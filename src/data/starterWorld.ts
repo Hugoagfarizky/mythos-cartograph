@@ -255,7 +255,7 @@ Meskipun berselisih tajam dengan mantan gurunya, [[Archmage Vaelen Thorne]], Ser
           'Aelfir Kabut Malam (Pengintai Perbatasan)',
           'Aelfir Rawa Abu (Klan Terbuang Selatan)',
         ],
-        signatureSkills: ['Tenunan Gravitasi Bintang'],
+        signatureSkills: ['Simfoni Kabut Pohon Memori', 'Tenunan Gravitasi Bintang'],
       },
       content: `Bangsa Sylvan Aelfir tidak menulis buku sejarah di atas kertas; mereka mengukir ingatan langsung ke dalam serat pohon *Lumin-Oak* di jantung [[Rimba Bayang-Bayang (Shadowwood)]].
 
@@ -289,7 +289,7 @@ Sejak meletusnya [[Konvergensi Gerhana Merah]], populasi mereka menurun drastis 
           'Dvergr Cermin Surya (Insinyur Optik & Astrolabe)',
           'Dvergr Pengelana Permukaan (Pedagang Karavan)',
         ],
-        signatureSkills: ['Keputusan Tombak Surya'],
+        signatureSkills: ['Runtuhan Palu Bintang Nidavellir'],
       },
       content: `Para Dvergr Besi-Bintang percaya bahwa gunung-gunung di timur Aethelia adalah pecahan meteor raksasa yang jatuh pada awal penciptaan dunia. Mereka adalah pencipta asli dari [[Astrolabe Api Surya]] sebelum artefak tersebut diserahkan sebagai tanda perdamaian kepada [[Kekaisaran Gondoria]] tiga abad silam.
 
@@ -549,10 +549,33 @@ Untuk menstabilkan iklim dan arus sihir dunia yang kacau, para leluhur [[Dvergr 
       summary: 'Sistem kekuatan utama di Aethelia yang mengubah cahaya benda langit menjadi manipulasi gravitasi, panas surya, dan memori ruang.',
       tags: ['Sistem Sihir Utama', 'Hard Magic', 'Hukum Mutlak'],
       attributes: {
-        energySource: 'Cahaya Matahari (Jalur Solar), Bulan (Jalur Lunar), dan Gugus Bintang (Jalur Sidereal)',
-        hardRules: '1. Tidak bisa menciptakan materi dari ketiadaan. 2. Kekuatan melemah 60% di ruang bawah tanah tertutup tanpa medium kristal penyimpan.',
+        systemTypology: 'Hard Magic / Terukur',
+        energySource: 'Cahaya Matahari (Jalur Solar), Bulan Kembar (Jalur Lunar), dan Gugus Bintang (Jalur Sidereal)',
+        originSource: 'Konvergensi Gerhana Merah',
+        awakeningCondition:
+          'Seseorang harus membuka Meridian Astral melalui meditasi penyelarasan detak jantung terhadap perputaran langit di menara observatorium atau di bawah kanopi [[Rimba Bayang-Bayang (Shadowwood)]].',
+        catalystMedium: 'Astrolabe Api Surya',
+        powerTiersList: [
+          'Lingkar 1: Inisiat Lentera (Peka Cahaya & Eter Dasar)',
+          'Lingkar 2: Penenun Cincin (Proyeksi Segel Tunggal)',
+          'Lingkar 3: Adept Cakrawala (Manipulasi Elemen Lokal)',
+          'Lingkar 4: Pengawas Rasi (Resonansi Jarak Menengah)',
+          'Lingkar 5: Magister Menara (Penguasa Hukum Ruang/Panas)',
+          'Lingkar 6: Sovereign Scholar / Valkyrie (Batas Tertinggi Fana)',
+          'Lingkar 7: Arsitek Mitos (Legenda Era Konvergensi)',
+        ],
+        elementBranches: [
+          'Jalur Solar (Panas Surya, Api Cinnabar & Otoritas Cahaya)',
+          'Jalur Lunar (Ilusi Kabut, Memori Pohon & Pantulan Bayangan)',
+          'Jalur Sidereal (Gravitasi Bintang, Vektor Ruang & Presisi Waktu)',
+        ],
         tierHierarchy: 'Lingkar 1 (Inisiat) → Lingkar 3 (Adept) → Lingkar 5 (Magister) → Lingkar 6 (Sovereign) → Lingkar 7 (Mitos)',
-        corruptionCost: 'Over-Resonansi menyebabkan Kristalisasi Organ: jaringan tubuh pengguna perlahan berubah menjadi kaca/kuningan kaku jika melewati batas kapasitas jiwa.',
+        hardRules:
+          '1. Hukum Konservasi Cahaya: Tidak bisa menciptakan materi dari ketiadaan dan tidak dapat dirapal di ruang bawah tanah yang tertutup rapat tanpa kristal penyimpan cahaya.\n2. Hukum Vektor Segel: Setiap rapalan wajib membentuk geometri cincin yang presisi; gangguan pada formasi cincin akan membatalkan teknik seketika.',
+        systemWeakness:
+          'Kekuatan melemah hingga 60% saat badai abu vulkanik atau di kedalaman [[Kerajaan Bawah Tanah Nidavellir]]. Logam timah hitam dan asap belerang dapat mengacaukan garis segel geometris.',
+        corruptionCost:
+          'Over-Resonansi memicu kutukan *Kristalisasi Organ*: pembuluh darah, mata, hingga jantung pengguna perlahan membatu menjadi kaca dan kuningan hidup yang kaku jika melampaui kapasitas jiwa (hanya dapat diredam dengan ekstrak [[Bunga Lentera Malam]]).',
       },
       content: `**Resonansi Eteris Astral** bekerja dengan menyelaraskan detak jantung dan meridian pengguna terhadap frekuensi benda langit melalui diagram geometris (*Astrolabe Sigil*).
 
@@ -562,40 +585,141 @@ Untuk menstabilkan iklim dan arus sihir dunia yang kacau, para leluhur [[Dvergr 
 3. **Kutukan Kristalisasi**: Setiap penggunaan skill tingkat tinggi meninggalkan residu mineral bintang di dalam darah. Inilah alasan mengapa mata kiri [[Archmage Vaelen Thorne]] telah membatu menjadi kuningan kristal.`,
       updatedAt: '2026-11-08',
     },
+    {
+      id: 'pwr-tempaan-runik',
+      category: 'power_system',
+      title: 'Tempaan Runik Besi-Bintang',
+      subtitle: 'Arsitektur Mekanika-Magis & Pahat Segel Logam Bangsa Dvergr',
+      summary: 'Disiplin kriya-magis dari [[Kerajaan Bawah Tanah Nidavellir]] yang mengikat energi panas bumi dan meteorit ke dalam roda gigi serta senjata tempaan.',
+      tags: ['Runik & Kriya', 'Mekanika Astral', 'Dvergr'],
+      attributes: {
+        systemTypology: 'Runik & Kriya Artefak',
+        energySource: 'Panas Tungku Geotermal & Inti Bijih Meteorit Bintang Jatuh',
+        originSource: 'Dvergr Besi-Bintang',
+        awakeningCondition:
+          'Tidak membutuhkan bakat sihir bawaan di dalam darah, melainkan penguasaan matematika geometri *Khaz-Runa*, ketahanan fisik terhadap panas tungku, dan sumpah darah penempa.',
+        catalystMedium: 'Palu Meteorit & Cincin Kuningan',
+        powerTiersList: [
+          'Tingkat 1: Juru Bara (Pengolah Bijih & Segel Tunggal)',
+          'Tingkat 2: Pahat Perunggu (Pembuat Lentera & Perisai Runik)',
+          'Tingkat 3: Empu Roda Gigi (Arsitek Automata & Cermin Optik)',
+          'Tingkat 4: Penempa Bintang (Pencipta Senjata Pusaka Kerajaan)',
+          'Tingkat 5: High Artificer (Pencipta Relik Sekelas Astrolabe Api Surya)',
+        ],
+        elementBranches: [
+          'Kriya Termal (Penyimpanan Panas & Meriam Uap Surya)',
+          'Kriya Magnetik (Kendali Berat Logam & Perisai Tolak Besi)',
+          'Kriya Horologi (Roda Gigi Presisi & Instrumen Penstabil Lempeng)',
+        ],
+        tierHierarchy: 'Juru Bara → Pahat Perunggu → Empu Roda Gigi → Penempa Bintang → High Artificer',
+        hardRules:
+          '1. Energi hanya dapat bekerja melalui medium fisik yang telah diukir aksara *Khaz-Runa* secara utuh.\n2. Jika satu huruf runik pada permukaan logam tergores atau retak lebih dari dua milimeter, aliran energi akan bocor dan memicu ledakan mekanis.',
+        systemWeakness:
+          'Sangat bergantung pada ketersediaan bijih meteorit dan waktu pemeliharaan alat; jika mekanisme roda gigi membeku di suhu ekstrem [[Puncak Wyvern]], output dayanya turun drastis.',
+        corruptionCost:
+          'Paparan uap raksa-bintang dan getaran tungku selama puluhan tahun menyebabkan *Paru-Paru Abu Besi* serta ketergantungan pada implan mekanis.',
+      },
+      content: `Diciptakan oleh bangsa [[Dvergr Besi-Bintang]] karena tubuh biologis mereka tidak dapat merapal sihir langsung seperti bangsa [[Sylvan Aelfir]] maupun [[Aethel-Born (Manusia Tinggi)]]. Melalui **Tempaan Runik Besi-Bintang**, mereka membuktikan bahwa sebilah senjata yang diukir dengan presisi matematika mampu menandingi penyihir Lingkar ke-6.`,
+      updatedAt: '2026-11-08',
+    },
 
     // 8. SKILLS
     {
       id: 'skl-tenunan-gravitasi',
       category: 'skill',
       title: 'Tenunan Gravitasi Bintang',
-      subtitle: 'Teknik Lingkar ke-6 Jalur Sidereal',
-      summary: 'Memampatkan medan gravitasi lokal untuk membelokkan serangan proyektil atau menghentikan pergerakan pasukan lawan.',
-      tags: ['Jalur Sidereal', 'Pertahanan & Kontrol', 'Lingkar 6'],
+      subtitle: 'Teknik Agung Lingkar ke-6 Jalur Sidereal · Pengendali Medan Tempur',
+      summary: 'Memampatkan medan gravitasi lokal dalam skala benteng untuk membelokkan hujan proyektil, menghentikan laju kavaleri, atau meremukkan formasi pengepungan.',
+      tags: ['Jalur Sidereal', 'Skala Benteng', 'Lingkar 6'],
       attributes: {
         parentPowerSystem: 'Resonansi Eteris Astral',
-        skillRank: 'Lingkar ke-6 (Sovereign Art)',
-        elementAffinity: 'Gravitasi & Ruang Sidereal',
+        skillRank: 'Lingkar 6: Sovereign Scholar / Valkyrie (Batas Tertinggi Fana)',
+        elementAffinity: 'Jalur Sidereal (Gravitasi Bintang, Vektor Ruang & Presisi Waktu)',
+        skillExclusivity: 'Teknik Agung Skala Strategis',
+        exclusiveRaces: ['Aethel-Born (Manusia Tinggi)', 'Sylvan Aelfir'],
+        impactScale: 'Skala Pasukan / Benteng (Radius 300 Meter)',
+        strategicImpact:
+          'Mampu melumpuhkan satu batalion kavaleri zirah berat dan membelokkan tembakan meriam uap secara serentak. Penggunaan beruntun di titik yang sama dapat memicu anomali retakan ruang mikro di atas tanah.',
+        visualManifestation:
+          'Tujuh cincin geometri perak berpendar di udara mengelilingi pengguna; batu-batu kerikil dan debu melayang naik secara terbalik sementara cahaya di sekitar kubah tampak melengkung bagai lensa kaca.',
         activationCost: 'Membutuhkan medium kompas/astrolabe logam dan 40% cadangan eter pengguna',
-        cooldownOrLimit: 'Maksimal dipertahankan selama 90 detik sebelum memicu pendarahan retina.',
+        cooldownOrLimit: 'Maksimal dipertahankan selama 90 detik sebelum memicu pendarahan retina dan gejala awal Kristalisasi Organ.',
       },
-      content: `Teknik khas milik [[Archmage Vaelen Thorne]]. Dengan memutar cincin astrolabe secara berlawanan arah jarum jam, pengguna menciptakan titik berat semu di udara dalam radius tiga puluh meter. Anak panah, tombak, hingga semburan api akan melengkung tertarik ke titik pusat tersebut sebelum sempat menyentuh target.`,
+      content: `Teknik khas tingkat tinggi yang disempurnakan oleh [[Archmage Vaelen Thorne]] bersama para penjaga perbatasan [[Sylvan Aelfir]]. Dengan memutar cincin astrolabe secara berlawanan arah jarum jam, pengguna menciptakan titik berat semu di udara yang mengubah hukum jatuh bebas di area pertempuran.
+
+Anak panah, tombak pengepungan, hingga semburan api dari [[Legiun Surya Cinnabar]] akan melengkung tertarik ke titik pusat gravitasi tersebut sebelum sempat menyentuh garis pertahanan [[Ordo Cakrawala Perak]].`,
       updatedAt: '2026-11-08',
     },
     {
       id: 'skl-tombak-surya',
       category: 'skill',
       title: 'Keputusan Tombak Surya',
-      subtitle: 'Teknik Militer Tertinggi Keluarga Valorian',
-      summary: 'Memfokuskan panas matahari siang hari ke ujung senjata menjadi berkas cahaya penembus benteng.',
-      tags: ['Jalur Solar', 'Serangan Murni', 'Valorian'],
+      subtitle: 'Teknik Militer Strategis Wangsa Valorian · Penghancur Gerbang Kota',
+      summary: 'Memfokuskan panas matahari siang hari menjadi pilar cahaya cinnabar raksasa yang sanggup melelehkan gerbang benteng baja dan membelah formasi armada laut.',
+      tags: ['Jalur Solar', 'Skala Kota / Benteng', 'Garis Darah Valorian'],
       attributes: {
         parentPowerSystem: 'Resonansi Eteris Astral',
-        skillRank: 'Lingkar ke-6 (Imperial Secret)',
-        elementAffinity: 'Api Surya & Cahaya Murni',
-        activationCost: 'Hanya bisa digunakan pada siang hari atau dengan mengorbankan satu inti rubi surya',
-        cooldownOrLimit: 'Menyebabkan luka bakar termal pada lengan pengguna jika digunakan lebih dari dua kali sehari.',
+        skillRank: 'Lingkar 6: Sovereign Scholar / Valkyrie (Batas Tertinggi Fana)',
+        elementAffinity: 'Jalur Solar (Panas Surya, Api Cinnabar & Otoritas Cahaya)',
+        skillExclusivity: 'Bakat Garis Darah Kuno & Takhta Mahkota',
+        exclusiveRaces: ['Aethel-Born (Manusia Tinggi)'],
+        impactScale: 'Skala Kota / Lembah (Jangkauan Lintas 2 Kilometer)',
+        strategicImpact:
+          'Satu tebasan penuh sanggup menguapkan parit pertahanan, melelehkan gerbang perunggu [[Kerajaan Bawah Tanah Nidavellir]], atau membakar lima kapal perang di Teluk Naga sekaligus. Tanah yang dilewati berkas cahayanya berubah menjadi kaca kristal merah selama berbulan-bulan.',
+        visualManifestation:
+          'Langit di atas pengguna tampak meredup sejenak karena seluruh cahaya matahari tersedot ke ujung pedang/tombak, membentuk mahkota halo emas-merah sebelum meledak menjadi seberkas pilar api lurus diiringi suara guntur termal.',
+        activationCost: 'Hanya bisa digunakan pada siang hari terik atau dengan mengorbankan satu inti rubi surya murni',
+        cooldownOrLimit: 'Menyebabkan luka bakar termal pada lengan pengguna jika dilepaskan lebih dari dua kali sehari tanpa sokongan [[Astrolabe Api Surya]].',
       },
-      content: `Keahlian warisan tahta [[Kekaisaran Gondoria]] yang dikuasai secara sempurna oleh [[Empress Seraphina Valorian]]. Berdasarkan aturan [[Resonansi Eteris Astral]], teknik ini kehilangan separuh dayanya pada malam hari kecuali disokong oleh artefak sekelas [[Astrolabe Api Surya]].`,
+      content: `Keahlian warisan takhta [[Kekaisaran Gondoria]] yang hanya diwariskan kepada garis darah bangsawan Surya di bawah kepemimpinan [[Empress Seraphina Valorian]]. Berdasarkan hukum mutlak [[Resonansi Eteris Astral]], teknik berskala strategis ini kehilangan separuh dayanya pada malam hari kecuali disokong oleh relik [[Astrolabe Api Surya]].`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'skl-kabut-memori-aelfir',
+      category: 'skill',
+      title: 'Simfoni Kabut Pohon Memori',
+      subtitle: 'Warisan Rasial Eksklusif Sylvan Aelfir · Ilusi & Pertahanan Skala Hutan',
+      summary: 'Skill khusus ras [[Sylvan Aelfir]] yang membangkitkan kabut bioluminesensi dari akar pohon purba untuk menyesatkan seluruh pasukan penyerbu ke dalam labirin ingatan masa lalu.',
+      tags: ['Warisan Rasial', 'Sylvan Aelfir', 'Skala Regional'],
+      attributes: {
+        parentPowerSystem: 'Resonansi Eteris Astral',
+        skillRank: 'Lingkar 5: Magister Menara (Penguasa Hukum Ruang/Panas)',
+        elementAffinity: 'Jalur Lunar (Ilusi Kabut, Memori Pohon & Pantulan Bayangan)',
+        skillExclusivity: 'Warisan Rasial Eksklusif',
+        exclusiveRaces: ['Sylvan Aelfir'],
+        impactScale: 'Skala Regional / Negara (Seluruh Lembah Hutan)',
+        strategicImpact:
+          'Menutup seluruh akses militer menuju [[Rimba Bayang-Bayang (Shadowwood)]]. Pasukan asing yang memasuki area kabut akan kehilangan arah kompas, melihat halusinasi kenangan leluhur hutan, dan berputar-putar hingga kembali ke titik awal tanpa pertumpahan darah.',
+        visualManifestation:
+          'Akar-akar pohon *Lumin-Oak* menyala biru-perak serentak, mengembuskan kabut tebal beraroma kelopak [[Bunga Lentera Malam]] disertai bisikan melodi bahasa kuno *Sylva-Lir* yang bergema dari segala penjuru.',
+        activationCost: 'Hanya dapat diaktifkan oleh darah murni [[Sylvan Aelfir]] yang menyentuh jaringan akar hidup di tanah hutan',
+        cooldownOrLimit: 'Tidak dapat digunakan di luar ekosistem hutan atau di tanah yang telah tercemar abu besi.',
+      },
+      content: `Hanya bangsa [[Sylvan Aelfir]] yang memiliki anatomi saraf pendengaran eter untuk memanggil **Simfoni Kabut Pohon Memori**. Dalam skala kecil, pengintai seperti [[Kaelen dari Kabut Perak]] menggunakannya untuk menyamarkan jejak pergerakan kelompoknya; namun bila dirapal bersama oleh para tetua di sekitar Pohon Memori Eldath, teknik ini mampu menelan seluruh lembah hutan dalam perisai ilusi berskala regional.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'skl-palu-gravitasi-dvergr',
+      category: 'skill',
+      title: 'Runtuhan Palu Bintang Nidavellir',
+      subtitle: 'Teknik Kriya-Runik Eksklusif Dvergr · Guncangan Seismik Skala Gunung',
+      summary: 'Teknik khusus ras [[Dvergr Besi-Bintang]] yang melepaskan muatan magnetik dan panas geotermal dari palu meteorit ke urat batuan bumi untuk meruntuhkan terowongan atau membelah perbukitan.',
+      tags: ['Warisan Rasial', 'Dvergr Besi-Bintang', 'Tempaan Runik'],
+      attributes: {
+        parentPowerSystem: 'Tempaan Runik Besi-Bintang',
+        skillRank: 'Tingkat 4: Penempa Bintang (Pencipta Senjata Pusaka Kerajaan)',
+        elementAffinity: 'Kriya Magnetik (Kendali Berat Logam & Perisai Tolak Besi)',
+        skillExclusivity: 'Warisan Rasial Eksklusif',
+        exclusiveRaces: ['Dvergr Besi-Bintang'],
+        impactScale: 'Skala Kota / Lembah (Guncangan Seismik 1,5 Kilometer)',
+        strategicImpact:
+          'Mampu menutup jalur celah pegunungan secara permanen, meruntuhkan dinding benteng batu dalam satu hentakan resonansi, atau menarik seluruh senjata besi prajurit lawan agar menempel ke tanah.',
+        visualManifestation:
+          'Ukiran aksara *Khaz-Runa* pada kepala palu meteorit berpijar putih-kebiruan; saat dihantamkan ke tanah, retakan garis geometris bercahaya merambat cepat di sepanjang permukaan batu diikuti gelombang kejut berfrekuensi rendah.',
+        activationCost: 'Memerlukan senjata/palu bijih bintang jatuh berukir segel lengkap serta kekuatan tulang fisik Dvergr untuk menahan hentakan balik',
+        cooldownOrLimit: 'Laras segel pada palu harus didinginkan dengan oli mineral khusus setelah tiga kali pelepasan agar logam tidak retak.',
+      },
+      content: `Karena tubuh biologis [[Dvergr Besi-Bintang]] memiliki kepadatan tulang dua kali lipat manusia dan tahan terhadap getaran ekstrem, hanya mereka yang sanggup mengeksekusi **Runtuhan Palu Bintang Nidavellir** tanpa meremukkan tulang lengan sendiri. Teknik dari sistem [[Tempaan Runik Besi-Bintang]] ini menjadi alasan utama mengapa belum pernah ada pasukan permukaan yang berhasil menembus gerbang [[Kerajaan Bawah Tanah Nidavellir]].`,
       updatedAt: '2026-11-08',
     },
 

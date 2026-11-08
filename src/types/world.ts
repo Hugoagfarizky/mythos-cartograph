@@ -92,14 +92,26 @@ export interface LoreAttributes {
   belligerents?: string;
   outcome?: string;
   // Power System specific
+  systemTypology?: string;
   energySource?: string;
+  originSource?: string;
+  awakeningCondition?: string;
+  catalystMedium?: string;
+  powerTiersList?: string[];
+  elementBranches?: string[];
   hardRules?: string;
   tierHierarchy?: string;
+  systemWeakness?: string;
   corruptionCost?: string;
   // Skill specific
   parentPowerSystem?: string;
   skillRank?: string;
   elementAffinity?: string;
+  skillExclusivity?: string;
+  exclusiveRaces?: string[];
+  impactScale?: string;
+  strategicImpact?: string;
+  visualManifestation?: string;
   activationCost?: string;
   cooldownOrLimit?: string;
   // Encyclopedia (Artifact, Flora, Fauna)

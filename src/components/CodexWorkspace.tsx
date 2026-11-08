@@ -101,6 +101,31 @@ const FACTION_SCALE_OPTIONS = [
   'Lokal / Kota',
 ];
 
+const POWER_SYSTEM_TYPOLOGY_FILTERS = [
+  'Semua',
+  'Hard Magic / Terukur',
+  'Kultivasi & Meridian',
+  'Runik & Kriya Artefak',
+  'Ilahi & Pakta Kosmik',
+  'Bela Diri & Aura Fisik',
+];
+
+const SKILL_EXCLUSIVITY_OPTIONS = [
+  'Warisan Rasial Eksklusif',
+  'Bakat Garis Darah Kuno & Takhta Mahkota',
+  'Teknik Agung Skala Strategis',
+  'Mukjizat / Bencana Kosmik',
+  'Teknik Khusus Terbatas',
+];
+
+const SKILL_IMPACT_SCALE_OPTIONS = [
+  'Skala Individu / Duel Taktis',
+  'Skala Pasukan / Benteng (Radius 300 Meter)',
+  'Skala Kota / Lembah (Jangkauan 1-2 Kilometer)',
+  'Skala Regional / Negara (Seluruh Lembah / Provinsi)',
+  'Skala Kontinental / Bencana Dunia',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -162,12 +187,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [factionTypeFilter, setFactionTypeFilter] = useState<string>('Semua');
   const [factionScaleFilter, setFactionScaleFilter] =
     useState<string>('Semua Skala');
+  const [powerTypologyFilter, setPowerTypologyFilter] =
+    useState<string>('Semua');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom array item inputs in editor (Character, Race & Faction)
+  // Custom array item inputs in editor (Character, Race, Faction, Power System & Skill)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
   const [customSubRaceInput, setCustomSubRaceInput] = useState('');
@@ -175,6 +202,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [customRankInput, setCustomRankInput] = useState('');
   const [customFactionArtifactInput, setCustomFactionArtifactInput] =
     useState('');
+  const [customPowerTierInput, setCustomPowerTierInput] = useState('');
+  const [customElementBranchInput, setCustomElementBranchInput] = useState('');
+  const [customExclusiveRaceInput, setCustomExclusiveRaceInput] = useState('');
+
+  // Quick-link state on Skill view mode
+  const [selectedQuickRaceId, setSelectedQuickRaceId] = useState('');
+  const [selectedQuickCharId, setSelectedQuickCharId] = useState('');
 
   // Inline Relationship Creator state for Character Sheet
   const [showAddRelation, setShowAddRelation] = useState(false);
@@ -196,6 +230,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setRaceClassFilter('Semua');
     setFactionTypeFilter('Semua');
     setFactionScaleFilter('Semua Skala');
+    setPowerTypologyFilter('Semua');
     setShowAddRelation(false);
   }, [category]);
 
@@ -248,6 +283,23 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'power_system') {
+      if (
+        powerTypologyFilter !== 'Semua' &&
+        !(attrs.systemTypology || '')
+          .toLowerCase()
+          .includes(
+            powerTypologyFilter
+              .split('/')[0]
+              .split('&')[0]
+              .trim()
+              .toLowerCase()
+          )
+      ) {
+        return false;
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -261,7 +313,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       (attrs.raceOriginClass || '').toLowerCase().includes(q) ||
       (attrs.factionType || '').toLowerCase().includes(q) ||
       (attrs.headquarters || '').toLowerCase().includes(q) ||
-      (attrs.leader || '').toLowerCase().includes(q)
+      (attrs.leader || '').toLowerCase().includes(q) ||
+      (attrs.systemTypology || '').toLowerCase().includes(q) ||
+      (attrs.energySource || '').toLowerCase().includes(q) ||
+      (attrs.parentPowerSystem || '').toLowerCase().includes(q) ||
+      (attrs.skillExclusivity || '').toLowerCase().includes(q) ||
+      (attrs.impactScale || '').toLowerCase().includes(q) ||
+      (attrs.exclusiveRaces || []).some((r) => r.toLowerCase().includes(q))
     );
   });
 
@@ -299,6 +357,22 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     );
   };
 
+  // Lists of existing entities by category for hybrid pickers
+  const characterEntities = entities.filter((e) => e.category === 'character');
+  const raceEntities = entities.filter((e) => e.category === 'race');
+  const factionEntities = entities.filter((e) => e.category === 'faction');
+  const nationAndRegionEntities = entities.filter(
+    (e) => e.category === 'nation' || e.category === 'region'
+  );
+  const historyEntities = entities.filter((e) => e.category === 'history');
+  const powerSystemEntities = entities.filter(
+    (e) => e.category === 'power_system'
+  );
+  const skillEntities = entities.filter((e) => e.category === 'skill');
+  const artifactEntities = entities.filter(
+    (e) => e.category === 'encyclopedia'
+  );
+
   const startEditing = (entity: LoreEntity) => {
     const enriched = getEnrichedAttributes(entity);
     setDraftEntity({
@@ -311,6 +385,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         signatureSkills: [...(enriched.signatureSkills || [])],
         rankHierarchy: [...(enriched.rankHierarchy || [])],
         factionArtifacts: [...(enriched.factionArtifacts || [])],
+        powerTiersList: [...(enriched.powerTiersList || [])],
+        elementBranches: [...(enriched.elementBranches || [])],
+        exclusiveRaces: [...(enriched.exclusiveRaces || [])],
       },
       tags: [...entity.tags],
     });
@@ -321,10 +398,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomRaceSkillInput('');
     setCustomRankInput('');
     setCustomFactionArtifactInput('');
+    setCustomPowerTierInput('');
+    setCustomElementBranchInput('');
+    setCustomExclusiveRaceInput('');
     setIsEditing(true);
   };
 
   const startCreatingNew = () => {
+    const defaultPs = powerSystemEntities[0];
+    const defaultPsAttrs = defaultPs ? getEnrichedAttributes(defaultPs) : {};
     const newEnt: LoreEntity = {
       id: `ent-${Date.now()}`,
       category,
@@ -336,6 +418,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           ? 'Julukan Bangsa & Spesies'
           : category === 'faction'
           ? 'Gelar Ordo, Serikat, atau Sindikat'
+          : category === 'power_system'
+          ? 'Arsitektur Sihir, Kultivasi, atau Hukum Kekuatan'
+          : category === 'skill'
+          ? 'Warisan Rasial Eksklusif / Teknik Skala Besar'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -366,6 +452,37 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               ],
               factionArtifacts: [],
             }
+          : category === 'power_system'
+          ? {
+              systemTypology: 'Hard Magic / Terukur',
+              energySource: 'Eter Kosmik & Meridian Jiwa',
+              powerTiersList: [
+                'Tingkat 1: Inisiat (Dasar)',
+                'Tingkat 2: Adept (Menengah)',
+                'Tingkat 3: Magister (Tinggi)',
+                'Tingkat 4: Sovereign (Puncak)',
+              ],
+              elementBranches: ['Cabang Cahaya', 'Cabang Bayangan'],
+            }
+          : category === 'skill'
+          ? {
+              parentPowerSystem: defaultPs
+                ? defaultPs.title
+                : 'Resonansi Eteris Astral',
+              skillRank:
+                defaultPsAttrs.powerTiersList &&
+                defaultPsAttrs.powerTiersList.length > 0
+                  ? defaultPsAttrs.powerTiersList[0]
+                  : 'Tingkat Tinggi',
+              elementAffinity:
+                defaultPsAttrs.elementBranches &&
+                defaultPsAttrs.elementBranches.length > 0
+                  ? defaultPsAttrs.elementBranches[0]
+                  : 'Elemen Utama',
+              skillExclusivity: 'Warisan Rasial Eksklusif',
+              exclusiveRaces: [],
+              impactScale: 'Skala Pasukan / Benteng (Radius 300 Meter)',
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -377,6 +494,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomRaceSkillInput('');
     setCustomRankInput('');
     setCustomFactionArtifactInput('');
+    setCustomPowerTierInput('');
+    setCustomElementBranchInput('');
+    setCustomExclusiveRaceInput('');
     setIsEditing(true);
   };
 
@@ -414,7 +534,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       | 'subRaces'
       | 'signatureSkills'
       | 'rankHierarchy'
-      | 'factionArtifacts',
+      | 'factionArtifacts'
+      | 'powerTiersList'
+      | 'elementBranches'
+      | 'exclusiveRaces',
     itemValue: string
   ) => {
     if (!draftEntity) return;
@@ -516,6 +639,99 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     jumpToEntity(newChar.id);
   };
 
+  // 1-Click Create Skill from active Power System
+  const handleCreateSkillFromPowerSystem = (psEntity: LoreEntity) => {
+    const psAttrs = getEnrichedAttributes(psEntity);
+    const firstBranch =
+      psAttrs.elementBranches && psAttrs.elementBranches.length > 0
+        ? psAttrs.elementBranches[0]
+        : psAttrs.energySource || 'Elemen Utama';
+    const firstTier =
+      psAttrs.powerTiersList && psAttrs.powerTiersList.length > 0
+        ? psAttrs.powerTiersList[0]
+        : 'Tingkat Menengah';
+    const newSkill: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'skill',
+      title: `Teknik ${psEntity.title} Baru`,
+      subtitle: `Jurus Turunan ${firstBranch.split('(')[0].trim()}`,
+      summary: `Teknik khusus atau jurus berskala besar yang bersumber dari sistem [[${psEntity.title}]].`,
+      content: `### Mekanisme & Cara Kerja Teknik\nMerupakan salah satu jurus turunan dari [[${psEntity.title}]] yang mematuhi hukum dasar sistem tersebut.\n\nTambahkan detail visual, syarat penggunaan, dan ras/tokoh penggunanya di sini.`,
+      tags: ['Skill', psEntity.title],
+      attributes: {
+        parentPowerSystem: psEntity.title,
+        skillRank: firstTier,
+        elementAffinity: firstBranch,
+        skillExclusivity: 'Teknik Agung Skala Strategis',
+        exclusiveRaces: [],
+        impactScale: 'Skala Pasukan / Benteng (Radius 300 Meter)',
+        activationCost: `Membutuhkan penyaluran energi ${
+          psAttrs.catalystMedium || psEntity.title
+        }`,
+        cooldownOrLimit:
+          psAttrs.corruptionCost ||
+          'Batas penggunaan sesuai kapasitas tubuh praktisi.',
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+    onSaveEntity(newSkill);
+    jumpToEntity(newSkill.id);
+  };
+
+  // 1-Click Link active Skill to a Race
+  const handleLinkSkillToRace = (skillEntity: LoreEntity, raceId: string) => {
+    const targetRace = entities.find((e) => e.id === raceId);
+    if (!targetRace) return;
+    const rAttrs = getEnrichedAttributes(targetRace);
+    const nextRaceSkills = Array.from(
+      new Set([...(rAttrs.signatureSkills || []), skillEntity.title])
+    );
+    onSaveEntity({
+      ...targetRace,
+      attributes: {
+        ...rAttrs,
+        signatureSkills: nextRaceSkills,
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    });
+
+    const sAttrs = getEnrichedAttributes(skillEntity);
+    const nextExclusiveRaces = Array.from(
+      new Set([...(sAttrs.exclusiveRaces || []), targetRace.title])
+    );
+    onSaveEntity({
+      ...skillEntity,
+      attributes: {
+        ...sAttrs,
+        exclusiveRaces: nextExclusiveRaces,
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    });
+    setSelectedQuickRaceId('');
+  };
+
+  // 1-Click Link active Skill to a Character
+  const handleLinkSkillToCharacter = (
+    skillEntity: LoreEntity,
+    charId: string
+  ) => {
+    const targetChar = entities.find((e) => e.id === charId);
+    if (!targetChar) return;
+    const cAttrs = getEnrichedAttributes(targetChar);
+    const nextCharSkills = Array.from(
+      new Set([...(cAttrs.knownSkills || []), skillEntity.title])
+    );
+    onSaveEntity({
+      ...targetChar,
+      attributes: {
+        ...cAttrs,
+        knownSkills: nextCharSkills,
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    });
+    setSelectedQuickCharId('');
+  };
+
   const backlinks = activeEntity
     ? findBacklinksForEntity(activeEntity, entities, chapters)
     : { linkedEntities: [], linkedChapters: [] };
@@ -530,18 +746,6 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           r.sourceId === activeEntity.id || r.targetId === activeEntity.id
       )
     : [];
-
-  // Lists of existing entities by category for hybrid pickers
-  const characterEntities = entities.filter((e) => e.category === 'character');
-  const raceEntities = entities.filter((e) => e.category === 'race');
-  const factionEntities = entities.filter((e) => e.category === 'faction');
-  const nationAndRegionEntities = entities.filter(
-    (e) => e.category === 'nation' || e.category === 'region'
-  );
-  const skillEntities = entities.filter((e) => e.category === 'skill');
-  const artifactEntities = entities.filter(
-    (e) => e.category === 'encyclopedia'
-  );
 
   // Automatic Roster of Characters belonging to the active Race
   const charactersOfActiveRace =
@@ -575,6 +779,97 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             facTitle.includes(fName && fName.length > 3 ? fName : '___') ||
             (facLeader && e.title.toLowerCase() === facLeader) ||
             e.content.toLowerCase().includes(`[[${facTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Skills belonging to the active Power System
+  const skillsOfActivePowerSystem =
+    category === 'power_system' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'skill') return false;
+          const sAttrs = getEnrichedAttributes(e);
+          const parentSys = (sAttrs.parentPowerSystem || '').toLowerCase();
+          const psTitle = activeEntity.title.toLowerCase();
+          return (
+            parentSys.includes(psTitle) ||
+            psTitle.includes(
+              parentSys && parentSys.length > 3 ? parentSys : '___'
+            ) ||
+            e.content.toLowerCase().includes(`[[${psTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Practitioners (Characters) of the active Power System
+  const practitionersOfActivePowerSystem =
+    category === 'power_system' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const psTitle = activeEntity.title.toLowerCase();
+          const derivedSkillNames = skillsOfActivePowerSystem.map((s) =>
+            s.title.toLowerCase()
+          );
+          const charSkills = (cAttrs.knownSkills || []).map((k) =>
+            k.toLowerCase()
+          );
+          return (
+            e.content.toLowerCase().includes(`[[${psTitle}]]`) ||
+            charSkills.some((cs) =>
+              derivedSkillNames.some(
+                (ds) => cs.includes(ds) || ds.includes(cs)
+              )
+            )
+          );
+        })
+      : [];
+
+  // Automatic Roster of Races possessing the active Skill
+  const racesOfActiveSkill =
+    category === 'skill' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'race') return false;
+          const rAttrs = getEnrichedAttributes(e);
+          const skTitle = activeEntity.title.toLowerCase();
+          const exclRaces = (activeAttrs.exclusiveRaces || []).map((x) =>
+            x.toLowerCase()
+          );
+          const rTitle = e.title.toLowerCase();
+          const rSigs = (rAttrs.signatureSkills || []).map((s) =>
+            s.toLowerCase()
+          );
+          return (
+            exclRaces.some(
+              (er) => er.includes(rTitle) || rTitle.includes(er)
+            ) ||
+            rSigs.some(
+              (rs) => rs.includes(skTitle) || skTitle.includes(rs)
+            ) ||
+            activeEntity.content.toLowerCase().includes(`[[${rTitle}]]`) ||
+            e.content.toLowerCase().includes(`[[${skTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Characters mastering the active Skill
+  const practitionersOfActiveSkill =
+    category === 'skill' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const skTitle = activeEntity.title.toLowerCase();
+          const charSkills = (cAttrs.knownSkills || []).map((k) =>
+            k.toLowerCase()
+          );
+          return (
+            charSkills.some(
+              (cs) => cs.includes(skTitle) || skTitle.includes(cs)
+            ) ||
+            activeEntity.content
+              .toLowerCase()
+              .includes(`[[${e.title.toLowerCase()}]]`) ||
+            e.content.toLowerCase().includes(`[[${skTitle}]]`)
           );
         })
       : [];
@@ -741,6 +1036,31 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
+          {/* Power System-Specific Typology Filters */}
+          {category === 'power_system' && (
+            <div className="space-y-1.5 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Tipologi Sistem Kekuatan:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {POWER_SYSTEM_TYPOLOGY_FILTERS.map((pt) => (
+                  <button
+                    key={pt}
+                    type="button"
+                    onClick={() => setPowerTypologyFilter(pt)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      powerTypologyFilter === pt
+                        ? 'bg-[#5A3E7A] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {pt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
@@ -817,6 +1137,22 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ? `${
                                   itemAttrs.factionType || 'Organisasi'
                                 } · ${itemAttrs.influenceScale || 'Regional'}`
+                              : category === 'power_system'
+                              ? `${
+                                  itemAttrs.systemTypology || 'Sistem Sihir'
+                                } · ${
+                                  itemAttrs.elementBranches
+                                    ? `${itemAttrs.elementBranches.length} Aliran`
+                                    : 'Arsitektur Kekuatan'
+                                }`
+                              : category === 'skill'
+                              ? `${
+                                  itemAttrs.parentPowerSystem || 'Sistem Sihir'
+                                } · ${
+                                  itemAttrs.skillExclusivity ||
+                                  itemAttrs.skillRank ||
+                                  'Teknik Khusus'
+                                }`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -851,6 +1187,24 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             Markas: {itemAttrs.headquarters || 'Belum ditentukan'}
                             {itemAttrs.leader
                               ? ` · Pemimpin: ${itemAttrs.leader}`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'power_system' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Energi: {itemAttrs.energySource || 'Belum ditentukan'}
+                          </div>
+                        )}
+
+                        {category === 'skill' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            {itemAttrs.impactScale ||
+                              itemAttrs.skillRank ||
+                              'Skala Khusus'}
+                            {itemAttrs.exclusiveRaces &&
+                            itemAttrs.exclusiveRaces.length > 0
+                              ? ` · Ras: ${itemAttrs.exclusiveRaces.join(', ')}`
                               : ''}
                           </div>
                         )}
@@ -2493,180 +2847,310 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
-              {/* Other Categories Structured Fields */}
-              {category !== 'character' &&
-                category !== 'race' &&
-                category !== 'faction' && (
+              {/* =========================================================== */}
+              {/* POWER SYSTEM-SPECIFIC RICH EDITOR (Magic & Combat Bible)    */}
+              {/* =========================================================== */}
+              {category === 'power_system' && (
+                <div className="space-y-4">
+                  {/* 1. Typology, Energy Source, Hybrid Origin & Catalyst Pickers */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#5A3E7A]">
+                      1. Tipologi Sistem, Sumber Energi, Asal-Usul & Medium Penyalur
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tipologi Sistem Kekuatan
+                        </label>
+                        <input
+                          type="text"
+                          list="power-typology-list"
+                          value={draftEntity.attributes.systemTypology || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                systemTypology: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Hard Magic / Kultivasi / Runik & Kriya..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <datalist id="power-typology-list">
+                          {POWER_SYSTEM_TYPOLOGY_FILTERS.filter(
+                            (p) => p !== 'Semua'
+                          ).map((pt) => (
+                            <option key={pt} value={pt} />
+                          ))}
+                        </datalist>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Sumber Energi Utama (Energy Source)
+                        </label>
+                        <input
+                          type="text"
+                          value={draftEntity.attributes.energySource || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                energySource: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Contoh: Cahaya Matahari, Bulan & Gugus Bintang"
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      {/* Hybrid Origin Picker (Race / Region / History) */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Asal-Usul / Pencipta (Pilih dari Ras/Wilayah/Sejarah atau Ketik)
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  originSource: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                          >
+                            <option value="">
+                              -- Pilih Entitas Asal-Usul --
+                            </option>
+                            {[
+                              ...raceEntities,
+                              ...nationAndRegionEntities,
+                              ...historyEntities,
+                            ].map((ent) => (
+                              <option key={ent.id} value={ent.title}>
+                                [{CATEGORY_META[ent.category].singular}]{' '}
+                                {ent.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.originSource || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  originSource: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Atau ketik asal-usul kekuatan..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Catalyst / Focus Medium Picker */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Medium Fokus / Alat Penyalur (Pilih dari Artefak atau Ketik)
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  catalystMedium: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                          >
+                            <option value="">
+                              -- Pilih dari Tab Artefak (
+                              {artifactEntities.length}) --
+                            </option>
+                            {artifactEntities.map((art) => (
+                              <option key={art.id} value={art.title}>
+                                {art.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.catalystMedium || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  catalystMedium: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Contoh: Astrolabe Kuningan, Segel Runik, Tongkat..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Syarat Bangkit (Awakening) & Cara Mempelajari Sistem Ini
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.awakeningCondition || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              awakeningCondition: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Siapa yang bisa menggunakan kekuatan ini? Apakah butuh garis darah khusus, pembukaan meridian, atau ujian ritual?"
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 2. Power Tiers Ladder & Element Branches / Schools Pickers */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Power Tiers List Manager */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#5A3E7A]">
+                        2A. Tangga Tingkatan Kekuatan (Power Tiers / Ranks)
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.powerTiersList || []).map(
+                          (tier) => (
+                            <span
+                              key={tier}
+                              className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                            >
+                              {tier}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleDraftArrayItem('powerTiersList', tier)
+                                }
+                                className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customPowerTierInput}
+                          onChange={(e) =>
+                            setCustomPowerTierInput(e.target.value)
+                          }
+                          placeholder="Contoh: Lingkar 1: Inisiat..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customPowerTierInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'powerTiersList',
+                              customPowerTierInput
+                            );
+                            setCustomPowerTierInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah Tier
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Element Branches / Schools Manager */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                        2B. Cabang Aliran, Disiplin, atau Elemen Turunan
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.elementBranches || []).map(
+                          (br) => (
+                            <span
+                              key={br}
+                              className="px-2.5 py-1 rounded bg-[#5A3E7A] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                            >
+                              {br}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleDraftArrayItem('elementBranches', br)
+                                }
+                                className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customElementBranchInput}
+                          onChange={(e) =>
+                            setCustomElementBranchInput(e.target.value)
+                          }
+                          placeholder="Contoh: Jalur Solar (Api Surya)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customElementBranchInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'elementBranches',
+                              customElementBranchInput
+                            );
+                            setCustomElementBranchInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah Aliran
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. Hard Magic Rules, Counter-Weakness & Corruption / Backlash Cost */}
                   <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
                     <div className="text-xs font-semibold text-[#9E2A2B]">
-                      Parameter Khusus {sectionMeta.label}
+                      3. Hukum Mutlak (Hard Rules), Kelemahan Sistem & Risiko Efek Samping
                     </div>
-
-                  {category === 'nation' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Bentuk Pemerintahan"
-                        value={draftEntity.attributes.government || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              government: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Ibu Kota Kerajaan"
-                        value={draftEntity.attributes.capitalCity || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              capitalCity: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Raja / Penguasa Saat Ini"
-                        value={draftEntity.attributes.ruler || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              ruler: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Mata Uang & Ekonomi"
-                        value={draftEntity.attributes.currency || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              currency: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  {category === 'region' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Negara / Kedaulatan Induk"
-                        value={draftEntity.attributes.parentNation || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              parentNation: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Iklim & Cuaca"
-                        value={draftEntity.attributes.climate || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              climate: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Sumber Daya Alam / Magis"
-                        value={draftEntity.attributes.resources || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              resources: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Tingkat Bahaya Wilayah"
-                        value={draftEntity.attributes.dangerLevel || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              dangerLevel: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  {category === 'power_system' && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Sumber Energi / Asal Kekuatan"
-                        value={draftEntity.attributes.energySource || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              energySource: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Urutan Tingkatan / Tier"
-                        value={draftEntity.attributes.tierHierarchy || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              tierHierarchy: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Hukum & Batasan Mutlak (Hard Rules)"
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        Hukum Besi & Batasan Mutlak (Hard Magic Rules — Apa yang TIDAK BISA Dilakukan)
+                      </label>
+                      <textarea
+                        rows={3}
                         value={draftEntity.attributes.hardRules || ''}
                         onChange={(e) =>
                           setDraftEntity({
@@ -2677,90 +3161,647 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             },
                           })
                         }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Risiko / Efek Samping Berlebih"
-                        value={draftEntity.attributes.corruptionCost || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              corruptionCost: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        placeholder="Tuliskan hukum mutlak agar sistem kekuatan konsisten dan bebas plot hole..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                       />
                     </div>
-                  )}
-
-                  {category === 'skill' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Power System Induk"
-                        value={draftEntity.attributes.parentPowerSystem || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              parentPowerSystem: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Tingkatan / Rank Skill"
-                        value={draftEntity.attributes.skillRank || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              skillRank: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Syarat / Biaya Aktivasi"
-                        value={draftEntity.attributes.activationCost || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              activationCost: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Batas Waktu / Cooldown / Kelemahan"
-                        value={draftEntity.attributes.cooldownOrLimit || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              cooldownOrLimit: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Risiko Over-Resonansi & Harga Kekuatan (Corruption / Backlash Cost)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.corruptionCost || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                corruptionCost: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Efek samping fisik, mental, atau kutukan bila dipaksakan melampaui batas..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Kelemahan Lingkungan & Material Penangkal (Anti-Magic / Counter)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.systemWeakness || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                systemWeakness: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Kondisi cuaca, tempat, atau material logam yang melemahkan kekuatan ini..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
                     </div>
-                  )}
+                  </div>
+                </div>
+              )}
+
+              {/* =========================================================== */}
+              {/* SKILL-SPECIFIC RICH EDITOR (Racial & Grand-Scale Skills)    */}
+              {/* =========================================================== */}
+              {category === 'skill' &&
+                (() => {
+                  const matchedParentPs = findMatchingEntityByName(
+                    draftEntity.attributes.parentPowerSystem,
+                    'power_system'
+                  );
+                  const parentPsAttrs = matchedParentPs
+                    ? getEnrichedAttributes(matchedParentPs)
+                    : {};
+                  const availableTiers = parentPsAttrs.powerTiersList || [];
+                  const availableBranches = parentPsAttrs.elementBranches || [];
+
+                  return (
+                    <div className="space-y-4">
+                      {/* 1. Dynamic Parent Power System, Tier & Branch Picker */}
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                        <div className="text-xs font-semibold text-[#5A3E7A]">
+                          1. Sistem Kekuatan Induk, Peringkat Tier & Cabang Aliran (Otomatis dari Power System)
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                          {/* Parent Power System Picker */}
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Sistem Kekuatan Induk (Power System)
+                            </label>
+                            <div className="space-y-1">
+                              <select
+                                value=""
+                                onChange={(e) => {
+                                  const selectedPsTitle = e.target.value;
+                                  if (!selectedPsTitle) return;
+                                  const psEnt = powerSystemEntities.find(
+                                    (p) => p.title === selectedPsTitle
+                                  );
+                                  const psA = psEnt
+                                    ? getEnrichedAttributes(psEnt)
+                                    : {};
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      parentPowerSystem: selectedPsTitle,
+                                      skillRank:
+                                        psA.powerTiersList &&
+                                        psA.powerTiersList.length > 0
+                                          ? psA.powerTiersList[0]
+                                          : draftEntity.attributes.skillRank,
+                                      elementAffinity:
+                                        psA.elementBranches &&
+                                        psA.elementBranches.length > 0
+                                          ? psA.elementBranches[0]
+                                          : draftEntity.attributes
+                                              .elementAffinity,
+                                    },
+                                  });
+                                }}
+                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                              >
+                                <option value="">
+                                  -- Pilih Power System Induk (
+                                  {powerSystemEntities.length}) --
+                                </option>
+                                {powerSystemEntities.map((ps) => (
+                                  <option key={ps.id} value={ps.title}>
+                                    {ps.title}
+                                  </option>
+                                ))}
+                              </select>
+                              <input
+                                type="text"
+                                value={
+                                  draftEntity.attributes.parentPowerSystem || ''
+                                }
+                                onChange={(e) =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      parentPowerSystem: e.target.value,
+                                    },
+                                  })
+                                }
+                                placeholder="Atau ketik sistem kekuatan..."
+                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Dynamic Tier / Rank Picker from Parent Power System */}
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Peringkat / Tier (Tarik dari{' '}
+                              {matchedParentPs
+                                ? matchedParentPs.title.split(' ')[0]
+                                : 'Power System'}
+                              )
+                            </label>
+                            <div className="space-y-1">
+                              <select
+                                value=""
+                                onChange={(e) => {
+                                  if (!e.target.value) return;
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      skillRank: e.target.value,
+                                    },
+                                  });
+                                }}
+                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                              >
+                                <option value="">
+                                  {availableTiers.length > 0
+                                    ? `-- Pilih Tier dari ${matchedParentPs?.title} (${availableTiers.length}) --`
+                                    : '-- Pilih Power System dahulu --'}
+                                </option>
+                                {availableTiers.map((tier) => (
+                                  <option key={tier} value={tier}>
+                                    {tier}
+                                  </option>
+                                ))}
+                              </select>
+                              <input
+                                type="text"
+                                value={draftEntity.attributes.skillRank || ''}
+                                onChange={(e) =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      skillRank: e.target.value,
+                                    },
+                                  })
+                                }
+                                placeholder="Atau ketik tingkatan tier..."
+                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Dynamic Branch / Element Picker from Parent Power System */}
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Cabang Aliran / Elemen (Tarik dari{' '}
+                              {matchedParentPs
+                                ? matchedParentPs.title.split(' ')[0]
+                                : 'Power System'}
+                              )
+                            </label>
+                            <div className="space-y-1">
+                              <select
+                                value=""
+                                onChange={(e) => {
+                                  if (!e.target.value) return;
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      elementAffinity: e.target.value,
+                                    },
+                                  });
+                                }}
+                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                              >
+                                <option value="">
+                                  {availableBranches.length > 0
+                                    ? `-- Pilih Cabang dari ${matchedParentPs?.title} (${availableBranches.length}) --`
+                                    : '-- Pilih Power System dahulu --'}
+                                </option>
+                                {availableBranches.map((br) => (
+                                  <option key={br} value={br}>
+                                    {br}
+                                  </option>
+                                ))}
+                              </select>
+                              <input
+                                type="text"
+                                value={
+                                  draftEntity.attributes.elementAffinity || ''
+                                }
+                                onChange={(e) =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      elementAffinity: e.target.value,
+                                    },
+                                  })
+                                }
+                                placeholder="Atau ketik cabang aliran..."
+                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 2. Skill Exclusivity, Exclusive Races & Impact Scale */}
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                        <div className="text-xs font-semibold text-[#9E2A2B]">
+                          2. Sifat Eksklusivitas Rasial & Skala Cakupan Dampak
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Sifat Kepemilikan / Eksklusivitas Skill
+                            </label>
+                            <input
+                              type="text"
+                              list="skill-exclusivity-list"
+                              value={
+                                draftEntity.attributes.skillExclusivity || ''
+                              }
+                              onChange={(e) =>
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    skillExclusivity: e.target.value,
+                                  },
+                                })
+                              }
+                              placeholder="Warisan Rasial Eksklusif / Teknik Skala Strategis..."
+                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            />
+                            <datalist id="skill-exclusivity-list">
+                              {SKILL_EXCLUSIVITY_OPTIONS.map((opt) => (
+                                <option key={opt} value={opt} />
+                              ))}
+                            </datalist>
+                          </div>
+
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Skala & Radius Cakupan Dampak (Impact Scale)
+                            </label>
+                            <input
+                              type="text"
+                              list="skill-scale-list"
+                              value={draftEntity.attributes.impactScale || ''}
+                              onChange={(e) =>
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    impactScale: e.target.value,
+                                  },
+                                })
+                              }
+                              placeholder="Skala Pasukan / Benteng / Kota / Regional..."
+                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            />
+                            <datalist id="skill-scale-list">
+                              {SKILL_IMPACT_SCALE_OPTIONS.map((sc) => (
+                                <option key={sc} value={sc} />
+                              ))}
+                            </datalist>
+                          </div>
+                        </div>
+
+                        {/* Exclusive Races / Bloodline Picker */}
+                        <div className="space-y-2 pt-1">
+                          <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                            Ras atau Garis Darah Pemilik Eksklusif Skill Ini
+                          </label>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(draftEntity.attributes.exclusiveRaces || []).map(
+                              (rc) => (
+                                <span
+                                  key={rc}
+                                  className="px-2.5 py-1 rounded bg-[#2D5A43] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                                >
+                                  {rc}
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      toggleDraftArrayItem('exclusiveRaces', rc)
+                                    }
+                                    className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </span>
+                              )
+                            )}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="text-[11px] text-[#695A47]">
+                              Pilih dari Tab Ras:
+                            </span>
+                            {raceEntities.map((rEnt) => {
+                              const active = (
+                                draftEntity.attributes.exclusiveRaces || []
+                              ).includes(rEnt.title);
+                              return (
+                                <button
+                                  key={rEnt.id}
+                                  type="button"
+                                  onClick={() =>
+                                    toggleDraftArrayItem(
+                                      'exclusiveRaces',
+                                      rEnt.title
+                                    )
+                                  }
+                                  className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
+                                    active
+                                      ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
+                                      : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                  }`}
+                                >
+                                  {active ? '✓ ' : '+ '}
+                                  {rEnt.title}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <div className="flex gap-1.5">
+                            <input
+                              type="text"
+                              value={customExclusiveRaceInput}
+                              onChange={(e) =>
+                                setCustomExclusiveRaceInput(e.target.value)
+                              }
+                              placeholder="Ketik sub-ras atau klan garis darah khusus..."
+                              className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (!customExclusiveRaceInput.trim()) return;
+                                toggleDraftArrayItem(
+                                  'exclusiveRaces',
+                                  customExclusiveRaceInput
+                                );
+                                setCustomExclusiveRaceInput('');
+                              }}
+                              className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                            >
+                              + Tambah Garis Darah
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 3. Large-Scale Strategic Impact, Visual Manifestation & Activation Cost */}
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                        <div className="text-xs font-semibold text-[#9E2A2B]">
+                          3. Dampak Skala Besar / Strategis, Manifestasi Visual & Syarat Aktivasi
+                        </div>
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                            Dampak Skala Besar & Efek Strategis terhadap Medan / Wilayah (Gunakan [[Nama Entitas]] untuk Tautan)
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={
+                              draftEntity.attributes.strategicImpact || ''
+                            }
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  strategicImpact: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Apa yang terjadi pada benteng, pasukan, atau lanskap alam ketika skill berskala besar ini dilepaskan..."
+                            className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[11px] font-semibold text-[#5A3E7A] mb-1">
+                            Manifestasi Visual, Suara & Fenomena Alam Saat Diaktifkan (Panduan Adegan Novel)
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={
+                              draftEntity.attributes.visualManifestation || ''
+                            }
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  visualManifestation: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Bagaimana wujud visual segel, warna cahaya, perubahan langit, atau getaran tanah saat teknik ini dirapal..."
+                            className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Syarat Pemicu & Biaya Aktivasi (Activation Cost)
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                draftEntity.attributes.activationCost || ''
+                              }
+                              onChange={(e) =>
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    activationCost: e.target.value,
+                                  },
+                                })
+                              }
+                              placeholder="Contoh: Membutuhkan darah murni Aelfir atau kompas logam..."
+                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                              Batas Cooldown, Frekuensi & Efek Balik Pengguna
+                            </label>
+                            <input
+                              type="text"
+                              value={
+                                draftEntity.attributes.cooldownOrLimit || ''
+                              }
+                              onChange={(e) =>
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    cooldownOrLimit: e.target.value,
+                                  },
+                                })
+                              }
+                              placeholder="Contoh: Maksimal 90 detik sebelum memicu pendarahan retina..."
+                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+              {/* Other Categories Structured Fields */}
+              {category !== 'character' &&
+                category !== 'race' &&
+                category !== 'faction' &&
+                category !== 'power_system' &&
+                category !== 'skill' && (
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                      Parameter Khusus {sectionMeta.label}
+                    </div>
+
+                    {category === 'nation' && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          placeholder="Bentuk Pemerintahan"
+                          value={draftEntity.attributes.government || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                government: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Ibu Kota Kerajaan"
+                          value={draftEntity.attributes.capitalCity || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                capitalCity: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Raja / Penguasa Saat Ini"
+                          value={draftEntity.attributes.ruler || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                ruler: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Mata Uang & Ekonomi"
+                          value={draftEntity.attributes.currency || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                currency: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    )}
+
+                    {category === 'region' && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <input
+                          type="text"
+                          placeholder="Negara / Kedaulatan Induk"
+                          value={draftEntity.attributes.parentNation || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                parentNation: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Iklim & Cuaca"
+                          value={draftEntity.attributes.climate || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                climate: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Sumber Daya Alam / Magis"
+                          value={draftEntity.attributes.resources || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                resources: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Tingkat Bahaya Wilayah"
+                          value={draftEntity.attributes.dangerLevel || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                dangerLevel: e.target.value,
+                              },
+                            })
+                          }
+                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    )}
 
                   {category === 'history' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -2989,6 +4030,44 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* Power System Awakening Condition Banner */}
+              {category === 'power_system' && activeAttrs.awakeningCondition && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#5A3E7A]">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>
+                      Syarat Bangkit (Awakening) & Pembukaan Meridian / Bakat
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.awakeningCondition}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Skill Visual Manifestation Banner */}
+              {category === 'skill' && activeAttrs.visualManifestation && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#5A3E7A]">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>
+                      Manifestasi Visual & Fenomena Saat Teknik Diaktifkan
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.visualManifestation}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -3075,6 +4154,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'factionArtifacts',
                             'alliedFactions',
                             'rivalFactions',
+                            'awakeningCondition',
+                            'powerTiersList',
+                            'elementBranches',
+                            'hardRules',
+                            'systemWeakness',
+                            'corruptionCost',
+                            'exclusiveRaces',
+                            'strategicImpact',
+                            'visualManifestation',
                           ].includes(key)
                         ) {
                           return false;
@@ -3114,15 +4202,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           year: 'Tahun Kejadian',
                           belligerents: 'Pihak Terlibat',
                           outcome: 'Dampak Sejarah',
-                          energySource: 'Sumber Energi',
-                          hardRules: 'Hukum Mutlak',
-                          tierHierarchy: 'Urutan Tingkatan',
-                          corruptionCost: 'Risiko / Harga Kekuatan',
-                          parentPowerSystem: 'Sistem Kekuatan',
-                          skillRank: 'Tingkat Teknik',
-                          elementAffinity: 'Elemen / Afiliasi',
-                          activationCost: 'Syarat Aktivasi',
-                          cooldownOrLimit: 'Batas Penggunaan',
+                          systemTypology: 'Tipologi Sistem Kekuatan',
+                          energySource: 'Sumber Energi Utama',
+                          originSource: 'Asal-Usul / Pencipta',
+                          catalystMedium: 'Medium Fokus / Penyalur',
+                          tierHierarchy: 'Ringkasan Urutan Tingkatan',
+                          parentPowerSystem: 'Sistem Kekuatan Induk',
+                          skillRank: 'Peringkat / Tier Teknik',
+                          elementAffinity: 'Cabang Aliran / Elemen',
+                          skillExclusivity: 'Sifat Eksklusivitas',
+                          impactScale: 'Skala Cakupan Dampak',
+                          activationCost: 'Syarat & Biaya Aktivasi',
+                          cooldownOrLimit: 'Batas Penggunaan / Efek Balik',
                           subCategory: 'Klasifikasi Ensiklopedia',
                           rarity: 'Tingkat Kelangkaan',
                           habitatOrOrigin: 'Asal / Habitat',
@@ -3141,6 +4232,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key === 'homeland' ||
                               key === 'headquarters'
                             ? 'region'
+                            : key === 'catalystMedium'
+                            ? 'encyclopedia'
                             : key === 'parentPowerSystem'
                             ? 'power_system'
                             : undefined;
@@ -3373,8 +4466,112 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         </div>
                       </div>
                     )}
+
+                  {/* Power System Tiers Ladder & Element Branches Interactive Cards */}
+                  {category === 'power_system' &&
+                    ((activeAttrs.powerTiersList &&
+                      activeAttrs.powerTiersList.length > 0) ||
+                      (activeAttrs.elementBranches &&
+                        activeAttrs.elementBranches.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#5A3E7A] flex items-center gap-1.5">
+                            <Flame className="w-3.5 h-3.5" />
+                            <span>Tangga Tingkatan Kekuatan (Power Tiers)</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.powerTiersList || []).map((tier) => (
+                              <span
+                                key={tier}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#5A3E7A]/40 text-xs font-semibold text-[#231C14]"
+                              >
+                                {tier}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Cabang Aliran & Disiplin Elemen</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.elementBranches || []).map((br) => (
+                              <span
+                                key={br}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#9E2A2B]/40 text-xs font-semibold text-[#231C14]"
+                              >
+                                {br}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Skill Exclusive Races Interactive Cards */}
+                  {category === 'skill' &&
+                    activeAttrs.exclusiveRaces &&
+                    activeAttrs.exclusiveRaces.length > 0 && (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5" />
+                          <span>
+                            Ras & Garis Darah Pemilik Eksklusif Skill Ini
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(activeAttrs.exclusiveRaces || []).map((rName) => {
+                            const matchedRace = findMatchingEntityByName(
+                              rName,
+                              'race'
+                            );
+                            return matchedRace ? (
+                              <button
+                                key={rName}
+                                type="button"
+                                onClick={() => jumpToEntity(matchedRace.id)}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>{rName}</span>
+                                <ArrowUpRight className="w-3 h-3" />
+                              </button>
+                            ) : (
+                              <span
+                                key={rName}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                              >
+                                {rName}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
+
+              {/* ============================================================= */}
+              {/* SKILL STRATEGIC / LARGE-SCALE IMPACT                          */}
+              {/* ============================================================= */}
+              {category === 'skill' && activeAttrs.strategicImpact && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#9E2A2B]">
+                    <Flame className="w-4 h-4" />
+                    <span>
+                      Dampak Skala Besar & Efek Strategis Medan Tempur ({activeAttrs.impactScale || 'Skala Khusus'})
+                    </span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.strategicImpact}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* ============================================================= */}
               {/* CHARACTER PSYCHOLOGY (MOTIVATION VS FLAW) & 3-ACT ARC         */}
@@ -3680,6 +4877,79 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
+              {/* ============================================================= */}
+              {/* POWER SYSTEM HARD RULES, COUNTER-WEAKNESS & CORRUPTION COST   */}
+              {/* ============================================================= */}
+              {category === 'power_system' &&
+                (activeAttrs.hardRules ||
+                  activeAttrs.corruptionCost ||
+                  activeAttrs.systemWeakness) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#5A3E7A]">
+                      <ShieldCheck className="w-4 h-4" />
+                      <span>
+                        Arsitektur Hukum Besi (Hard Magic Rules), Penangkal & Harga Kekuatan
+                      </span>
+                    </div>
+
+                    {activeAttrs.hardRules && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>
+                            Hukum Besi & Batasan Mutlak (Hard Magic Rules)
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.hardRules}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {(activeAttrs.corruptionCost ||
+                      activeAttrs.systemWeakness) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Risiko Over-Resonansi & Harga Kekuatan (Backlash)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.corruptionCost || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#231C14]">
+                            Kelemahan Lingkungan & Material Penangkal (Counter)
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.systemWeakness || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
               <div className="pt-4 border-t border-[#D8CBB3]">
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#695A47] mb-3">
@@ -3842,6 +5112,298 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       })}
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF DERIVED SKILLS & PRACTITIONERS (POWER)    */}
+              {/* ============================================================= */}
+              {category === 'power_system' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                  {/* Derived Skills Section */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Swords className="w-4 h-4 text-[#5A3E7A]" />
+                        <span>
+                          Daftar Teknik & Skill Turunan {activeEntity.title} (
+                          {skillsOfActivePowerSystem.length})
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCreateSkillFromPowerSystem(activeEntity)
+                        }
+                        className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        + Buat Skill dari Sistem Ini
+                      </button>
+                    </div>
+
+                    {skillsOfActivePowerSystem.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada teknik di tab <strong>Skill</strong> yang
+                        tercatat di bawah sistem kekuatan ini. Klik{' '}
+                        <strong>+ Buat Skill dari Sistem Ini</strong> untuk
+                        merancang jurus baru secara instan.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {skillsOfActivePowerSystem.map((sk) => {
+                          const sAttrs = getEnrichedAttributes(sk);
+                          return (
+                            <button
+                              key={sk.id}
+                              type="button"
+                              onClick={() => jumpToEntity(sk.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#5A3E7A]">
+                                <span>
+                                  {sAttrs.skillRank || 'Teknik Kanon'}
+                                </span>
+                                <span>
+                                  {sAttrs.elementAffinity || 'Aliran Umum'}
+                                </span>
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{sk.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-2">
+                                {sk.summary}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Practitioners Section */}
+                  {practitionersOfActivePowerSystem.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                        <span>
+                          Praktisi & Pengguna Tercatat (
+                          {practitionersOfActivePowerSystem.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {practitionersOfActivePowerSystem.map((prac) => {
+                          const pAttrs = getEnrichedAttributes(prac);
+                          return (
+                            <button
+                              key={prac.id}
+                              type="button"
+                              onClick={() => jumpToEntity(prac.id)}
+                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                            >
+                              {prac.imageUrl ? (
+                                <img
+                                  src={prac.imageUrl}
+                                  alt={prac.title}
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                  <span className="truncate">{prac.title}</span>
+                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                </div>
+                                <div className="text-[11px] text-[#695A47] truncate">
+                                  {pAttrs.powerTier || prac.subtitle}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF RACES & CHARACTER PRACTITIONERS (SKILL)   */}
+              {/* ============================================================= */}
+              {category === 'skill' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                  {/* Races Possessing This Skill */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Globe className="w-4 h-4 text-[#2D5A43]" />
+                        <span>
+                          Ras & Garis Darah Penguasa Skill Ini (
+                          {racesOfActiveSkill.length})
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <select
+                          value={selectedQuickRaceId}
+                          onChange={(e) =>
+                            setSelectedQuickRaceId(e.target.value)
+                          }
+                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                        >
+                          <option value="">-- Pilih Ras --</option>
+                          {raceEntities.map((r) => (
+                            <option key={r.id} value={r.id}>
+                              {r.title}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={!selectedQuickRaceId}
+                          onClick={() => {
+                            if (!selectedQuickRaceId) return;
+                            handleLinkSkillToRace(
+                              activeEntity,
+                              selectedQuickRaceId
+                            );
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#2D5A43] text-white rounded-lg disabled:opacity-40 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tautkan ke Ras
+                        </button>
+                      </div>
+                    </div>
+
+                    {racesOfActiveSkill.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada entitas <strong>Ras</strong> yang tercatat
+                        mewarisi skill ini secara eksklusif. Pilih ras di atas
+                        dan klik <strong>+ Tautkan ke Ras</strong> bila skill
+                        ini adalah keahlian rasial.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {racesOfActiveSkill.map((rc) => {
+                          const rAttrs = getEnrichedAttributes(rc);
+                          return (
+                            <button
+                              key={rc.id}
+                              type="button"
+                              onClick={() => jumpToEntity(rc.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="text-[11px] font-semibold text-[#2D5A43]">
+                                {rAttrs.raceOriginClass || 'Ras Kanon'} ·{' '}
+                                {rAttrs.homeland || 'Habitat Asal'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{rc.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-1">
+                                {rc.subtitle}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Character Practitioners Mastering This Skill */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                        <span>
+                          Tokoh Praktisi yang Menguasai Skill Ini (
+                          {practitionersOfActiveSkill.length})
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <select
+                          value={selectedQuickCharId}
+                          onChange={(e) =>
+                            setSelectedQuickCharId(e.target.value)
+                          }
+                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                        >
+                          <option value="">-- Pilih Tokoh --</option>
+                          {characterEntities.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.title}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={!selectedQuickCharId}
+                          onClick={() => {
+                            if (!selectedQuickCharId) return;
+                            handleLinkSkillToCharacter(
+                              activeEntity,
+                              selectedQuickCharId
+                            );
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg disabled:opacity-40 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tautkan ke Tokoh
+                        </button>
+                      </div>
+                    </div>
+
+                    {practitionersOfActiveSkill.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada tokoh di tab <strong>Character</strong> yang
+                        tercatat menguasai skill ini. Pilih tokoh di atas dan
+                        klik <strong>+ Tautkan ke Tokoh</strong>.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {practitionersOfActiveSkill.map((prac) => {
+                          const pAttrs = getEnrichedAttributes(prac);
+                          return (
+                            <button
+                              key={prac.id}
+                              type="button"
+                              onClick={() => jumpToEntity(prac.id)}
+                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                            >
+                              {prac.imageUrl ? (
+                                <img
+                                  src={prac.imageUrl}
+                                  alt={prac.title}
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                  <span className="truncate">{prac.title}</span>
+                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                </div>
+                                <div className="text-[11px] text-[#695A47] truncate">
+                                  {pAttrs.raceName
+                                    ? `${pAttrs.raceName} · `
+                                    : ''}
+                                  {pAttrs.powerTier || prac.subtitle}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 

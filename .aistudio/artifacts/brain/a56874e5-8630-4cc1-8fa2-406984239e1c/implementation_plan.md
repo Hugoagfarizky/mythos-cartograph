@@ -1,56 +1,58 @@
-# Rencana Pengembangan Tab Power System (Magic & Combat Architecture Bible) — MythosCartograph
+# Rencana Penyempurnaan Tab Negara (Atlas Geopolitik & Kedaulatan Kerajaan)
 
-Berdasarkan pilihan Anda, berikut adalah rancangan peningkatan menyeluruh untuk tab **Power System** (`CodexWorkspace.tsx`, `types/world.ts`, dan `starterWorld.ts`) agar berfungsi sebagai *Hard Magic & Combat Architecture Codex* yang terhubung langsung dengan tab **Skill**, **Character**, **Ras**, dan **Artefak & Biota**:
-
----
-
-## 1. Perluasan Skema Atribut Power System (`LoreAttributes` di `src/types/world.ts`)
-Menambahkan atribut terstruktur khusus entitas berkategori `'power_system'`:
-- **Klasifikasi & Fondasi Energi**:
-  - `systemTypology`: Tipologi Sistem Kekuatan (*Hard Magic / Terukur*, *Kultivasi & Meridian*, *Runik & Kriya Artefak*, *Ilahi & Pakta Kosmik*, *Bela Diri & Aura Fisik*).
-  - `energySource`: Sumber energi utama (matahari, eter, emosi, panas bumi, dll.).
-  - `originSource`: Asal-usul historis, ras pencipta, atau wilayah tempat sistem ini pertama kali ditemukan (mendukung tautan ke **Ras** / **Wilayah** / **Sejarah**).
-  - `awakeningCondition`: Syarat bangkit (*Awakening*) atau bakat yang dibutuhkan seseorang untuk mempelajari sistem ini.
-  - `catalystMedium`: Medium fokus, senjata, segel, atau artefak penyalur yang dibutuhkan (mendukung tautan ke **Artefak & Biota**).
-- **Tangga Tingkatan (*Power Tiers*) & Cabang Aliran (*Schools / Affinities*)**:
-  - `powerTiersList`: Daftar urutan tingkatan penguasaan dari pemula hingga puncak mitos (`string[]`).
-  - `elementBranches`: Daftar cabang aliran, disiplin, atau elemen turunan di dalam sistem kekuatan ini (`string[]`).
-- **Hukum Besi (*Hard Rules*), Kelemahan Lingkungan & Harga Kekuatan (*Corruption Cost*)**:
-  - `hardRules`: Hukum mutlak yang tidak pernah bisa dilanggar oleh sistem kekuatan ini (menjaga cerita bebas dari *plot hole* / *deus ex machina*).
-  - `systemWeakness`: Kondisi cuaca, material penangkal (*anti-magic*), atau situasi di mana sistem ini lumpuh/melemah.
-  - `corruptionCost`: Risiko fisik, mental, atau kutukan permanen apabila pengguna melampaui kapasitasnya (*Overload / Backlash*).
+Berdasarkan jawaban Anda, kita akan menyempurnakan tab **Negara** (`nation`) menjadi **Atlas Geopolitik & Kedaulatan Kerajaan (*Sovereign Realm Bible*)** yang menghubungkan penguasa, demografi ras, kekuatan militer, ekonomi, diplomasi, serta wilayah-wilayah di bawah kedaulatannya.
 
 ---
 
-## 2. Lima Pembaruan Utama pada Antarmuka Tab Power System (`src/components/CodexWorkspace.tsx`)
+## 1. Perluasan Skema Atribut Negara (`src/types/world.ts`)
+Menambahkan atribut geopolitik baru pada `LoreAttributes` untuk kategori `nation`:
+- `governmentType?: string` — Klasifikasi bentuk pemerintahan untuk filter direktori (mis. *Kekaisaran / Monarki*, *Dewan Serikat / Republik*, *Persemakmuran / Otonom*, *Teokrasi / Magokrasi*).
+- `nationalEmblem?: string` — Lambang panji kerajaan, warna kebesaran, dan semboyan resmi negara.
+- `dominantRaces?: string[]` — Daftar Ras mayoritas dan kelompok demografi penghuni negara (terhubung langsung ke entitas **Ras**).
+- `economicCommodities?: string` — Komoditas ekspor/impor utama, pusat industri/perdagangan, dan penopang ekonomi negara (mendukung sintaks `[[Nama Entitas]]`).
+- `militaryStrength?: string` — Kekuatan militer darat/laut, ordo pertahanan negara, benteng strategis, dan doktrin perang (mendukung sintaks `[[Nama Entitas]]`).
+- `lawsAndCulture?: string` — Hukum utama kerajaan, larangan/tabu negara, struktur kelas warga, serta tradisi masyarakat (mendukung sintaks `[[Nama Entitas]]`).
+- `diplomaticAllies?: string` — Hubungan diplomasi, pakta pertahanan, dan mitra dagang luar negeri (mendukung sintaks `[[Nama Entitas]]`).
+- `borderConflicts?: string` — Rival geopolitik, sengketa wilayah perbatasan, embargo, dan potensi pecahnya perang (mendukung sintaks `[[Nama Entitas]]`).
 
-### A. Filter Tipologi Sistem Kekuatan di Direktori Kiri
-- Menambahkan barisan tombol filter tipologi di atas daftar direktori Power System:
-  - `Semua`, `Hard Magic / Terukur`, `Kultivasi & Meridian`, `Runik & Kriya Artefak`, `Ilahi & Pakta Kosmik`, `Bela Diri & Aura Fisik`.
-- Setiap kartu di direktori kiri menampilkan tipologi sistem, sumber energi, jumlah cabang aliran, serta jumlah **Skill turunan** yang tercatat.
-
-### B. Panel Fondasi Energi, Syarat Bangkit (*Awakening*) & Medium Penyalur (*Catalyst*)
-- Menampilkan kartu informasi terstruktur untuk **Tipologi Sistem**, **Sumber Energi**, **Asal-Usul / Pencipta** (dapat diklik ke entitas Ras/Wilayah/Sejarah), **Syarat Bangkit & Bakat**, serta **Medium Fokus / Alat Penyalur** (dapat diklik ke entitas Artefak).
-
-### C. Panel Tangga Tingkatan (*Power Tiers*) & Cabang Aliran / Disiplin (*Branches*)
-- Menampilkan kartu **Tangga Tingkatan Kekuatan (Tier Hierarchy)** secara berurutan dari tingkat dasar hingga puncak.
-- Menampilkan kartu **Cabang Aliran & Disiplin Elemen** sebagai daftar yang terstruktur rapi.
-
-### D. Panel Hukum Besi (*Hard Magic Rules*), Penangkal & Risiko Efek Samping (*Backlash*)
-- Menampilkan perbandingan berdampingan antara **Hukum Mutlak & Batasan Sistem (Hard Rules)** dengan **Risiko Over-Resonansi & Harga Kekuatan (Corruption / Backlash)** serta **Kelemahan & Material Penangkal**, lengkap dengan dukungan tautan `[[Nama Entitas]]`.
-
-### E. Daftar Otomatis Skill Turunan & Praktisi Terkait + Tombol 1-Klik `+ Buat Skill dari Sistem Ini`
-- Di bagian bawah lembar Power System, sistem secara otomatis menampilkan:
-  1. **Daftar Teknik & Skill Turunan** dari tab **Skill** yang memiliki `parentPowerSystem` yang merujuk pada sistem kekuatan ini, dilengkapi tombol **`+ Buat Skill dari Sistem Ini`** yang langsung membuat entri **Skill** baru dengan `parentPowerSystem` dan `elementAffinity` yang sudah terisi otomatis.
-  2. **Daftar Praktisi & Pengguna Tercatat** dari tab **Character** yang menguasai skill dari sistem ini atau memiliki *Power Tier* yang sesuai, lengkap dengan klik langsung menuju lembar karakter tersebut.
+*(Tetap mempertahankan atribut `government`, `capitalCity`, `ruler`, `stateReligion`, dan `currency` yang sudah ada).*
 
 ---
 
-## 3. Pemilih Hibrida Saat Mengedit Power System & Pengayaan Data Awal (`src/data/starterWorld.ts`)
-- Pada mode edit Power System, penulis dapat:
-  - Memilih **Asal-Usul / Pencipta** dari daftar **Ras**, **Wilayah**, atau **Sejarah** yang ada (atau mengetik manual).
-  - Memilih **Medium Fokus / Penyalur** dari daftar **Artefak & Biota** (atau mengetik manual).
-  - Mengelola daftar **Tangga Tingkatan (Power Tiers)** dan **Cabang Aliran / Elemen** secara interaktif.
-- Memperkaya data awal di `starterWorld.ts`:
-  - Melengkapi **Resonansi Eteris Astral** (`pwr-resonansi-astral`) dengan seluruh atribut Power System baru (3 cabang aliran: *Jalur Solar*, *Jalur Lunar*, *Jalur Sidereal*; 6 tangga Lingkar Jiwa; syarat bangkit; medium penyalur; penangkal; dan kutukan kristalisasi).
-  - Menambahkan sistem kekuatan kedua **Tempaan Runik Besi-Bintang (Khaz-Vahl Artifice)** (`pwr-tempaan-runik`) sebagai contoh sistem bertipologi *Runik & Kriya Artefak* milik bangsa Dvergr, sehingga direktori Power System memiliki perbandingan dua sistem kekuatan yang kontras.
+## 2. Pengayaan Data Awal (`src/data/starterWorld.ts`)
+- Memperkaya **Kekaisaran Gondoria** (`nat-gondoria`) dan **Kerajaan Bawah Tanah Nidavellir** (`nat-nidavellir`) dengan seluruh atribut geopolitik baru (lambang & semboyan negara, demografi ras, komoditas ekonomi, kekuatan militer, hukum & budaya, serta peta diplomasi dan konflik perbatasan).
+- Menambahkan 1 entitas Negara/Kedaulatan ke-3 sebagai pelengkap peta geopolitik Aethelia: **Persemakmuran Kanopi Eldath** (`nat-eldath`, konfederasi otonom bangsa [[Sylvan Aelfir]] di wilayah [[Rimba Bayang-Bayang (Shadowwood)]]).
+
+---
+
+## 3. Desain Lembar Profil Negara (`src/components/CodexWorkspace.tsx`)
+
+### A. Filter Bentuk Pemerintahan di Direktori Kiri
+- Menambahkan barisan tombol filter di kolom kiri untuk tab **Negara**:
+  - `Semua`, `Kekaisaran / Monarki`, `Dewan Serikat / Republik`, `Persemakmuran / Otonom`, `Teokrasi / Magokrasi`.
+- Setiap kartu Negara pada daftar kiri menampilkan **Bentuk Pemerintahan**, **Ibu Kota**, **Penguasa Saat Ini**, dan jumlah **Ras Mayoritas**.
+
+### B. Tampilan Lembar Geopolitik Negara (Mode Baca)
+1. **Banner Lambang Panji & Semboyan Negara (`nationalEmblem`)**: Ditampilkan di bagian atas lembar profil negara.
+2. **Kartu Spesifikasi Kedaulatan & Tautan Relasional**:
+   - **Penguasa Saat Ini (`ruler`)** → Tautan klik langsung menuju profil **Character** penguasa.
+   - **Ibu Kota (`capitalCity`)** → Tautan klik langsung menuju **Wilayah** terkait (jika ada).
+   - **Bentuk Pemerintahan (`government`)**, **Kepercayaan Resmi (`stateReligion`)**, dan **Mata Uang (`currency`)**.
+3. **Kartu Interaktif Demografi Ras Penghuni (`dominantRaces`)**: Menampilkan *chip* Ras yang mendiami negara tersebut, yang dapat diklik untuk langsung melompat ke lembar **Ras**.
+4. **Panel Ekonomi, Kekuatan Militer & Hukum Masyarakat**:
+   - Kartu berdampingan **Komoditas Ekonomi & Perdagangan (`economicCommodities`)** dan **Kekuatan Militer & Pertahanan Strategis (`militaryStrength`)**.
+   - Kartu **Hukum Kerajaan, Ketertiban & Budaya Masyarakat (`lawsAndCulture`)**.
+5. **Panel Peta Diplomasi & Konflik Perbatasan**:
+   - Kartu berdampingan **Mitra Aliansi & Hubungan Diplomatik (`diplomaticAllies`)** vs **Konflik Perbatasan & Rival Geopolitik (`borderConflicts`)**.
+
+### C. Mode Sunting dengan Pemilih Hibrida (Pilih dari Entitas atau Ketik Baru)
+- **Pemilih Hibrida Penguasa (`ruler`)**: Dropdown dari daftar **Tokoh** (`character`) yang ada + kolom ketik manual.
+- **Pemilih Hibrida Ibu Kota (`capitalCity`)**: Dropdown dari daftar **Wilayah** (`region`) / titik peta yang ada + kolom ketik manual.
+- **Pemilih Hibrida Demografi Ras (`dominantRaces`)**: Tombol *chip* interaktif untuk memilih satu atau beberapa **Ras** (`race`) yang ada di dunia + kolom tambah ras/etnis kustom.
+- Editor terstruktur untuk **Lambang & Semboyan Negara**, **Komoditas Ekonomi**, **Kekuatan Militer**, **Hukum & Budaya**, serta **Diplomasi & Konflik Perbatasan**.
+
+### D. Direktori Otomatis Wilayah, Kelompok & Warga Negara + Tombol 1-Klik
+Di bagian bawah lembar profil Negara:
+1. **Daftar Otomatis Wilayah & Provinsi (`regionsOfActiveNation`)**: Menghimpun semua entitas di tab **Wilayah** yang berada di bawah kedaulatan negara ini, dilengkapi tombol 1-klik **`+ Buat Wilayah di Negara Ini`** (otomatis membuat Wilayah baru dengan `parentNation` terisi nama negara ini).
+2. **Daftar Otomatis Kelompok & Organisasi (`factionsOfActiveNation`)**: Menghimpun semua **Kelompok** yang bermarkas atau beroperasi di negara ini.
+3. **Daftar Otomatis Tokoh & Warga Negara (`citizensOfActiveNation`)**: Menghimpun semua **Tokoh** yang berasal dari atau memimpin negara ini.
