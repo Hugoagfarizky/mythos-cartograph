@@ -15,19 +15,22 @@
   }
 
   body {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Lora', Georgia, Cambria, serif;
     background-color: #F6F1E6;
     color: #231C14;
-    line-height: 1.6;
+    line-height: 1.65;
+    letter-spacing: 0.005em;
   }
 
   h1, h2, h3, .font-display {
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
+    letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
   .font-cartography {
-    font-family: 'Cinzel', 'Cormorant Garamond', Georgia, serif;
+    font-family: 'Fraunces', Georgia, serif;
+    letter-spacing: 0.04em;
   }
 
   .font-mono-tabular {

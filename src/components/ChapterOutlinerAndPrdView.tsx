@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import {
-  BookMarked,
-  CheckCircle2,
+  Compass,
   Edit3,
-  FileText,
-  Layers,
+  FilePlus2,
+  Flame,
+  Globe,
   Plus,
   ShieldCheck,
   Sparkles,
   Trash2,
+  Zap,
 } from 'lucide-react';
 import { ChapterOutline, LoreEntity, WorldProject } from '../types/world';
 import { CATEGORY_META, WikiTextRenderer } from './WikiTextRenderer';
@@ -430,41 +431,59 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
   );
 };
 
-interface PrdBlueprintViewProps {
+interface WorldSettingsAndPowerViewProps {
   project: WorldProject;
   onUpdateProjectMeta: (patch: Partial<WorldProject>) => void;
-  onNavigateModule: (
-    mod: 'codex' | 'map' | 'timeline' | 'graph' | 'outliner' | 'prd'
-  ) => void;
+  onCreateBlankWorld: () => void;
+  onSelectEntity: (entityId: string) => void;
 }
 
-export const PrdBlueprintView: React.FC<PrdBlueprintViewProps> = ({
+export const WorldSettingsAndPowerView: React.FC<
+  WorldSettingsAndPowerViewProps
+> = ({
   project,
   onUpdateProjectMeta,
-  onNavigateModule,
+  onCreateBlankWorld,
+  onSelectEntity,
 }) => {
+  const powerSystems = project.entities.filter(
+    (e) => e.category === 'power_system'
+  );
+  const skills = project.entities.filter((e) => e.category === 'skill');
+  const nations = project.entities.filter((e) => e.category === 'nation');
+  const races = project.entities.filter((e) => e.category === 'race');
+
   return (
     <div className="space-y-6">
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-4">
+      {/* World Identity & Cosmology Settings */}
+      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-5">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-4">
           <div>
             <div className="text-xs font-semibold text-[#9E2A2B]">
-              Product Requirements Document (PRD) & Konfigurasi Semesta Cerita
+              Identitas Semesta & Parameter Kanon
             </div>
             <h2 className="font-display text-3xl font-bold text-[#231C14]">
-              Cetak Biru Platform MythosCartograph
+              Pengaturan Dunia & Kosmologi ({project.worldName})
             </h2>
             <p className="text-sm text-[#695A47] mt-1 max-w-3xl">
-              Halaman ini mendokumentasikan spesifikasi konsep (PRD) yang telah diimplementasikan secara penuh ke dalam ruang kerja Anda, sekaligus menjadi pusat pengaturan identitas proyek dunia cerita.
+              Atur nama dunia, genre, sistem penanggalan kalender, serta tinjau ringkasan struktur kekuatan (*Power System*) dan geopolitik di semesta cerita Anda.
             </p>
           </div>
+
+          <button
+            type="button"
+            onClick={onCreateBlankWorld}
+            className="px-3.5 py-2 text-xs font-semibold border border-[#9E2A2B] text-[#9E2A2B] hover:bg-[#9E2A2B] hover:text-white rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <FilePlus2 className="w-3.5 h-3.5" />
+            Buat Dunia Kosong Baru
+          </button>
         </div>
 
-        {/* Editable World Project Metadata */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-semibold text-[#695A47] mb-1">
-              Nama Dunia / Judul Proyek
+              Nama Dunia / Judul Semesta
             </label>
             <input
               type="text"
@@ -477,7 +496,7 @@ export const PrdBlueprintView: React.FC<PrdBlueprintViewProps> = ({
           </div>
           <div>
             <label className="block text-xs font-semibold text-[#695A47] mb-1">
-              Genre & Sub-Genre
+              Genre & Sub-Genre Cerita
             </label>
             <input
               type="text"
@@ -488,7 +507,7 @@ export const PrdBlueprintView: React.FC<PrdBlueprintViewProps> = ({
           </div>
           <div>
             <label className="block text-xs font-semibold text-[#695A47] mb-1">
-              Sistem Penanggalan / Era
+              Sistem Penanggalan / Era Kalender
             </label>
             <input
               type="text"
@@ -501,7 +520,7 @@ export const PrdBlueprintView: React.FC<PrdBlueprintViewProps> = ({
           </div>
           <div>
             <label className="block text-xs font-semibold text-[#695A47] mb-1">
-              Nama Penulis / Arsiparis
+              Nama Penulis / Kreator Dunia
             </label>
             <input
               type="text"
@@ -513,107 +532,164 @@ export const PrdBlueprintView: React.FC<PrdBlueprintViewProps> = ({
             />
           </div>
         </div>
+
+        <div>
+          <label className="block text-xs font-semibold text-[#695A47] mb-1">
+            Premis Utama / Tagline Dunia Cerita
+          </label>
+          <input
+            type="text"
+            value={project.tagline}
+            onChange={(e) => onUpdateProjectMeta({ tagline: e.target.value })}
+            className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+          />
+        </div>
       </div>
 
-      {/* PRD Pillar Matrix */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-3">
-          <div className="text-xs font-semibold text-[#9E2A2B]">
-            01. Pilar World Bible Codex (9 Kategori)
+      {/* Power System & Skill Matrix Overview */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+            <div>
+              <div className="text-xs font-semibold text-[#264653]">
+                Hukum Kekuatan & Hirarki Sihir
+              </div>
+              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                Matriks Power System & Skill
+              </h3>
+            </div>
+            <Zap className="w-5 h-5 text-[#B5832A]" />
           </div>
-          <h3 className="font-display text-xl font-bold text-[#231C14]">
-            Manajemen Entitas & Wiki Cross-Link
-          </h3>
-          <p className="text-xs text-[#695A47] leading-relaxed">
-            Menyimpan seluruh kanon cerita dengan atribut terstruktur khusus untuk Karakter, Ras, Kelompok/Faksi, Negara, Wilayah, Sejarah, Power System, Skill, serta Ensiklopedia Artefak/Flora/Fauna.
-          </p>
-          <ul className="text-xs text-[#231C14] space-y-1.5 pt-1">
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Sintaks [[Nama Entitas]] untuk tautan dua arah otomatis</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Panel Backlinks: lacak di mana saja entitas disebut</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Atribut Hard Magic untuk Power System & Skill</span>
-            </li>
-          </ul>
-          <button
-            type="button"
-            onClick={() => onNavigateModule('codex')}
-            className="w-full mt-2 py-2 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg transition-colors cursor-pointer"
-          >
-            Buka Modul World Bible Codex →
-          </button>
+
+          <div className="space-y-3">
+            {powerSystems.map((ps) => (
+              <div
+                key={ps.id}
+                className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="font-display text-xl font-bold text-[#231C14]">
+                    {ps.title}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onSelectEntity(ps.id)}
+                    className="text-xs font-semibold text-[#9E2A2B] hover:underline cursor-pointer"
+                  >
+                    Sunting Hukum →
+                  </button>
+                </div>
+                <p className="text-xs text-[#695A47]">{ps.summary}</p>
+                {ps.attributes.tierHierarchy && (
+                  <div className="text-xs bg-[#EFE7D6] p-2.5 rounded-lg border border-[#D8CBB3]">
+                    <span className="font-semibold text-[#231C14]">
+                      Urutan Tingkatan (Tier):{' '}
+                    </span>
+                    <span className="text-[#695A47]">
+                      {ps.attributes.tierHierarchy}
+                    </span>
+                  </div>
+                )}
+                {ps.attributes.hardRules && (
+                  <div className="text-xs text-[#9E2A2B] font-medium">
+                    Batasan Mutlak: {ps.attributes.hardRules}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <div className="pt-2">
+              <div className="text-xs font-semibold text-[#695A47] mb-2">
+                Daftar Skill & Teknik Terdaftar ({skills.length})
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {skills.map((sk) => (
+                  <button
+                    key={sk.id}
+                    type="button"
+                    onClick={() => onSelectEntity(sk.id)}
+                    className="text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                  >
+                    <div className="text-[11px] font-semibold text-[#264653]">
+                      {sk.attributes.skillRank || 'Teknik Khusus'}
+                    </div>
+                    <div className="font-display text-base font-bold text-[#231C14]">
+                      {sk.title}
+                    </div>
+                    <div className="text-xs text-[#695A47] line-clamp-1 mt-0.5">
+                      {sk.summary}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-3">
-          <div className="text-xs font-semibold text-[#9E2A2B]">
-            02. Pilar Kartografi Interaktif
+        {/* Geopolitics & Races Quick Atlas */}
+        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+            <div>
+              <div className="text-xs font-semibold text-[#2D5A43]">
+                Geopolitik, Kerajaan & Bangsa
+              </div>
+              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                Ikhtisar Negara & Ras Penghuni
+              </h3>
+            </div>
+            <Globe className="w-5 h-5 text-[#9E2A2B]" />
           </div>
-          <h3 className="font-display text-xl font-bold text-[#231C14]">
-            Medieval Map Sandbox Canvas
-          </h3>
-          <p className="text-xs text-[#695A47] leading-relaxed">
-            Kanvas *sandbox* bergaya peta perkamen abad pertengahan untuk melukis bentuk benua, menaruh simbol kartografi klasik, dan menghubungkan titik geografis ke basis data lore.
-          </p>
-          <ul className="text-xs text-[#231C14] space-y-1.5 pt-1">
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>8 Kuas Bioma (Daratan, Samudra, Gunung, Rimba, Gurun, Rawa)</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Stempel Ikon Abad Pertengahan & Label Kaligrafi Wilayah</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Klik Pin untuk membuka detail Negara/Wilayah + Ekspor PNG</span>
-            </li>
-          </ul>
-          <button
-            type="button"
-            onClick={() => onNavigateModule('map')}
-            className="w-full mt-2 py-2 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg transition-colors cursor-pointer"
-          >
-            Buka Medieval Map Sandbox →
-          </button>
-        </div>
 
-        <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-3">
-          <div className="text-xs font-semibold text-[#9E2A2B]">
-            03. Pilar Naratif & Asisten AI
+          <div className="space-y-3">
+            <div className="text-xs font-semibold text-[#695A47]">
+              Negara & Kedaulatan ({nations.length})
+            </div>
+            <div className="grid grid-cols-1 gap-2.5">
+              {nations.map((nat) => (
+                <button
+                  key={nat.id}
+                  type="button"
+                  onClick={() => onSelectEntity(nat.id)}
+                  className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center justify-between text-xs text-[#695A47]">
+                    <span className="font-semibold text-[#9E2A2B]">
+                      Ibu Kota: {nat.attributes.capitalCity || '-'}
+                    </span>
+                    <span>Penguasa: {nat.attributes.ruler || '-'}</span>
+                  </div>
+                  <div className="font-display text-lg font-bold text-[#231C14] mt-0.5">
+                    {nat.title}
+                  </div>
+                  <p className="text-xs text-[#695A47] mt-1">{nat.summary}</p>
+                </button>
+              ))}
+            </div>
+
+            <div className="text-xs font-semibold text-[#695A47] pt-2">
+              Ras & Bangsa ({races.length})
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {races.map((rc) => (
+                <button
+                  key={rc.id}
+                  type="button"
+                  onClick={() => onSelectEntity(rc.id)}
+                  className="text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                >
+                  <div className="text-[11px] font-semibold text-[#2D5A43]">
+                    Usia: {rc.attributes.lifespan || 'Tidak diketahui'}
+                  </div>
+                  <div className="font-display text-base font-bold text-[#231C14]">
+                    {rc.title}
+                  </div>
+                  <div className="text-xs text-[#695A47] line-clamp-1 mt-0.5">
+                    Habitat: {rc.attributes.homeland || '-'}
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
-          <h3 className="font-display text-xl font-bold text-[#231C14]">
-            Timeline, Relasi, Outliner & Audit AI
-          </h3>
-          <p className="text-xs text-[#695A47] leading-relaxed">
-            Menjaga kesinambungan alur cerita dari masa lalu hingga bab terbaru melalui visualisasi kronologis, peta jaringan politik, dan pemeriksaan *plot hole* berbasis AI.
-          </p>
-          <ul className="text-xs text-[#231C14] space-y-1.5 pt-1">
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Kanvas Relationship Graph interaktif yang dapat digeser</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>Plot & Chapter Outliner dengan rincian adegan (Scenes)</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-3.5 h-3.5 text-[#2D5A43] shrink-0" />
-              <span>AI Lore Consistency Checker untuk mencegah kontradiksi cerita</span>
-            </li>
-          </ul>
-          <button
-            type="button"
-            onClick={() => onNavigateModule('outliner')}
-            className="w-full mt-2 py-2 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg transition-colors cursor-pointer"
-          >
-            Buka Plot & Chapter Outliner →
-          </button>
         </div>
       </div>
     </div>

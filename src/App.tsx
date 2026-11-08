@@ -1,29 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  AlertTriangle,
-  BookOpen,
-  Calendar,
   CheckCircle2,
   Compass,
-  Download,
-  FileText,
-  GitBranch,
-  Layers,
   Loader2,
-  Plus,
   RotateCcw,
-  ShieldCheck,
-  Sparkles,
+  Settings,
   Upload,
-  Wand2,
   X,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
 import {
-  ChapterOutline,
   LoreAuditResult,
   LoreCategory,
   LoreEntity,
+  TerrainType,
   WorldProject,
 } from './types/world';
 import { CATEGORY_META } from './components/WikiTextRenderer';
@@ -35,12 +25,18 @@ import {
 } from './components/TimelineAndGraphView';
 import {
   ChapterOutlinerView,
-  PrdBlueprintView,
+  WorldSettingsAndPowerView,
 } from './components/ChapterOutlinerAndPrdView';
 
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
 
-type ActiveModule = 'codex' | 'map' | 'timeline' | 'graph' | 'outliner' | 'prd';
+type ActiveModule =
+  | 'codex'
+  | 'map'
+  | 'timeline'
+  | 'graph'
+  | 'outliner'
+  | 'settings';
 
 interface BrainstormIdea {
   title: string;
@@ -184,6 +180,72 @@ export default function App() {
     setProject(STARTER_WORLD_PROJECT);
     setSelectedEntityId(STARTER_WORLD_PROJECT.entities[0].id);
     showToast('Dunia contoh "Kronik Benua Aethelia" telah dipulihkan.');
+  };
+
+  const handleCreateBlankWorld = () => {
+    const cols = 36;
+    const rows = 22;
+    const blankCells: TerrainType[] = new Array(cols * rows).fill('sea');
+    const starterEntity: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'character',
+      title: 'Tokoh Utama Pertama',
+      subtitle: 'Pengembara Dunia Baru',
+      summary: 'Tokoh sentral yang memulai perjalanan di semesta baru Anda.',
+      content:
+        'Mulai tuliskan latar belakang karakter, sejarah dunia, atau aturan kekuatan di sini.',
+      tags: ['Protagonis'],
+      attributes: {
+        role: 'Protagonis',
+        status: 'Hidup',
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+
+    const blankWorld: WorldProject = {
+      id: `world-${Date.now()}`,
+      worldName: 'Semesta Cerita Baru',
+      tagline: 'Tuliskan premis utama dunia fantasi atau fiksi Anda di sini',
+      genre: 'Fantasi / Fiksi',
+      calendarSystem: 'Tahun ke-1 Era Baru',
+      authorName: project.authorName || 'Penulis',
+      heroBannerUrl: project.heroBannerUrl,
+      entities: [starterEntity],
+      mapData: {
+        mapTitle: 'Peta Dunia Baru',
+        subtitle: 'Kanvas Kartografi Semesta',
+        scaleLabel: '1 Grid = 50 Liga',
+        gridCols: cols,
+        gridRows: rows,
+        cells: blankCells,
+        stamps: [],
+        regionLabels: [],
+        rivers: [],
+      },
+      relationships: [],
+      nodePositions: [{ entityId: starterEntity.id, x: 450, y: 260 }],
+      timeline: [],
+      chapters: [
+        {
+          id: `chap-${Date.now()}`,
+          chapterNumber: 1,
+          act: 'Babak I',
+          title: 'Awal Mula Perjalanan',
+          status: 'Rencana',
+          synopsis: 'Bab pembuka yang memperkenalkan dunia dan tokoh utama.',
+          draftNotes: 'Catatan adegan untuk [[Tokoh Utama Pertama]].',
+          featuredEntityIds: [starterEntity.id],
+          wordCountTarget: 3000,
+          currentWordCount: 0,
+          scenes: [],
+        },
+      ],
+    };
+
+    setProject(blankWorld);
+    setSelectedEntityId(starterEntity.id);
+    setActiveModule('codex');
+    showToast('Proyek World Bible kosong berhasil dibuat.');
   };
 
   // Build world summary string for AI context
@@ -411,15 +473,15 @@ export default function App() {
 
                 <button
                   type="button"
-                  onClick={() => setActiveModule('prd')}
+                  onClick={() => setActiveModule('settings')}
                   className={`px-3.5 py-2 text-xs font-semibold rounded-lg border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    activeModule === 'prd'
+                    activeModule === 'settings'
                       ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
                       : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
                   }`}
                 >
-                  <FileText className="w-3.5 h-3.5" />
-                  Dokumen Konsep PRD & Pengaturan Dunia
+                  <Settings className="w-3.5 h-3.5" />
+                  Pengaturan Dunia & Matriks Kekuatan
                 </button>
 
                 <button
@@ -462,7 +524,7 @@ export default function App() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex items-end p-4">
                   <div className="text-[#FBF8F1]">
                     <div className="text-[11px] text-[#E6D5B8]">
-                      Arsiparis Utama: {project.authorName} · Penyimpanan Otomatis Aktif
+                      Arsiparis Utama: {project.authorName} · Tersimpan Otomatis di Browser
                     </div>
                     <div className="font-cartography text-sm font-bold tracking-wide">
                       Atlas & Ensiklopedia Kanon Terpadu
@@ -550,7 +612,7 @@ export default function App() {
               ['timeline', 'Timeline'],
               ['graph', 'Peta Relasi'],
               ['outliner', 'Alur Bab'],
-              ['prd', 'PRD'],
+              ['settings', 'Pengaturan Dunia'],
             ] as const
           ).map(([mod, lbl]) => (
             <button
@@ -659,13 +721,14 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'prd' && (
-          <PrdBlueprintView
+        {activeModule === 'settings' && (
+          <WorldSettingsAndPowerView
             project={project}
             onUpdateProjectMeta={(patch) =>
               setProject((prev) => ({ ...prev, ...patch }))
             }
-            onNavigateModule={setActiveModule}
+            onCreateBlankWorld={handleCreateBlankWorld}
+            onSelectEntity={handleNavigateToEntity}
           />
         )}
       </main>
@@ -679,17 +742,17 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={() => setActiveModule('prd')}
+              onClick={() => setActiveModule('settings')}
               className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
             >
-              Dokumentasi PRD
+              Pengaturan Semesta
             </button>
             <button
               type="button"
               onClick={handleExportWorldJson}
               className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
             >
-              Cadangkan Data (.JSON)
+              Cadangkan World Bible (.JSON)
             </button>
           </div>
         </div>
