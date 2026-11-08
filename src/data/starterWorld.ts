@@ -671,18 +671,153 @@ Sebelum diasingkan ke [[Puncak Wyvern]], [[Archmage Vaelen Thorne]] pernah memim
       id: 'hist-gerhana-merah',
       category: 'history',
       title: 'Konvergensi Gerhana Merah',
-      subtitle: 'Tragedi Runtuhnya Menara Sihir Kuno (Tahun 1 AE)',
-      summary: 'Peristiwa bersejarah ketika dua bulan Aethelia sejajar dengan matahari, membelah daratan Teluk Naga dan melahirkan sistem penanggalan baru.',
+      subtitle: 'Tragedi Runtuhnya Menara Sihir Kuno & Tenggelamnya Teluk Naga (Tahun 1 AE)',
+      summary: 'Peristiwa bencana kosmik ketika dua bulan Aethelia sejajar dengan matahari, membelah daratan Teluk Naga dan melahirkan sistem penanggalan Era Astral.',
       tags: ['Bencana Besar', 'Era Pertama', 'Asal-Usul Sihir'],
       attributes: {
-        era: 'Awal Era Astral (AE)',
+        historyEventType: 'Bencana Kosmik / Arcane',
+        era: 'AE (Era Astral)',
         year: 1,
+        displayDate: 'Tahun 1 AE · Malam Gerhana Ganda Musim Gugur',
+        eventLocation: 'Reruntuhan Menara Gerhana',
         belligerents: 'Dinasti Kuno Aethelia vs Arus Eter Liar',
-        outcome: 'Tenggelamnya ibu kota lama menjadi Teluk Naga dan diciptakannya [[Astrolabe Api Surya]].',
+        belligerentsList: [
+          'Kekaisaran Gondoria',
+          'Dvergr Besi-Bintang',
+          'Sylvan Aelfir',
+        ],
+        keyHistoricalFigures: ['Archmage Vaelen Thorne'],
+        historicalTrigger:
+          'Eksperimen ambisius Dewan Penyihir Dinasti Kuno yang mencoba menyedot energi matahari dan dua bulan kembar secara paksa menggunakan menara fokus kristal tunggal guna meraih keabadian.',
+        casualtiesAndLosses:
+          'Ibu kota kuno lembah barat tenggelam seluruhnya menjadi perairan Teluk Naga; lebih dari 120.000 jiwa gugur dan tanah di sekitar titik ledakan meleleh menjadi [[Reruntuhan Menara Gerhana]].',
+        outcome:
+          'Runtuhnya Dinasti Lama, terbentuknya Teluk Naga, dan ditempanya [[Astrolabe Api Surya]] sebagai penstabil lempeng benua.',
+        worldImpactLegacy:
+          'Melahirkan sistem kalender *Era Astral (AE)*, memberlakukan Tiga Hukum Besi [[Resonansi Eteris Astral]], serta memicu trauma ekologis yang membuat bangsa [[Sylvan Aelfir]] menutup perbatasan [[Rimba Bayang-Bayang (Shadowwood)]].',
+        officialHistoryVersion:
+          'Menurut kronik resmi Gereja Cahaya di [[Solis Prime]], bencana ini adalah murka benda langit akibat kesombongan penyihir aliran bulan dan bintang yang menolak tunduk pada satu otoritas Matahari.',
+        hiddenHistoricalTruth:
+          'Prasasti yang diterjemahkan [[Archmage Vaelen Thorne]] membuktikan bahwa eksperimen tersebut sebenarnya disabotase oleh leluhur Wangsa Valorian sendiri agar mereka dapat memonopoli sisa inti surya dan mendirikan [[Kekaisaran Gondoria]].',
       },
-      content: `Empat ratus tahun yang lalu, para penyihir kuno mencoba menarik energi matahari secara paksa saat terjadi gerhana ganda. Eksperimen tersebut gagal dan memicu ledakan gelombang eter yang menenggelamkan lembah barat menjadi perairan Teluk Naga.
+      content: `Empat ratus tahun yang lalu, para penyihir kuno mencoba menarik energi matahari secara paksa saat terjadi gerhana ganda. Eksperimen tersebut gagal dan memicu ledakan gelombang eter yang menenggelamkan lembah barat menjadi perairan Teluk Naga serta meninggalkan kawah abadi di [[Reruntuhan Menara Gerhana]].
 
 Untuk menstabilkan iklim dan arus sihir dunia yang kacau, para leluhur [[Dvergr Besi-Bintang]] dan pendahulu [[Kekaisaran Gondoria]] bekerja sama menempa [[Astrolabe Api Surya]]. Catatan [[Archmage Vaelen Thorne]] menunjukkan bahwa siklus gerhana serupa akan terulang dalam waktu kurang dari tiga tahun.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'hist-traktat-astrolabe',
+      category: 'history',
+      title: 'Pakta Kubah Besi & Penempaan Astrolabe',
+      subtitle: 'Perjanjian Bersejarah Gondoria–Nidavellir Pasca-Konvergensi (Tahun 2 AE)',
+      summary: 'Traktat kerja sama darurat antara leluhur [[Kekaisaran Gondoria]] dan [[Kerajaan Bawah Tanah Nidavellir]] untuk menempa [[Astrolabe Api Surya]].',
+      tags: ['Traktat Politik', 'Penemuan Pusaka', 'Nidavellir'],
+      attributes: {
+        historyEventType: 'Traktat, Pakta & Penemuan Agung',
+        era: 'AE (Era Astral)',
+        year: 2,
+        displayDate: 'Tahun 2 AE · Titik Balik Musim Dingin',
+        eventLocation: 'Kerajaan Bawah Tanah Nidavellir',
+        belligerents: 'Kekaisaran Gondoria & Serikat Klan Dvergr Nidavellir',
+        belligerentsList: [
+          'Kekaisaran Gondoria',
+          'Kerajaan Bawah Tanah Nidavellir',
+          'Dvergr Besi-Bintang',
+        ],
+        keyHistoricalFigures: [
+          'Empress Seraphina Valorian',
+          'Archmage Vaelen Thorne',
+        ],
+        historicalTrigger:
+          'Gempa eter susulan pasca-[[Konvergensi Gerhana Merah]] yang mengancam akan meruntuhkan kubah-kubah bawah tanah Nidavellir dan membekukan lahan pertanian Gondoria.',
+        casualtiesAndLosses:
+          'Tujuh empu penempa tertinggi [[Dvergr Besi-Bintang]] kehilangan nyawa akibat paparan radiasi panas inti bintang saat menyatukan tiga cincin kuningan Astrolabe.',
+        outcome:
+          'Terciptanya [[Astrolabe Api Surya]] dan ditandatanganinya *Piagam Rotasi Seratus Tahun* yang mengatur hak kepemilikan bergilir atas relik tersebut.',
+        worldImpactLegacy:
+          'Pelanggaran klausul pengembalian relik inilah yang kini memicu krisis diplomatik terbesar antara [[Empress Seraphina Valorian]] dan Dewan Serikat [[Kerajaan Bawah Tanah Nidavellir]].',
+        officialHistoryVersion:
+          'Klaim resmi istana [[Solis Prime]] menyatakan bahwa bangsa Dvergr menyerahkan Astrolabe Api Surya secara permanen kepada Wangsa Valorian sebagai upeti perlindungan militer.',
+        hiddenHistoricalTruth:
+          'Salinan asli traktat yang terukir di lempeng meteorit di bawah Kubah Pertama Nidavellir secara tegas menyebutkan bahwa hak guna Gondoria telah habis sejak sepuluh tahun silam.',
+      },
+      content: `Satu tahun setelah bencana [[Konvergensi Gerhana Merah]], dunia Aethelia masih dilanda badai abu dan pergeseran lempeng. Hanya melalui penggabungan ilmu [[Tempaan Runik Besi-Bintang]] milik [[Dvergr Besi-Bintang]] dan matriks [[Resonansi Eteris Astral]] milik penyihir manusia, [[Astrolabe Api Surya]] berhasil diselesaikan.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'hist-perang-rantai-besi',
+      category: 'history',
+      title: 'Perang Rantai Besi & Pengepungan Lembah Timur',
+      subtitle: 'Konflik Militer Terbesar Abad Keempat antara Gondoria dan Nidavellir (Tahun 340 AE)',
+      summary: 'Perang perbatasan selama empat tahun memperebutkan tambang meteorit timur yang memperkenalkan kedahsyatan [[Legiun Surya Cinnabar]].',
+      tags: ['Perang Besar', 'Militer', 'Abad Keempat'],
+      attributes: {
+        historyEventType: 'Perang Besar & Pengepungan',
+        era: 'AE (Era Astral)',
+        year: 340,
+        displayDate: 'Tahun 340–344 AE · Kampanye Musim Kemarau',
+        eventLocation: 'Puncak Wyvern',
+        belligerents: 'Kekaisaran Gondoria vs Kerajaan Bawah Tanah Nidavellir',
+        belligerentsList: [
+          'Kekaisaran Gondoria',
+          'Kerajaan Bawah Tanah Nidavellir',
+          'Legiun Surya Cinnabar',
+        ],
+        keyHistoricalFigures: ['Empress Seraphina Valorian'],
+        historicalTrigger:
+          'Sengketa klaim atas jatuhnya meteorit bintang baru di lereng selatan [[Puncak Wyvern]] dan blokade jalur batu bara oleh Gilda Penempa Nidavellir.',
+        casualtiesAndLosses:
+          'Lebih dari 18.000 prajurit kedua belah pihak gugur; tiga benteng perbatasan hancur lebur dan jalur kereta gantung lama di pegunungan timur terputus.',
+        outcome:
+          'Gencatan senjata tanpa pemenang mutlak; lembah tambang ditetapkan sebagai zona penyangga demiliterisasi.',
+        worldImpactLegacy:
+          'Melahirkan doktrin artileri modern [[Legiun Surya Cinnabar]] serta mendorong Nidavellir membangun meriam uap penangkal sihir surya di sepanjang terowongan mereka.',
+        officialHistoryVersion:
+          'Buku sejarah militer Gondoria mencatat perang ini sebagai kemenangan gemilang Kekaisaran yang berhasil memaksa bangsa Dvergr kembali ke bawah tanah.',
+        hiddenHistoricalTruth:
+          'Pasukan Gondoria sebenarnya hampir kehabisan logistik di musim dingin keempat dan terpaksa mundur setelah jalur suplai mereka diputus oleh gerilyawan [[Sylvan Aelfir]].',
+      },
+      content: `**Perang Rantai Besi** menjadi ujian tempur pertama bagi persenjataan hibrida di Benua Aethelia. Pertempuran ini meninggalkan luka diplomasi mendalam yang membuat kepercayaan antara [[Kekaisaran Gondoria]] dan [[Kerajaan Bawah Tanah Nidavellir]] tidak pernah pulih sepenuhnya.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'hist-pengasingan-vaelen',
+      category: 'history',
+      title: 'Malam Skisma Surya & Pengasingan Vaelen Thorne',
+      subtitle: 'Perpecahan Takhta Solis Prime dan Pelarian Pembawa Astrolabe (Tahun 410 AE)',
+      summary: 'Peristiwa politik dramatis ketika [[Archmage Vaelen Thorne]] menolak perintah [[Empress Seraphina Valorian]] dan membawa lari [[Astrolabe Api Surya]] ke [[Puncak Wyvern]].',
+      tags: ['Intrik Politik', 'Skisma', 'Pemicu Plot Utama'],
+      attributes: {
+        historyEventType: 'Berdirinya / Runtuhnya Dinasti',
+        era: 'AE (Era Astral)',
+        year: 410,
+        displayDate: 'Tahun 410 AE · Malam Titik Balik Musim Dingin',
+        eventLocation: 'Solis Prime',
+        belligerents: 'Istana Kekaisaran Gondoria vs Ordo Cakrawala Perak',
+        belligerentsList: [
+          'Kekaisaran Gondoria',
+          'Ordo Cakrawala Perak',
+          'Legiun Surya Cinnabar',
+        ],
+        keyHistoricalFigures: [
+          'Archmage Vaelen Thorne',
+          'Empress Seraphina Valorian',
+          'Kaelen dari Kabut Perak',
+        ],
+        historicalTrigger:
+          'Perintah rahasia Empress Seraphina untuk membuka segel cincin ketiga [[Astrolabe Api Surya]] guna mengisi meriam suar kekaisaran.',
+        casualtiesAndLosses:
+          'Menara Astronomi Kerajaan di [[Solis Prime]] terbakar sebagian; dua belas cendekiawan [[Ordo Cakrawala Perak]] ditahan dan status kebangsawanan Vaelen dicabut.',
+        outcome:
+          'Vaelen berhasil meloloskan diri menembus blokade malam menuju [[Puncak Wyvern]] dengan bantuan pemandu [[Kaelen dari Kabut Perak]].',
+        worldImpactLegacy:
+          'Menjadi titik awal langsung dari konflik utama cerita novel saat ini (Bab 1–3), memicu perburuan lintas benua terhadap Vaelen dan Astrolabe Api Surya.',
+        officialHistoryVersion:
+          'Dekrit Segel Merah mengumumkan bahwa Archmage Vaelen telah kehilangan kewarasannya akibat kutukan *Kristalisasi Organ* dan mencuri pusaka negara untuk berkhianat.',
+        hiddenHistoricalTruth:
+          'Vaelen justru menyelamatkan ibu kota [[Solis Prime]] dari kehancuran: jika cincin ketiga Astrolabe dipaksa menyala malam itu, retakan intinya akan meledakkan separuh kota seperti tragedi [[Konvergensi Gerhana Merah]].',
+      },
+      content: `Pada malam titik balik musim dingin Tahun 410 AE, hubungan guru dan murid antara [[Archmage Vaelen Thorne]] dan [[Empress Seraphina Valorian]] pecah di ruang observatorium istana [[Solis Prime]]. Peristiwa inilah yang membuka rangkaian adegan pada Bab 1 naskah utama.`,
       updatedAt: '2026-11-08',
     },
 

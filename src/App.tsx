@@ -637,6 +637,7 @@ export default function App() {
             chapters={project.chapters}
             mapStamps={project.mapData.stamps}
             relationships={project.relationships}
+            timeline={project.timeline}
             selectedEntityId={selectedEntityId}
             onSelectEntity={setSelectedEntityId}
             onNavigateToEntity={handleNavigateToEntity}
@@ -646,6 +647,13 @@ export default function App() {
               setProject((prev) => ({ ...prev, relationships: nextRels }));
               showToast('Jaringan relasi tokoh berhasil diperbarui.');
             }}
+            onUpdateTimeline={(nextTimeline) => {
+              setProject((prev) => ({ ...prev, timeline: nextTimeline }));
+              showToast(
+                'Catatan sejarah berhasil disinkronkan ke Pita Kronologi Dunia.'
+              );
+            }}
+            onOpenTimeline={() => handleSwitchTab('timeline')}
             onOpenMapAtStamp={() => handleSwitchTab('map')}
             onOpenChapter={(chId) => {
               setSelectedChapterId(chId);

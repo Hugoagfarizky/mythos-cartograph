@@ -3,6 +3,7 @@ import {
   ArrowUpRight,
   BookOpen,
   Check,
+  Clock,
   Compass,
   Crown,
   Edit3,
@@ -35,6 +36,7 @@ import {
   MapStamp,
   RelationType,
   RelationshipEdge,
+  TimelineEvent,
 } from '../types/world';
 import {
   CATEGORY_META,
@@ -47,12 +49,15 @@ interface CodexWorkspaceProps {
   entities: LoreEntity[];
   chapters: ChapterOutline[];
   mapStamps: MapStamp[];
+  timeline?: TimelineEvent[];
   relationships?: RelationshipEdge[];
   selectedEntityId: string;
   onSelectEntity: (id: string) => void;
   onNavigateToEntity?: (id: string) => void;
   onSaveEntity: (entity: LoreEntity) => void;
   onDeleteEntity: (id: string) => void;
+  onUpdateTimeline?: (next: TimelineEvent[]) => void;
+  onOpenTimeline?: () => void;
   onUpdateRelationships?: (next: RelationshipEdge[]) => void;
   onOpenMapAtStamp: (stampId: string) => void;
   onOpenChapter: (chapterId: string) => void;
@@ -151,6 +156,14 @@ const REGION_DANGER_PRESETS = [
   'Ekstrem (Zona Terkutuk / Anomali Mematikan)',
 ];
 
+const HISTORY_EVENT_TYPE_FILTERS = [
+  'Semua',
+  'Bencana Kosmik / Arcane',
+  'Perang Besar & Pengepungan',
+  'Berdirinya / Runtuhnya Dinasti',
+  'Traktat, Pakta & Penemuan Agung',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -193,12 +206,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   entities,
   chapters,
   mapStamps,
+  timeline = [],
   relationships = [],
   selectedEntityId,
   onSelectEntity,
   onNavigateToEntity,
   onSaveEntity,
   onDeleteEntity,
+  onUpdateTimeline,
+  onOpenTimeline,
   onUpdateRelationships,
   onOpenMapAtStamp,
   onOpenChapter,
@@ -216,12 +232,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     useState<string>('Semua');
   const [nationGovFilter, setNationGovFilter] = useState<string>('Semua');
   const [regionTypeFilter, setRegionTypeFilter] = useState<string>('Semua');
+  const [historyTypeFilter, setHistoryTypeFilter] = useState<string>('Semua');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom array item inputs in editor (Character, Race, Faction, Power System, Skill, Nation & Region)
+  // Custom array item inputs in editor (Character, Race, Faction, Power System, Skill, Nation, Region & History)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
   const [customSubRaceInput, setCustomSubRaceInput] = useState('');
@@ -235,6 +252,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [customDominantRaceInput, setCustomDominantRaceInput] = useState('');
   const [customLandmarkInput, setCustomLandmarkInput] = useState('');
   const [customEndemicInput, setCustomEndemicInput] = useState('');
+  const [customBelligerentInput, setCustomBelligerentInput] = useState('');
+  const [customKeyFigureInput, setCustomKeyFigureInput] = useState('');
+  const [timelineSyncMessage, setTimelineSyncMessage] = useState('');
 
   // Quick-link state on Skill view mode
   const [selectedQuickRaceId, setSelectedQuickRaceId] = useState('');
@@ -263,6 +283,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setPowerTypologyFilter('Semua');
     setNationGovFilter('Semua');
     setRegionTypeFilter('Semua');
+    setHistoryTypeFilter('Semua');
+    setTimelineSyncMessage('');
     setShowAddRelation(false);
   }, [category]);
 
@@ -361,6 +383,23 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'history') {
+      if (historyTypeFilter !== 'Semua') {
+        const histStr = `${attrs.historyEventType || ''} ${e.subtitle || ''} ${e.tags.join(
+          ' '
+        )}`.toLowerCase();
+        const filterKeywords = historyTypeFilter
+          .split('/')
+          .flatMap((s) => s.split('&'))
+          .flatMap((s) => s.split(','))
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+        if (!filterKeywords.some((kw) => histStr.includes(kw))) {
+          return false;
+        }
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -391,7 +430,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       (attrs.climate || '').toLowerCase().includes(q) ||
       (attrs.dangerLevel || '').toLowerCase().includes(q) ||
       (attrs.landmarksList || []).some((l) => l.toLowerCase().includes(q)) ||
-      (attrs.endemicFloraFauna || []).some((f) => f.toLowerCase().includes(q))
+      (attrs.endemicFloraFauna || []).some((f) =>
+        f.toLowerCase().includes(q)
+      ) ||
+      (attrs.historyEventType || '').toLowerCase().includes(q) ||
+      (attrs.displayDate || '').toLowerCase().includes(q) ||
+      (attrs.era || '').toLowerCase().includes(q) ||
+      (attrs.eventLocation || '').toLowerCase().includes(q) ||
+      (attrs.belligerents || '').toLowerCase().includes(q) ||
+      (attrs.belligerentsList || []).some((b) => b.toLowerCase().includes(q)) ||
+      (attrs.keyHistoricalFigures || []).some((kf) =>
+        kf.toLowerCase().includes(q)
+      )
     );
   });
 
@@ -465,6 +515,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         dominantRaces: [...(enriched.dominantRaces || [])],
         landmarksList: [...(enriched.landmarksList || [])],
         endemicFloraFauna: [...(enriched.endemicFloraFauna || [])],
+        belligerentsList: [...(enriched.belligerentsList || [])],
+        keyHistoricalFigures: [...(enriched.keyHistoricalFigures || [])],
       },
       tags: [...entity.tags],
     });
@@ -481,6 +533,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomDominantRaceInput('');
     setCustomLandmarkInput('');
     setCustomEndemicInput('');
+    setCustomBelligerentInput('');
+    setCustomKeyFigureInput('');
     setIsEditing(true);
   };
 
@@ -504,6 +558,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           ? 'Warisan Rasial Eksklusif / Teknik Skala Besar'
           : category === 'nation'
           ? 'Kedaulatan Kerajaan, Republik, atau Persemakmuran'
+          : category === 'region'
+          ? 'Kawasan Geografis, Provinsi, atau Benteng'
+          : category === 'history'
+          ? 'Peristiwa Bersejarah, Perang Besar, atau Bencana Kosmik'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -579,6 +637,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               landmarksList: [],
               endemicFloraFauna: [],
             }
+          : category === 'history'
+          ? {
+              historyEventType: 'Perang Besar & Pengepungan',
+              era: 'Era Abu (Post-Gerhana)',
+              year: 200,
+              displayDate: 'Tahun 200 PG',
+              eventLocation: regionEntities[0]?.title || '',
+              belligerentsList: [],
+              keyHistoricalFigures: [],
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -596,6 +664,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomDominantRaceInput('');
     setCustomLandmarkInput('');
     setCustomEndemicInput('');
+    setCustomBelligerentInput('');
+    setCustomKeyFigureInput('');
     setIsEditing(true);
   };
 
@@ -1144,6 +1214,91 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         })
       : [];
 
+  // Automatic Roster of TimelineEvents linked to the active History entity
+  const timelineEventsOfActiveHistory =
+    category === 'history' && activeEntity
+      ? timeline.filter((t) => {
+          const hTitle = activeEntity.title.toLowerCase();
+          const tTitle = t.title.toLowerCase();
+          return (
+            t.linkedEntityIds.includes(activeEntity.id) ||
+            tTitle === hTitle ||
+            tTitle.includes(hTitle) ||
+            hTitle.includes(tTitle)
+          );
+        })
+      : [];
+
+  // 1-Click Sync or Create TimelineEvent in Kronologi tab from active History entity
+  const handleSyncHistoryToTimeline = (historyEntity: LoreEntity) => {
+    if (!onUpdateTimeline) return;
+    const hAttrs = getEnrichedAttributes(historyEntity);
+    const evTypeStr = (hAttrs.historyEventType || '').toLowerCase();
+    const mappedCategory: TimelineEvent['category'] = evTypeStr.includes(
+      'bencana'
+    )
+      ? 'Bencana Arcane'
+      : evTypeStr.includes('perang')
+      ? 'Peperangan'
+      : evTypeStr.includes('penemuan') || evTypeStr.includes('traktat')
+      ? 'Penemuan Pusaka'
+      : 'Berdirinya Kerajaan';
+
+    // Collect linked entity IDs from belligerents, key figures, location & self
+    const relatedIds = new Set<string>([historyEntity.id]);
+    [
+      ...(hAttrs.belligerentsList || []),
+      ...(hAttrs.keyHistoricalFigures || []),
+      hAttrs.eventLocation || '',
+    ].forEach((name) => {
+      const m = findMatchingEntityByName(name);
+      if (m) relatedIds.add(m.id);
+    });
+
+    const existingEvent = timeline.find(
+      (t) =>
+        t.linkedEntityIds.includes(historyEntity.id) ||
+        t.title.toLowerCase() === historyEntity.title.toLowerCase()
+    );
+
+    const yearVal =
+      typeof hAttrs.year === 'number' && !Number.isNaN(hAttrs.year)
+        ? hAttrs.year
+        : existingEvent?.year ?? 0;
+
+    const syncedEvent: TimelineEvent = {
+      id: existingEvent ? existingEvent.id : `tl-${Date.now()}`,
+      era: hAttrs.era || existingEvent?.era || 'Era Abu (Post-Gerhana)',
+      year: yearVal,
+      displayDate:
+        hAttrs.displayDate ||
+        existingEvent?.displayDate ||
+        `Tahun ${yearVal} PG`,
+      title: historyEntity.title,
+      summary:
+        hAttrs.outcome ||
+        historyEntity.summary ||
+        'Peristiwa bersejarah tercatat dari arsip Sejarah Dunia.',
+      category: mappedCategory,
+      linkedEntityIds: Array.from(
+        new Set([...(existingEvent?.linkedEntityIds || []), ...relatedIds])
+      ),
+    };
+
+    const nextTimeline = existingEvent
+      ? timeline
+          .map((t) => (t.id === existingEvent.id ? syncedEvent : t))
+          .sort((a, b) => a.year - b.year)
+      : [...timeline, syncedEvent].sort((a, b) => a.year - b.year);
+
+    onUpdateTimeline(nextTimeline);
+    setTimelineSyncMessage(
+      existingEvent
+        ? 'Berhasil memperbarui catatan peristiwa di Pita Kronologi Dunia!'
+        : 'Berhasil menambahkan peristiwa ini ke Pita Kronologi Dunia!'
+    );
+  };
+
   return (
     <div className="space-y-5">
       {/* Dedicated Section Header Bar */}
@@ -1381,6 +1536,31 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
+          {/* History-Specific Event Scale / Type Filters */}
+          {category === 'history' && (
+            <div className="space-y-1.5 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Jenis & Skala Peristiwa Sejarah:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {HISTORY_EVENT_TYPE_FILTERS.map((ht) => (
+                  <button
+                    key={ht}
+                    type="button"
+                    onClick={() => setHistoryTypeFilter(ht)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      historyTypeFilter === ht
+                        ? 'bg-[#7A3E1D] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {ht}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
@@ -1485,6 +1665,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 } · ${
                                   itemAttrs.parentNation || 'Wilayah Otonom'
                                 }`
+                              : category === 'history'
+                              ? `${
+                                  itemAttrs.historyEventType ||
+                                  'Peristiwa Sejarah'
+                                } · ${
+                                  itemAttrs.displayDate ||
+                                  itemAttrs.era ||
+                                  'Era Kanon'
+                                }`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -1557,6 +1746,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {itemAttrs.landmarksList &&
                             itemAttrs.landmarksList.length > 0
                               ? ` · ${itemAttrs.landmarksList.length} Landmark`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'history' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Lokasi: {itemAttrs.eventLocation || 'Lintas Benua'}
+                            {itemAttrs.belligerentsList &&
+                            itemAttrs.belligerentsList.length > 0
+                              ? ` · ${itemAttrs.belligerentsList.length} Pihak Terlibat`
                               : ''}
                           </div>
                         )}
@@ -5017,118 +5216,635 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* ============================================================= */}
+              {/* HISTORY-SPECIFIC RICH EDITOR (ARSIP SEJARAH & KONFLIK KANON)  */}
+              {/* ============================================================= */}
+              {category === 'history' && (
+                <div className="space-y-5">
+                  {/* Section 1: Klasifikasi Skala Peristiwa, Era Penanggalan & Lokasi Kejadian */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#7A3E1D] flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>
+                        1. Klasifikasi Skala Peristiwa, Era Penanggalan & Lokasi Kejadian
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Jenis / Skala Peristiwa (Filter Direktori Kiri)
+                        </label>
+                        <select
+                          value={
+                            draftEntity.attributes.historyEventType ||
+                            'Perang Besar & Pengepungan'
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                historyEventType: e.target.value,
+                              },
+                            })
+                          }
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        >
+                          {HISTORY_EVENT_TYPE_FILTERS.filter(
+                            (f) => f !== 'Semua'
+                          ).map((ht) => (
+                            <option key={ht} value={ht}>
+                              {ht}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Era Penanggalan Sejarah
+                        </label>
+                        <input
+                          type="text"
+                          value={draftEntity.attributes.era || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                era: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Contoh: Era Surya Emas / Era Abu (Post-Gerhana)..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tahun Numerik (Untuk Urutan Otomatis di Tab Kronologi)
+                        </label>
+                        <input
+                          type="number"
+                          value={
+                            typeof draftEntity.attributes.year === 'number'
+                              ? draftEntity.attributes.year
+                              : 0
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                year: Number(e.target.value),
+                              },
+                            })
+                          }
+                          placeholder="Contoh: -340 atau 298"
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg font-mono-tabular"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Penanggalan Kanon Lengkap (Label Tanggal)
+                        </label>
+                        <input
+                          type="text"
+                          value={draftEntity.attributes.displayDate || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                displayDate: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Contoh: Tahun 0 PG — Malam Tanpa Bayangan / Musim Gugur 214 PG"
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Hybrid Event Location Picker */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                        Lokasi Utama Kejadian / Medan Peristiwa (Pilih dari Wilayah/Negara/Peta atau Ketik Manual)
+                      </label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <select
+                          value={
+                            nationAndRegionEntities.some(
+                              (nr) =>
+                                nr.title ===
+                                draftEntity.attributes.eventLocation
+                            )
+                              ? draftEntity.attributes.eventLocation
+                              : '__CUSTOM__'
+                          }
+                          onChange={(e) => {
+                            if (e.target.value !== '__CUSTOM__') {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  eventLocation: e.target.value,
+                                },
+                              });
+                            }
+                          }}
+                          className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        >
+                          <option value="__CUSTOM__">
+                            -- Pilih dari Daftar Wilayah / Negara / Pin Peta atau Ketik --
+                          </option>
+                          {regionEntities.map((r) => (
+                            <option key={r.id} value={r.title}>
+                              [Wilayah] {r.title}
+                            </option>
+                          ))}
+                          {nationEntities.map((n) => (
+                            <option key={n.id} value={n.title}>
+                              [Negara] {n.title}
+                            </option>
+                          ))}
+                          {(mapStamps || []).map((st) => (
+                            <option key={st.id} value={st.label}>
+                              [Pin Peta] {st.label}
+                            </option>
+                          ))}
+                        </select>
+                        <input
+                          type="text"
+                          value={draftEntity.attributes.eventLocation || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                eventLocation: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Ketik lokasi peristiwa (misal: Kawah Gerhana Merah / Lembah Aethelgard)..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 2: Pemilih Hibrida Pihak Terlibat (Negara/Kelompok/Ras) & Tokoh Kunci */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                      <Swords className="w-3.5 h-3.5" />
+                      <span>
+                        2. Pihak yang Terlibat (Negara / Kelompok / Ras) & Tokoh Kunci Sejarah
+                      </span>
+                    </div>
+
+                    {/* Hybrid Belligerents Multi-Picker */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-[#9E2A2B]">
+                        Pihak / Fraksi / Negara / Bangsa yang Terlibat (Pilih dari Codex atau Ketik Manual)
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.belligerentsList || []).map(
+                          (bName) => (
+                            <span
+                              key={bName}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#9E2A2B]/40 text-xs font-medium text-[#231C14]"
+                            >
+                              {bName}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const next = (
+                                    draftEntity.attributes.belligerentsList ||
+                                    []
+                                  ).filter((item) => item !== bName);
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      belligerentsList: next,
+                                      belligerents: next.join(' vs '),
+                                    },
+                                  });
+                                }}
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      {(nationEntities.length > 0 ||
+                        factionEntities.length > 0 ||
+                        raceEntities.length > 0) && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[11px] text-[#695A47]">
+                            Pilih Cepat Negara / Kelompok / Ras:
+                          </span>
+                          {[
+                            ...nationEntities,
+                            ...factionEntities,
+                            ...raceEntities,
+                          ].map((ent) => {
+                            const already = (
+                              draftEntity.attributes.belligerentsList || []
+                            ).includes(ent.title);
+                            return (
+                              <button
+                                key={ent.id}
+                                type="button"
+                                onClick={() => {
+                                  const current =
+                                    draftEntity.attributes.belligerentsList ||
+                                    [];
+                                  const next = already
+                                    ? current.filter((x) => x !== ent.title)
+                                    : [...current, ent.title];
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      belligerentsList: next,
+                                      belligerents: next.join(' vs '),
+                                    },
+                                  });
+                                }}
+                                className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
+                                  already
+                                    ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
+                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                }`}
+                              >
+                                {already ? '✓ ' : '+ '}
+                                {ent.title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          value={customBelligerentInput}
+                          onChange={(e) =>
+                            setCustomBelligerentInput(e.target.value)
+                          }
+                          placeholder="Ketik pihak terlibat lain (misal: Armada Bajak Laut Lautan Abu)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customBelligerentInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.belligerentsList || [];
+                            if (!current.includes(val)) {
+                              const next = [...current, val];
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  belligerentsList: next,
+                                  belligerents: next.join(' vs '),
+                                },
+                              });
+                            }
+                            setCustomBelligerentInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#9E2A2B] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Pihak
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Hybrid Key Historical Figures Multi-Picker */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-[#8F5B14]">
+                        Tokoh Kunci, Panglima, atau Saksi Sejarah (Pilih dari Tab Character atau Ketik Manual)
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(
+                          draftEntity.attributes.keyHistoricalFigures || []
+                        ).map((kf) => (
+                          <span
+                            key={kf}
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-medium text-[#231C14]"
+                          >
+                            {kf}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    keyHistoricalFigures: (
+                                      draftEntity.attributes
+                                        .keyHistoricalFigures || []
+                                    ).filter((item) => item !== kf),
+                                  },
+                                })
+                              }
+                              className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+
+                      {characterEntities.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[11px] text-[#695A47]">
+                            Pilih Cepat dari Tab Character:
+                          </span>
+                          {characterEntities.map((cEnt) => {
+                            const already = (
+                              draftEntity.attributes.keyHistoricalFigures || []
+                            ).includes(cEnt.title);
+                            return (
+                              <button
+                                key={cEnt.id}
+                                type="button"
+                                onClick={() => {
+                                  const current =
+                                    draftEntity.attributes
+                                      .keyHistoricalFigures || [];
+                                  const next = already
+                                    ? current.filter((x) => x !== cEnt.title)
+                                    : [...current, cEnt.title];
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      keyHistoricalFigures: next,
+                                    },
+                                  });
+                                }}
+                                className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
+                                  already
+                                    ? 'bg-[#8F5B14] text-white border-[#8F5B14]'
+                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                }`}
+                              >
+                                {already ? '✓ ' : '+ '}
+                                {cEnt.title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          value={customKeyFigureInput}
+                          onChange={(e) =>
+                            setCustomKeyFigureInput(e.target.value)
+                          }
+                          placeholder="Ketik tokoh sejarah lain (misal: Kaisar Aurelius I / Kanselir Cassian)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customKeyFigureInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.keyHistoricalFigures || [];
+                            if (!current.includes(val)) {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  keyHistoricalFigures: [...current, val],
+                                },
+                              });
+                            }
+                            setCustomKeyFigureInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#8F5B14] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Tokoh
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 3: Pemicu Konflik, Dampak Dunia & Sejarah Resmi vs Kebenaran Rahasia */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                      <span>
+                        3. Anatomi Historiografi: Pemicu, Dampak Dunia & Propaganda vs Kebenaran Rahasia
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#7A3E1D] mb-1">
+                          Pemicu Awal Peristiwa (Casus Belli / Akar Masalah)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.historicalTrigger || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                historicalTrigger: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Insiden, krisis politik, atau ritual gagal yang menyulut meletusnya peristiwa ini..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Korban Jiwa, Kehancuran & Kerugian Besar
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={
+                            draftEntity.attributes.casualtiesAndLosses || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                casualtiesAndLosses: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Kota yang hancur, jumlah legiun gugur, atau pusaka kuno yang hilang..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                          Hasil Akhir Langsung (Outcome)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.outcome || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                outcome: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Siapa yang menang, traktat apa yang ditandatangani, atau perubahan batas negara..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                          Dampak Jangka Panjang terhadap Dunia Saat Ini (Legacy)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.worldImpactLegacy || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                worldImpactLegacy: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Bagaimana peristiwa ini masih memengaruhi hukum, trauma bangsa, atau politik di era cerita utama..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Official Winner History vs Hidden Historical Truth */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Sejarah Resmi Pemenang (Propaganda Publik / Buku Sejarah Istana)
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={
+                            draftEntity.attributes.officialHistoryVersion || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                officialHistoryVersion: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Versi sejarah yang diajarkan kepada rakyat umum atau diklaim oleh penguasa..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Kebenaran Rahasia Tersembunyi (Fakta Kanon di Balik Layar)
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={
+                            draftEntity.attributes.hiddenHistoricalTruth || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                hiddenHistoricalTruth: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Apa yang sebenarnya terjadi di balik layar yang disembunyikan dari publik..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Other Categories Structured Fields */}
-              {category !== 'character' &&
-                category !== 'race' &&
-                category !== 'faction' &&
-                category !== 'power_system' &&
-                category !== 'skill' &&
-                category !== 'nation' &&
-                category !== 'region' && (
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
-                      Parameter Khusus {sectionMeta.label}
-                    </div>
-
-                  {category === 'history' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Era Penanggalan"
-                        value={draftEntity.attributes.era || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              era: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Pihak yang Terlibat"
-                        value={draftEntity.attributes.belligerents || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              belligerents: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Dampak Sejarah Utama"
-                        value={draftEntity.attributes.outcome || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              outcome: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                    </div>
-                  )}
-
-                  {category === 'encyclopedia' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Tingkat Kelangkaan"
-                        value={draftEntity.attributes.rarity || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              rarity: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Asal-Usul / Habitat"
-                        value={draftEntity.attributes.habitatOrOrigin || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              habitatOrOrigin: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Khasiat / Efek Khusus"
-                        value={draftEntity.attributes.magicalProperties || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              magicalProperties: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                    </div>
-                  )}
+              {category === 'encyclopedia' && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                  <div className="text-xs font-semibold text-[#9E2A2B]">
+                    Parameter Khusus {sectionMeta.label}
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Tingkat Kelangkaan"
+                      value={draftEntity.attributes.rarity || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: {
+                            ...draftEntity.attributes,
+                            rarity: e.target.value,
+                          },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Asal-Usul / Habitat"
+                      value={draftEntity.attributes.habitatOrOrigin || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: {
+                            ...draftEntity.attributes,
+                            habitatOrOrigin: e.target.value,
+                          },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Khasiat / Efek Khusus"
+                      value={draftEntity.attributes.magicalProperties || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: {
+                            ...draftEntity.attributes,
+                            magicalProperties: e.target.value,
+                          },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
                 </div>
               )}
 
@@ -5329,6 +6045,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* History Trigger & Casus Belli Banner */}
+              {category === 'history' && activeAttrs.historicalTrigger && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#7A3E1D]">
+                    <Flame className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <span>
+                      Pemicu Awal Peristiwa (Casus Belli) ·{' '}
+                      {activeAttrs.displayDate || activeAttrs.era || 'Arsip Sejarah'}
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.historicalTrigger}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -5435,13 +6171,28 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'landmarksList',
                             'endemicFloraFauna',
                             'localEcologyAndHazards',
+                            'belligerentsList',
+                            'keyHistoricalFigures',
+                            'historicalTrigger',
+                            'casualtiesAndLosses',
+                            'worldImpactLegacy',
+                            'officialHistoryVersion',
+                            'hiddenHistoricalTruth',
                           ].includes(key)
+                        ) {
+                          return false;
+                        }
+                        if (
+                          category === 'history' &&
+                          key === 'belligerents' &&
+                          activeAttrs.belligerentsList &&
+                          activeAttrs.belligerentsList.length > 0
                         ) {
                           return false;
                         }
                         return Array.isArray(val)
                           ? val.length > 0
-                          : Boolean(val);
+                          : val !== undefined && val !== null && val !== '';
                       })
                       .map(([key, val]) => {
                         const labelMap: Record<string, string> = {
@@ -5473,10 +6224,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           resources: 'Sumber Daya Utama',
                           dangerLevel: 'Tingkat Bahaya Wilayah',
                           linkedMapStampLabel: 'Pin Lokasi di Map Dunia',
+                          historyEventType: 'Klasifikasi Skala Peristiwa',
                           era: 'Era Penanggalan',
-                          year: 'Tahun Kejadian',
+                          year: 'Urutan Tahun Kronologi',
+                          displayDate: 'Penanggalan Kanon',
+                          eventLocation: 'Lokasi Kejadian Utama',
                           belligerents: 'Pihak Terlibat',
-                          outcome: 'Dampak Sejarah',
+                          outcome: 'Hasil Akhir Langsung',
                           systemTypology: 'Tipologi Sistem Kekuatan',
                           energySource: 'Sumber Energi Utama',
                           originSource: 'Asal-Usul / Pencipta',
@@ -5507,7 +6261,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             : key === 'originNation' ||
                               key === 'homeland' ||
                               key === 'headquarters' ||
-                              key === 'capitalCity'
+                              key === 'capitalCity' ||
+                              key === 'eventLocation'
                             ? 'region'
                             : key === 'catalystMedium'
                             ? 'encyclopedia'
@@ -5925,6 +6680,84 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 </span>
                               );
                             })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* History Belligerents & Key Figures Interactive Cards */}
+                  {category === 'history' &&
+                    ((activeAttrs.belligerentsList &&
+                      activeAttrs.belligerentsList.length > 0) ||
+                      (activeAttrs.keyHistoricalFigures &&
+                        activeAttrs.keyHistoricalFigures.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Swords className="w-3.5 h-3.5" />
+                            <span>
+                              Pihak, Negara & Kelompok yang Terlibat
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.belligerentsList || []).map((bel) => {
+                              const matchedBel = findMatchingEntityByName(bel);
+                              return matchedBel ? (
+                                <button
+                                  key={bel}
+                                  type="button"
+                                  onClick={() => jumpToEntity(matchedBel.id)}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/50 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                >
+                                  <span>{bel}</span>
+                                  <ArrowUpRight className="w-3 h-3" />
+                                </button>
+                              ) : (
+                                <span
+                                  key={bel}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                >
+                                  {bel}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5" />
+                            <span>
+                              Tokoh Kunci, Panglima & Saksi Sejarah
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.keyHistoricalFigures || []).map(
+                              (kf) => {
+                                const matchedChar = findMatchingEntityByName(
+                                  kf,
+                                  'character'
+                                );
+                                return matchedChar ? (
+                                  <button
+                                    key={kf}
+                                    type="button"
+                                    onClick={() => jumpToEntity(matchedChar.id)}
+                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#8F5B14]/50 text-xs font-semibold text-[#8F5B14] flex items-center gap-1 cursor-pointer"
+                                  >
+                                    <span>{kf}</span>
+                                    <ArrowUpRight className="w-3 h-3" />
+                                  </button>
+                                ) : (
+                                  <span
+                                    key={kf}
+                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  >
+                                    {kf}
+                                  </span>
+                                );
+                              }
+                            )}
                           </div>
                         </div>
                       </div>
@@ -6470,6 +7303,111 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* ============================================================= */}
+              {/* HISTORY OFFICIAL WINNER VERSION VS HIDDEN TRUTH & LEGACY      */}
+              {/* ============================================================= */}
+              {category === 'history' &&
+                (activeAttrs.officialHistoryVersion ||
+                  activeAttrs.hiddenHistoricalTruth ||
+                  activeAttrs.casualtiesAndLosses ||
+                  activeAttrs.worldImpactLegacy) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#7A3E1D]">
+                      <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
+                      <span>
+                        Dossier Historiografi: Sejarah Resmi Pemenang vs Kebenaran Rahasia & Dampak Dunia
+                      </span>
+                    </div>
+
+                    {/* Official Winner History vs Hidden Canonical Truth */}
+                    {(activeAttrs.officialHistoryVersion ||
+                      activeAttrs.hiddenHistoricalTruth) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Crown className="w-3.5 h-3.5" />
+                            <span>
+                              Sejarah Resmi Pemenang (Propaganda Publik / Kronik Istana)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.officialHistoryVersion ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Kebenaran Rahasia Tersembunyi (Fakta Kanon di Balik Layar)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.hiddenHistoricalTruth ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Casualties & Losses vs Long-Term World Impact Legacy */}
+                    {(activeAttrs.casualtiesAndLosses ||
+                      activeAttrs.worldImpactLegacy) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Swords className="w-3.5 h-3.5" />
+                            <span>
+                              Korban Jiwa, Kehancuran & Kerugian Besar
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.casualtiesAndLosses ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                            <Globe className="w-3.5 h-3.5" />
+                            <span>
+                              Dampak Jangka Panjang terhadap Dunia Saat Ini (Legacy)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.worldImpactLegacy || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
               <div className="pt-4 border-t border-[#D8CBB3]">
@@ -7233,6 +8171,104 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                   </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* HISTORY TIMELINE SYNCHRONIZATION & KRONOLOGI BRIDGE PANEL     */}
+              {/* ============================================================= */}
+              {category === 'history' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-3.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                      <Clock className="w-4 h-4 text-[#7A3E1D]" />
+                      <span>
+                        Sinkronisasi Pita Kronologi Dunia (
+                        {timelineEventsOfActiveHistory.length} Catatan Kronologi)
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {onUpdateTimeline && (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleSyncHistoryToTimeline(activeEntity)
+                          }
+                          className="px-3.5 py-1.5 text-xs font-semibold bg-[#7A3E1D] text-white rounded-lg hover:bg-[#5E2F15] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          {timelineEventsOfActiveHistory.length > 0
+                            ? 'Perbarui di Pita Kronologi'
+                            : '+ Catat / Sinkronkan ke Pita Kronologi'}
+                        </button>
+                      )}
+                      {onOpenTimeline && (
+                        <button
+                          type="button"
+                          onClick={onOpenTimeline}
+                          className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          <span>Buka Tab Kronologi</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 text-[#B5832A]" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {timelineSyncMessage && (
+                    <div className="p-3 rounded-lg bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-semibold text-[#2D5A43] flex items-center justify-between">
+                      <span>{timelineSyncMessage}</span>
+                      <button
+                        type="button"
+                        onClick={() => setTimelineSyncMessage('')}
+                        className="text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+
+                  {timelineEventsOfActiveHistory.length === 0 ? (
+                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      Peristiwa sejarah ini belum tercatat di <strong>Tab Kronologi</strong>. Klik{' '}
+                      <strong>+ Catat / Sinkronkan ke Pita Kronologi</strong> di atas agar peristiwa ini otomatis masuk ke urutan tahun linier dunia beserta tautan pihak yang terlibat.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3">
+                      {timelineEventsOfActiveHistory.map((tlEv) => (
+                        <div
+                          key={tlEv.id}
+                          className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                        >
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#7A3E1D]">
+                              <span className="font-mono-tabular">
+                                {tlEv.displayDate} (Tahun {tlEv.year})
+                              </span>
+                              <span aria-hidden="true">·</span>
+                              <span>{tlEv.era}</span>
+                            </div>
+                            <div className="font-display text-base font-bold text-[#231C14]">
+                              {tlEv.title}
+                            </div>
+                            <p className="text-xs text-[#695A47] leading-relaxed">
+                              {tlEv.summary}
+                            </p>
+                          </div>
+                          {onOpenTimeline && (
+                            <button
+                              type="button"
+                              onClick={onOpenTimeline}
+                              className="px-3 py-1.5 rounded-lg bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#7A3E1D]/40 text-xs font-semibold text-[#7A3E1D] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                            >
+                              <span>Lihat di Pita Waktu</span>
+                              <ArrowUpRight className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
 

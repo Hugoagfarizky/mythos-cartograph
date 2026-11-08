@@ -101,10 +101,20 @@ export interface LoreAttributes {
   localEcologyAndHazards?: string;
   linkedMapStampLabel?: string;
   // History specific
+  historyEventType?: string;
   era?: string;
   year?: number;
+  displayDate?: string;
+  eventLocation?: string;
   belligerents?: string;
+  belligerentsList?: string[];
+  keyHistoricalFigures?: string[];
+  historicalTrigger?: string;
+  casualtiesAndLosses?: string;
   outcome?: string;
+  worldImpactLegacy?: string;
+  officialHistoryVersion?: string;
+  hiddenHistoricalTruth?: string;
   // Power System specific
   systemTypology?: string;
   energySource?: string;
