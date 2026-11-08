@@ -624,10 +624,16 @@ export default function App() {
             entities={project.entities}
             chapters={project.chapters}
             mapStamps={project.mapData.stamps}
+            relationships={project.relationships}
             selectedEntityId={selectedEntityId}
             onSelectEntity={setSelectedEntityId}
+            onNavigateToEntity={handleNavigateToEntity}
             onSaveEntity={handleSaveEntity}
             onDeleteEntity={handleDeleteEntity}
+            onUpdateRelationships={(nextRels) => {
+              setProject((prev) => ({ ...prev, relationships: nextRels }));
+              showToast('Jaringan relasi tokoh berhasil diperbarui.');
+            }}
             onOpenMapAtStamp={() => handleSwitchTab('map')}
             onOpenChapter={(chId) => {
               setSelectedChapterId(chId);

@@ -39,6 +39,15 @@ export interface LoreAttributes {
   status?: string;
   powerTier?: string;
   knownSkills?: string[];
+  ownedArtifacts?: string[];
+  signatureQuote?: string;
+  appearance?: string;
+  voiceStyle?: string;
+  motivationGoal?: string;
+  fatalFlaw?: string;
+  arcStart?: string;
+  arcCrisis?: string;
+  arcEndgame?: string;
   // Race specific
   lifespan?: string;
   traits?: string;

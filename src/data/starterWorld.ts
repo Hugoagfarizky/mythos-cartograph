@@ -116,14 +116,31 @@ export const STARTER_WORLD_PROJECT: WorldProject = {
       imageUrl: '/src/assets/images/avatar_archmage_vaelen_1794157187885.jpg',
       tags: ['Protagonis', 'Penyihir Astral', 'Ordo Cakrawala'],
       attributes: {
-        role: 'Protagonis / Mentor',
+        role: 'Protagonis',
         raceName: 'Aethel-Born (Manusia Tinggi)',
         factionName: 'Ordo Cakrawala Perak',
         originNation: 'Kekaisaran Gondoria',
         age: '68 Tahun',
-        status: 'Hidup (Diasingkan secara politik)',
+        status: 'Diasingkan',
         powerTier: 'Lingkar ke-6 (Sovereign Scholar)',
-        knownSkills: ['Tenunan Gravitasi Bintang', 'Segel Kronos Kuno'],
+        knownSkills: ['Tenunan Gravitasi Bintang'],
+        ownedArtifacts: ['Astrolabe Api Surya', 'Bunga Lentera Malam'],
+        signatureQuote:
+          'Bintang-bintang tidak pernah berdusta, Seraphina; hanya raja-raja fana yang memalsukan peta langit demi membenarkan perang mereka.',
+        voiceStyle:
+          'Tenang, terukur, sering menggunakan metafora astronomi dan jam mekanis kuno saat berdebat.',
+        appearance:
+          'Berjanggut perak rapi, mengenakan jubah beludru biru malam berbordir rasi bintang. Mata kirinya telah mengkristal menjadi kuningan bercahaya akibat kutukan Over-Resonansi.',
+        motivationGoal:
+          'Memperbaiki retakan cincin ketiga Astrolabe Api Surya tanpa mengorbankan nyawa penduduk Teluk Naga maupun kedaulatan bangsa Sylvan Aelfir.',
+        fatalFlaw:
+          'Rasa bersalah mendalam atas kegagalan masa mudanya membuat Vaelen cenderung memikul beban sendiri dan menyembunyikan rahasia fatal dari muridnya.',
+        arcStart:
+          'Cendekiawan penyendiri yang bersembunyi di Puncak Wyvern dan berusaha menghindari konflik politik secara pasif.',
+        arcCrisis:
+          'Ketika kristal di mata kirinya mulai menjalar ke jantungnya saat legiun Gondoria mengepung Rimba Shadowwood.',
+        arcEndgame:
+          'Menerima bahwa pengetahuan harus diwariskan kepada generasi baru dan rela mengorbankan kapasitas sihirnya demi menyegel kembali patahan benua.',
       },
       content: `Archmage Vaelen Thorne adalah mantan Penasihat Agung di istana [[Kekaisaran Gondoria]] yang diasingkan setelah menolak menyerahkan [[Astrolabe Api Surya]] kepada [[Empress Seraphina Valorian]] untuk dijadikan senjata perang.
 
@@ -141,18 +158,72 @@ Saat ini ia bersembunyi di observatorium tua di lereng [[Puncak Wyvern]], melati
       imageUrl: '/src/assets/images/avatar_empress_seraphina_1794157189411.jpg',
       tags: ['Penguasa', 'Antagonis Kompleks', 'Keluarga Valorian'],
       attributes: {
-        role: 'Deuteragonis / Rival Politik',
+        role: 'Antagonis',
         raceName: 'Aethel-Born (Darah Surya)',
-        factionName: 'Keluarga Kekaisaran Valorian',
+        factionName: 'Kekaisaran Gondoria',
         originNation: 'Kekaisaran Gondoria',
         age: '39 Tahun',
-        status: 'Hidup (Berkuasa di Solis Prime)',
+        status: 'Hidup',
         powerTier: 'Lingkar ke-6 (Solar Valkyrie)',
-        knownSkills: ['Keputusan Tombak Surya', 'Dominasi Segel Darah'],
+        knownSkills: ['Keputusan Tombak Surya'],
+        ownedArtifacts: ['Astrolabe Api Surya'],
+        signatureQuote:
+          'Sejarah tidak akan menghakimi siapa yang sopan saat langit runtuh; sejarah hanya mencatat siapa yang sanggup menjaga perisai tetap tegak.',
+        voiceStyle:
+          'Tegas, lugas seperti dekrit militer, jarang meninggikan suara namun setiap kalimatnya mengandung otoritas mutlak.',
+        appearance:
+          'Perawakan tinggi tegap dalam balutan zirah seremonial emas-cinnabar dan jubah beludru merah mahkota. Lengan kanannya memiliki bekas luka bakar surya yang disembunyikan di balik sarung tangan baja.',
+        motivationGoal:
+          'Menyatukan seluruh kerajaan di Benua Aethelia di bawah satu komando militer sebelum Konvergensi Gerhana Merah berikutnya tiba.',
+        fatalFlaw:
+          'Obsesi terhadap kendali mutlak dan ketidakmampuan mempercayai aliansi setara karena trauma pengkhianatan yang menewaskan ayahnya.',
+        arcStart:
+          'Penguasa rasional namun otoriter yang menganggap diplomasi sudah gagal dan hanya kekuatan senjata surya yang dapat menyelamatkan dunia.',
+        arcCrisis:
+          'Menyadari bahwa penyalaan paksa Menara Suar Ibu Kota justru mempercepat kehancuran Teluk Naga yang ingin ia lindungi.',
+        arcEndgame:
+          'Terpaksa memilih antara mempertahankan takhta kekaisaran atau bekerja sama dengan mantan gurunya, Archmage Vaelen Thorne.',
       },
-      content: `Empress Seraphina Valorian naik takhta setelah ayahnya gugur dalam pemberontakan di perbatasan [[Lembah Nidavellir]]. Berbeda dengan para bangsawan korup yang mendahuluinya, Seraphina meyakini bahwa satu-satunya cara menyelamatkan Benua Aethelia dari kehancuran astral adalah menyatukan seluruh bangsa di bawah satu komando militer mutlak.
+      content: `Empress Seraphina Valorian naik takhta setelah ayahnya gugur dalam pemberontakan di perbatasan [[Kerajaan Bawah Tanah Nidavellir]]. Berbeda dengan para bangsawan korup yang mendahuluinya, Seraphina meyakini bahwa satu-satunya cara menyelamatkan Benua Aethelia dari kehancuran astral adalah menyatukan seluruh bangsa di bawah satu komando militer mutlak.
 
 Meskipun berselisih tajam dengan mantan gurunya, [[Archmage Vaelen Thorne]], Seraphina diam-diam mendanai riset pertahanan batas dunia. Ia memegang pedang pusaka warisan era [[Konvergensi Gerhana Merah]] dan berencana merebut [[Astrolabe Api Surya]] demi menyalakan kembali Menara Suar Ibu Kota.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'char-kaelen',
+      category: 'character',
+      title: 'Kaelen dari Kabut Perak',
+      subtitle: 'Penjaga Perbatasan Shadowwood & Utusan Pohon Memori',
+      summary: 'Pengintai muda bangsa [[Sylvan Aelfir]] yang menjadi penghubung rahasia antara [[Ordo Cakrawala Perak]] dan penjaga hutan.',
+      tags: ['Deuteragonis', 'Sylvan Aelfir', 'Pemanah Eter'],
+      attributes: {
+        role: 'Deuteragonis',
+        raceName: 'Sylvan Aelfir',
+        factionName: 'Ordo Cakrawala Perak',
+        originNation: 'Rimba Bayang-Bayang (Shadowwood)',
+        age: '114 Tahun (Setara pemuda 22 tahun)',
+        status: 'Hidup',
+        powerTier: 'Lingkar ke-4 (Lunar Ranger)',
+        knownSkills: ['Tenunan Gravitasi Bintang'],
+        ownedArtifacts: ['Bunga Lentera Malam'],
+        signatureQuote:
+          'Kalian manusia membangun menara batu untuk menyentuh bintang, padahal akar pohon kami sudah mendengar bisikan langit sejak zaman pertama.',
+        voiceStyle:
+          'Sarkastik namun puitis, bicara dengan nada rendah seperti berbisik di tengah hutan berkabut.',
+        appearance:
+          'Rambut perak sebahu dengan iris mata berwarna ambar menyala. Mengenakan mantel kamuflase serat daun Lumin-Oak dan busur kayu besi perak.',
+        motivationGoal:
+          'Melindungi lembah terakhir Bunga Lentera Malam dari penjarahan penyelundup dan ekspansi legiun Gondoria.',
+        fatalFlaw:
+          'Prasangka mendalam terhadap bangsa manusia di luar Ordo Cakrawala Perak akibat terbakarnya hutan selatan.',
+        arcStart:
+          'Penjaga perbatasan yang xenofobik dan hanya mau berurusan dengan Vaelen karena utang nyawa.',
+        arcCrisis:
+          'Harus memimpin pengungsi manusia dan Aelfir bersama-sama melewati terowongan kuno Dvergr.',
+        arcEndgame:
+          'Menjadi duta perdamaian pertama antara Rimba Shadowwood dan persemakmuran kota-kota manusia.',
+      },
+      content: `Kaelen adalah pengintai tercepat di perbatasan [[Rimba Bayang-Bayang (Shadowwood)]]. Ketika patroli [[Kekaisaran Gondoria]] mulai merambah lembah tempat tumbuhnya [[Bunga Lentera Malam]], Kaelen diutus menembus badai salju menuju [[Puncak Wyvern]] untuk memperingatkan [[Archmage Vaelen Thorne]].`,
       updatedAt: '2026-11-08',
     },
 
