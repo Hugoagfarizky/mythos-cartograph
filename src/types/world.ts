@@ -62,9 +62,18 @@ export interface LoreAttributes {
   signatureSkills?: string[];
   // Faction / Group specific
   factionType?: string;
+  influenceScale?: string;
   leader?: string;
   headquarters?: string;
+  emblemSymbol?: string;
+  rankHierarchy?: string[];
+  recruitmentOath?: string;
   ideology?: string;
+  secretAgenda?: string;
+  resourcesAndAssets?: string;
+  factionArtifacts?: string[];
+  alliedFactions?: string;
+  rivalFactions?: string;
   // Nation specific
   government?: string;
   capitalCity?: string;

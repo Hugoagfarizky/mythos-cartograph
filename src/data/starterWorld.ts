@@ -160,7 +160,7 @@ Saat ini ia bersembunyi di observatorium tua di lereng [[Puncak Wyvern]], melati
       attributes: {
         role: 'Antagonis',
         raceName: 'Aethel-Born (Darah Surya)',
-        factionName: 'Kekaisaran Gondoria',
+        factionName: 'Legiun Surya Cinnabar',
         originNation: 'Kekaisaran Gondoria',
         age: '39 Tahun',
         status: 'Hidup',
@@ -336,16 +336,111 @@ Para tetua Dvergr menuntut pengembalian artefak tersebut karena tungku utama di 
       title: 'Ordo Cakrawala Perak',
       subtitle: 'Persaudaraan Kartografer Astral & Penjaga Relik',
       summary: 'Kelompok cendekiawan independen yang memetakan anomali ruang-waktu dan menjaga keseimbangan [[Resonansi Eteris Astral]].',
-      tags: ['Akademi Sihir', 'Netral', 'Kartografer'],
+      tags: ['Majelis Sihir', 'Netral', 'Kartografer'],
       attributes: {
-        factionType: 'Ordo Cendekiawan & Penyihir',
+        factionType: 'Majelis Sihir / Akademi',
+        influenceScale: 'Lintas Benua',
         leader: 'Archmage Vaelen Thorne',
-        headquarters: 'Observatorium Puncak Wyvern',
-        ideology: 'Pengetahuan dan artefak kuno tidak boleh dimonopoli oleh satu mahkota kerajaan.',
+        headquarters: 'Puncak Wyvern',
+        emblemSymbol: 'Kompas Perak Berjarum Tujuh di atas Beludru Biru Malam · Semboyan: "Mengukur Langit, Menjaga Bumi"',
+        rankHierarchy: [
+          '1. Akolit Lentera (Murid & Pencatat Peta)',
+          '2. Kartografer Eter (Penjelajah Lapangan)',
+          '3. Pengamat Cincin (Ahli Segel & Astronomi)',
+          '4. Magister Rasi (Dewan Menara)',
+          '5. Penjaga Segel Ketujuh (Arsiparis Agung)',
+        ],
+        recruitmentOath:
+          'Calon anggota wajib melewati ujian navigasi buta melintasi kabut [[Rimba Bayang-Bayang (Shadowwood)]] hanya dengan panduan frekuensi bintang, lalu mengucapkan Sumpah Perak untuk tidak pernah menyerahkan peta patahan benua kepada penguasa militer.',
+        ideology:
+          'Pengetahuan astronomi dan relik era [[Konvergensi Gerhana Merah]] adalah milik seluruh penghuni Aethelia dan tidak boleh dimonopoli oleh satu mahkota kerajaan.',
+        secretAgenda:
+          'Diam-diam menyembunyikan cincin inti [[Astrolabe Api Surya]] di balik segel ruang bawah tanah [[Puncak Wyvern]] sembari menyiapkan ritual darurat seandainya lempeng Teluk Naga kembali runtuh.',
+        resourcesAndAssets:
+          'Perpustakaan Peta Bintang Terlengkap di Aethelia, jaringan menara suar optik di pegunungan utara, serta pasokan rutin [[Bunga Lentera Malam]] hasil pakta dengan [[Sylvan Aelfir]].',
+        factionArtifacts: ['Astrolabe Api Surya', 'Bunga Lentera Malam'],
+        alliedFactions:
+          'Menjalin pakta pertahanan dan pertukaran herbal dengan bangsa [[Sylvan Aelfir]] di [[Rimba Bayang-Bayang (Shadowwood)]], serta membeli instrumen optik dari [[Serikat Kriya Besi-Bintang]].',
+        rivalFactions:
+          'Diburu oleh [[Legiun Surya Cinnabar]] atas perintah [[Empress Seraphina Valorian]] karena menolak menyerahkan [[Astrolabe Api Surya]] ke Solis Prime.',
       },
       content: `Didirikan lima puluh tahun setelah [[Konvergensi Gerhana Merah]], Ordo Cakrawala Perak bertugas mengawasi titik-titik retakan dimensi di seluruh Benua Aethelia.
 
 Setiap anggota ordo membawa kompas kuningan khusus yang bergetar saat terjadi penyalahgunaan [[Resonansi Eteris Astral]] tingkat tinggi. Sejak [[Empress Seraphina Valorian]] membekukan hak otonomi mereka di ibu kota, sebagian besar anggota Ordo mundur ke [[Puncak Wyvern]].`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'fac-legiun-cinnabar',
+      category: 'faction',
+      title: 'Legiun Surya Cinnabar',
+      subtitle: 'Garda Ksatria Mahkota & Armada Penakluk Gondoria',
+      summary: 'Ordo militer elit di bawah komando langsung [[Empress Seraphina Valorian]] yang bersenjatakan tombak surya dan zirah baja merah.',
+      tags: ['Ordo Ksatria', 'Militer Gondoria', 'Jalur Solar'],
+      attributes: {
+        factionType: 'Ordo Ksatria / Militer',
+        influenceScale: 'Regional / Kerajaan',
+        leader: 'Empress Seraphina Valorian',
+        headquarters: 'Kekaisaran Gondoria',
+        emblemSymbol: 'Matahari Cinnabar Bersayap Tombak Kembar di atas Panji Merah-Emas · Semboyan: "Satu Matahari, Satu Perisai"',
+        rankHierarchy: [
+          '1. Tombak Perunggu (Prajurit Infanteri Surya)',
+          '2. Ksatria Lentera Merah (Kavaleri Berlapis Baja)',
+          '3. Kapten Menara Suar (Komandan Benteng Perbatasan)',
+          '4. Marsekal Cinnabar (Dewan Perang Solis Prime)',
+          '5. Panglima Mahkota Surya (Empress Seraphina Valorian)',
+        ],
+        recruitmentOath:
+          'Hanya menerima prajurit dan praktisi Jalur Solar yang lulus ujian ketahanan panas di Gurun Surya Selatan dan bersumpah setia di hadapan Takhta Abu Solis Prime.',
+        ideology:
+          'Persatuan militer mutlak di bawah [[Kekaisaran Gondoria]] adalah satu-satunya perisai yang sanggup menyelamatkan dunia dari kehancuran [[Konvergensi Gerhana Merah]] berikutnya.',
+        secretAgenda:
+          'Merancang ekspedisi penyergapan ke [[Puncak Wyvern]] untuk merebut paksa [[Astrolabe Api Surya]] dan mengaktifkan meriam suar kuno di sepanjang perbatasan [[Kerajaan Bawah Tanah Nidavellir]].',
+        resourcesAndAssets:
+          'Tiga belas batalion kavaleri zirah surya, armada kapal perang berlapis perunggu di Pelabuhan Teluk Naga, serta pajak penuh dari kas negara [[Kekaisaran Gondoria]].',
+        factionArtifacts: ['Astrolabe Api Surya'],
+        alliedFactions:
+          'Didukung penuh oleh Senat Bangsawan [[Kekaisaran Gondoria]] dan Kultus Surya Abadi di Solis Prime.',
+        rivalFactions:
+          'Berseberangan langsung dengan [[Ordo Cakrawala Perak]] pimpinan [[Archmage Vaelen Thorne]], serta terlibat blokade dagang melawan [[Serikat Kriya Besi-Bintang]] dari [[Kerajaan Bawah Tanah Nidavellir]].',
+      },
+      content: `**Legiun Surya Cinnabar** merupakan tulang punggung kekuatan militer [[Kekaisaran Gondoria]]. Direformasi secara langsung oleh [[Empress Seraphina Valorian]], ordo ksatria ini memadukan disiplin taktis formasi tombak dengan penyaluran [[Resonansi Eteris Astral]] Jalur Solar.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'fac-serikat-besibintang',
+      category: 'faction',
+      title: 'Serikat Kriya Besi-Bintang',
+      subtitle: 'Konsorsium Penempa Pusaka & Karavan Dagang Bawah Tanah',
+      summary: 'Gilda dagang dan insinyur mekanika dari [[Kerajaan Bawah Tanah Nidavellir]] yang memonopoli perdagangan logam meteorit serta instrumen optik astral.',
+      tags: ['Gilda Dagang', 'Penempa', 'Nidavellir'],
+      attributes: {
+        factionType: 'Gilda Dagang / Kriya',
+        influenceScale: 'Lintas Benua',
+        leader: 'High Artificer Thrain Ironstar',
+        headquarters: 'Kerajaan Bawah Tanah Nidavellir',
+        emblemSymbol: 'Roda Gigi Kuningan Mengelilingi Palu Meteorit Perak · Semboyan: "Tak Ada Mahkota Tanpa Besi Kami"',
+        rankHierarchy: [
+          '1. Penempa Magang (Pengolah Bijih & Bara)',
+          '2. Juru Roda Gigi (Teknisi Lentera & Karavan)',
+          '3. Empu Cermin (Pembuat Lensa & Kompas Astral)',
+          '4. Saudagar Kubah (Pengawas Jalur Dagang Benua)',
+          '5. Dewan Tujuh Palu (Pucuk Pimpinan Serikat)',
+        ],
+        recruitmentOath:
+          'Setiap anggota wajib menempa satu keping segel perunggu dengan tanda sidik jari dan darahnya sendiri; membocorkan rahasia campuran baja meteorit kepada pihak luar dihukum dengan pengasingan seumur hidup.',
+        ideology:
+          'Kemajuan peradaban ditentukan oleh ketepatan mesin dan kemurnian logam, bukan oleh takhayul bangsawan permukaan.',
+        secretAgenda:
+          'Menggunakan jaringan karavan dagang mereka di permukaan untuk menyelundupkan cetak biru senjata kuno dan mempersiapkan penarikan paksa [[Astrolabe Api Surya]] kembali ke tungku utama [[Kerajaan Bawah Tanah Nidavellir]].',
+        resourcesAndAssets:
+          'Monopoli tambang bijih bintang jatuh, terowongan kereta uap bawah tanah, serta armada karavan lapis baja yang melintasi Jalan Raya Kekaisaran Timur.',
+        factionArtifacts: ['Astrolabe Api Surya'],
+        alliedFactions:
+          'Menyuplai instrumen astronomi kepada [[Ordo Cakrawala Perak]] dan berdagang getah kristal dengan [[Sylvan Aelfir]].',
+        rivalFactions:
+          'Mengeluarkan ultimatum embargo baja terhadap [[Kekaisaran Gondoria]] dan [[Legiun Surya Cinnabar]] akibat sengketa kepemilikan [[Astrolabe Api Surya]].',
+      },
+      content: `Tidak ada satu pun menara observatorium maupun gerbang benteng di Benua Aethelia yang berdiri tanpa campur tangan **Serikat Kriya Besi-Bintang**. Berpusat di [[Kerajaan Bawah Tanah Nidavellir]], gilda milik bangsa [[Dvergr Besi-Bintang]] ini memegang kendali penuh atas suplai logam penghantar eter.`,
       updatedAt: '2026-11-08',
     },
 

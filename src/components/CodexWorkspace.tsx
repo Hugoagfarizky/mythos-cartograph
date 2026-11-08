@@ -84,6 +84,23 @@ const RACE_ORIGIN_FILTERS = [
   'Drakonik / Buas',
 ];
 
+const FACTION_TYPE_FILTERS = [
+  'Semua',
+  'Ordo Ksatria / Militer',
+  'Majelis Sihir / Akademi',
+  'Sindikat Rahasia / Intelijen',
+  'Gilda Dagang / Kriya',
+  'Sekte Keagamaan / Kultus',
+];
+
+const FACTION_SCALE_OPTIONS = [
+  'Semua Skala',
+  'Lintas Benua',
+  'Regional / Kerajaan',
+  'Bawah Tanah / Bayangan',
+  'Lokal / Kota',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -142,16 +159,22 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [roleFilter, setRoleFilter] = useState<string>('Semua');
   const [statusFilter, setStatusFilter] = useState<string>('Semua');
   const [raceClassFilter, setRaceClassFilter] = useState<string>('Semua');
+  const [factionTypeFilter, setFactionTypeFilter] = useState<string>('Semua');
+  const [factionScaleFilter, setFactionScaleFilter] =
+    useState<string>('Semua Skala');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom array item inputs in editor (Character & Race)
+  // Custom array item inputs in editor (Character, Race & Faction)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
   const [customSubRaceInput, setCustomSubRaceInput] = useState('');
   const [customRaceSkillInput, setCustomRaceSkillInput] = useState('');
+  const [customRankInput, setCustomRankInput] = useState('');
+  const [customFactionArtifactInput, setCustomFactionArtifactInput] =
+    useState('');
 
   // Inline Relationship Creator state for Character Sheet
   const [showAddRelation, setShowAddRelation] = useState(false);
@@ -171,6 +194,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setRoleFilter('Semua');
     setStatusFilter('Semua');
     setRaceClassFilter('Semua');
+    setFactionTypeFilter('Semua');
+    setFactionScaleFilter('Semua Skala');
     setShowAddRelation(false);
   }, [category]);
 
@@ -204,6 +229,25 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'faction') {
+      if (
+        factionTypeFilter !== 'Semua' &&
+        !(attrs.factionType || '')
+          .toLowerCase()
+          .includes(factionTypeFilter.split('/')[0].trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        factionScaleFilter !== 'Semua Skala' &&
+        !(attrs.influenceScale || '')
+          .toLowerCase()
+          .includes(factionScaleFilter.split('/')[0].trim().toLowerCase())
+      ) {
+        return false;
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -214,7 +258,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       (attrs.raceName || '').toLowerCase().includes(q) ||
       (attrs.factionName || '').toLowerCase().includes(q) ||
       (attrs.homeland || '').toLowerCase().includes(q) ||
-      (attrs.raceOriginClass || '').toLowerCase().includes(q)
+      (attrs.raceOriginClass || '').toLowerCase().includes(q) ||
+      (attrs.factionType || '').toLowerCase().includes(q) ||
+      (attrs.headquarters || '').toLowerCase().includes(q) ||
+      (attrs.leader || '').toLowerCase().includes(q)
     );
   });
 
@@ -262,6 +309,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         ownedArtifacts: [...(enriched.ownedArtifacts || [])],
         subRaces: [...(enriched.subRaces || [])],
         signatureSkills: [...(enriched.signatureSkills || [])],
+        rankHierarchy: [...(enriched.rankHierarchy || [])],
+        factionArtifacts: [...(enriched.factionArtifacts || [])],
       },
       tags: [...entity.tags],
     });
@@ -270,6 +319,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomArtifactInput('');
     setCustomSubRaceInput('');
     setCustomRaceSkillInput('');
+    setCustomRankInput('');
+    setCustomFactionArtifactInput('');
     setIsEditing(true);
   };
 
@@ -283,6 +334,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           ? 'Gelar atau Julukan Tokoh'
           : category === 'race'
           ? 'Julukan Bangsa & Spesies'
+          : category === 'faction'
+          ? 'Gelar Ordo, Serikat, atau Sindikat'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -302,6 +355,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               subRaces: [],
               signatureSkills: [],
             }
+          : category === 'faction'
+          ? {
+              factionType: 'Ordo Ksatria / Militer',
+              influenceScale: 'Regional / Kerajaan',
+              rankHierarchy: [
+                '1. Inisiat / Anggota Muda',
+                '2. Perwira / Penjaga Inti',
+                '3. Dewan Tinggi / Pemimpin Utama',
+              ],
+              factionArtifacts: [],
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -311,6 +375,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomArtifactInput('');
     setCustomSubRaceInput('');
     setCustomRaceSkillInput('');
+    setCustomRankInput('');
+    setCustomFactionArtifactInput('');
     setIsEditing(true);
   };
 
@@ -342,7 +408,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   };
 
   const toggleDraftArrayItem = (
-    field: 'knownSkills' | 'ownedArtifacts' | 'subRaces' | 'signatureSkills',
+    field:
+      | 'knownSkills'
+      | 'ownedArtifacts'
+      | 'subRaces'
+      | 'signatureSkills'
+      | 'rankHierarchy'
+      | 'factionArtifacts',
     itemValue: string
   ) => {
     if (!draftEntity) return;
@@ -411,6 +483,39 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     jumpToEntity(newChar.id);
   };
 
+  // 1-Click Create Character from active Faction
+  const handleCreateCharacterFromFaction = (factionEntity: LoreEntity) => {
+    const fAttrs = getEnrichedAttributes(factionEntity);
+    const topRank =
+      fAttrs.rankHierarchy && fAttrs.rankHierarchy.length > 0
+        ? fAttrs.rankHierarchy[0]
+        : 'Anggota Inti';
+    const newChar: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'character',
+      title: `Anggota ${factionEntity.title} Baru`,
+      subtitle: `${topRank} di ${factionEntity.title}`,
+      summary: `Anggota aktif dari [[${factionEntity.title}]] yang beroperasi di [[${
+        fAttrs.headquarters || factionEntity.title
+      }]].`,
+      content: `### Peran di Dalam ${factionEntity.title}\nMerupakan anggota [[${factionEntity.title}]] yang telah mengucapkan sumpah setia organisasi.\n\nTambahkan misi rahasia dan hubungannya dengan [[${
+        fAttrs.leader || factionEntity.title
+      }]] di sini.`,
+      tags: ['Character', factionEntity.title],
+      attributes: {
+        role: 'Pendukung',
+        status: 'Hidup',
+        factionName: factionEntity.title,
+        originNation: fAttrs.headquarters || '',
+        knownSkills: [],
+        ownedArtifacts: [...(fAttrs.factionArtifacts || [])],
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+    onSaveEntity(newChar);
+    jumpToEntity(newChar.id);
+  };
+
   const backlinks = activeEntity
     ? findBacklinksForEntity(activeEntity, entities, chapters)
     : { linkedEntities: [], linkedChapters: [] };
@@ -427,6 +532,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     : [];
 
   // Lists of existing entities by category for hybrid pickers
+  const characterEntities = entities.filter((e) => e.category === 'character');
   const raceEntities = entities.filter((e) => e.category === 'race');
   const factionEntities = entities.filter((e) => e.category === 'faction');
   const nationAndRegionEntities = entities.filter(
@@ -451,6 +557,24 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             raceTitle.includes(rName && rName.length > 3 ? rName : '___') ||
             (raceFirstWord.length > 3 && rName.includes(raceFirstWord)) ||
             e.content.toLowerCase().includes(`[[${raceTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Characters belonging to the active Faction
+  const membersOfActiveFaction =
+    category === 'faction' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const fName = (cAttrs.factionName || '').toLowerCase();
+          const facTitle = activeEntity.title.toLowerCase();
+          const facLeader = (activeAttrs.leader || '').toLowerCase();
+          return (
+            fName.includes(facTitle) ||
+            facTitle.includes(fName && fName.length > 3 ? fName : '___') ||
+            (facLeader && e.title.toLowerCase() === facLeader) ||
+            e.content.toLowerCase().includes(`[[${facTitle}]]`)
           );
         })
       : [];
@@ -576,6 +700,47 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
+          {/* Faction-Specific Organization Type & Influence Scale Filters */}
+          {category === 'faction' && (
+            <div className="space-y-2 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Jenis Organisasi:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {FACTION_TYPE_FILTERS.map((ft) => (
+                  <button
+                    key={ft}
+                    type="button"
+                    onClick={() => setFactionTypeFilter(ft)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      factionTypeFilter === ft
+                        ? 'bg-[#8F5B14] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {ft}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center justify-between gap-2 text-xs">
+                <span className="text-[11px] text-[#695A47] font-medium">
+                  Skala Pengaruh:
+                </span>
+                <select
+                  value={factionScaleFilter}
+                  onChange={(e) => setFactionScaleFilter(e.target.value)}
+                  className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                >
+                  {FACTION_SCALE_OPTIONS.map((sc) => (
+                    <option key={sc} value={sc}>
+                      {sc}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
@@ -648,6 +813,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ? `${
                                   itemAttrs.raceOriginClass || 'Ras Kanon'
                                 } · ${itemAttrs.lifespan || 'Usia Bervariasi'}`
+                              : category === 'faction'
+                              ? `${
+                                  itemAttrs.factionType || 'Organisasi'
+                                } · ${itemAttrs.influenceScale || 'Regional'}`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -673,6 +842,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             Habitat: {itemAttrs.homeland || 'Belum ditentukan'}
                             {itemAttrs.subRaces && itemAttrs.subRaces.length > 0
                               ? ` · ${itemAttrs.subRaces.length} Sub-Ras`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'faction' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Markas: {itemAttrs.headquarters || 'Belum ditentukan'}
+                            {itemAttrs.leader
+                              ? ` · Pemimpin: ${itemAttrs.leader}`
                               : ''}
                           </div>
                         )}
@@ -1849,77 +2027,480 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
-              {/* Other Categories Structured Fields */}
-              {category !== 'character' && category !== 'race' && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                  <div className="text-xs font-semibold text-[#9E2A2B]">
-                    Parameter Khusus {sectionMeta.label}
-                  </div>
-
-                  {category === 'faction' && (
+              {/* =========================================================== */}
+              {/* FACTION-SPECIFIC RICH EDITOR (Faction & Order Bible)        */}
+              {/* =========================================================== */}
+              {category === 'faction' && (
+                <div className="space-y-4">
+                  {/* 1. Organization Classification, Scale, Hybrid Leader & Headquarters Pickers */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#8F5B14]">
+                      1. Klasifikasi Organisasi, Pucuk Pimpinan & Markas Besar
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Jenis Organisasi / Faksi
+                        </label>
+                        <input
+                          type="text"
+                          list="faction-type-list"
+                          value={draftEntity.attributes.factionType || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                factionType: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Ordo Ksatria / Majelis Sihir / Gilda Dagang..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <datalist id="faction-type-list">
+                          {FACTION_TYPE_FILTERS.filter(
+                            (f) => f !== 'Semua'
+                          ).map((ft) => (
+                            <option key={ft} value={ft} />
+                          ))}
+                        </datalist>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Skala Pengaruh & Jangkauan Operasi
+                        </label>
+                        <input
+                          type="text"
+                          list="faction-scale-list"
+                          value={draftEntity.attributes.influenceScale || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                influenceScale: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Lintas Benua / Regional / Bawah Tanah..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <datalist id="faction-scale-list">
+                          {FACTION_SCALE_OPTIONS.filter(
+                            (s) => s !== 'Semua Skala'
+                          ).map((sc) => (
+                            <option key={sc} value={sc} />
+                          ))}
+                        </datalist>
+                      </div>
+
+                      {/* Hybrid Leader Picker */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Pemimpin Tertinggi (Pilih dari Tokoh atau Ketik Baru)
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  leader: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                          >
+                            <option value="">
+                              -- Pilih dari Tab Character (
+                              {characterEntities.length}) --
+                            </option>
+                            {characterEntities.map((c) => (
+                              <option key={c.id} value={c.title}>
+                                {c.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.leader || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  leader: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Atau ketik nama/gelar pemimpin..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Headquarters Picker */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Markas Besar Utama (Pilih dari Wilayah/Negara atau Ketik)
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  headquarters: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                          >
+                            <option value="">
+                              -- Pilih Wilayah / Negara (
+                              {nationAndRegionEntities.length}) --
+                            </option>
+                            {nationAndRegionEntities.map((nr) => (
+                              <option key={nr.id} value={nr.title}>
+                                [{CATEGORY_META[nr.category].singular}]{' '}
+                                {nr.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.headquarters || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  headquarters: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Atau ketik lokasi markas..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Lambang Panji, Warna Seragam & Semboyan Organisasi
+                      </label>
                       <input
                         type="text"
-                        placeholder="Jenis Kelompok (Ordo/Serikat/Klan)"
-                        value={draftEntity.attributes.factionType || ''}
+                        value={draftEntity.attributes.emblemSymbol || ''}
                         onChange={(e) =>
                           setDraftEntity({
                             ...draftEntity,
                             attributes: {
                               ...draftEntity.attributes,
-                              factionType: e.target.value,
+                              emblemSymbol: e.target.value,
                             },
                           })
                         }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Pemimpin Utama"
-                        value={draftEntity.attributes.leader || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              leader: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Markas Besar"
-                        value={draftEntity.attributes.headquarters || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              headquarters: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Ideologi / Tujuan Organisasi"
-                        value={draftEntity.attributes.ideology || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              ideology: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        placeholder='Contoh: Kompas Perak di atas Beludru Biru · Semboyan: "Mengukur Langit, Menjaga Bumi"'
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                       />
                     </div>
-                  )}
+                  </div>
+
+                  {/* 2. Rank Hierarchy Ladder & Faction Artifacts Pickers */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Rank Hierarchy Manager */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#8F5B14]">
+                        2A. Struktur Tangga Hierarki Pangkat (Bawah ke Atas)
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.rankHierarchy || []).map(
+                          (rk) => (
+                            <span
+                              key={rk}
+                              className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                            >
+                              {rk}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleDraftArrayItem('rankHierarchy', rk)
+                                }
+                                className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customRankInput}
+                          onChange={(e) => setCustomRankInput(e.target.value)}
+                          placeholder="Contoh: 1. Akolit Lentera..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customRankInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'rankHierarchy',
+                              customRankInput
+                            );
+                            setCustomRankInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah Pangkat
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Faction Artifacts / Strategic Assets Picker */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                        2B. Pusaka, Relik & Aset Strategis Milik Kelompok
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.factionArtifacts || []).map(
+                          (art) => (
+                            <span
+                              key={art}
+                              className="px-2.5 py-1 rounded bg-[#3B2818] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                            >
+                              {art}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleDraftArrayItem('factionArtifacts', art)
+                                }
+                                className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        <span className="text-[11px] text-[#695A47]">
+                          Pilih dari Tab Artefak:
+                        </span>
+                        {artifactEntities.map((artEnt) => {
+                          const active = (
+                            draftEntity.attributes.factionArtifacts || []
+                          ).includes(artEnt.title);
+                          return (
+                            <button
+                              key={artEnt.id}
+                              type="button"
+                              onClick={() =>
+                                toggleDraftArrayItem(
+                                  'factionArtifacts',
+                                  artEnt.title
+                                )
+                              }
+                              className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
+                                active
+                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
+                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                              }`}
+                            >
+                              {active ? '✓ ' : '+ '}
+                              {artEnt.title}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customFactionArtifactInput}
+                          onChange={(e) =>
+                            setCustomFactionArtifactInput(e.target.value)
+                          }
+                          placeholder="Ketik relik/aset lain..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customFactionArtifactInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'factionArtifacts',
+                              customFactionArtifactInput
+                            );
+                            setCustomFactionArtifactInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. Recruitment Oath, Public Ideology vs Secret Agenda & Resources */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#8F5B14]">
+                      3. Sumpah Setia, Doktrin Publik vs Agenda Rahasia & Sumber Daya
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Syarat Perekrutan, Ujian Inisiasi & Sumpah Setia Anggota
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.recruitmentOath || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              recruitmentOath: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Bagaimana seseorang direkrut, apa ujian masuknya, dan apa konsekuensi mengkhianati kelompok..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Doktrin & Ideologi Publik (Tujuan Resmi)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.ideology || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                ideology: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Tujuan mulia atau filosofi resmi yang diumumkan kepada publik..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Agenda Rahasia & Konspirasi Internal (Di Balik Layar)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.secretAgenda || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                secretAgenda: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Rencana tersembunyi, operasi bayangan, atau rahasia yang hanya diketahui petinggi..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Sumber Pendanaan, Pasukan Khusus & Wilayah Pengaruh
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.resourcesAndAssets || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              resourcesAndAssets: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Dari mana kelompok ini mendapat emas, senjata, intelijen, atau dukungan militer..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* 4. Diplomacy: Allied Factions vs Rival Factions */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#264653]">
+                      4. Peta Politik & Diplomasi Antar-Kelompok (Gunakan [[Nama Entitas]] untuk Tautan)
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Sekutu, Patron & Mitra Dagang (Allied Factions)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.alliedFactions || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                alliedFactions: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Kelompok, ras, atau kerajaan mana yang bersekutu dengan organisasi ini..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Rival Politik & Musuh Bebuyutan (Rival Factions)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.rivalFactions || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                rivalFactions: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Kelompok atau penguasa mana yang berusaha menghancurkan atau menyaingi mereka..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Other Categories Structured Fields */}
+              {category !== 'character' &&
+                category !== 'race' &&
+                category !== 'faction' && (
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                      Parameter Khusus {sectionMeta.label}
+                    </div>
 
                   {category === 'nation' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -2395,6 +2976,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* Faction Banner Emblem & Motto */}
+              {category === 'faction' && activeAttrs.emblemSymbol && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#8F5B14]">
+                    <Compass className="w-3.5 h-3.5" />
+                    <span>Lambang Panji & Semboyan Organisasi</span>
+                  </div>
+                  <p className="text-sm font-semibold text-[#231C14] leading-relaxed">
+                    {activeAttrs.emblemSymbol}
+                  </p>
+                </div>
+              )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -2472,6 +3066,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'interRaceRelations',
                             'subRaces',
                             'signatureSkills',
+                            'emblemSymbol',
+                            'rankHierarchy',
+                            'recruitmentOath',
+                            'ideology',
+                            'secretAgenda',
+                            'resourcesAndAssets',
+                            'factionArtifacts',
+                            'alliedFactions',
+                            'rivalFactions',
                           ].includes(key)
                         ) {
                           return false;
@@ -2493,10 +3096,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           lifespan: 'Rentang Usia',
                           traits: 'Anatomi & Ciri Fisik',
                           homeland: 'Tanah Kelahiran / Habitat',
-                          factionType: 'Bentuk Organisasi',
-                          leader: 'Pemimpin',
-                          headquarters: 'Markas Utama',
-                          ideology: 'Ideologi / Semboyan',
+                          factionType: 'Jenis Organisasi',
+                          influenceScale: 'Skala Pengaruh',
+                          leader: 'Pucuk Pimpinan',
+                          headquarters: 'Markas Besar Utama',
                           government: 'Pemerintahan',
                           capitalCity: 'Ibu Kota',
                           ruler: 'Penguasa Saat Ini',
@@ -2531,9 +3134,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             ? 'race'
                             : key === 'factionName'
                             ? 'faction'
+                            : key === 'leader' || key === 'ruler'
+                            ? 'character'
                             : key === 'originNation' ||
                               key === 'parentNation' ||
-                              key === 'homeland'
+                              key === 'homeland' ||
+                              key === 'headquarters'
                             ? 'region'
                             : key === 'parentPowerSystem'
                             ? 'power_system'
@@ -2701,6 +3307,65 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
                                 >
                                   {sk}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Faction Rank Hierarchy & Strategic Artifacts Interactive Cards */}
+                  {category === 'faction' &&
+                    ((activeAttrs.rankHierarchy &&
+                      activeAttrs.rankHierarchy.length > 0) ||
+                      (activeAttrs.factionArtifacts &&
+                        activeAttrs.factionArtifacts.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5" />
+                            <span>Tangga Hierarki Pangkat Organisasi</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.rankHierarchy || []).map((rk) => (
+                              <span
+                                key={rk}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-semibold text-[#231C14]"
+                              >
+                                {rk}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Compass className="w-3.5 h-3.5" />
+                            <span>Pusaka & Aset Strategis Kelompok</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.factionArtifacts || []).map((art) => {
+                              const matchedArt = findMatchingEntityByName(
+                                art,
+                                'encyclopedia'
+                              );
+                              return matchedArt ? (
+                                <button
+                                  key={art}
+                                  type="button"
+                                  onClick={() => jumpToEntity(matchedArt.id)}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/40 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                >
+                                  <span>{art}</span>
+                                  <ArrowUpRight className="w-3 h-3" />
+                                </button>
+                              ) : (
+                                <span
+                                  key={art}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                >
+                                  {art}
                                 </span>
                               );
                             })}
@@ -2888,6 +3553,133 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
+              {/* ============================================================= */}
+              {/* FACTION DOCTRINE VS SECRET AGENDA, OATH & DIPLOMACY           */}
+              {/* ============================================================= */}
+              {category === 'faction' &&
+                (activeAttrs.ideology ||
+                  activeAttrs.secretAgenda ||
+                  activeAttrs.recruitmentOath ||
+                  activeAttrs.resourcesAndAssets ||
+                  activeAttrs.alliedFactions ||
+                  activeAttrs.rivalFactions) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#8F5B14]">
+                      <Swords className="w-4 h-4" />
+                      <span>
+                        Doktrin Organisasi, Agenda Rahasia, Aset & Peta Diplomasi
+                      </span>
+                    </div>
+
+                    {/* Public Ideology vs Secret Agenda */}
+                    {(activeAttrs.ideology || activeAttrs.secretAgenda) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>
+                              Doktrin & Ideologi Publik (Wajah Resmi)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={activeAttrs.ideology || 'Belum diisi.'}
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Agenda Rahasia & Konspirasi Internal
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={activeAttrs.secretAgenda || 'Belum diisi.'}
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recruitment Oath & Strategic Resources */}
+                    {(activeAttrs.recruitmentOath ||
+                      activeAttrs.resourcesAndAssets) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#8F5B14]">
+                            Syarat Perekrutan & Sumpah Setia Anggota
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.recruitmentOath || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#231C14]">
+                            Sumber Pendanaan, Pasukan & Wilayah Pengaruh
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.resourcesAndAssets || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Allied Factions vs Rival Factions */}
+                    {(activeAttrs.alliedFactions ||
+                      activeAttrs.rivalFactions) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43]">
+                            Jaringan Sekutu & Patron Politik
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.alliedFactions || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B]">
+                            Rival Politik & Musuh Organisasi
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={activeAttrs.rivalFactions || 'Belum diisi.'}
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
               <div className="pt-4 border-t border-[#D8CBB3]">
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#695A47] mb-3">
@@ -2967,6 +3759,82 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               </div>
                               <div className="text-[11px] text-[#695A47] truncate">
                                 {cAttrs.powerTier || char.subtitle}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF MEMBERS BELONGING TO THIS FACTION         */}
+              {/* ============================================================= */}
+              {category === 'faction' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                      <Users className="w-4 h-4 text-[#8F5B14]" />
+                      <span>
+                        Daftar Anggota & Tokoh Terkait {activeEntity.title} (
+                        {membersOfActiveFaction.length})
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCreateCharacterFromFaction(activeEntity)
+                      }
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                      + Rekrut / Buat Tokoh Anggota Baru
+                    </button>
+                  </div>
+
+                  {membersOfActiveFaction.length === 0 ? (
+                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      Belum ada tokoh di tab <strong>Character</strong> yang
+                      terdaftar sebagai anggota kelompok ini. Klik{' '}
+                      <strong>+ Rekrut / Buat Tokoh Anggota Baru</strong> untuk
+                      membuat tokoh anggota baru secara instan.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {membersOfActiveFaction.map((member) => {
+                        const mAttrs = getEnrichedAttributes(member);
+                        return (
+                          <button
+                            key={member.id}
+                            type="button"
+                            onClick={() => jumpToEntity(member.id)}
+                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-start gap-3 cursor-pointer"
+                          >
+                            {member.imageUrl ? (
+                              <img
+                                src={member.imageUrl}
+                                alt={member.title}
+                                referrerPolicy="no-referrer"
+                                className="w-12 h-12 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                <User className="w-5 h-5 text-[#9E2A2B]" />
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                                {mAttrs.role || 'Anggota'} ·{' '}
+                                {mAttrs.status || 'Hidup'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <span className="truncate">{member.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <div className="text-[11px] text-[#695A47] truncate">
+                                {mAttrs.powerTier || member.subtitle}
                               </div>
                             </div>
                           </button>

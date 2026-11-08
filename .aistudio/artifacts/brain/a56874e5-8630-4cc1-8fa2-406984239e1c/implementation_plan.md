@@ -1,39 +1,56 @@
-# Rencana Pembaruan Tab Ras (Ancestry & Species Codex)
+# Rencana Pengembangan Tab Power System (Magic & Combat Architecture Bible) — MythosCartograph
 
-Pembaruan ini menyempurnakan tab **Ras** menjadi ensiklopedia bangsa & spesies (*Ancestry & Species Codex*) yang terhubung secara dua arah dengan tab **Character**, **Wilayah**, **Negara**, dan **Skill**.
-
----
-
-## 1. Biologi, Klasifikasi Asal-Usul, Bakat Bawaan & Kelemahan Rasial
-Menambahkan atribut khusus ras pada `LoreAttributes` (`src/types/world.ts`) dan menampilkannya secara terstruktur di lembar profil Ras:
-- **Klasifikasi Asal-Usul (`raceOriginClass`)**: Kategorisasi spesies seperti *Bangsa Manusia (Aethel-Born)*, *Bangsa Hutan / Fae (Sylvan)*, *Bangsa Bawah Tanah (Subterranean)*, *Drakonik / Astral*, atau *Hibrida / Kuno*.
-- **Anatomi & Ciri Fisik (`traits`)** serta **Rentang Usia (`lifespan`)**.
-- **Bakat Magis & Kemampuan Bawaan (`innateAbilities`)** vs **Kelemahan Biologis / Pantangan Rasial (`racialWeakness`)**: Ditampilkan berdampingan agar kekuatan dan kerentanan ras terlihat seimbang.
+Berdasarkan pilihan Anda, berikut adalah rancangan peningkatan menyeluruh untuk tab **Power System** (`CodexWorkspace.tsx`, `types/world.ts`, dan `starterWorld.ts`) agar berfungsi sebagai *Hard Magic & Combat Architecture Codex* yang terhubung langsung dengan tab **Skill**, **Character**, **Ras**, dan **Artefak & Biota**:
 
 ---
 
-## 2. Budaya, Bahasa, Pola Penamaan (*Naming Conventions*) & Tradisi
-- **Bahasa, Aksara & Pola Nama Khas (`languageAndNaming`)**: Panduan bunyi bahasa, contoh nama depan, dan marga/gelar khas ras tersebut agar penulis selalu konsisten saat menamai tokoh baru.
-- **Struktur Sosial, Kepercayaan & Tabu Budaya (`cultureAndTraditions`)**: Sistem kepemimpinan, nilai luhur, ritual, dan pantangan adat.
-- **Hubungan Diplomatik Antar-Ras (`interRaceRelations`)**: Bagaimana ras ini memandang bangsa lain (sekutu alami, rival sejarah, atau terisolasi).
+## 1. Perluasan Skema Atribut Power System (`LoreAttributes` di `src/types/world.ts`)
+Menambahkan atribut terstruktur khusus entitas berkategori `'power_system'`:
+- **Klasifikasi & Fondasi Energi**:
+  - `systemTypology`: Tipologi Sistem Kekuatan (*Hard Magic / Terukur*, *Kultivasi & Meridian*, *Runik & Kriya Artefak*, *Ilahi & Pakta Kosmik*, *Bela Diri & Aura Fisik*).
+  - `energySource`: Sumber energi utama (matahari, eter, emosi, panas bumi, dll.).
+  - `originSource`: Asal-usul historis, ras pencipta, atau wilayah tempat sistem ini pertama kali ditemukan (mendukung tautan ke **Ras** / **Wilayah** / **Sejarah**).
+  - `awakeningCondition`: Syarat bangkit (*Awakening*) atau bakat yang dibutuhkan seseorang untuk mempelajari sistem ini.
+  - `catalystMedium`: Medium fokus, senjata, segel, atau artefak penyalur yang dibutuhkan (mendukung tautan ke **Artefak & Biota**).
+- **Tangga Tingkatan (*Power Tiers*) & Cabang Aliran (*Schools / Affinities*)**:
+  - `powerTiersList`: Daftar urutan tingkatan penguasaan dari pemula hingga puncak mitos (`string[]`).
+  - `elementBranches`: Daftar cabang aliran, disiplin, atau elemen turunan di dalam sistem kekuatan ini (`string[]`).
+- **Hukum Besi (*Hard Rules*), Kelemahan Lingkungan & Harga Kekuatan (*Corruption Cost*)**:
+  - `hardRules`: Hukum mutlak yang tidak pernah bisa dilanggar oleh sistem kekuatan ini (menjaga cerita bebas dari *plot hole* / *deus ex machina*).
+  - `systemWeakness`: Kondisi cuaca, material penangkal (*anti-magic*), atau situasi di mana sistem ini lumpuh/melemah.
+  - `corruptionCost`: Risiko fisik, mental, atau kutukan permanen apabila pengguna melampaui kapasitasnya (*Overload / Backlash*).
 
 ---
 
-## 3. Varian Sub-Ras / Garis Keturunan & Pemilih Hibrida Tanah Kelahiran
-- **Cabang Sub-Ras / Garis Keturunan Darah (`subRaces: string[]`)**:
-  - Menyediakan daftar interaktif untuk mencatat sub-ras atau klan keturunan (contoh: *Sylvan Kanopi Perak*, *Sylvan Rawa Abu*, atau *Dvergr Kubah Besi* vs *Dvergr Permukaan*).
-- **Pemilih Hibrida Tanah Kelahiran (`homeland`) & Skill Khas (`signatureSkills`)**:
-  - Di mode sunting, penulis dapat memilih **Tanah Kelahiran / Habitat** langsung dari daftar entitas **Wilayah** atau **Negara** yang ada di *World Bible* (atau mengetik baru), serta memilih **Teknik / Skill Khas Ras**.
-  - Di mode baca, mengeklik *Tanah Kelahiran* atau *Skill Khas* akan langsung membuka lembar Wilayah/Negara/Skill tersebut.
+## 2. Lima Pembaruan Utama pada Antarmuka Tab Power System (`src/components/CodexWorkspace.tsx`)
+
+### A. Filter Tipologi Sistem Kekuatan di Direktori Kiri
+- Menambahkan barisan tombol filter tipologi di atas daftar direktori Power System:
+  - `Semua`, `Hard Magic / Terukur`, `Kultivasi & Meridian`, `Runik & Kriya Artefak`, `Ilahi & Pakta Kosmik`, `Bela Diri & Aura Fisik`.
+- Setiap kartu di direktori kiri menampilkan tipologi sistem, sumber energi, jumlah cabang aliran, serta jumlah **Skill turunan** yang tercatat.
+
+### B. Panel Fondasi Energi, Syarat Bangkit (*Awakening*) & Medium Penyalur (*Catalyst*)
+- Menampilkan kartu informasi terstruktur untuk **Tipologi Sistem**, **Sumber Energi**, **Asal-Usul / Pencipta** (dapat diklik ke entitas Ras/Wilayah/Sejarah), **Syarat Bangkit & Bakat**, serta **Medium Fokus / Alat Penyalur** (dapat diklik ke entitas Artefak).
+
+### C. Panel Tangga Tingkatan (*Power Tiers*) & Cabang Aliran / Disiplin (*Branches*)
+- Menampilkan kartu **Tangga Tingkatan Kekuatan (Tier Hierarchy)** secara berurutan dari tingkat dasar hingga puncak.
+- Menampilkan kartu **Cabang Aliran & Disiplin Elemen** sebagai daftar yang terstruktur rapi.
+
+### D. Panel Hukum Besi (*Hard Magic Rules*), Penangkal & Risiko Efek Samping (*Backlash*)
+- Menampilkan perbandingan berdampingan antara **Hukum Mutlak & Batasan Sistem (Hard Rules)** dengan **Risiko Over-Resonansi & Harga Kekuatan (Corruption / Backlash)** serta **Kelemahan & Material Penangkal**, lengkap dengan dukungan tautan `[[Nama Entitas]]`.
+
+### E. Daftar Otomatis Skill Turunan & Praktisi Terkait + Tombol 1-Klik `+ Buat Skill dari Sistem Ini`
+- Di bagian bawah lembar Power System, sistem secara otomatis menampilkan:
+  1. **Daftar Teknik & Skill Turunan** dari tab **Skill** yang memiliki `parentPowerSystem` yang merujuk pada sistem kekuatan ini, dilengkapi tombol **`+ Buat Skill dari Sistem Ini`** yang langsung membuat entri **Skill** baru dengan `parentPowerSystem` dan `elementAffinity` yang sudah terisi otomatis.
+  2. **Daftar Praktisi & Pengguna Tercatat** dari tab **Character** yang menguasai skill dari sistem ini atau memiliki *Power Tier* yang sesuai, lengkap dengan klik langsung menuju lembar karakter tersebut.
 
 ---
 
-## 4. Daftar Otomatis Tokoh dari Ras Ini & Tombol 1-Klik "+ Buat Karakter"
-- **Sensus Karakter dari Ras Ini**:
-  - Di bagian bawah lembar Ras, sistem secara otomatis mendeteksi dan menampilkan kartu semua **Character** yang memiliki ras tersebut (beserta potret mini, peran, dan *power tier*-nya).
-  - Dilengkapi tombol **"+ Buat Karakter Baru dari Ras Ini"** yang langsung membuat draf karakter baru dengan atribut `raceName` dan `originNation` terisi otomatis lalu membuka editor di tab **Character**.
-
----
-
-## 5. Filter Klasifikasi Asal-Usul Ras di Direktori Kiri
-- Menambahkan tombol filter klasifikasi di daftar direktori sebelah kiri (*Semua*, *Sylvan / Fae*, *Subterranean / Kriya*, *Manusia / Aethel-Born*, *Astral / Kuno*) serta menambahkan entri ras ketiga pada data contoh (`Aethel-Born (Manusia Tinggi)`) agar ketiga ras utama di Benua Aethelia memiliki lembar kanon lengkap.
+## 3. Pemilih Hibrida Saat Mengedit Power System & Pengayaan Data Awal (`src/data/starterWorld.ts`)
+- Pada mode edit Power System, penulis dapat:
+  - Memilih **Asal-Usul / Pencipta** dari daftar **Ras**, **Wilayah**, atau **Sejarah** yang ada (atau mengetik manual).
+  - Memilih **Medium Fokus / Penyalur** dari daftar **Artefak & Biota** (atau mengetik manual).
+  - Mengelola daftar **Tangga Tingkatan (Power Tiers)** dan **Cabang Aliran / Elemen** secara interaktif.
+- Memperkaya data awal di `starterWorld.ts`:
+  - Melengkapi **Resonansi Eteris Astral** (`pwr-resonansi-astral`) dengan seluruh atribut Power System baru (3 cabang aliran: *Jalur Solar*, *Jalur Lunar*, *Jalur Sidereal*; 6 tangga Lingkar Jiwa; syarat bangkit; medium penyalur; penangkal; dan kutukan kristalisasi).
+  - Menambahkan sistem kekuatan kedua **Tempaan Runik Besi-Bintang (Khaz-Vahl Artifice)** (`pwr-tempaan-runik`) sebagai contoh sistem bertipologi *Runik & Kriya Artefak* milik bangsa Dvergr, sehingga direktori Power System memiliki perbandingan dua sistem kekuatan yang kontras.
