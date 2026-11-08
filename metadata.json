@@ -1,0 +1,6 @@
+{
+  "name": "MythosCartograph — World Bible & Medieval Map Studio",
+  "description": "Platform World Bible terintegrasi, kanvas peta abad pertengahan interaktif, manajemen karakter, power system, timeline, dan asisten konsistensi cerita untuk penulis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
