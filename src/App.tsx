@@ -1,25 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  BookOpen,
-  Calendar,
   CheckCircle2,
   Compass,
-  Crown,
-  Flame,
-  GitBranch,
-  Globe,
-  History,
   Loader2,
-  MapPin,
   RotateCcw,
-  Settings,
-  Shield,
-  Sparkles,
-  Swords,
   Upload,
-  Users,
   X,
-  Zap,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
 import {
@@ -44,20 +30,20 @@ import {
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
 
 export type WorkspaceTab =
+  | 'overview'
   | 'map'
   | 'character'
   | 'race'
   | 'faction'
-  | 'nation'
-  | 'region'
   | 'power_system'
   | 'skill'
+  | 'nation'
+  | 'region'
   | 'history'
   | 'timeline'
   | 'encyclopedia'
   | 'graph'
-  | 'outliner'
-  | 'settings';
+  | 'outliner';
 
 const LORE_CATEGORY_TABS: LoreCategory[] = [
   'character',
@@ -78,22 +64,21 @@ function isLoreCategoryTab(tab: WorkspaceTab): tab is LoreCategory {
 const SECTION_TABS: Array<{
   id: WorkspaceTab;
   label: string;
-  group: 'core' | 'world' | 'story';
 }> = [
-  { id: 'map', label: 'Map Dunia', group: 'core' },
-  { id: 'character', label: 'Character', group: 'core' },
-  { id: 'race', label: 'Ras', group: 'core' },
-  { id: 'faction', label: 'Kelompok', group: 'core' },
-  { id: 'power_system', label: 'Power System', group: 'core' },
-  { id: 'skill', label: 'Skill', group: 'core' },
-  { id: 'nation', label: 'Negara', group: 'world' },
-  { id: 'region', label: 'Wilayah', group: 'world' },
-  { id: 'history', label: 'Sejarah', group: 'world' },
-  { id: 'timeline', label: 'Timeline', group: 'world' },
-  { id: 'encyclopedia', label: 'Artefak & Biota', group: 'world' },
-  { id: 'graph', label: 'Peta Relasi', group: 'story' },
-  { id: 'outliner', label: 'Alur Bab', group: 'story' },
-  { id: 'settings', label: 'Pengaturan Dunia', group: 'story' },
+  { id: 'overview', label: 'Overview' },
+  { id: 'map', label: 'Map Dunia' },
+  { id: 'character', label: 'Character' },
+  { id: 'race', label: 'Ras' },
+  { id: 'faction', label: 'Kelompok' },
+  { id: 'power_system', label: 'Power System' },
+  { id: 'skill', label: 'Skill' },
+  { id: 'nation', label: 'Negara' },
+  { id: 'region', label: 'Wilayah' },
+  { id: 'history', label: 'Sejarah' },
+  { id: 'timeline', label: 'Timeline' },
+  { id: 'encyclopedia', label: 'Artefak & Biota' },
+  { id: 'graph', label: 'Peta Relasi' },
+  { id: 'outliner', label: 'Alur Bab' },
 ];
 
 interface BrainstormIdea {
@@ -120,7 +105,7 @@ export default function App() {
     return STARTER_WORLD_PROJECT;
   });
 
-  const [activeTab, setActiveTab] = useState<WorkspaceTab>('character');
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>('overview');
   const [selectedEntityId, setSelectedEntityId] = useState<string>(
     project.entities[0]?.id || ''
   );
@@ -172,7 +157,7 @@ export default function App() {
     }
   };
 
-  // Navigate to any entity and automatically switch to that entity's dedicated section tab!
+  // Navigate to any entity and automatically switch to that entity's dedicated section tab
   const handleNavigateToEntity = (entityId: string) => {
     const target = project.entities.find((e) => e.id === entityId);
     setSelectedEntityId(entityId);
@@ -190,7 +175,9 @@ export default function App() {
       return { ...prev, entities: nextEntities };
     });
     setActiveTab(entity.category);
-    showToast(`Entri "${entity.title}" berhasil disimpan ke tab ${CATEGORY_META[entity.category].singular}.`);
+    showToast(
+      `Entri "${entity.title}" berhasil disimpan ke tab ${CATEGORY_META[entity.category].singular}.`
+    );
   };
 
   const handleDeleteEntity = (entityId: string) => {
@@ -317,7 +304,7 @@ export default function App() {
 
     setProject(blankWorld);
     setSelectedEntityId(starterEntity.id);
-    setActiveTab('character');
+    setActiveTab('overview');
     showToast('Proyek World Bible kosong berhasil dibuat.');
   };
 
@@ -438,82 +425,32 @@ export default function App() {
     return null;
   };
 
+  const activeTabLabel =
+    SECTION_TABS.find((t) => t.id === activeTab)?.label || 'Overview';
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F6F1E6] text-[#231C14]">
-      {/* Strict 3-Zone Top Navigation Bar Contract */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-8 px-6 py-4 bg-[#FBF8F1]/95 backdrop-blur-xs border-b border-[#D8CBB3]">
-        {/* Zone 1: Single text element wordmark */}
+      {/* Top Bar: Brand & Active Breadcrumb on Left, Project Export on Right (NO duplicate tab buttons here) */}
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-8 px-6 py-3.5 bg-[#FBF8F1]/95 backdrop-blur-xs border-b border-[#D8CBB3]">
         <a
           href="#top"
           onClick={(e) => {
             e.preventDefault();
-            handleSwitchTab('character');
+            handleSwitchTab('overview');
           }}
           className="font-cartography text-xl font-bold tracking-tight text-[#231C14] whitespace-nowrap shrink-0"
         >
           MythosCartograph
         </a>
 
-        {/* Zone 2: 5 concise single-line text navigation links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#695A47]">
-          <button
-            type="button"
-            onClick={() => handleSwitchTab('map')}
-            className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'map'
-                ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
-                : 'hover:text-[#231C14]'
-            }`}
-          >
-            Map Dunia
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSwitchTab('character')}
-            className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'character'
-                ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
-                : 'hover:text-[#231C14]'
-            }`}
-          >
-            Character
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSwitchTab('race')}
-            className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'race'
-                ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
-                : 'hover:text-[#231C14]'
-            }`}
-          >
-            Ras
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSwitchTab('faction')}
-            className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'faction'
-                ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
-                : 'hover:text-[#231C14]'
-            }`}
-          >
-            Kelompok
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSwitchTab('power_system')}
-            className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'power_system'
-                ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
-                : 'hover:text-[#231C14]'
-            }`}
-          >
-            Power System
-          </button>
-        </nav>
+        <div className="hidden md:flex items-center gap-2 text-xs text-[#695A47] truncate">
+          <span className="font-semibold text-[#231C14] truncate">
+            {project.worldName}
+          </span>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#9E2A2B] font-semibold">{activeTabLabel}</span>
+        </div>
 
-        {/* Zone 3: 1 primary action */}
         <div className="flex items-center gap-3 shrink-0">
           <button
             type="button"
@@ -526,136 +463,190 @@ export default function App() {
       </header>
 
       {/* Main Content Container (1440px baseline) */}
-      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* Split-Screen World Overview Banner */}
-        <section className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch bg-[#FBF8F1] border border-[#D8CBB3] rounded-2xl p-6">
-            {/* Left Column: World Typography & Studio Controls */}
-            <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
-              <div className="space-y-2">
-                <div className="text-xs text-[#9E2A2B] font-semibold">
-                  {project.genre} · {project.calendarSystem}
-                </div>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.12]">
-                  {project.worldName}
-                </h1>
-                <p className="text-sm sm:text-base text-[#695A47] max-w-2xl leading-relaxed">
-                  {project.tagline}
-                </p>
-              </div>
-
-              {/* Studio File & Quick Actions Toolbar */}
-              <div className="flex flex-wrap items-center gap-2.5 pt-2">
+      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
+        {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible */}
+        <nav
+          aria-label="Navigasi Bagian World Bible"
+          className="bg-[#EFE7D6] border border-[#D8CBB3] rounded-xl p-2"
+        >
+          <div className="flex flex-wrap items-center gap-1.5">
+            {SECTION_TABS.map((tab) => {
+              const isActive = activeTab === tab.id;
+              const count = getTabCount(tab.id);
+              return (
                 <button
+                  key={tab.id}
                   type="button"
-                  onClick={() => handleSwitchTab('map')}
-                  className="px-4 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
-                  Buka Kanvas Map Abad Pertengahan
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleSwitchTab('settings')}
-                  className={`px-3.5 py-2 text-xs font-semibold rounded-lg border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    activeTab === 'settings'
-                      ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                      : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                  onClick={() => handleSwitchTab(tab.id)}
+                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                    isActive
+                      ? 'bg-[#9E2A2B] text-white shadow-xs'
+                      : 'bg-[#FBF8F1]/85 text-[#231C14] hover:bg-[#FBF8F1] border border-[#D8CBB3]/70'
                   }`}
                 >
-                  <Settings className="w-3.5 h-3.5" />
-                  Pengaturan Dunia
+                  <span>{tab.label}</span>
+                  {count !== null && (
+                    <span
+                      className={`font-mono-tabular text-[11px] px-1.5 py-0.2 rounded ${
+                        isActive
+                          ? 'bg-black/20 text-white'
+                          : 'bg-[#EFE7D6] text-[#695A47]'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
                 </button>
+              );
+            })}
+          </div>
+        </nav>
 
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="px-3.5 py-2 text-xs font-medium bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  Impor JSON
-                </button>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportWorldJson}
-                  className="hidden"
-                />
+        {/* TAB 1: OVERVIEW (BERANDA DUNIA) */}
+        {activeTab === 'overview' && (
+          <div className="space-y-6">
+            {/* Split-Screen World Overview Hero Banner */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch bg-[#FBF8F1] border border-[#D8CBB3] rounded-2xl p-6">
+              {/* Left Column: World Typography & Studio Controls */}
+              <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <div className="text-xs text-[#9E2A2B] font-semibold">
+                    {project.genre} · {project.calendarSystem}
+                  </div>
+                  <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.12]">
+                    {project.worldName}
+                  </h1>
+                  <p className="text-sm sm:text-base text-[#695A47] max-w-2xl leading-relaxed">
+                    {project.tagline}
+                  </p>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={handleResetStarterWorld}
-                  className="px-3 py-2 text-xs font-medium text-[#695A47] hover:text-[#231C14] flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                  title="Kembalikan data contoh dunia Aethelia"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  Reset Contoh Dunia
-                </button>
+                {/* Studio File & Project Actions Toolbar */}
+                <div className="flex flex-wrap items-center gap-2.5 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleSwitchTab('map')}
+                    className="px-4 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
+                    Buka Map Dunia Abad Pertengahan
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-3.5 py-2 text-xs font-medium bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    Impor File JSON
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportWorldJson}
+                    className="hidden"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={handleResetStarterWorld}
+                    className="px-3 py-2 text-xs font-medium text-[#695A47] hover:text-[#231C14] flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    title="Kembalikan data contoh dunia Aethelia"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Reset Contoh Dunia
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Right Column: Matching Height Visual Container */}
-            <div className="lg:col-span-5">
-              <div className="relative h-56 lg:h-full min-h-[200px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
-                <img
-                  src={project.heroBannerUrl}
-                  alt={project.worldName}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex items-end p-4">
-                  <div className="text-[#FBF8F1]">
-                    <div className="text-[11px] text-[#E6D5B8]">
-                      Arsiparis Utama: {project.authorName} · Tersimpan Otomatis di Browser
-                    </div>
-                    <div className="font-cartography text-sm font-bold tracking-wide">
-                      Atlas & Ensiklopedia Kanon Terpadu
+              {/* Right Column: Matching Height Visual Container */}
+              <div className="lg:col-span-5">
+                <div className="relative h-56 lg:h-full min-h-[210px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
+                  <img
+                    src={project.heroBannerUrl}
+                    alt={project.worldName}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex items-end p-4">
+                    <div className="text-[#FBF8F1]">
+                      <div className="text-[11px] text-[#E6D5B8]">
+                        Arsiparis Utama: {project.authorName} · Tersimpan Otomatis di Browser
+                      </div>
+                      <div className="font-cartography text-sm font-bold tracking-wide">
+                        Atlas & Ensiklopedia Kanon Terpadu
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Dedicated Section Tab Bar — Every World Bible Section has its own tab */}
-          <div className="bg-[#EFE7D6] border border-[#D8CBB3] rounded-xl p-2">
-            <div className="flex flex-wrap items-center gap-1.5">
-              {SECTION_TABS.map((tab) => {
-                const isActive = activeTab === tab.id;
-                const count = getTabCount(tab.id);
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => handleSwitchTab(tab.id)}
-                    className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                      isActive
-                        ? 'bg-[#9E2A2B] text-white shadow-xs'
-                        : 'bg-[#FBF8F1]/80 text-[#231C14] hover:bg-[#FBF8F1] border border-[#D8CBB3]/70'
-                    }`}
-                  >
-                    <span>{tab.label}</span>
-                    {count !== null && (
-                      <span
-                        className={`font-mono-tabular text-[11px] px-1.5 py-0.2 rounded ${
-                          isActive
-                            ? 'bg-black/20 text-white'
-                            : 'bg-[#EFE7D6] text-[#695A47]'
-                        }`}
-                      >
-                        {count}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+            {/* Full-Width 4-Column World Bible Metrics Strip Below Hero Split */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
+                <div className="text-xs text-[#695A47]">
+                  Total Entitas World Bible
+                </div>
+                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
+                  {project.entities.length} Entri Kanon
+                </div>
+                <div className="text-[11px] text-[#9E2A2B] mt-1">
+                  Character · Ras · Kelompok · Power System
+                </div>
+              </div>
+
+              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
+                <div className="text-xs text-[#695A47]">
+                  Titik Peta & Label Kartografi
+                </div>
+                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
+                  {project.mapData.stamps.length} Lokasi Peta
+                </div>
+                <div className="text-[11px] text-[#695A47] mt-1">
+                  {project.mapData.regionLabels.length} Label Kaligrafi · {project.mapData.rivers.length} Sungai
+                </div>
+              </div>
+
+              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
+                <div className="text-xs text-[#695A47]">
+                  Kronik Sejarah & Relasi
+                </div>
+                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
+                  {project.timeline.length} Peristiwa Era
+                </div>
+                <div className="text-[11px] text-[#695A47] mt-1">
+                  {project.relationships.length} Ikatan Relasi Karakter & Kelompok
+                </div>
+              </div>
+
+              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
+                <div className="text-xs text-[#695A47]">
+                  Alur Cerita & Naskah
+                </div>
+                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
+                  {project.chapters.length} Bab Cerita
+                </div>
+                <div className="text-[11px] text-[#695A47] mt-1">
+                  Terhubung langsung ke elemen World Bible
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* Active Dedicated Section Tab Viewport */}
+            {/* World Cosmology Settings & Power System / Geopolitics Matrix */}
+            <WorldSettingsAndPowerView
+              project={project}
+              onUpdateProjectMeta={(patch) =>
+                setProject((prev) => ({ ...prev, ...patch }))
+              }
+              onCreateBlankWorld={handleCreateBlankWorld}
+              onSelectEntity={handleNavigateToEntity}
+            />
+          </div>
+        )}
+
+        {/* Dedicated Lore Category Tabs (Character, Ras, Kelompok, Power System, Skill, Negara, Wilayah, Sejarah, Artefak & Biota) */}
         {isLoreCategoryTab(activeTab) && (
           <CodexWorkspace
             category={activeTab}
@@ -744,17 +735,6 @@ export default function App() {
             }
           />
         )}
-
-        {activeTab === 'settings' && (
-          <WorldSettingsAndPowerView
-            project={project}
-            onUpdateProjectMeta={(patch) =>
-              setProject((prev) => ({ ...prev, ...patch }))
-            }
-            onCreateBlankWorld={handleCreateBlankWorld}
-            onSelectEntity={handleNavigateToEntity}
-          />
-        )}
       </main>
 
       {/* Quiet Editorial Footer */}
@@ -763,22 +743,13 @@ export default function App() {
           <span>
             MythosCartograph — Studio World Bible, Peta Abad Pertengahan & Arsitektur Cerita
           </span>
-          <div className="flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => handleSwitchTab('settings')}
-              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
-            >
-              Pengaturan Semesta
-            </button>
-            <button
-              type="button"
-              onClick={handleExportWorldJson}
-              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
-            >
-              Cadangkan World Bible (.JSON)
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleExportWorldJson}
+            className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
+          >
+            Cadangkan World Bible (.JSON)
+          </button>
         </div>
       </footer>
 
