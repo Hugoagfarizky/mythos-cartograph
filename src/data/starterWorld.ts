@@ -409,6 +409,7 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
     mapTitle: 'Tabula Aethelia Magna',
     subtitle: 'Peta Kartografi Kekaisaran Gondoria, Rimba Shadowwood & Pegunungan Nidavellir',
     scaleLabel: '1 Grid = 45 Liga Kerajaan',
+    leaguesPerCell: 45,
     gridCols: GRID_COLS,
     gridRows: GRID_ROWS,
     cells: createStarterTerrainGrid(),
@@ -494,6 +495,30 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
           { x: 58, y: 39 },
           { x: 54, y: 48 },
           { x: 50, y: 59 },
+        ],
+      },
+    ],
+    routes: [
+      {
+        id: 'rte-1',
+        name: 'Jalan Raya Kekaisaran Timur',
+        style: 'road',
+        points: [
+          { x: 34, y: 44 },
+          { x: 42, y: 49 },
+          { x: 49, y: 52 },
+          { x: 60, y: 54 },
+          { x: 71, y: 56 },
+        ],
+      },
+      {
+        id: 'rte-2',
+        name: 'Ekspedisi Vaelen (Bab 1-3)',
+        style: 'expedition',
+        points: [
+          { x: 46, y: 23 },
+          { x: 52, y: 30 },
+          { x: 59, y: 37 },
         ],
       },
     ],

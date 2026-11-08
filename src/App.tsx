@@ -9,6 +9,7 @@ import {
   LoreAuditResult,
   LoreCategory,
   LoreEntity,
+  MapStamp,
   ScratchpadNote,
   TerrainType,
   WorldProject,
@@ -347,6 +348,49 @@ export default function App() {
     );
   };
 
+  const handleCreateEntityFromStamp = (
+    stamp: MapStamp,
+    category: LoreCategory
+  ) => {
+    const newEntity: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category,
+      title: stamp.label,
+      subtitle: `Lokasi di ${project.mapData.mapTitle} (${stamp.x}°B, ${stamp.y}°U)`,
+      summary: `${stamp.label} adalah lokasi penting yang tercatat pada peta ${project.mapData.mapTitle}.`,
+      content: `### Geografi & Sejarah Lokasi\n**${stamp.label}** terletak pada koordinat atlas ${stamp.x}°B · ${stamp.y}°U.\n\nTuliskan sejarah tempat ini, penguasa wilayahnya, atau hubungannya dengan entitas lain menggunakan sintaks \`[[Nama Entitas]]\`.`,
+      tags: [CATEGORY_META[category].singular, 'Lokasi Peta'],
+      attributes:
+        category === 'region'
+          ? {
+              climate: 'Sedang',
+              landmarks: stamp.label,
+              dangerLevel: 'Menengah',
+            }
+          : category === 'nation'
+          ? {
+              capitalCity: stamp.label,
+              government: 'Kerajaan / Persemakmuran',
+            }
+          : {},
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+
+    setProject((prev) => ({
+      ...prev,
+      entities: [newEntity, ...prev.entities],
+      mapData: {
+        ...prev.mapData,
+        stamps: prev.mapData.stamps.map((s) =>
+          s.id === stamp.id ? { ...s, linkedEntityId: newEntity.id } : s
+        ),
+      },
+    }));
+    showToast(
+      `Entri "${newEntity.title}" berhasil dibuat di tab ${CATEGORY_META[category].singular} dan ditautkan ke pin peta.`
+    );
+  };
+
   // Build world summary string for AI context
   const buildWorldContextSummary = () => {
     const entityLines = project.entities
@@ -613,6 +657,7 @@ export default function App() {
               setProject((prev) => ({ ...prev, mapData: nextMap }))
             }
             onSelectEntity={handleNavigateToEntity}
+            onCreateEntityFromStamp={handleCreateEntityFromStamp}
           />
         )}
 

@@ -121,16 +121,27 @@ export interface MapRiverPath {
   points: Array<{ x: number; y: number }>;
 }
 
+export type MapRouteStyle = 'road' | 'expedition' | 'sea_lane';
+
+export interface MapRoutePath {
+  id: string;
+  name: string;
+  style: MapRouteStyle;
+  points: Array<{ x: number; y: number }>;
+}
+
 export interface MapSandboxData {
   mapTitle: string;
   subtitle: string;
   scaleLabel: string;
+  leaguesPerCell?: number;
   gridCols: number;
   gridRows: number;
   cells: TerrainType[]; // length = gridCols * gridRows
   stamps: MapStamp[];
   regionLabels: MapRegionLabel[];
   rivers: MapRiverPath[];
+  routes?: MapRoutePath[];
   customBgUrl?: string;
 }
 

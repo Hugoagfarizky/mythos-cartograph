@@ -1,21 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Check,
   Compass,
   Download,
+  Edit3,
   Eye,
+  FilePlus2,
+  Layers,
   MapPin,
   Navigation,
   Paintbrush,
+  Plus,
   RotateCcw,
-  Sparkles,
+  Route,
+  Ruler,
   Trash2,
   Type as TypeIcon,
+  Waves,
+  X,
   ZoomIn,
   ZoomOut,
 } from 'lucide-react';
+import { STARTER_WORLD_PROJECT } from '../data/starterWorld';
 import {
+  LoreCategory,
   LoreEntity,
   MapRegionLabel,
+  MapRiverPath,
+  MapRoutePath,
+  MapRouteStyle,
   MapSandboxData,
   MapStamp,
   StampType,
@@ -28,7 +41,19 @@ interface MedievalMapSandboxProps {
   entities: LoreEntity[];
   onChangeMapData: (updated: MapSandboxData) => void;
   onSelectEntity: (entityId: string) => void;
+  onCreateEntityFromStamp?: (
+    stamp: MapStamp,
+    category: LoreCategory
+  ) => void;
 }
+
+type MapToolMode =
+  | 'inspect'
+  | 'terrain'
+  | 'stamp'
+  | 'label'
+  | 'river_route'
+  | 'measure';
 
 const TERRAIN_PALETTE: Array<{
   type: TerrainType;
@@ -91,14 +116,61 @@ const STAMP_PALETTE: Array<{
   label: string;
   defaultColor: string;
 }> = [
-  { type: 'capital', label: 'Ibu Kota Mahkota', defaultColor: '#8B1E1E' },
+  { type: 'capital', label: 'Ibu Kota Mahkota', defaultColor: '#9E2A2B' },
   { type: 'castle', label: 'Benteng / Kastil', defaultColor: '#3B2818' },
-  { type: 'tower', label: 'Menara Penyihir', defaultColor: '#1E3F4E' },
+  { type: 'tower', label: 'Menara Penyihir', defaultColor: '#264653' },
   { type: 'port', label: 'Pelabuhan & Dermaga', defaultColor: '#1F485B' },
-  { type: 'shrine', label: 'Pohon Suci / Kuil', defaultColor: '#294C36' },
-  { type: 'ruins', label: 'Reruntuhan Kuno', defaultColor: '#5A4632' },
-  { type: 'village', label: 'Kota Kecil / Desa', defaultColor: '#4A3520' },
+  { type: 'shrine', label: 'Pohon Suci / Kuil', defaultColor: '#2D5A43' },
+  { type: 'ruins', label: 'Reruntuhan Kuno', defaultColor: '#695A47' },
+  { type: 'village', label: 'Kota Kecil / Desa', defaultColor: '#B5832A' },
   { type: 'battlefield', label: 'Medan Perang', defaultColor: '#8B1E1E' },
+];
+
+const BANNER_COLORS: Array<{ hex: string; label: string }> = [
+  { hex: '#9E2A2B', label: 'Merah Mahkota' },
+  { hex: '#B5832A', label: 'Emas Surya' },
+  { hex: '#2D5A43', label: 'Hijau Sylvan' },
+  { hex: '#264653', label: 'Biru Astral' },
+  { hex: '#5A3E6B', label: 'Ungu Arkana' },
+  { hex: '#3B2818', label: 'Besi Sepia' },
+];
+
+const TRAVEL_MODES: Array<{
+  id: string;
+  label: string;
+  leaguesPerDay: number;
+  note: string;
+}> = [
+  {
+    id: 'foot',
+    label: 'Jalan Kaki / Infanteri',
+    leaguesPerDay: 5,
+    note: '~24 km/hari',
+  },
+  {
+    id: 'cart',
+    label: 'Karavan / Kereta Dagang',
+    leaguesPerDay: 8,
+    note: '~38 km/hari',
+  },
+  {
+    id: 'cavalry',
+    label: 'Kuda Perang Cepat',
+    leaguesPerDay: 13,
+    note: '~62 km/hari',
+  },
+  {
+    id: 'ship',
+    label: 'Kapal Layar Kerajaan',
+    leaguesPerDay: 25,
+    note: '~120 km/hari',
+  },
+  {
+    id: 'dragon',
+    label: 'Naga / Tunggangan Udara',
+    leaguesPerDay: 50,
+    note: '~240 km/hari',
+  },
 ];
 
 // Deterministic pseudo-random helper for consistent hand-drawn ink texture
@@ -120,10 +192,11 @@ const MedievalStampArtwork: React.FC<{
     <svg
       viewBox="0 0 48 48"
       className={`w-10 h-10 overflow-visible transition-transform duration-150 ${
-        isSelected ? 'scale-125 drop-shadow-[0_2px_6px_rgba(158,42,43,0.45)]' : 'group-hover:scale-110'
+        isSelected
+          ? 'scale-125 drop-shadow-[0_2px_6px_rgba(158,42,43,0.45)]'
+          : 'group-hover:scale-110'
       }`}
     >
-      {/* Subtle parchment halo behind ink drawing for readability */}
       <ellipse
         cx="24"
         cy="28"
@@ -134,19 +207,14 @@ const MedievalStampArtwork: React.FC<{
 
       {type === 'capital' && (
         <g stroke={strokeColor} strokeWidth="1.8" strokeLinejoin="round">
-          {/* Base wall */}
           <path d="M8 36 L40 36 L38 26 L10 26 Z" fill="#EFE2C8" />
-          {/* Three towers */}
           <rect x="11" y="17" width="6" height="19" fill="#E5D4B3" />
           <rect x="31" y="17" width="6" height="19" fill="#E5D4B3" />
           <rect x="19" y="12" width="10" height="24" fill="#F6EEDC" />
-          {/* Steep medieval roofs */}
           <polygon points="10,17 14,9 18,17" fill={fillAccent} />
           <polygon points="30,17 34,9 38,17" fill={fillAccent} />
           <polygon points="17,12 24,2 31,12" fill={fillAccent} />
-          {/* Royal banner flag */}
           <path d="M24 2 L24 -4 L32 -1 L24 2 Z" fill={fillAccent} />
-          {/* Gate arch */}
           <path d="M21 36 L21 29 A3 3 0 0 1 27 29 L27 36 Z" fill="#261A10" />
         </g>
       )}
@@ -156,7 +224,6 @@ const MedievalStampArtwork: React.FC<{
           <rect x="12" y="20" width="24" height="16" fill="#E5D4B3" />
           <rect x="9" y="14" width="8" height="22" fill="#D8C39E" />
           <rect x="31" y="14" width="8" height="22" fill="#D8C39E" />
-          {/* Crenellations */}
           <path d="M8 14 H18 V11 H15 V14 H12 V11 H8 Z" fill="#3B2818" />
           <path d="M30 14 H40 V11 H37 V14 H34 V11 H30 Z" fill="#3B2818" />
           <path d="M21 36 V28 A3 3 0 0 1 27 28 V36 Z" fill="#261A10" />
@@ -169,27 +236,22 @@ const MedievalStampArtwork: React.FC<{
           <path d="M18 37 L20 13 L28 13 L30 37 Z" fill="#E5D4B3" />
           <polygon points="16,13 24,2 32,13" fill={fillAccent} />
           <circle cx="24" cy="20" r="2.2" fill="#FBF8F1" />
-          {/* Arcane crescent atop spire */}
           <circle cx="24" cy="1" r="2" fill="#B5832A" />
         </g>
       )}
 
       {type === 'port' && (
         <g stroke={strokeColor} strokeWidth="1.7" strokeLinejoin="round">
-          {/* Medieval sailing hull */}
           <path d="M10 29 Q24 38 38 29 L34 36 H14 Z" fill="#8C6239" />
-          {/* Mast & Billowing Sail */}
           <line x1="24" y1="9" x2="24" y2="30" />
           <path d="M24 10 Q35 17 24 26 Q16 20 24 10 Z" fill="#FBF8F1" />
           <path d="M24 9 L31 11 L24 13 Z" fill={fillAccent} />
-          {/* Waves under ship */}
           <path d="M8 38 Q16 35 24 38 T40 38" fill="none" />
         </g>
       )}
 
       {type === 'shrine' && (
         <g stroke={strokeColor} strokeWidth="1.7" strokeLinejoin="round">
-          {/* Sacred Elder Tree & Stone Arch */}
           <path d="M21 36 L22 23 L26 23 L27 36 Z" fill="#6E4E32" />
           <circle cx="24" cy="17" r="9" fill="#527356" />
           <circle cx="18" cy="21" r="6" fill="#3E5C42" />
@@ -220,10 +282,12 @@ const MedievalStampArtwork: React.FC<{
 
       {type === 'battlefield' && (
         <g stroke={strokeColor} strokeWidth="1.9" strokeLinecap="round">
-          {/* Crossed Medieval Broadswords & Shield */}
           <line x1="11" y1="35" x2="37" y2="11" />
           <line x1="37" y1="35" x2="11" y2="11" />
-          <path d="M17 18 L24 14 L31 18 L29 30 L24 35 L19 30 Z" fill={fillAccent} />
+          <path
+            d="M17 18 L24 14 L31 18 L29 30 L24 35 L19 30 Z"
+            fill={fillAccent}
+          />
         </g>
       )}
     </svg>
@@ -235,34 +299,126 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
   entities,
   onChangeMapData,
   onSelectEntity,
+  onCreateEntityFromStamp,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [toolMode, setToolMode] = useState<'inspect' | 'terrain' | 'stamp' | 'label'>('inspect');
+  const [toolMode, setToolMode] = useState<MapToolMode>('inspect');
   const [selectedTerrain, setSelectedTerrain] = useState<TerrainType>('plains');
   const [brushSize, setBrushSize] = useState<1 | 2 | 3>(1);
-  const [selectedStampType, setSelectedStampType] = useState<StampType>('castle');
+
+  // Stamp creation state
+  const [selectedStampType, setSelectedStampType] =
+    useState<StampType>('castle');
+  const [selectedBannerColor, setSelectedBannerColor] =
+    useState<string>('#9E2A2B');
   const [newStampLabel, setNewStampLabel] = useState<string>('');
   const [newStampEntityId, setNewStampEntityId] = useState<string>('');
-  const [newRegionText, setNewRegionText] = useState<string>('');
-  const [newRegionStyle, setNewRegionStyle] = useState<'empire' | 'region' | 'sea'>('region');
 
+  // Label creation state
+  const [newRegionText, setNewRegionText] = useState<string>('');
+  const [newRegionStyle, setNewRegionStyle] = useState<
+    'empire' | 'region' | 'sea'
+  >('region');
+  const [newRegionRotation, setNewRegionRotation] = useState<number>(0);
+
+  // River & Route drawing state
+  const [pathDrawKind, setPathDrawKind] = useState<'river' | MapRouteStyle>(
+    'river'
+  );
+  const [newPathName, setNewPathName] = useState<string>('');
+  const [draftPoints, setDraftPoints] = useState<Array<{ x: number; y: number }>>(
+    []
+  );
+
+  // Distance & Travel Time Ruler state (Click 2 points on map)
+  const [measurePointA, setMeasurePointA] = useState<{
+    x: number;
+    y: number;
+    label: string;
+  } | null>(() => {
+    const s0 = mapData.stamps[0];
+    return s0 ? { x: s0.x, y: s0.y, label: s0.label } : null;
+  });
+  const [measurePointB, setMeasurePointB] = useState<{
+    x: number;
+    y: number;
+    label: string;
+  } | null>(() => {
+    const s1 = mapData.stamps[3] || mapData.stamps[1];
+    return s1 ? { x: s1.x, y: s1.y, label: s1.label } : null;
+  });
+
+  // Inspector selection: either a Stamp or a Region Calligraphy Label
+  const [inspectorKind, setInspectorKind] = useState<'stamp' | 'label'>('stamp');
   const [activeStampId, setActiveStampId] = useState<string | null>(
     mapData.stamps[0]?.id ?? null
   );
+  const [activeLabelId, setActiveLabelId] = useState<string | null>(
+    mapData.regionLabels[0]?.id ?? null
+  );
+  const [promoteCategory, setPromoteCategory] =
+    useState<LoreCategory>('region');
+
+  // Dragging & Painting state
   const [draggingStampId, setDraggingStampId] = useState<string | null>(null);
   const [draggingLabelId, setDraggingLabelId] = useState<string | null>(null);
   const [isPainting, setIsPainting] = useState<boolean>(false);
-  const [showRhumbLines, setShowRhumbLines] = useState<boolean>(true);
   const [zoom, setZoom] = useState<number>(1);
 
-  const activeStamp = mapData.stamps.find((s) => s.id === activeStampId) || null;
+  // Layer visibility toggles
+  const [showStampsLayer, setShowStampsLayer] = useState<boolean>(true);
+  const [showLabelsLayer, setShowLabelsLayer] = useState<boolean>(true);
+  const [showRiversLayer, setShowRiversLayer] = useState<boolean>(true);
+  const [showRoutesLayer, setShowRoutesLayer] = useState<boolean>(true);
+  const [showRhumbLines, setShowRhumbLines] = useState<boolean>(true);
+
+  // Collapsible Map Title & Scale settings drawer
+  const [isEditingMapMeta, setIsEditingMapMeta] = useState<boolean>(false);
+  const leaguesPerCell =
+    mapData.leaguesPerCell ?? STARTER_WORLD_PROJECT.mapData.leaguesPerCell ?? 45;
+  const routes: MapRoutePath[] =
+    mapData.routes ?? STARTER_WORLD_PROJECT.mapData.routes ?? [];
+
+  const [draftMapMeta, setDraftMapMeta] = useState({
+    mapTitle: mapData.mapTitle,
+    subtitle: mapData.subtitle,
+    leaguesPerCell,
+  });
+
+  const activeStamp =
+    mapData.stamps.find((s) => s.id === activeStampId) || null;
+  const activeLabel =
+    mapData.regionLabels.find((l) => l.id === activeLabelId) || null;
   const linkedEntity = activeStamp?.linkedEntityId
     ? entities.find((e) => e.id === activeStamp.linkedEntityId) || null
     : null;
 
-  // Render an authentic Medieval Book Map (Tolkien / Ortelius / Liber Mundi style)
+  // Calculate measured distance in Leagues and Kilometers
+  const measuredDistance = React.useMemo(() => {
+    if (!measurePointA || !measurePointB) return null;
+    const dxCells =
+      ((measurePointB.x - measurePointA.x) / 100) * mapData.gridCols;
+    const dyCells =
+      ((measurePointB.y - measurePointA.y) / 100) * mapData.gridRows;
+    const gridDist = Math.hypot(dxCells, dyCells);
+    const totalLeagues = Math.max(1, Math.round(gridDist * leaguesPerCell));
+    const totalKm = Math.round(totalLeagues * 4.8);
+    return {
+      gridDist: Number(gridDist.toFixed(1)),
+      totalLeagues,
+      totalKm,
+    };
+  }, [
+    measurePointA,
+    measurePointB,
+    mapData.gridCols,
+    mapData.gridRows,
+    leaguesPerCell,
+  ]);
+
+  // Render authentic Medieval Book Map on Canvas (Land, Coastlines, Rivers, Routes, Ruler, Compass, Frame)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -308,7 +464,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       const ry = pseudoRand(i * 29 + 7) * height;
       const rad = 1 + pseudoRand(i * 41) * 3.5;
       ctx.fillStyle =
-        i % 3 === 0 ? 'rgba(120, 88, 50, 0.05)' : 'rgba(255, 248, 231, 0.08)';
+        i % 3 === 0
+          ? 'rgba(120, 88, 50, 0.05)'
+          : 'rgba(255, 248, 231, 0.08)';
       ctx.beginPath();
       ctx.arc(rx, ry, rad, 0, Math.PI * 2);
       ctx.fill();
@@ -319,7 +477,11 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     ctx.lineWidth = 1;
     for (let r = 1; r < gridRows - 1; r++) {
       for (let c = 1; c < gridCols - 1; c++) {
-        if (!isLand(c, r) && getCell(c, r) === 'sea' && (c * 7 + r * 3) % 5 === 0) {
+        if (
+          !isLand(c, r) &&
+          getCell(c, r) === 'sea' &&
+          (c * 7 + r * 3) % 5 === 0
+        ) {
           const sx = (c + 0.2) * cellW;
           const sy = (r + 0.5) * cellH;
           ctx.beginPath();
@@ -336,7 +498,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     // =========================================================================
     // 2. SMOOTH ORGANIC LANDMASS & CONCENTRIC MEDIEVAL COASTAL RIPPLES
     // =========================================================================
-    // Build an organic continuous path around land cells using rounded overlapping lobes
     const drawOrganicLandMask = (expandPx: number) => {
       ctx.beginPath();
       for (let r = 0; r < gridRows; r++) {
@@ -347,13 +508,11 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           const baseRx = cellW * 0.66 + expandPx;
           const baseRy = cellH * 0.66 + expandPx;
 
-          // Add 3 overlapping organic sub-lobes per cell so no square corners ever appear
           const jx1 = (pseudoRand(c * 19 + r * 37) - 0.5) * cellW * 0.24;
           const jy1 = (pseudoRand(c * 43 + r * 11) - 0.5) * cellH * 0.24;
           ctx.moveTo(cx + jx1 + baseRx, cy + jy1);
           ctx.ellipse(cx + jx1, cy + jy1, baseRx, baseRy, 0, 0, Math.PI * 2);
 
-          // Bridge lobes toward adjacent diagonal/orthogonal land cells
           if (isLand(c + 1, r)) {
             ctx.moveTo(cx + cellW * 0.5 + baseRx * 0.85, cy);
             ctx.ellipse(
@@ -382,7 +541,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       }
     };
 
-    // 3 Concentric Medieval Coastline Ripple Rings (Classic Cartography Hatching)
     const rippleRings = [
       { expand: 11, color: 'rgba(104, 82, 54, 0.14)', width: 1.2 },
       { expand: 6.5, color: 'rgba(82, 62, 38, 0.25)', width: 1.5 },
@@ -396,7 +554,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       ctx.restore();
     }
 
-    // Main Warm Parchment Interior Land Fill
     ctx.save();
     drawOrganicLandMask(0);
     const landGrad = ctx.createRadialGradient(
@@ -413,7 +570,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     ctx.fillStyle = landGrad;
     ctx.fill();
 
-    // Clip to land interior for subtle biome washes (tundra, desert, forest, swamp)
     ctx.clip();
     for (let r = 0; r < gridRows; r++) {
       for (let c = 0; c < gridCols; c++) {
@@ -421,7 +577,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         if (t === 'plains' || t === 'sea' || t === 'shallows') continue;
         const cx = (c + 0.5) * cellW;
         const cy = (r + 0.5) * cellH;
-        const washGrad = ctx.createRadialGradient(cx, cy, 2, cx, cy, cellW * 1.15);
+        const washGrad = ctx.createRadialGradient(
+          cx,
+          cy,
+          2,
+          cx,
+          cy,
+          cellW * 1.15
+        );
         if (t === 'forest') {
           washGrad.addColorStop(0, 'rgba(116, 136, 98, 0.34)');
           washGrad.addColorStop(1, 'rgba(116, 136, 98, 0)');
@@ -446,7 +609,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     }
     ctx.restore();
 
-    // Draw Hand-Inked Organic Coastline Contour where Land meets Water
+    // Hand-Inked Organic Coastline Contour
     ctx.save();
     ctx.strokeStyle = '#2B1E12';
     ctx.lineWidth = 2.2;
@@ -460,14 +623,17 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         const seed = c * 31 + r * 17;
         const wob = (pseudoRand(seed) - 0.5) * 4;
 
-        // Top coast
         if (!isLand(c, r - 1)) {
           ctx.beginPath();
           ctx.moveTo(x - 2, y + wob);
-          ctx.quadraticCurveTo(x + cellW * 0.5, y - 4 - wob, x + cellW + 2, y - wob);
+          ctx.quadraticCurveTo(
+            x + cellW * 0.5,
+            y - 4 - wob,
+            x + cellW + 2,
+            y - wob
+          );
           ctx.stroke();
         }
-        // Bottom coast
         if (!isLand(c, r + 1)) {
           ctx.beginPath();
           ctx.moveTo(x - 2, y + cellH - wob);
@@ -479,14 +645,17 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           );
           ctx.stroke();
         }
-        // Left coast
         if (!isLand(c - 1, r)) {
           ctx.beginPath();
           ctx.moveTo(x + wob, y - 2);
-          ctx.quadraticCurveTo(x - 4 - wob, y + cellH * 0.5, x - wob, y + cellH + 2);
+          ctx.quadraticCurveTo(
+            x - 4 - wob,
+            y + cellH * 0.5,
+            x - wob,
+            y + cellH + 2
+          );
           ctx.stroke();
         }
-        // Right coast
         if (!isLand(c + 1, r)) {
           ctx.beginPath();
           ctx.moveTo(x + cellW - wob, y - 2);
@@ -503,35 +672,35 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     ctx.restore();
 
     // =========================================================================
-    // 3. WINDING CALLIGRAPHIC RIVERS (Tapered Estuary to Mountain Source)
+    // 3. WINDING CALLIGRAPHIC RIVERS LAYER
     // =========================================================================
-    for (const river of rivers) {
-      if (river.points.length < 2) continue;
-      ctx.save();
-      // Outer sepia ink bank
-      ctx.strokeStyle = '#2B1E12';
-      ctx.lineWidth = 4.2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.beginPath();
-      river.points.forEach((pt, idx) => {
-        const px = (pt.x / 100) * width;
-        const py = (pt.y / 100) * height;
-        if (idx === 0) ctx.moveTo(px, py);
-        else {
-          const prev = river.points[idx - 1];
-          const mx = ((prev.x + pt.x) / 200) * width + 6;
-          const my = ((prev.y + pt.y) / 200) * height - 4;
-          ctx.quadraticCurveTo(mx, my, px, py);
-        }
-      });
-      ctx.stroke();
+    if (showRiversLayer) {
+      for (const river of rivers) {
+        if (river.points.length < 2) continue;
+        ctx.save();
+        ctx.strokeStyle = '#2B1E12';
+        ctx.lineWidth = 4.2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        river.points.forEach((pt, idx) => {
+          const px = (pt.x / 100) * width;
+          const py = (pt.y / 100) * height;
+          if (idx === 0) ctx.moveTo(px, py);
+          else {
+            const prev = river.points[idx - 1];
+            const mx = ((prev.x + pt.x) / 200) * width + 5;
+            const my = ((prev.y + pt.y) / 200) * height - 4;
+            ctx.quadraticCurveTo(mx, my, px, py);
+          }
+        });
+        ctx.stroke();
 
-      // Inner water channel
-      ctx.strokeStyle = '#9BB0B5';
-      ctx.lineWidth = 2.2;
-      ctx.stroke();
-      ctx.restore();
+        ctx.strokeStyle = '#9BB0B5';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+        ctx.restore();
+      }
     }
 
     // =========================================================================
@@ -547,9 +716,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         const oy = (pseudoRand(seed + 1) - 0.5) * 5;
 
         if (terrain === 'mountain') {
-          // Draw a primary craggy medieval mountain peak + smaller flanking ridge
           const drawPeak = (px: number, py: number, w: number, h: number) => {
-            // West illuminated face
             ctx.fillStyle = '#EFE3CA';
             ctx.beginPath();
             ctx.moveTo(px - w, py + h * 0.55);
@@ -558,16 +725,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             ctx.closePath();
             ctx.fill();
 
-            // East shaded slope (sepia ink wash)
             ctx.fillStyle = 'rgba(74, 52, 31, 0.34)';
             ctx.beginPath();
             ctx.moveTo(px, py - h * 0.65);
             ctx.lineTo(px + w, py + h * 0.55);
             ctx.lineTo(px + w * 0.08, py + h * 0.55);
-            ctx. quadraticCurveTo(px - w * 0.08, py, px, py - h * 0.65);
+            ctx.quadraticCurveTo(px - w * 0.08, py, px, py - h * 0.65);
             ctx.fill();
 
-            // East slope ink hatching strokes
             ctx.strokeStyle = '#3B2818';
             ctx.lineWidth = 1.1;
             for (let k = 1; k <= 3; k++) {
@@ -580,7 +745,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               ctx.stroke();
             }
 
-            // Craggy outline & central ridge spine
             ctx.strokeStyle = '#261A10';
             ctx.lineWidth = 1.75;
             ctx.beginPath();
@@ -589,16 +753,24 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             ctx.lineTo(px, py - h * 0.65);
             ctx.lineTo(px + w * 0.5, py - h * 0.02);
             ctx.lineTo(px + w, py + h * 0.55);
-            // Central ridge line
             ctx.moveTo(px, py - h * 0.65);
-            ctx.quadraticCurveTo(px - w * 0.1, py, px + w * 0.06, py + h * 0.45);
+            ctx.quadraticCurveTo(
+              px - w * 0.1,
+              py,
+              px + w * 0.06,
+              py + h * 0.45
+            );
             ctx.stroke();
           };
 
-          drawPeak(cx - 7 + ox * 0.5, cy + 3 + oy * 0.5, cellW * 0.42, cellH * 0.55);
+          drawPeak(
+            cx - 7 + ox * 0.5,
+            cy + 3 + oy * 0.5,
+            cellW * 0.42,
+            cellH * 0.55
+          );
           drawPeak(cx + 5 + ox, cy - 1 + oy, cellW * 0.56, cellH * 0.78);
         } else if (terrain === 'forest') {
-          // Clumped medieval book woodland canopy
           const trees = [
             { dx: -7, dy: -2, r: 6.5 },
             { dx: 6, dy: -3, r: 6.5 },
@@ -612,11 +784,16 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             ctx.strokeStyle = '#2B2116';
             ctx.lineWidth = 1.35;
             ctx.beginPath();
-            ctx.arc(cx + tr.dx + ox * 0.4, cy + tr.dy + oy * 0.4, tr.r, 0, Math.PI * 2);
+            ctx.arc(
+              cx + tr.dx + ox * 0.4,
+              cy + tr.dy + oy * 0.4,
+              tr.r,
+              0,
+              Math.PI * 2
+            );
             ctx.fill();
             ctx.stroke();
           }
-          // Little tree trunks at bottom edge of clump
           ctx.strokeStyle = '#2B2116';
           ctx.lineWidth = 1.4;
           ctx.beginPath();
@@ -626,7 +803,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           ctx.lineTo(cx + 4 + ox * 0.4, cy + 12);
           ctx.stroke();
         } else if (terrain === 'desert') {
-          // Hand-drawn crescent sand dunes & stippling
           ctx.strokeStyle = '#5C4322';
           ctx.lineWidth = 1.3;
           ctx.beginPath();
@@ -634,13 +810,11 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           ctx.quadraticCurveTo(cx - 3, cy - 5, cx + 6, cy + 2);
           ctx.quadraticCurveTo(cx + 10, cy + 4, cx + 14, cy + 1);
           ctx.stroke();
-          // Sand stipples
           ctx.fillStyle = '#5C4322';
           for (let d = 0; d < 6; d++) {
             ctx.fillRect(cx - 8 + d * 3, cy + 5 + (d % 2) * 2, 1.3, 1.3);
           }
         } else if (terrain === 'swamp') {
-          // Medieval marsh reeds & water ripples
           ctx.strokeStyle = '#384234';
           ctx.lineWidth = 1.25;
           ctx.beginPath();
@@ -648,7 +822,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           ctx.lineTo(cx + 10, cy + 4);
           ctx.moveTo(cx - 6, cy + 7);
           ctx.lineTo(cx + 6, cy + 7);
-          // Reed stalks
           ctx.moveTo(cx - 3, cy + 4);
           ctx.lineTo(cx - 5, cy - 5);
           ctx.moveTo(cx, cy + 4);
@@ -657,7 +830,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           ctx.lineTo(cx + 5, cy - 5);
           ctx.stroke();
         } else if (terrain === 'tundra') {
-          // Gently rolling frosty hills
           ctx.strokeStyle = '#5B676D';
           ctx.lineWidth = 1.2;
           ctx.beginPath();
@@ -668,14 +840,123 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     }
 
     // =========================================================================
-    // 5. PORTOLAN COMPASS RHUMB LINES & SEA MONSTER / GALLEON ILLUSTRATIONS
+    // 5. ROYAL ROADS, EXPEDITION TRAILS & SEA LANES LAYER
+    // =========================================================================
+    if (showRoutesLayer) {
+      for (const route of routes) {
+        if (route.points.length < 2) continue;
+        ctx.save();
+        if (route.style === 'road') {
+          ctx.strokeStyle = '#4A3219';
+          ctx.lineWidth = 2.4;
+          ctx.setLineDash([7, 5]);
+        } else if (route.style === 'expedition') {
+          ctx.strokeStyle = '#9E2A2B';
+          ctx.lineWidth = 2.6;
+          ctx.setLineDash([3, 5]);
+        } else {
+          ctx.strokeStyle = '#264653';
+          ctx.lineWidth = 2.0;
+          ctx.setLineDash([9, 6]);
+        }
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        route.points.forEach((pt, idx) => {
+          const px = (pt.x / 100) * width;
+          const py = (pt.y / 100) * height;
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    // Active Draft River/Route Preview while clicking on map
+    if (toolMode === 'river_route' && draftPoints.length > 0) {
+      ctx.save();
+      ctx.strokeStyle = pathDrawKind === 'river' ? '#1F485B' : '#9E2A2B';
+      ctx.lineWidth = 3;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      draftPoints.forEach((pt, idx) => {
+        const px = (pt.x / 100) * width;
+        const py = (pt.y / 100) * height;
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+      for (const pt of draftPoints) {
+        const px = (pt.x / 100) * width;
+        const py = (pt.y / 100) * height;
+        ctx.fillStyle = '#9E2A2B';
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // 6. DISTANCE & TRAVEL TIME RULER OVERLAY (WHEN IN MEASURE MODE)
+    // =========================================================================
+    if (toolMode === 'measure' && measurePointA) {
+      const ax = (measurePointA.x / 100) * width;
+      const ay = (measurePointA.y / 100) * height;
+      ctx.save();
+
+      if (measurePointB) {
+        const bx = (measurePointB.x / 100) * width;
+        const by = (measurePointB.y / 100) * height;
+
+        // Halo line
+        ctx.strokeStyle = 'rgba(251, 248, 241, 0.85)';
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+
+        // Crimson divider ruler line
+        ctx.strokeStyle = '#9E2A2B';
+        ctx.lineWidth = 2.5;
+        ctx.setLineDash([8, 5]);
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Endpoint B marker
+        ctx.fillStyle = '#9E2A2B';
+        ctx.strokeStyle = '#FBF8F1';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(bx, by, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      // Endpoint A marker
+      ctx.fillStyle = '#231C14';
+      ctx.strokeStyle = '#FBF8F1';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(ax, ay, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // =========================================================================
+    // 7. PORTOLAN COMPASS RHUMB LINES & SEA MONSTER ILLUSTRATION
     // =========================================================================
     const roseX = width * 0.12;
     const roseY = height * 0.78;
 
     if (showRhumbLines) {
       ctx.save();
-      // Portolan radiating directional lines from the Compass Rose
       ctx.strokeStyle = 'rgba(92, 68, 40, 0.18)';
       ctx.lineWidth = 0.85;
       for (let i = 0; i < 16; i++) {
@@ -689,7 +970,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         ctx.stroke();
       }
 
-      // Secondary wind-rose intersection in top-right sea
       const secX = width * 0.88;
       const secY = height * 0.18;
       ctx.strokeStyle = 'rgba(92, 68, 40, 0.11)';
@@ -706,7 +986,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       ctx.restore();
     }
 
-    // Hand-drawn 16-Point Compass Rose on Canvas
+    // Hand-drawn 16-Point Compass Rose
     ctx.save();
     ctx.translate(roseX, roseY);
     ctx.strokeStyle = '#2B1E12';
@@ -719,7 +999,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       ctx.save();
       ctx.rotate((i * Math.PI) / 4);
       const len = i % 2 === 0 ? 30 : 22;
-      // Right half of point (dark ink)
       ctx.fillStyle = i === 0 ? '#8B1E1E' : '#2B1E12';
       ctx.beginPath();
       ctx.moveTo(0, 0);
@@ -727,7 +1006,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       ctx.lineTo(0, -len);
       ctx.closePath();
       ctx.fill();
-      // Left half of point (parchment)
       ctx.fillStyle = '#F5ECD9';
       ctx.beginPath();
       ctx.moveTo(0, 0);
@@ -740,13 +1018,11 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     }
     ctx.restore();
 
-    // Hand-sketched Medieval Sea Serpent ("Hic Sunt Dracones") in bottom-right ocean
+    // Sea Serpent ("Hic Sunt Dracones")
     ctx.save();
     ctx.translate(width * 0.84, height * 0.84);
     ctx.strokeStyle = 'rgba(59, 43, 25, 0.65)';
-    ctx.fillStyle = 'rgba(194, 172, 131, 0.7)';
     ctx.lineWidth = 1.6;
-    // Coiling serpent humps emerging from waves
     ctx.beginPath();
     ctx.arc(-28, 4, 9, Math.PI, 0);
     ctx.stroke();
@@ -756,7 +1032,6 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     ctx.beginPath();
     ctx.arc(18, 4, 8, Math.PI, 0);
     ctx.stroke();
-    // Water line under serpent
     ctx.beginPath();
     ctx.moveTo(-44, 5);
     ctx.lineTo(34, 5);
@@ -767,18 +1042,21 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     ctx.restore();
 
     // =========================================================================
-    // 6. CLASSICAL MEDIEVAL DEGREE-TICK BORDER FRAME (LATITUDE / LONGITUDE)
+    // 8. CLASSICAL MEDIEVAL DEGREE-TICK BORDER FRAME
     // =========================================================================
     const borderM = 14;
     ctx.save();
-    // Outer thick dark sepia frame
     ctx.strokeStyle = '#261A10';
     ctx.lineWidth = 3;
     ctx.strokeRect(4, 4, width - 8, height - 8);
     ctx.lineWidth = 1.5;
-    ctx.strokeRect(borderM, borderM, width - borderM * 2, height - borderM * 2);
+    ctx.strokeRect(
+      borderM,
+      borderM,
+      width - borderM * 2,
+      height - borderM * 2
+    );
 
-    // Alternating black and parchment degree blocks along all 4 edges
     const stepX = 36;
     for (let x = borderM, idx = 0; x < width - borderM; x += stepX, idx++) {
       const segW = Math.min(stepX, width - borderM - x);
@@ -794,7 +1072,18 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       ctx.fillRect(width - borderM + 1.5, y, borderM - 7, segH);
     }
     ctx.restore();
-  }, [mapData, showRhumbLines]);
+  }, [
+    mapData,
+    routes,
+    showRiversLayer,
+    showRoutesLayer,
+    showRhumbLines,
+    toolMode,
+    draftPoints,
+    pathDrawKind,
+    measurePointA,
+    measurePointB,
+  ]);
 
   const paintCellAtPosition = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
@@ -816,7 +1105,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       for (let dc = -radius; dc <= radius; dc++) {
         const c = centerCol + dc;
         const r = centerRow + dr;
-        if (c >= 1 && c < mapData.gridCols - 1 && r >= 1 && r < mapData.gridRows - 1) {
+        if (
+          c >= 1 &&
+          c < mapData.gridCols - 1 &&
+          r >= 1 &&
+          r < mapData.gridRows - 1
+        ) {
           const idx = r * mapData.gridCols + c;
           if (nextCells[idx] !== selectedTerrain) {
             nextCells[idx] = selectedTerrain;
@@ -835,8 +1129,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     const container = containerRef.current;
     if (!container) return;
     const rect = container.getBoundingClientRect();
-    const pctX = Math.max(4, Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
-    const pctY = Math.max(5, Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+    const pctX = Math.max(
+      4,
+      Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100))
+    );
+    const pctY = Math.max(
+      5,
+      Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100))
+    );
 
     if (toolMode === 'terrain') {
       setIsPainting(true);
@@ -856,7 +1156,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         y: pctY,
         label: labelText,
         linkedEntityId: newStampEntityId || undefined,
-        nationColor: meta?.defaultColor || '#8B1E1E',
+        nationColor: selectedBannerColor || meta?.defaultColor || '#9E2A2B',
       };
 
       onChangeMapData({
@@ -864,6 +1164,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         stamps: [...mapData.stamps, created],
       });
       setActiveStampId(created.id);
+      setInspectorKind('stamp');
       setNewStampLabel('');
       setToolMode('inspect');
     } else if (toolMode === 'label') {
@@ -874,14 +1175,33 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         x: pctX,
         y: pctY,
         style: newRegionStyle,
-        rotation: 0,
+        rotation: newRegionRotation,
       };
       onChangeMapData({
         ...mapData,
         regionLabels: [...mapData.regionLabels, createdLabel],
       });
+      setActiveLabelId(createdLabel.id);
+      setInspectorKind('label');
       setNewRegionText('');
       setToolMode('inspect');
+    } else if (toolMode === 'river_route') {
+      setDraftPoints((prev) => [...prev, { x: pctX, y: pctY }]);
+    } else if (toolMode === 'measure') {
+      // Snap to nearby stamp if within 4% radius
+      const nearbyStamp = mapData.stamps.find(
+        (s) => Math.hypot(s.x - pctX, s.y - pctY) <= 4.5
+      );
+      const picked = nearbyStamp
+        ? { x: nearbyStamp.x, y: nearbyStamp.y, label: nearbyStamp.label }
+        : { x: pctX, y: pctY, label: `Titik (${pctX}°B, ${pctY}°U)` };
+
+      if (!measurePointA || (measurePointA && measurePointB)) {
+        setMeasurePointA(picked);
+        setMeasurePointB(null);
+      } else {
+        setMeasurePointB(picked);
+      }
     }
   };
 
@@ -893,8 +1213,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
     if (draggingStampId && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const pctX = Math.max(4, Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
-      const pctY = Math.max(5, Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+      const pctX = Math.max(
+        4,
+        Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100))
+      );
+      const pctY = Math.max(
+        5,
+        Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100))
+      );
 
       onChangeMapData({
         ...mapData,
@@ -904,8 +1230,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       });
     } else if (draggingLabelId && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const pctX = Math.max(4, Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
-      const pctY = Math.max(5, Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+      const pctX = Math.max(
+        4,
+        Math.min(96, Math.round(((e.clientX - rect.left) / rect.width) * 100))
+      );
+      const pctY = Math.max(
+        5,
+        Math.min(95, Math.round(((e.clientY - rect.top) / rect.height) * 100))
+      );
 
       onChangeMapData({
         ...mapData,
@@ -922,14 +1254,69 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     setDraggingLabelId(null);
   };
 
+  const handleFinishRiverOrRoute = () => {
+    if (draftPoints.length < 2) return;
+    if (pathDrawKind === 'river') {
+      const newRiver: MapRiverPath = {
+        id: `riv-${Date.now()}`,
+        name:
+          newPathName.trim() || `Sungai Baru #${mapData.rivers.length + 1}`,
+        points: draftPoints,
+      };
+      onChangeMapData({
+        ...mapData,
+        rivers: [...mapData.rivers, newRiver],
+      });
+    } else {
+      const newRoute: MapRoutePath = {
+        id: `rte-${Date.now()}`,
+        name: newPathName.trim() || `Rute Perjalanan #${routes.length + 1}`,
+        style: pathDrawKind,
+        points: draftPoints,
+      };
+      onChangeMapData({
+        ...mapData,
+        routes: [...routes, newRoute],
+      });
+    }
+    setDraftPoints([]);
+    setNewPathName('');
+  };
+
+  const handleSaveMapMeta = (e: React.FormEvent) => {
+    e.preventDefault();
+    const validLeagues = Math.max(
+      1,
+      Number(draftMapMeta.leaguesPerCell) || 45
+    );
+    onChangeMapData({
+      ...mapData,
+      mapTitle: draftMapMeta.mapTitle.trim() || mapData.mapTitle,
+      subtitle: draftMapMeta.subtitle.trim() || mapData.subtitle,
+      leaguesPerCell: validLeagues,
+      scaleLabel: `1 Grid = ${validLeagues} Liga Kerajaan`,
+    });
+    setIsEditingMapMeta(false);
+  };
+
   const handleGenerateRandomArchipelago = () => {
     const { gridCols, gridRows } = mapData;
     const nextCells: TerrainType[] = new Array(gridCols * gridRows).fill('sea');
 
     const seeds = [
       { cx: 11 + Math.random() * 5, cy: 9 + Math.random() * 4, rx: 8.5, ry: 6 },
-      { cx: 23 + Math.random() * 4, cy: 10 + Math.random() * 4, rx: 8, ry: 6.2 },
-      { cx: 18 + Math.random() * 4, cy: 5 + Math.random() * 3, rx: 5.5, ry: 3.8 },
+      {
+        cx: 23 + Math.random() * 4,
+        cy: 10 + Math.random() * 4,
+        rx: 8,
+        ry: 6.2,
+      },
+      {
+        cx: 18 + Math.random() * 4,
+        cy: 5 + Math.random() * 3,
+        rx: 5.5,
+        ry: 3.8,
+      },
     ];
 
     for (let r = 2; r < gridRows - 2; r++) {
@@ -942,7 +1329,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         if (minD < 0.42) {
           nextCells[r * gridCols + c] = r < 5 ? 'tundra' : 'mountain';
         } else if (minD < 0.7) {
-          nextCells[r * gridCols + c] = (c + r) % 2 === 0 ? 'forest' : 'plains';
+          nextCells[r * gridCols + c] =
+            (c + r) % 2 === 0 ? 'forest' : 'plains';
         } else if (minD < 0.98) {
           nextCells[r * gridCols + c] = 'plains';
         } else if (minD < 1.12) {
@@ -954,112 +1342,402 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     onChangeMapData({ ...mapData, cells: nextCells });
   };
 
+  // Composite Full PNG Export (Terrain + Rivers + Routes + Cartouche + Calligraphy Labels + Stamps)
   const handleExportMapPng = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const dataUrl = canvas.toDataURL('image/png');
+    const baseCanvas = canvasRef.current;
+    if (!baseCanvas) return;
+
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = baseCanvas.width;
+    exportCanvas.height = baseCanvas.height;
+    const ctx = exportCanvas.getContext('2d');
+    if (!ctx) return;
+
+    // 1. Copy base terrain, rivers, routes, compass, and border frame
+    ctx.drawImage(baseCanvas, 0, 0);
+
+    // 2. Draw Top-Left Liber Mundi Cartouche Box
+    ctx.save();
+    ctx.fillStyle = 'rgba(245, 236, 217, 0.96)';
+    ctx.strokeStyle = '#2B1E12';
+    ctx.lineWidth = 2.5;
+    ctx.fillRect(28, 26, 290, 68);
+    ctx.strokeRect(28, 26, 290, 68);
+    ctx.font = 'bold 10px "Fraunces", Georgia, serif';
+    ctx.fillStyle = '#8B1E1E';
+    ctx.textAlign = 'center';
+    ctx.fillText('LIBER MUNDI · CHRONICA', 173, 44);
+    ctx.font = 'bold 16px "Fraunces", Georgia, serif';
+    ctx.fillStyle = '#231C14';
+    ctx.fillText(mapData.mapTitle.toUpperCase(), 173, 65);
+    ctx.font = 'italic 11px "Lora", Georgia, serif';
+    ctx.fillStyle = '#5A4632';
+    ctx.fillText(mapData.scaleLabel, 173, 82);
+    ctx.restore();
+
+    // 3. Draw Calligraphy Region Labels
+    if (showLabelsLayer) {
+      for (const lbl of mapData.regionLabels) {
+        const lx = (lbl.x / 100) * exportCanvas.width;
+        const ly = (lbl.y / 100) * exportCanvas.height;
+        ctx.save();
+        ctx.translate(lx, ly);
+        ctx.rotate(((lbl.rotation || 0) * Math.PI) / 180);
+        ctx.textAlign = 'center';
+        if (lbl.style === 'empire') {
+          ctx.font = 'bold 17px "Fraunces", Georgia, serif';
+          ctx.fillStyle = '#4A1818';
+        } else if (lbl.style === 'sea') {
+          ctx.font = 'italic 16px "Lora", Georgia, serif';
+          ctx.fillStyle = '#3B2E1E';
+        } else {
+          ctx.font = 'bold 13px "Fraunces", Georgia, serif';
+          ctx.fillStyle = '#2B1E12';
+        }
+        ctx.fillText(lbl.text, 0, 0);
+        ctx.restore();
+      }
+    }
+
+    // 4. Draw Stamp Markers & Scroll Ribbons
+    if (showStampsLayer) {
+      for (const st of mapData.stamps) {
+        const sx = (st.x / 100) * exportCanvas.width;
+        const sy = (st.y / 100) * exportCanvas.height;
+        ctx.save();
+        ctx.fillStyle = st.nationColor || '#8B1E1E';
+        ctx.strokeStyle = '#261A10';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(sx, sy - 8, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.font = 'bold 11px "Fraunces", Georgia, serif';
+        const textW = ctx.measureText(st.label).width + 14;
+        ctx.fillStyle = '#F5ECD9';
+        ctx.fillRect(sx - textW / 2, sy + 4, textW, 18);
+        ctx.strokeRect(sx - textW / 2, sy + 4, textW, 18);
+        ctx.fillStyle = '#231C14';
+        ctx.textAlign = 'center';
+        ctx.fillText(st.label, sx, sy + 17);
+        ctx.restore();
+      }
+    }
+
+    const dataUrl = exportCanvas.toDataURL('image/png');
     const link = document.createElement('a');
-    link.download = `${mapData.mapTitle.toLowerCase().replace(/\s+/g, '-')}.png`;
+    link.download = `${mapData.mapTitle.toLowerCase().replace(/\s+/g, '-')}-atlas.png`;
     link.href = dataUrl;
     link.click();
   };
 
   return (
-    <div className="space-y-5">
-      {/* Top Map Studio Control Bar */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="text-xs text-[#695A47] font-medium">
-            Atlas Ilustrasi Buku Abad Pertengahan · {mapData.scaleLabel}
+    <div className="space-y-4">
+      {/* ===================================================================== */}
+      {/* 1. TOP MAP STUDIO HEADER & MODE SELECTOR                              */}
+      {/* ===================================================================== */}
+      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="text-xs text-[#695A47] font-medium">
+              Atlas Ilustrasi Buku Abad Pertengahan · {mapData.scaleLabel}
+            </div>
+            <h2 className="font-cartography text-2xl font-bold text-[#231C14]">
+              {mapData.mapTitle}
+            </h2>
           </div>
-          <h2 className="font-cartography text-2xl font-bold text-[#231C14]">
-            {mapData.mapTitle}
-          </h2>
+
+          {/* 6 Cartography Tool Modes */}
+          <div className="flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-lg border border-[#D8CBB3]">
+            <button
+              type="button"
+              onClick={() => setToolMode('inspect')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'inspect'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <Eye className="w-3.5 h-3.5" />
+              Jelajah & Geser
+            </button>
+            <button
+              type="button"
+              onClick={() => setToolMode('terrain')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'terrain'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <Paintbrush className="w-3.5 h-3.5" />
+              Lukis Daratan
+            </button>
+            <button
+              type="button"
+              onClick={() => setToolMode('stamp')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'stamp'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              Kastil & Kota
+            </button>
+            <button
+              type="button"
+              onClick={() => setToolMode('label')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'label'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <TypeIcon className="w-3.5 h-3.5" />
+              Kaligrafi Wilayah
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setDraftPoints([]);
+                setToolMode('river_route');
+              }}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'river_route'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <Route className="w-3.5 h-3.5" />
+              Sungai & Rute Jalan
+            </button>
+            <button
+              type="button"
+              onClick={() => setToolMode('measure')}
+              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                toolMode === 'measure'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              <Ruler className="w-3.5 h-3.5" />
+              Ukur Jarak & Hari Tempuh
+            </button>
+          </div>
+
+          {/* Map Settings, Random Continent & Full PNG Download */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setDraftMapMeta({
+                  mapTitle: mapData.mapTitle,
+                  subtitle: mapData.subtitle,
+                  leaguesPerCell,
+                });
+                setIsEditingMapMeta((prev) => !prev);
+              }}
+              className={`px-3 py-1.5 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                isEditingMapMeta
+                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
+                  : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+              }`}
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Atur Judul & Skala
+            </button>
+            <button
+              type="button"
+              onClick={handleGenerateRandomArchipelago}
+              className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              title="Buat bentuk benua baru secara prosedural"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Acak Benua
+            </button>
+            <button
+              type="button"
+              onClick={handleExportMapPng}
+              className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Unduh Peta PNG
+            </button>
+          </div>
         </div>
 
-        {/* Mode Selector Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-lg border border-[#D8CBB3]">
-          <button
-            type="button"
-            onClick={() => setToolMode('inspect')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'inspect'
-                ? 'bg-[#9E2A2B] text-white'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
-            }`}
-          >
-            <Eye className="w-3.5 h-3.5" />
-            Jelajah & Geser Pin
-          </button>
-          <button
-            type="button"
-            onClick={() => setToolMode('terrain')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'terrain'
-                ? 'bg-[#9E2A2B] text-white'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
-            }`}
-          >
-            <Paintbrush className="w-3.5 h-3.5" />
-            Lukis Peta (Gunung / Hutan / Pantai)
-          </button>
-          <button
-            type="button"
-            onClick={() => setToolMode('stamp')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'stamp'
-                ? 'bg-[#9E2A2B] text-white'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
-            }`}
-          >
-            <MapPin className="w-3.5 h-3.5" />
-            Tambah Kastil & Kota
-          </button>
-          <button
-            type="button"
-            onClick={() => setToolMode('label')}
-            className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'label'
-                ? 'bg-[#9E2A2B] text-white'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
-            }`}
-          >
-            <TypeIcon className="w-3.5 h-3.5" />
-            Kaligrafi Nama Wilayah
-          </button>
+        {/* Layer Visibility Toggles Bar */}
+        <div className="pt-3 border-t border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="font-semibold text-[#695A47] flex items-center gap-1">
+              <Layers className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              Tampilan Layer Peta:
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowStampsLayer((v) => !v)}
+              className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
+                showStampsLayer
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
+                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+              }`}
+            >
+              Simbol Kota ({mapData.stamps.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowLabelsLayer((v) => !v)}
+              className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
+                showLabelsLayer
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
+                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+              }`}
+            >
+              Kaligrafi Wilayah ({mapData.regionLabels.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowRiversLayer((v) => !v)}
+              className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
+                showRiversLayer
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
+                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+              }`}
+            >
+              Sungai ({mapData.rivers.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowRoutesLayer((v) => !v)}
+              className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
+                showRoutesLayer
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
+                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+              }`}
+            >
+              Rute Jalan & Ekspedisi ({routes.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowRhumbLines((v) => !v)}
+              className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
+                showRhumbLines
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
+                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+              }`}
+            >
+              Garis Kompas Portolan
+            </button>
+          </div>
+
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() =>
+                setZoom((z) => Math.max(0.85, Number((z - 0.15).toFixed(2))))
+              }
+              className="p-1.5 rounded bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+              title="Perkecil tampilan"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <span className="font-mono-tabular text-xs font-semibold text-[#231C14] px-1">
+              {Math.round(zoom * 100)}%
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setZoom((z) => Math.min(1.45, Number((z + 0.15).toFixed(2))))
+              }
+              className="p-1.5 rounded bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+              title="Perbesar tampilan"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
 
-        {/* Utility Actions */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setShowRhumbLines((prev) => !prev)}
-            className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+        {/* Collapsible Map Title & Scale Settings Form */}
+        {isEditingMapMeta && (
+          <form
+            onSubmit={handleSaveMapMeta}
+            className="pt-4 border-t border-[#D8CBB3] grid grid-cols-1 md:grid-cols-4 gap-3 items-end"
           >
-            {showRhumbLines ? 'Sembunyikan Garis Kompas' : 'Tampilkan Garis Kompas'}
-          </button>
-          <button
-            type="button"
-            onClick={handleGenerateRandomArchipelago}
-            className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-            title="Buat bentuk benua baru secara prosedural"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            Acak Benua
-          </button>
-          <button
-            type="button"
-            onClick={handleExportMapPng}
-            className="px-3 py-1.5 text-xs font-medium bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Unduh Peta PNG
-          </button>
-        </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                Judul Peta (Lencana Liber Mundi)
+              </label>
+              <input
+                type="text"
+                value={draftMapMeta.mapTitle}
+                onChange={(e) =>
+                  setDraftMapMeta({ ...draftMapMeta, mapTitle: e.target.value })
+                }
+                className="w-full px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                Subjudul / Deskripsi Geografi
+              </label>
+              <input
+                type="text"
+                value={draftMapMeta.subtitle}
+                onChange={(e) =>
+                  setDraftMapMeta({ ...draftMapMeta, subtitle: e.target.value })
+                }
+                className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              />
+            </div>
+            <div className="flex items-end gap-2">
+              <div className="flex-1">
+                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  Skala: 1 Grid Berapa Liga?
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={500}
+                  value={draftMapMeta.leaguesPerCell}
+                  onChange={(e) =>
+                    setDraftMapMeta({
+                      ...draftMapMeta,
+                      leaguesPerCell: Number(e.target.value),
+                    })
+                  }
+                  className="w-full px-3 py-1.5 text-xs font-mono-tabular bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-3.5 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <Check className="w-3.5 h-3.5" />
+                Simpan
+              </button>
+            </div>
+          </form>
+        )}
       </div>
 
-      {/* Contextual Sub-Toolbar depending on active toolMode */}
-      <div className="bg-[#EFE7D6]/85 border border-[#D8CBB3] rounded-xl p-3.5">
+      {/* ===================================================================== */}
+      {/* 2. CONTEXTUAL SUB-TOOLBAR FOR ACTIVE CARTOGRAPHY MODE                 */}
+      {/* ===================================================================== */}
+      <div className="bg-[#EFE7D6]/90 border border-[#D8CBB3] rounded-xl p-3.5">
+        {toolMode === 'inspect' && (
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#695A47]">
+            <span>
+              <strong>Mode Jelajah & Geser:</strong> Klik simbol kastil/kota
+              atau teks kaligrafi wilayah di peta untuk mengedit detail, warna
+              bendera, atau kemiringan teks di panel kanan. Tahan & geser untuk
+              memindahkan posisinya.
+            </span>
+          </div>
+        )}
+
         {toolMode === 'terrain' && (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2">
@@ -1087,7 +1765,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#695A47]">Diameter Kuas:</span>
+              <span className="text-xs font-semibold text-[#695A47]">
+                Diameter Kuas:
+              </span>
               {([1, 2, 3] as const).map((sz) => (
                 <button
                   key={sz}
@@ -1107,17 +1787,20 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         )}
 
         {toolMode === 'stamp' && (
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-xs font-semibold text-[#695A47]">
-              1. Pilih Simbol Ilustrasi Abad Pertengahan:
-            </span>
-            <div className="flex flex-wrap items-center gap-1.5">
+          <div className="space-y-2.5">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-[#695A47]">
+                1. Pilih Simbol:
+              </span>
               {STAMP_PALETTE.map((st) => (
                 <button
                   key={st.type}
                   type="button"
-                  onClick={() => setSelectedStampType(st.type)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 border cursor-pointer whitespace-nowrap shrink-0 ${
+                  onClick={() => {
+                    setSelectedStampType(st.type);
+                    setSelectedBannerColor(st.defaultColor);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border cursor-pointer whitespace-nowrap shrink-0 ${
                     selectedStampType === st.type
                       ? 'bg-[#FBF8F1] border-[#9E2A2B] text-[#9E2A2B] font-semibold'
                       : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#231C14]'
@@ -1128,29 +1811,55 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               ))}
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 ml-auto">
-              <input
-                type="text"
-                value={newStampLabel}
-                onChange={(e) => setNewStampLabel(e.target.value)}
-                placeholder="Nama Kota / Benteng..."
-                className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] focus:outline-none focus:border-[#9E2A2B]"
-              />
-              <select
-                value={newStampEntityId}
-                onChange={(e) => setNewStampEntityId(e.target.value)}
-                className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] focus:outline-none focus:border-[#9E2A2B]"
-              >
-                <option value="">-- Hubungkan ke Entitas World Bible --</option>
-                {entities.map((ent) => (
-                  <option key={ent.id} value={ent.id}>
-                    [{CATEGORY_META[ent.category].singular}] {ent.title}
-                  </option>
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-xs font-semibold text-[#695A47]">
+                  2. Warna Panji Kerajaan:
+                </span>
+                {BANNER_COLORS.map((c) => (
+                  <button
+                    key={c.hex}
+                    type="button"
+                    onClick={() => setSelectedBannerColor(c.hex)}
+                    className={`px-2 py-1 rounded text-[11px] font-medium flex items-center gap-1.5 border cursor-pointer ${
+                      selectedBannerColor === c.hex
+                        ? 'bg-[#FBF8F1] border-[#231C14] font-semibold'
+                        : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47]'
+                    }`}
+                  >
+                    <span
+                      className="w-2.5 h-2.5 rounded-full"
+                      style={{ backgroundColor: c.hex }}
+                    />
+                    {c.label}
+                  </button>
                 ))}
-              </select>
-              <span className="text-xs text-[#9E2A2B] font-medium">
-                → Klik pada peta untuk menaruh simbol
-              </span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <input
+                  type="text"
+                  value={newStampLabel}
+                  onChange={(e) => setNewStampLabel(e.target.value)}
+                  placeholder="Nama Kota / Benteng..."
+                  className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                />
+                <select
+                  value={newStampEntityId}
+                  onChange={(e) => setNewStampEntityId(e.target.value)}
+                  className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                >
+                  <option value="">-- Hubungkan ke Entitas (Opsional) --</option>
+                  {entities.map((ent) => (
+                    <option key={ent.id} value={ent.id}>
+                      [{CATEGORY_META[ent.category].singular}] {ent.title}
+                    </option>
+                  ))}
+                </select>
+                <span className="text-xs text-[#9E2A2B] font-semibold">
+                  → Klik pada peta untuk menaruh simbol
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -1158,14 +1867,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {toolMode === 'label' && (
           <div className="flex flex-wrap items-center gap-3">
             <span className="text-xs font-semibold text-[#695A47]">
-              Teks Kaligrafi Peta:
+              Teks Kaligrafi Baru:
             </span>
             <input
               type="text"
               value={newRegionText}
               onChange={(e) => setNewRegionText(e.target.value)}
               placeholder="Contoh: KEKAISARAN GONDORIA atau Teluk Naga..."
-              className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] w-64 focus:outline-none focus:border-[#9E2A2B]"
+              className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] w-60"
             />
             <select
               value={newRegionStyle}
@@ -1175,46 +1884,188 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
             >
               <option value="empire">Kaligrafi Kerajaan / Negara Besar</option>
-              <option value="region">Kaligrafi Wilayah / Rimba / Pegunungan</option>
+              <option value="region">
+                Kaligrafi Wilayah / Rimba / Pegunungan
+              </option>
               <option value="sea">Kaligrafi Miring Samudra / Teluk</option>
             </select>
-            <span className="text-xs text-[#9E2A2B] font-medium">
+            <div className="flex items-center gap-1.5 text-xs text-[#231C14]">
+              <span className="text-[#695A47] font-semibold">Kemiringan:</span>
+              <input
+                type="range"
+                min={-45}
+                max={45}
+                step={3}
+                value={newRegionRotation}
+                onChange={(e) => setNewRegionRotation(Number(e.target.value))}
+                className="w-24 accent-[#9E2A2B]"
+              />
+              <span className="font-mono-tabular w-9">
+                {newRegionRotation}°
+              </span>
+            </div>
+            <span className="text-xs text-[#9E2A2B] font-semibold ml-auto">
               → Klik titik di peta untuk menempelkan teks
             </span>
           </div>
         )}
 
-        {toolMode === 'inspect' && (
-          <div className="flex items-center justify-between text-xs text-[#695A47]">
-            <span>
-              Mode Jelajah Peta Buku: Klik simbol kota/kastil untuk membuka lembar World Bible, atau tahan & geser simbol/nama wilayah untuk menata letaknya.
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setZoom((z) => Math.max(0.85, Number((z - 0.15).toFixed(2))))}
-                className="p-1.5 rounded bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
-                title="Perkecil tampilan"
-              >
-                <ZoomOut className="w-3.5 h-3.5" />
-              </button>
-              <span className="font-mono-tabular font-medium text-[#231C14]">
-                {Math.round(zoom * 100)}%
+        {toolMode === 'river_route' && (
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-xs font-semibold text-[#695A47]">
+                Jenis Jalur Kartografi:
               </span>
               <button
                 type="button"
-                onClick={() => setZoom((z) => Math.min(1.45, Number((z + 0.15).toFixed(2))))}
-                className="p-1.5 rounded bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
-                title="Perbesar tampilan"
+                onClick={() => setPathDrawKind('river')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
+                  pathDrawKind === 'river'
+                    ? 'bg-[#264653] text-white border-[#264653]'
+                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                }`}
               >
-                <ZoomIn className="w-3.5 h-3.5" />
+                <Waves className="w-3.5 h-3.5" />
+                Alur Sungai Berliku
+              </button>
+              <button
+                type="button"
+                onClick={() => setPathDrawKind('road')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
+                  pathDrawKind === 'road'
+                    ? 'bg-[#3B2818] text-white border-[#3B2818]'
+                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                }`}
+              >
+                Jalan Raya Kerajaan
+              </button>
+              <button
+                type="button"
+                onClick={() => setPathDrawKind('expedition')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
+                  pathDrawKind === 'expedition'
+                    ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
+                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                }`}
+              >
+                Rute Ekspedisi Tokoh
+              </button>
+              <button
+                type="button"
+                onClick={() => setPathDrawKind('sea_lane')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
+                  pathDrawKind === 'sea_lane'
+                    ? 'bg-[#1F485B] text-white border-[#1F485B]'
+                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                }`}
+              >
+                Jalur Pelayaran Laut
+              </button>
+
+              <input
+                type="text"
+                value={newPathName}
+                onChange={(e) => setNewPathName(e.target.value)}
+                placeholder={
+                  pathDrawKind === 'river'
+                    ? 'Nama Sungai (cth: Sungai Perak)...'
+                    : 'Nama Rute (cth: Ekspedisi Bab 2)...'
+                }
+                className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] w-56"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#695A47]">
+                Klik minimal 2 titik berurutan di peta (
+                <strong className="font-mono-tabular text-[#231C14]">
+                  {draftPoints.length}
+                </strong>{' '}
+                titik dipilih)
+              </span>
+              {draftPoints.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setDraftPoints([])}
+                  className="px-2.5 py-1.5 text-xs font-medium text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3] bg-[#FBF8F1] rounded-lg cursor-pointer"
+                >
+                  Reset Titik
+                </button>
+              )}
+              <button
+                type="button"
+                disabled={draftPoints.length < 2}
+                onClick={handleFinishRiverOrRoute}
+                className="px-3.5 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] disabled:opacity-40 cursor-pointer flex items-center gap-1"
+              >
+                <Check className="w-3.5 h-3.5" />
+                Simpan Jalur ({draftPoints.length} Titik)
               </button>
             </div>
           </div>
         )}
+
+        {toolMode === 'measure' && (
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="text-xs text-[#231C14]">
+                <strong className="text-[#9E2A2B]">
+                  Pengukur Jarak & Kalkulator Waktu Tempuh:
+                </strong>{' '}
+                Klik dua lokasi atau titik mana saja di atas peta untuk mengukur
+                jarak dan estimasi hari perjalanan.
+              </div>
+              {measuredDistance && (
+                <div className="flex items-center gap-3 bg-[#FBF8F1] border border-[#D8CBB3] px-3.5 py-1.5 rounded-lg">
+                  <span className="text-xs text-[#695A47]">
+                    <strong>{measurePointA?.label}</strong> →{' '}
+                    <strong>{measurePointB?.label}</strong>:
+                  </span>
+                  <span className="font-mono-tabular text-sm font-bold text-[#9E2A2B]">
+                    {measuredDistance.totalLeagues} Liga (~
+                    {measuredDistance.totalKm} km)
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {measuredDistance && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                {TRAVEL_MODES.map((tm) => {
+                  const days = Math.max(
+                    0.5,
+                    Number(
+                      (
+                        measuredDistance.totalLeagues / tm.leaguesPerDay
+                      ).toFixed(1)
+                    )
+                  );
+                  return (
+                    <div
+                      key={tm.id}
+                      className="p-2.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-0.5"
+                    >
+                      <div className="text-[11px] font-semibold text-[#695A47]">
+                        {tm.label}
+                      </div>
+                      <div className="font-mono-tabular text-base font-bold text-[#231C14]">
+                        {days} Hari
+                      </div>
+                      <div className="text-[10px] text-[#9E2A2B]">
+                        Kecepatan {tm.leaguesPerDay} Liga/hari ({tm.note})
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Main Map Canvas & Pin Inspector Split */}
+      {/* ===================================================================== */}
+      {/* 3. MAIN MAP CANVAS & RIGHT INSPECTOR SPLIT                            */}
+      {/* ===================================================================== */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
         {/* Interactive Medieval Book Map Viewport */}
         <div className="xl:col-span-9 bg-[#3B2818] border-2 border-[#261A10] rounded-xl p-3 overflow-auto shadow-md">
@@ -1229,7 +2080,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               transformOrigin: 'top left',
             }}
             className={`relative w-full aspect-[16/10] select-none rounded overflow-hidden transition-transform duration-150 ${
-              toolMode === 'terrain'
+              toolMode === 'terrain' ||
+              toolMode === 'river_route' ||
+              toolMode === 'measure'
                 ? 'cursor-crosshair'
                 : toolMode === 'stamp' || toolMode === 'label'
                 ? 'cursor-copy'
@@ -1258,242 +2111,673 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               </div>
             </div>
 
-            {/* Region Calligraphy Labels Overlay (Draggable in inspect mode!) */}
-            {mapData.regionLabels.map((lbl) => (
-              <div
-                key={lbl.id}
-                style={{
-                  left: `${lbl.x}%`,
-                  top: `${lbl.y}%`,
-                  transform: `translate(-50%, -50%) rotate(${lbl.rotation || 0}deg)`,
-                }}
-                onPointerDown={(e) => {
-                  if (toolMode === 'inspect') {
-                    e.stopPropagation();
-                    setDraggingLabelId(lbl.id);
-                  }
-                }}
-                className={`absolute select-none text-center ${
-                  toolMode === 'inspect' ? 'cursor-grab active:cursor-grabbing' : 'pointer-events-none'
-                }`}
-              >
-                <span
-                  className={
-                    lbl.style === 'empire'
-                      ? 'font-cartography text-sm md:text-lg font-bold tracking-[0.28em] text-[#4A1818] drop-shadow-[0_1px_2px_rgba(245,236,217,0.95)]'
-                      : lbl.style === 'sea'
-                      ? 'font-display italic text-sm md:text-lg font-semibold tracking-[0.14em] text-[#3B2E1E]/80'
-                      : 'font-cartography text-xs md:text-sm font-bold tracking-[0.18em] text-[#2B1E12]/90 drop-shadow-[0_1px_2px_rgba(245,236,217,0.9)]'
-                  }
-                >
-                  {lbl.text}
-                </span>
-              </div>
-            ))}
-
-            {/* Hand-Illustrated Medieval Stamps & Scroll Ribbon Labels Overlay */}
-            {mapData.stamps.map((stamp) => {
-              const isSelected = stamp.id === activeStampId;
-              return (
+            {/* Floating Distance Badge on Map when measuring */}
+            {toolMode === 'measure' &&
+              measurePointA &&
+              measurePointB &&
+              measuredDistance && (
                 <div
-                  key={stamp.id}
                   style={{
-                    left: `${stamp.x}%`,
-                    top: `${stamp.y}%`,
-                    transform: 'translate(-50%, -55%)',
+                    left: `${(measurePointA.x + measurePointB.x) / 2}%`,
+                    top: `${(measurePointA.y + measurePointB.y) / 2}%`,
+                    transform: 'translate(-50%, -120%)',
                   }}
-                  onPointerDown={(e) => {
-                    e.stopPropagation();
-                    setActiveStampId(stamp.id);
-                    if (toolMode === 'inspect') {
-                      setDraggingStampId(stamp.id);
-                    }
-                  }}
-                  className="absolute z-10 group flex flex-col items-center cursor-pointer"
+                  className="pointer-events-none absolute z-20 px-3 py-1 rounded-lg bg-[#231C14] text-[#FBF8F1] border border-[#B5832A] shadow-md text-xs font-mono-tabular font-bold whitespace-nowrap"
                 >
-                  <MedievalStampArtwork
-                    type={stamp.type}
-                    color={stamp.nationColor || '#8B1E1E'}
-                    isSelected={isSelected}
-                  />
-                  {/* Authentic Medieval Parchment Scroll Banner Label */}
-                  <div
-                    className={`-mt-1 px-2.5 py-0.5 border text-[11px] font-display font-bold tracking-wide whitespace-nowrap transition-colors ${
-                      isSelected
-                        ? 'bg-[#8B1E1E] text-[#FBF8F1] border-[#261A10] shadow-xs'
-                        : 'bg-[#F5ECD9]/95 text-[#231C14] border-[#2B1E12]'
-                    }`}
-                  >
-                    {stamp.label}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Right Pin & Lore Inspector Panel */}
-        <div className="xl:col-span-3 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
-            <div>
-              <span className="text-xs text-[#695A47]">Detail Lokasi Peta</span>
-              <h3 className="font-display text-xl font-bold text-[#231C14]">
-                Indeks Kartografi
-              </h3>
-            </div>
-            <Navigation className="w-5 h-5 text-[#9E2A2B]" />
-          </div>
-
-          {activeStamp ? (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-[#695A47] mb-1">
-                  Nama Tempat di Peta
-                </label>
-                <input
-                  type="text"
-                  value={activeStamp.label}
-                  onChange={(e) =>
-                    onChangeMapData({
-                      ...mapData,
-                      stamps: mapData.stamps.map((s) =>
-                        s.id === activeStamp.id ? { ...s, label: e.target.value } : s
-                      ),
-                    })
-                  }
-                  className="w-full px-3 py-1.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-medium"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-medium text-[#695A47] mb-1">
-                    Simbol Ilustrasi
-                  </label>
-                  <select
-                    value={activeStamp.type}
-                    onChange={(e) =>
-                      onChangeMapData({
-                        ...mapData,
-                        stamps: mapData.stamps.map((s) =>
-                          s.id === activeStamp.id
-                            ? { ...s, type: e.target.value as StampType }
-                            : s
-                        ),
-                      })
-                    }
-                    className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
-                  >
-                    {STAMP_PALETTE.map((st) => (
-                      <option key={st.type} value={st.type}>
-                        {st.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-[#695A47] mb-1">
-                    Koordinat Atlas
-                  </label>
-                  <div className="px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-mono-tabular text-[#231C14]">
-                    {activeStamp.x}°B · {activeStamp.y}°U
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-[#695A47] mb-1">
-                  Tautkan ke Entri World Bible
-                </label>
-                <select
-                  value={activeStamp.linkedEntityId || ''}
-                  onChange={(e) =>
-                    onChangeMapData({
-                      ...mapData,
-                      stamps: mapData.stamps.map((s) =>
-                        s.id === activeStamp.id
-                          ? { ...s, linkedEntityId: e.target.value || undefined }
-                          : s
-                      ),
-                    })
-                  }
-                  className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
-                >
-                  <option value="">-- Tidak Ditautkan --</option>
-                  {entities.map((ent) => (
-                    <option key={ent.id} value={ent.id}>
-                      [{CATEGORY_META[ent.category].singular}] {ent.title}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {linkedEntity ? (
-                <div className="p-3.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                  <div className="text-xs text-[#9E2A2B] font-semibold">
-                    {CATEGORY_META[linkedEntity.category].singular} Terhubung
-                  </div>
-                  <div className="font-display text-lg font-bold text-[#231C14]">
-                    {linkedEntity.title}
-                  </div>
-                  <p className="text-xs text-[#695A47] leading-relaxed">
-                    {linkedEntity.summary}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => onSelectEntity(linkedEntity.id)}
-                    className="w-full mt-2 px-3 py-2 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] transition-colors cursor-pointer"
-                  >
-                    Buka Lembar Lore Lengkap →
-                  </button>
-                </div>
-              ) : (
-                <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
-                  Lokasi ini belum dihubungkan ke entitas World Bible. Pilih salah satu entitas di atas untuk menautkannya.
+                  {measuredDistance.totalLeagues} Liga (~
+                  {measuredDistance.totalKm} km)
                 </div>
               )}
 
+            {/* Region Calligraphy Labels Overlay (Clickable & Draggable in inspect mode) */}
+            {showLabelsLayer &&
+              mapData.regionLabels.map((lbl) => {
+                const isLabelSelected =
+                  inspectorKind === 'label' && activeLabelId === lbl.id;
+                return (
+                  <div
+                    key={lbl.id}
+                    style={{
+                      left: `${lbl.x}%`,
+                      top: `${lbl.y}%`,
+                      transform: `translate(-50%, -50%) rotate(${lbl.rotation || 0}deg)`,
+                    }}
+                    onPointerDown={(e) => {
+                      if (toolMode === 'inspect') {
+                        e.stopPropagation();
+                        setActiveLabelId(lbl.id);
+                        setInspectorKind('label');
+                        setDraggingLabelId(lbl.id);
+                      }
+                    }}
+                    className={`absolute select-none text-center px-1.5 py-0.5 rounded transition-all ${
+                      toolMode === 'inspect'
+                        ? 'cursor-grab active:cursor-grabbing hover:bg-[#F5ECD9]/50'
+                        : 'pointer-events-none'
+                    } ${
+                      isLabelSelected
+                        ? 'ring-2 ring-[#9E2A2B] bg-[#F5ECD9]/75'
+                        : ''
+                    }`}
+                  >
+                    <span
+                      className={
+                        lbl.style === 'empire'
+                          ? 'font-cartography text-sm md:text-lg font-bold tracking-[0.28em] text-[#4A1818] drop-shadow-[0_1px_2px_rgba(245,236,217,0.95)]'
+                          : lbl.style === 'sea'
+                          ? 'font-display italic text-sm md:text-lg font-semibold tracking-[0.14em] text-[#3B2E1E]/80'
+                          : 'font-cartography text-xs md:text-sm font-bold tracking-[0.18em] text-[#2B1E12]/90 drop-shadow-[0_1px_2px_rgba(245,236,217,0.9)]'
+                      }
+                    >
+                      {lbl.text}
+                    </span>
+                  </div>
+                );
+              })}
+
+            {/* Hand-Illustrated Medieval Stamps & Scroll Ribbon Labels Overlay */}
+            {showStampsLayer &&
+              mapData.stamps.map((stamp) => {
+                const isSelected =
+                  inspectorKind === 'stamp' && stamp.id === activeStampId;
+                return (
+                  <div
+                    key={stamp.id}
+                    style={{
+                      left: `${stamp.x}%`,
+                      top: `${stamp.y}%`,
+                      transform: 'translate(-50%, -55%)',
+                    }}
+                    onPointerDown={(e) => {
+                      if (toolMode === 'measure') {
+                        // Let measure click pass through & snap to this stamp!
+                        return;
+                      }
+                      e.stopPropagation();
+                      setActiveStampId(stamp.id);
+                      setInspectorKind('stamp');
+                      if (toolMode === 'inspect') {
+                        setDraggingStampId(stamp.id);
+                      }
+                    }}
+                    className={`absolute z-10 group flex flex-col items-center ${
+                      toolMode === 'measure'
+                        ? 'pointer-events-none'
+                        : 'cursor-pointer'
+                    }`}
+                  >
+                    <MedievalStampArtwork
+                      type={stamp.type}
+                      color={stamp.nationColor || '#8B1E1E'}
+                      isSelected={isSelected}
+                    />
+                    <div
+                      className={`-mt-1 px-2.5 py-0.5 border text-[11px] font-display font-bold tracking-wide whitespace-nowrap transition-colors ${
+                        isSelected
+                          ? 'bg-[#8B1E1E] text-[#FBF8F1] border-[#261A10] shadow-xs'
+                          : 'bg-[#F5ECD9]/95 text-[#231C14] border-[#2B1E12]'
+                      }`}
+                    >
+                      {stamp.label}
+                    </div>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+
+        {/* =================================================================== */}
+        {/* 4. RIGHT CARTOGRAPHY INSPECTOR PANEL (STAMPS, LABELS, RIVERS/ROUTES)*/}
+        {/* =================================================================== */}
+        <div className="xl:col-span-3 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-4">
+          {/* Switcher between Stamp Inspector and Label Inspector */}
+          <div className="flex items-center gap-1.5 bg-[#EFE7D6] p-1 rounded-lg border border-[#D8CBB3]">
+            <button
+              type="button"
+              onClick={() => setInspectorKind('stamp')}
+              className={`flex-1 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer ${
+                inspectorKind === 'stamp'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              Lokasi Pin ({mapData.stamps.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setInspectorKind('label')}
+              className={`flex-1 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer ${
+                inspectorKind === 'label'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+              }`}
+            >
+              Kaligrafi ({mapData.regionLabels.length})
+            </button>
+          </div>
+
+          {/* PANEL A: STAMP LOCATION INSPECTOR */}
+          {inspectorKind === 'stamp' && (
+            <>
+              {activeStamp ? (
+                <div className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                      Nama Tempat di Peta
+                    </label>
+                    <input
+                      type="text"
+                      value={activeStamp.label}
+                      onChange={(e) =>
+                        onChangeMapData({
+                          ...mapData,
+                          stamps: mapData.stamps.map((s) =>
+                            s.id === activeStamp.id
+                              ? { ...s, label: e.target.value }
+                              : s
+                          ),
+                        })
+                      }
+                      className="w-full px-3 py-1.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-xs font-medium text-[#695A47] mb-1">
+                        Simbol Ilustrasi
+                      </label>
+                      <select
+                        value={activeStamp.type}
+                        onChange={(e) =>
+                          onChangeMapData({
+                            ...mapData,
+                            stamps: mapData.stamps.map((s) =>
+                              s.id === activeStamp.id
+                                ? { ...s, type: e.target.value as StampType }
+                                : s
+                            ),
+                          })
+                        }
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                      >
+                        {STAMP_PALETTE.map((st) => (
+                          <option key={st.type} value={st.type}>
+                            {st.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#695A47] mb-1">
+                        Koordinat Atlas
+                      </label>
+                      <div className="px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-mono-tabular text-[#231C14]">
+                        {activeStamp.x}°B · {activeStamp.y}°U
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Kingdom Flag / Banner Color Picker */}
+                  <div>
+                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                      Warna Panji Kerajaan / Faksi
+                    </label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {BANNER_COLORS.map((c) => (
+                        <button
+                          key={c.hex}
+                          type="button"
+                          onClick={() =>
+                            onChangeMapData({
+                              ...mapData,
+                              stamps: mapData.stamps.map((s) =>
+                                s.id === activeStamp.id
+                                  ? { ...s, nationColor: c.hex }
+                                  : s
+                              ),
+                            })
+                          }
+                          className={`px-2 py-1 rounded text-[11px] font-medium flex items-center gap-1.5 border cursor-pointer ${
+                            (activeStamp.nationColor || '#9E2A2B') === c.hex
+                              ? 'bg-[#EFE7D6] border-[#231C14] font-semibold text-[#231C14]'
+                              : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47]'
+                          }`}
+                        >
+                          <span
+                            className="w-2.5 h-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: c.hex }}
+                          />
+                          <span className="truncate">{c.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                      Tautkan ke Entri World Bible
+                    </label>
+                    <select
+                      value={activeStamp.linkedEntityId || ''}
+                      onChange={(e) =>
+                        onChangeMapData({
+                          ...mapData,
+                          stamps: mapData.stamps.map((s) =>
+                            s.id === activeStamp.id
+                              ? {
+                                  ...s,
+                                  linkedEntityId: e.target.value || undefined,
+                                }
+                              : s
+                          ),
+                        })
+                      }
+                      className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    >
+                      <option value="">-- Tidak Ditautkan --</option>
+                      {entities.map((ent) => (
+                        <option key={ent.id} value={ent.id}>
+                          [{CATEGORY_META[ent.category].singular}] {ent.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {linkedEntity ? (
+                    <div className="p-3.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                      <div className="text-xs text-[#9E2A2B] font-semibold">
+                        {CATEGORY_META[linkedEntity.category].singular}{' '}
+                        Terhubung
+                      </div>
+                      <div className="font-display text-lg font-bold text-[#231C14]">
+                        {linkedEntity.title}
+                      </div>
+                      <p className="text-xs text-[#695A47] leading-relaxed">
+                        {linkedEntity.summary}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => onSelectEntity(linkedEntity.id)}
+                        className="w-full mt-1 px-3 py-2 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] transition-colors cursor-pointer"
+                      >
+                        Buka Lembar Lore Lengkap →
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs text-[#695A47]">
+                        Lokasi <strong>{activeStamp.label}</strong> belum
+                        memiliki lembar entri di World Bible.
+                      </div>
+                      {onCreateEntityFromStamp && (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[11px] text-[#695A47]">
+                              Jadikan Kategori:
+                            </span>
+                            <select
+                              value={promoteCategory}
+                              onChange={(e) =>
+                                setPromoteCategory(
+                                  e.target.value as LoreCategory
+                                )
+                              }
+                              className="flex-1 px-2 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded text-[#231C14]"
+                            >
+                              <option value="region">Wilayah</option>
+                              <option value="nation">Negara / Kerajaan</option>
+                              <option value="faction">Kelompok / Markas</option>
+                              <option value="history">Situs Sejarah</option>
+                              <option value="encyclopedia">
+                                Artefak & Biota
+                              </option>
+                            </select>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              onCreateEntityFromStamp(
+                                activeStamp,
+                                promoteCategory
+                              )
+                            }
+                            className="w-full px-3 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <FilePlus2 className="w-3.5 h-3.5 text-[#B5832A]" />
+                            + Buat Entri World Bible dari Pin Ini
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const remaining = mapData.stamps.filter(
+                        (s) => s.id !== activeStamp.id
+                      );
+                      onChangeMapData({ ...mapData, stamps: remaining });
+                      setActiveStampId(remaining[0]?.id ?? null);
+                    }}
+                    className="w-full px-3 py-1.5 text-xs font-medium text-[#9E2A2B] border border-[#9E2A2B]/40 rounded-lg hover:bg-[#9E2A2B]/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Hapus Simbol dari Peta
+                  </button>
+                </div>
+              ) : (
+                <div className="text-xs text-[#695A47] py-4 text-center">
+                  Klik salah satu simbol kastil atau kota di atas peta untuk
+                  melihat detail lokasinya.
+                </div>
+              )}
+
+              {/* List of all map stamps */}
+              <div className="pt-3 border-t border-[#D8CBB3]">
+                <div className="text-xs font-semibold text-[#695A47] mb-2">
+                  Daftar Tempat di Peta ({mapData.stamps.length})
+                </div>
+                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                  {mapData.stamps.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveStampId(s.id);
+                        setInspectorKind('stamp');
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                        s.id === activeStampId
+                          ? 'bg-[#EFE7D6] text-[#231C14] font-semibold border border-[#D8CBB3]'
+                          : 'text-[#695A47] hover:bg-[#F6F1E6]'
+                      }`}
+                    >
+                      <span className="truncate flex items-center gap-1.5">
+                        <span
+                          className="w-2 h-2 rounded-full shrink-0"
+                          style={{
+                            backgroundColor: s.nationColor || '#9E2A2B',
+                          }}
+                        />
+                        {s.label}
+                      </span>
+                      <span className="font-mono-tabular text-[11px] text-[#695A47] shrink-0 ml-2">
+                        {s.x}°,{s.y}°
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* PANEL B: REGION CALLIGRAPHY LABEL INSPECTOR */}
+          {inspectorKind === 'label' && (
+            <>
+              {activeLabel ? (
+                <div className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                      Teks Kaligrafi Wilayah
+                    </label>
+                    <input
+                      type="text"
+                      value={activeLabel.text}
+                      onChange={(e) =>
+                        onChangeMapData({
+                          ...mapData,
+                          regionLabels: mapData.regionLabels.map((l) =>
+                            l.id === activeLabel.id
+                              ? { ...l, text: e.target.value }
+                              : l
+                          ),
+                        })
+                      }
+                      className="w-full px-3 py-1.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                      Gaya Kaligrafi Peta
+                    </label>
+                    <select
+                      value={activeLabel.style}
+                      onChange={(e) =>
+                        onChangeMapData({
+                          ...mapData,
+                          regionLabels: mapData.regionLabels.map((l) =>
+                            l.id === activeLabel.id
+                              ? {
+                                  ...l,
+                                  style: e.target.value as
+                                    | 'empire'
+                                    | 'region'
+                                    | 'sea',
+                                }
+                              : l
+                          ),
+                        })
+                      }
+                      className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    >
+                      <option value="empire">
+                        Kaligrafi Kerajaan / Negara Besar
+                      </option>
+                      <option value="region">
+                        Kaligrafi Wilayah / Rimba / Pegunungan
+                      </option>
+                      <option value="sea">
+                        Kaligrafi Miring Samudra / Teluk
+                      </option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-medium text-[#695A47]">
+                        Rotasi / Kemiringan Teks
+                      </span>
+                      <span className="font-mono-tabular font-semibold text-[#231C14]">
+                        {activeLabel.rotation || 0}°
+                      </span>
+                    </div>
+                    <input
+                      type="range"
+                      min={-90}
+                      max={90}
+                      step={2}
+                      value={activeLabel.rotation || 0}
+                      onChange={(e) =>
+                        onChangeMapData({
+                          ...mapData,
+                          regionLabels: mapData.regionLabels.map((l) =>
+                            l.id === activeLabel.id
+                              ? { ...l, rotation: Number(e.target.value) }
+                              : l
+                          ),
+                        })
+                      }
+                      className="w-full accent-[#9E2A2B]"
+                    />
+                    <div className="flex justify-between text-[10px] text-[#695A47] mt-1">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onChangeMapData({
+                            ...mapData,
+                            regionLabels: mapData.regionLabels.map((l) =>
+                              l.id === activeLabel.id
+                                ? { ...l, rotation: -15 }
+                                : l
+                            ),
+                          })
+                        }
+                        className="underline cursor-pointer"
+                      >
+                        -15°
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onChangeMapData({
+                            ...mapData,
+                            regionLabels: mapData.regionLabels.map((l) =>
+                              l.id === activeLabel.id
+                                ? { ...l, rotation: 0 }
+                                : l
+                            ),
+                          })
+                        }
+                        className="underline cursor-pointer"
+                      >
+                        Reset 0°
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onChangeMapData({
+                            ...mapData,
+                            regionLabels: mapData.regionLabels.map((l) =>
+                              l.id === activeLabel.id
+                                ? { ...l, rotation: 15 }
+                                : l
+                            ),
+                          })
+                        }
+                        className="underline cursor-pointer"
+                      >
+                        +15°
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const remaining = mapData.regionLabels.filter(
+                        (l) => l.id !== activeLabel.id
+                      );
+                      onChangeMapData({ ...mapData, regionLabels: remaining });
+                      setActiveLabelId(remaining[0]?.id ?? null);
+                    }}
+                    className="w-full px-3 py-1.5 text-xs font-medium text-[#9E2A2B] border border-[#9E2A2B]/40 rounded-lg hover:bg-[#9E2A2B]/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Hapus Teks Kaligrafi
+                  </button>
+                </div>
+              ) : (
+                <div className="text-xs text-[#695A47] py-4 text-center">
+                  Pilih salah satu teks kaligrafi di peta atau dari daftar di
+                  bawah.
+                </div>
+              )}
+
+              <div className="pt-3 border-t border-[#D8CBB3]">
+                <div className="text-xs font-semibold text-[#695A47] mb-2">
+                  Daftar Kaligrafi Wilayah ({mapData.regionLabels.length})
+                </div>
+                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                  {mapData.regionLabels.map((lbl) => (
+                    <button
+                      key={lbl.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveLabelId(lbl.id);
+                        setInspectorKind('label');
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
+                        lbl.id === activeLabelId
+                          ? 'bg-[#EFE7D6] text-[#231C14] font-semibold border border-[#D8CBB3]'
+                          : 'text-[#695A47] hover:bg-[#F6F1E6]'
+                      }`}
+                    >
+                      <span className="truncate">{lbl.text}</span>
+                      <span className="font-mono-tabular text-[11px] text-[#695A47] shrink-0 ml-2">
+                        {lbl.rotation || 0}°
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Rivers & Routes Management List at Bottom of Inspector */}
+          <div className="pt-3 border-t border-[#D8CBB3] space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-[#695A47]">
+                Jaringan Sungai ({mapData.rivers.length}) & Rute (
+                {routes.length})
+              </span>
               <button
                 type="button"
                 onClick={() => {
-                  const remaining = mapData.stamps.filter((s) => s.id !== activeStamp.id);
-                  onChangeMapData({ ...mapData, stamps: remaining });
-                  setActiveStampId(remaining[0]?.id ?? null);
+                  setDraftPoints([]);
+                  setToolMode('river_route');
                 }}
-                className="w-full px-3 py-1.5 text-xs font-medium text-[#9E2A2B] border border-[#9E2A2B]/40 rounded-lg hover:bg-[#9E2A2B]/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                className="text-[11px] font-semibold text-[#9E2A2B] hover:underline cursor-pointer"
               >
-                <Trash2 className="w-3.5 h-3.5" />
-                Hapus Simbol dari Peta
+                + Gambar Baru
               </button>
             </div>
-          ) : (
-            <div className="text-xs text-[#695A47] py-6 text-center">
-              Klik salah satu simbol kastil atau kota di atas peta untuk melihat detail lokasinya.
-            </div>
-          )}
 
-          {/* List of all map stamps */}
-          <div className="pt-3 border-t border-[#D8CBB3]">
-            <div className="text-xs font-semibold text-[#695A47] mb-2">
-              Daftar Tempat di Peta ({mapData.stamps.length})
-            </div>
-            <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1">
-              {mapData.stamps.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setActiveStampId(s.id)}
-                  className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
-                    s.id === activeStampId
-                      ? 'bg-[#EFE7D6] text-[#231C14] font-semibold border border-[#D8CBB3]'
-                      : 'text-[#695A47] hover:bg-[#F6F1E6]'
-                  }`}
+            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+              {mapData.rivers.map((rv) => (
+                <div
+                  key={rv.id}
+                  className="px-2.5 py-1.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between text-xs"
                 >
-                  <span className="truncate">{s.label}</span>
-                  <span className="font-mono-tabular text-[11px] text-[#695A47] shrink-0 ml-2">
-                    {s.x}°,{s.y}°
+                  <span className="truncate text-[#264653] font-medium">
+                    [Sungai] {rv.name}
                   </span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onChangeMapData({
+                        ...mapData,
+                        rivers: mapData.rivers.filter((r) => r.id !== rv.id),
+                      })
+                    }
+                    className="text-[#695A47] hover:text-[#9E2A2B] cursor-pointer ml-2"
+                    title="Hapus sungai"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
+
+              {routes.map((rt) => (
+                <div
+                  key={rt.id}
+                  className="px-2.5 py-1.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between text-xs"
+                >
+                  <span className="truncate text-[#9E2A2B] font-medium">
+                    [
+                    {rt.style === 'road'
+                      ? 'Jalan'
+                      : rt.style === 'expedition'
+                      ? 'Ekspedisi'
+                      : 'Pelayaran'}
+                    ] {rt.name}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onChangeMapData({
+                        ...mapData,
+                        routes: routes.filter((r) => r.id !== rt.id),
+                      })
+                    }
+                    className="text-[#695A47] hover:text-[#9E2A2B] cursor-pointer ml-2"
+                    title="Hapus rute"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               ))}
             </div>
           </div>
