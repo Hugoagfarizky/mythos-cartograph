@@ -449,17 +449,31 @@ Setiap anggota ordo membawa kompas kuningan khusus yang bergetar saat terjadi pe
       id: 'nat-gondoria',
       category: 'nation',
       title: 'Kekaisaran Gondoria',
-      subtitle: 'Mahkota Surya di Tepi Teluk Naga',
-      summary: 'Negara maritim dan militer terkuat di barat Aethelia yang diperintah oleh [[Empress Seraphina Valorian]].',
+      subtitle: 'Mahkota Surya di Tepi Teluk Naga · Imperium Maritim & Militer Barat',
+      summary: 'Negara maritim dan militer terkuat di barat Aethelia yang diperintah oleh [[Empress Seraphina Valorian]] dari ibu kota Solis Prime.',
       tags: ['Kekaisaran', 'Kekuatan Militer', 'Teluk Naga'],
       attributes: {
-        government: 'Monarki Konstitusional Militer',
+        governmentType: 'Kekaisaran / Monarki',
+        government: 'Monarki Konstitusional Militer (Takhta Surya & Senat Bangsawan)',
         capitalCity: 'Solis Prime',
         ruler: 'Empress Seraphina Valorian',
         stateReligion: 'Kultus Surya Abadi',
         currency: 'Dinar Surya Emas & Keping Kuningan',
+        nationalEmblem:
+          'Panji Matahari Emas Berkembar Tombak di atas Beludru Merah Cinnabar · Semboyan: "Di Bawah Satu Matahari, Tak Ada Bayangan"',
+        dominantRaces: ['Aethel-Born (Manusia Tinggi)', 'Dvergr Besi-Bintang'],
+        economicCommodities:
+          'Ekspor utama berupa gandum lembah barat, anggur merah Solis, kapal perang berlapis perunggu, serta pajak pelayaran internasional di Teluk Naga. Sangat bergantung pada impor bijih meteorit dari [[Kerajaan Bawah Tanah Nidavellir]] dan herbal alkimia dari [[Rimba Bayang-Bayang (Shadowwood)]].',
+        militaryStrength:
+          'Diperkuat oleh [[Legiun Surya Cinnabar]] (13 batalion kavaleri zirah surya), Armada Laut Teluk Naga (40 kapal galiung meriam uap), serta jaringan Menara Suar Optik di sepanjang perbatasan timur.',
+        lawsAndCulture:
+          'Memberlakukan *Dekrit Registrasi Eter*: setiap praktisi [[Resonansi Eteris Astral]] Lingkar ke-3 ke atas wajib terdaftar di bawah pengawasan negara. Masyarakatnya menjunjung tinggi disiplin militer, arsitektur kubah marmer putih, dan mengadakan *Festival Titik Balik Surya* setiap pertengahan tahun.',
+        diplomaticAllies:
+          'Memiliki pakta perdagangan maritim dengan kota-kota pelabuhan bebas di pesisir selatan serta didukung penuh oleh Kultus Surya Abadi.',
+        borderConflicts:
+          'Terlibat ketegangan militer di perbatasan [[Rimba Bayang-Bayang (Shadowwood)]] melawan [[Persemakmuran Kanopi Eldath]], sengketa hak milik [[Astrolabe Api Surya]] dengan [[Kerajaan Bawah Tanah Nidavellir]], serta memburu pimpinan [[Ordo Cakrawala Perak]] di [[Puncak Wyvern]].',
       },
-      content: `Kekaisaran Gondoria menguasai dataran subur di pesisir barat serta jalur pelayaran strategis di Teluk Naga (*Dragon's Bay*). Kekuatan ekonomi mereka bertumpu pada armada dagang dan legiun kavaleri berlapis baja surya.
+      content: `Kekaisaran Gondoria menguasai dataran subur di pesisir barat serta jalur pelayaran strategis di Teluk Naga (*Dragon's Bay*). Kekuatan ekonomi mereka bertumpu pada armada dagang dan legiun kavaleri berlapis baja surya di bawah komando [[Empress Seraphina Valorian]] dan [[Legiun Surya Cinnabar]].
 
 Dalam dekade terakhir, Gondoria memperluas benteng perbatasannya hingga mendekati [[Rimba Bayang-Bayang (Shadowwood)]] dan jalur pegunungan menuju [[Kerajaan Bawah Tanah Nidavellir]], memicu ketegangan diplomatik di seluruh benua.`,
       updatedAt: '2026-11-08',
@@ -468,55 +482,187 @@ Dalam dekade terakhir, Gondoria memperluas benteng perbatasannya hingga mendekat
       id: 'nat-nidavellir',
       category: 'nation',
       title: 'Kerajaan Bawah Tanah Nidavellir',
-      subtitle: 'Persemakmuran Tujuh Kubah Besi',
-      summary: 'Negara benteng pegunungan di tenggara yang dikuasai serikat penempa [[Dvergr Besi-Bintang]].',
-      tags: ['Negara Industri', 'Benteng Gunung', 'Dvergr'],
+      subtitle: 'Persemakmuran Tujuh Kubah Besi & Benteng Industri Tenggara',
+      summary: 'Negara benteng pegunungan di tenggara yang dikuasai serikat penempa [[Dvergr Besi-Bintang]] dan memonopoli teknologi mekanika astral.',
+      tags: ['Dewan Serikat', 'Benteng Gunung', 'Dvergr'],
       attributes: {
-        government: 'Dewan Serikat Penempa (oligarki teknik)',
+        governmentType: 'Dewan Serikat / Republik',
+        government: 'Teknokrasi Dewan Serikat Penempa (Majelis Tujuh Kubah)',
         capitalCity: 'Kubah Kazad-Vahl',
         ruler: 'High Artificer Thrain Ironstar',
-        stateReligion: 'Penghormatan Inti Bumi & Bintang',
-        currency: 'Ingot Perak Bertanda Segel',
+        stateReligion: 'Penghormatan Inti Bumi & Bintang Jatuh',
+        currency: 'Ingot Perak Bertanda Segel & Koin Perunggu Roda Gigi',
+        nationalEmblem:
+          'Tujuh Palu Perak Mengelilingi Cincin Astrolabe di atas Panji Hitam-Tembaga · Semboyan: "Ditempa dalam Tekanan, Abadi dalam Baja"',
+        dominantRaces: ['Dvergr Besi-Bintang'],
+        economicCommodities:
+          'Pengekspor tunggal baja meteorit, lensa teleskop astral, senjata berukir [[Tempaan Runik Besi-Bintang]], dan mesin uap geotermal. Mengimpor bahan pangan gandum dari permukaan serta getah kristal dari [[Persemakmuran Kanopi Eldath]].',
+        militaryStrength:
+          'Pertahanan berlapis gerbang baja setebal lima meter di sela ngarai pegunungan, baterai meriam uap termal, pasukan zirah berat Dvergr yang menguasai [[Runtuhan Palu Bintang Nidavellir]], serta kolosus mekanika penjaga kubah.',
+        lawsAndCulture:
+          'Berlandaskan *Hukum Kontrak Ingot*: setiap perjanjian dagang maupun politik yang telah dicap di atas keping perak bersifat mengikat secara hukum. Membocorkan rahasia metalurgi [[Serikat Kriya Besi-Bintang]] kepada pihak asing dihukum dengan pencabutan nama klan.',
+        diplomaticAllies:
+          'Menjalin hubungan dagang dan pasokan instrumen optik dengan [[Ordo Cakrawala Perak]] di [[Puncak Wyvern]], serta perjanjian pertukaran kristal dengan [[Persemakmuran Kanopi Eldath]].',
+        borderConflicts:
+          'Memberlakukan embargo ekspor baja meteorit terhadap [[Kekaisaran Gondoria]] dan menyiagakan meriam perbatasan akibat penolakan Solis Prime mengembalikan [[Astrolabe Api Surya]].',
       },
-      content: `Terletak di balik barisan pegunungan tenggara, [[Kerajaan Bawah Tanah Nidavellir]] adalah pusat teknologi metalurgi dan mekanika astral. Kota-kota mereka dibangun di dalam kawah gunung berapi tidak aktif yang diterangi oleh cermin surya raksasa.
+      content: `Terletak di balik barisan pegunungan tenggara, [[Kerajaan Bawah Tanah Nidavellir]] adalah pusat teknologi metalurgi dan mekanika astral. Kota-kota mereka dibangun di dalam kawah gunung berapi tidak aktif yang diterangi oleh cermin surya raksasa dan dikelola oleh [[Serikat Kriya Besi-Bintang]].
 
-Hubungan mereka dengan [[Kekaisaran Gondoria]] memburuk sejak sengketa kepemilikan [[Astrolabe Api Surya]].`,
+Hubungan mereka dengan [[Kekaisaran Gondoria]] memburuk drastis sejak sengketa kepemilikan [[Astrolabe Api Surya]].`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'nat-eldath',
+      category: 'nation',
+      title: 'Persemakmuran Kanopi Eldath',
+      subtitle: 'Konfederasi Suci Rimba Shadowwood & Penjaga Pohon Memori',
+      summary: 'Kedaulatan otonom bangsa [[Sylvan Aelfir]] di timur laut Aethelia yang diperintah oleh majelis tetua hutan tanpa raja tunggal.',
+      tags: ['Persemakmuran', 'Sylvan Aelfir', 'Otonom'],
+      attributes: {
+        governmentType: 'Persemakmuran / Otonom',
+        government: 'Konfederasi Majelis Tetua Kanopi & Penenun Memori',
+        capitalCity: 'Rimba Bayang-Bayang (Shadowwood)',
+        ruler: 'Kaelen dari Kabut Perak',
+        stateReligion: 'Sinkronisasi Akar Pohon Memori Eldath & Siklus Bulan Kembar',
+        currency: 'Barter Permata Getah Lumin & Keping Perak Daun',
+        nationalEmblem:
+          'Pohon Perak Berakar Bulan Kembar di atas Kain Hijau Zamrud · Semboyan: "Akar Mengingat Apa yang Dilupakan Mahkota"',
+        dominantRaces: ['Sylvan Aelfir'],
+        economicCommodities:
+          'Penghasil eksklusif tanaman obat [[Bunga Lentera Malam]], kayu besi perak, busur eter, dan kristal memori. Sangat membatasi perdagangan dengan pihak luar kecuali melalui perantara terpercaya.',
+        militaryStrength:
+          'Tidak memiliki tentara reguler, melainkan dilindungi oleh medan alami [[Rimba Bayang-Bayang (Shadowwood)]], unit pemanah siluman penjaga perbatasan, serta pertahanan ilusi skala regional [[Simfoni Kabut Pohon Memori]].',
+        lawsAndCulture:
+          'Hukum Adat Kanopi melarang keras penebangan pohon *Lumin-Oak* dan penggunaan api Jalur Solar skala besar di dalam batas hutan. Pengambilan keputusan dilakukan melalui musyawarah gema memori di bawah pohon induk.',
+        diplomaticAllies:
+          'Bersekutu erat dengan [[Ordo Cakrawala Perak]] pimpinan [[Archmage Vaelen Thorne]] dan membuka jalur barter terbatas dengan [[Kerajaan Bawah Tanah Nidavellir]].',
+        borderConflicts:
+          'Berhadapan langsung dengan ekspansi pos militer [[Legiun Surya Cinnabar]] milik [[Kekaisaran Gondoria]] serta sindikat penyelundup bersenjata yang memburu [[Bunga Lentera Malam]].',
+      },
+      content: `**Persemakmuran Kanopi Eldath** bukanlah kerajaan dengan istana batu, melainkan jaringan kota-kota gantung di atas dahan pohon raksasa di jantung [[Rimba Bayang-Bayang (Shadowwood)]]. Diwakili di perbatasan luar oleh utusan seperti [[Kaelen dari Kabut Perak]], kedaulatan bangsa [[Sylvan Aelfir]] ini berusaha mempertahankan netralitasnya di tengah ancaman perang besar antara Gondoria dan Nidavellir.`,
       updatedAt: '2026-11-08',
     },
 
     // 5. REGIONS
     {
+      id: 'reg-solis-prime',
+      category: 'region',
+      title: 'Solis Prime',
+      subtitle: 'Ibu Kota Cincin Marmer Kekaisaran Gondoria · Pusat Takhta Surya',
+      summary: 'Metropolis bertingkat tiga yang dibangun mengelilingi obelisk cermin surya raksasa, menjadi pusat politik dan militer [[Kekaisaran Gondoria]].',
+      tags: ['Ibu Kota', 'Metropolis', 'Gondoria'],
+      attributes: {
+        regionType: 'Ibu Kota / Metropolis',
+        parentNation: 'Kekaisaran Gondoria',
+        climate: 'Hangat keemasan sepanjang tahun berkat pantulan cermin helio-termal di puncak kota',
+        landmarks: 'Istana Takhta Surya, Katedral Sol-Aurea, Akademi Militer Legiun Cinnabar, Pelabuhan Udara Marmer',
+        landmarksList: [
+          'Istana Takhta Surya (Kediaman Empress Seraphina)',
+          'Katedral Agung Sol-Aurea (Pusat Sinode Gereja Cahaya)',
+          'Distrik Cincin Besi & Barak Legiun Cinnabar',
+          'Menara Lonceng Helio-Termal',
+        ],
+        resources: 'Kristal Lensa Surya, Pajak Jalur Perdagangan Barat, Gudang Persenjataan Kekaisaran',
+        endemicFloraFauna: ['Astrolabe Api Surya', 'Kuda Perang Zirah Surya'],
+        dangerLevel: 'Rendah di Distrik Dalam · Ketat oleh Patroli Inkuisitor & Jam Malam Militer',
+        sensoryAtmosphere:
+          'Cahaya matahari memantul menyilaukan dari kubah-kubah marmer putih dan jalanan batu berlapis kuningan; udara berbau dupa kemenyan suci bercampur asap batu bara dari bengkel senjata, diiringi derap sepatu lars patroli [[Legiun Surya Cinnabar]] setiap pergantian jam.',
+        localEcologyAndHazards:
+          'Tidak ada monster liar di dalam tembok kota, namun bahaya utamanya adalah pengawasan mata-mata Inkuisisi Cahaya, razia sihir Jalur Lunar tanpa lisensi, serta panas ekstrem di sekitar menara cermin pusat pada tengah hari.',
+        linkedMapStampLabel: 'Solis Prime (Ibu Kota)',
+      },
+      content: `**Solis Prime** adalah permata mahkota [[Kekaisaran Gondoria]] sekaligus kediaman resmi [[Empress Seraphina Valorian]]. Kota ini dirancang dalam tiga cincin konsentris yang semakin meninggi ke arah tengah: Cincin Luar untuk pasar niaga dan pemukiman rakyat, Cincin Tengah untuk senat bangsawan [[Aethel-Born (Manusia Tinggi)]] dan barak [[Legiun Surya Cinnabar]], serta Cincin Puncak tempat berdirinya Istana Takhta Surya.
+
+Sebelum diasingkan ke [[Puncak Wyvern]], [[Archmage Vaelen Thorne]] pernah memimpin menara astronomi istana di kota ini sebelum menemukan bukti bahaya penggunaan [[Astrolabe Api Surya]].`,
+      updatedAt: '2026-11-08',
+    },
+    {
       id: 'reg-shadowwood',
       category: 'region',
       title: 'Rimba Bayang-Bayang (Shadowwood)',
-      subtitle: 'Hutan Kanopi Perak di Timur Laut Aethelia',
-      summary: 'Wilayah hutan purba berkabut tempat pohon-pohon raksasa menyerap cahaya bintang dan menjadi tanah suci [[Sylvan Aelfir]].',
+      subtitle: 'Hutan Kanopi Perak di Timur Laut Aethelia · Tanah Suci Sylvan Aelfir',
+      summary: 'Wilayah hutan purba berkabut tempat pohon-pohon raksasa menyerap cahaya bintang dan menjadi pusat kedaulatan [[Persemakmuran Kanopi Eldath]].',
       tags: ['Bioma Hutan', 'Zona Anomali', 'Aelfir'],
       attributes: {
-        parentNation: 'Wilayah Otonom Sylvan Aelfir',
-        climate: 'Lembap, berkabut abadi dengan pendaran bioluminesensi di malam hari',
-        landmarks: 'Pohon Memori Eldath, Reruntuhan Kuil Bulan',
+        regionType: 'Alam Liar & Hutan Magis',
+        parentNation: 'Persemakmuran Kanopi Eldath',
+        climate: 'Lembap, sejuk, dan berkabut abadi dengan pendaran bioluminesensi perak-biru di malam hari',
+        landmarks: 'Pohon Memori Eldath, Reruntuhan Kuil Bulan, Jembatan Akar Gantung, Pos Perbatasan Kabut Perak',
+        landmarksList: [
+          'Pohon Memori Eldath (Pusat Musyawarah Tetua Aelfir)',
+          'Reruntuhan Kuil Bulan Kembar',
+          'Lembah Budidaya Bunga Lentera Malam',
+          'Pos Penjaga Kabut Perak',
+        ],
         resources: 'Getah Kristal Eter, Kayu Besi Perak, Tanaman [[Bunga Lentera Malam]]',
-        dangerLevel: 'Tinggi (Kabut Ilusi & Penjaga Hutan)',
+        endemicFloraFauna: ['Bunga Lentera Malam', 'Rusa Tanduk Kristal', 'Ngengat Eter Perak'],
+        dangerLevel: 'Tinggi (Kabut Ilusi Memori & Penjaga Perbatasan Aelfir)',
+        sensoryAtmosphere:
+          'Kanopi pohon *Lumin-Oak* setinggi seratus meter menutup langit hingga siang hari tampak seperti senja kebiruan; udara dingin beraroma lumut basah, getah pinus manis, dan ozon sihir, dengan bisikan halus gema suara masa lalu yang terbawa angin di sela akar-akar gantung.',
+        localEcologyAndHazards:
+          'Medan magnet dan kompas logam lumpuh total di wilayah ini. Pendatang asing yang masuk tanpa pemandu [[Sylvan Aelfir]] akan terjebak dalam anomali [[Simfoni Kabut Pohon Memori]] yang memutar balik arah langkah kaki dan membangkitkan halusinasi masa lalu.',
+        linkedMapStampLabel: 'Pohon Memori Eldath',
       },
-      content: `Rimba Bayang-Bayang membentang luas di bagian timur laut benua. Kompas biasa tidak berfungsi di dalam wilayah ini karena rapatnya kandungan eter di akar pepohonan. Hanya kartografer dari [[Ordo Cakrawala Perak]] atau pemandu asli [[Sylvan Aelfir]] yang dapat melintasi jalurnya dengan selamat.`,
+      content: `Rimba Bayang-Bayang membentang luas di bagian timur laut benua sebagai jantung dari [[Persemakmuran Kanopi Eldath]]. Kompas biasa tidak berfungsi di dalam wilayah ini karena rapatnya kandungan eter di akar pepohonan. Hanya kartografer dari [[Ordo Cakrawala Perak]] atau pemandu asli [[Sylvan Aelfir]] seperti [[Kaelen dari Kabut Perak]] yang dapat melintasi jalurnya dengan selamat.`,
       updatedAt: '2026-11-08',
     },
     {
       id: 'reg-wyvern-peaks',
       category: 'region',
       title: 'Puncak Wyvern',
-      subtitle: 'Pegunungan Utara Tempat Bersarangnya Naga Angin',
-      summary: 'Barisan pegunungan bersalju di utara tempat berdirinya observatorium pengasingan [[Archmage Vaelen Thorne]].',
+      subtitle: 'Pegunungan Utara Tempat Bersarangnya Naga Angin & Benteng Observatorium',
+      summary: 'Barisan pegunungan bersalju di utara tempat berdirinya observatorium pengasingan [[Archmage Vaelen Thorne]] dan markas [[Ordo Cakrawala Perak]].',
       tags: ['Pegunungan', 'Utara', 'Observatorium'],
       attributes: {
+        regionType: 'Benteng & Kota Perbatasan',
         parentNation: 'Zona Bebas Perbatasan Utara',
-        climate: 'Dingin ekstrem, badai angin astral musiman',
-        landmarks: 'Observatorium Cakrawala, Jembatan Rantai Langit',
-        resources: 'Bijih Bintang Jatuh, Kristal Es Abadi',
-        dangerLevel: 'Sangat Tinggi (Wyvern Puncak & Badai Eter)',
+        climate: 'Dingin membeku sepanjang tahun, disertai badai angin astral dan aurora eter di malam hari',
+        landmarks: 'Observatorium Cakrawala, Jembatan Rantai Langit, Tebing Sarang Wyvern',
+        landmarksList: [
+          'Observatorium Cakrawala Perak (Markas Vaelen Thorne)',
+          'Jembatan Rantai Besi-Bintang Lintas Jurang',
+          'Gua Kristal Es Abadi',
+          'Pos Sinyal Lentera Utara',
+        ],
+        resources: 'Bijih Bintang Jatuh, Kristal Es Abadi, Rekaman Peta Bintang Kuno',
+        endemicFloraFauna: ['Wyvern Sayap-Es Utara', 'Lumut Bara Gunung'],
+        dangerLevel: 'Sangat Tinggi (Predator Wyvern Puncak, Jurang Terjal & Badai Eter)',
+        sensoryAtmosphere:
+          'Angin utara menderu melewati celah tebing granit hitam dan menggetarkan rantai-rantai jembatan gantung; udara begitu dingin hingga napas langsung mengkristal, sementara langit malamnya sangat jernih menampilkan dua bulan dan cincin kuningan raksasa observatorium yang berputar perlahan.',
+        localEcologyAndHazards:
+          'Kawanan *Wyvern Sayap-Es* berburu di sekitar tebing bawah saat badai salju turun. Selain suhu hipodermia ekstrem, kilatan petir astral kerap menyambar logam terbuka yang tidak dilindungi ukiran runik [[Dvergr Besi-Bintang]].',
+        linkedMapStampLabel: 'Observatorium Puncak Wyvern',
       },
       content: `Puncak Wyvern merupakan atap dunia Aethelia. Karena langitnya yang sangat jernih dan dekat dengan arus bintang, [[Ordo Cakrawala Perak]] membangun benteng observatorium mereka di tebing tertingginya.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'reg-reruntuhan-gerhana',
+      category: 'region',
+      title: 'Reruntuhan Menara Gerhana',
+      subtitle: 'Zona Kawah Kaca & Patahan Eter Bekas Tragedi Tahun 1 AE',
+      summary: 'Kawasan tanah tandus berkaca di tepi timur Teluk Naga tempat meledaknya menara sihir kuno saat [[Konvergensi Gerhana Merah]].',
+      tags: ['Zona Terkutuk', 'Reruntuhan Kuno', 'Anomali Gravitasi'],
+      attributes: {
+        regionType: 'Zona Terkutuk / Reruntuhan',
+        parentNation: 'Zona Sengketa Gondoria – Nidavellir',
+        climate: 'Kering berangin abu dengan badai pasir kaca dan distorsi cahaya senja',
+        landmarks: 'Pilar Patah Menara Pertama, Kawah Kaca Merah, Dermaga Tenggelam Teluk Naga',
+        landmarksList: [
+          'Inti Kawah Kaca Merah (Titik Nol Konvergensi)',
+          'Pilar Patah Menara Sihir Kuno',
+          'Bangkai Kapal Batu Dinasti Lama',
+        ],
+        resources: 'Pecahan Kaca Eter Kuno, Prasasti Era Pra-Konvergensi, Residu Kristal Surya',
+        endemicFloraFauna: ['Astrolabe Api Surya', 'Konstruk Abu Terkutuk'],
+        dangerLevel: 'Ekstrem (Anomali Gravitasi Liar & Radiasi Kristalisasi Organ)',
+        sensoryAtmosphere:
+          'Hamparan tanah pasir yang telah meleleh menjadi kaca hitam dan merah tua berkilau tajam di bawah matahari; batu-batu reruntuhan tampak melayang miring tanpa bobot di udara yang berbau logam terbakar dan kesunyian mencekam tanpa suara burung sedikit pun.',
+        localEcologyAndHazards:
+          'Zona paling mematikan di Aethelia tengah: kantong gravitasi terbalik dapat menghempaskan penjelajah ke udara, sementara debu kaca eter di kawah utama mempercepat gejala *Kristalisasi Organ* bagi siapa pun yang merapal [[Resonansi Eteris Astral]] tanpa pelindung.',
+        linkedMapStampLabel: 'Reruntuhan Menara Gerhana',
+      },
+      content: `**Reruntuhan Menara Gerhana** adalah saksi bisu kehancuran [[Konvergensi Gerhana Merah]]. Di tempat inilah para penyihir kuno gagal mengendalikan energi gerhana ganda hingga menenggelamkan lembah barat menjadi Teluk Naga dan memaksa ditempanya [[Astrolabe Api Surya]].`,
       updatedAt: '2026-11-08',
     },
 

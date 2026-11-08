@@ -4,6 +4,7 @@ import {
   BookOpen,
   Check,
   Compass,
+  Crown,
   Edit3,
   Flame,
   GitBranch,
@@ -126,6 +127,30 @@ const SKILL_IMPACT_SCALE_OPTIONS = [
   'Skala Kontinental / Bencana Dunia',
 ];
 
+const NATION_GOVERNMENT_FILTERS = [
+  'Semua',
+  'Kekaisaran / Monarki',
+  'Dewan Serikat / Republik',
+  'Persemakmuran / Otonom',
+  'Teokrasi / Magokrasi',
+];
+
+const REGION_TYPOLOGY_FILTERS = [
+  'Semua',
+  'Ibu Kota / Metropolis',
+  'Benteng & Kota Perbatasan',
+  'Alam Liar & Hutan Magis',
+  'Zona Terkutuk / Reruntuhan',
+];
+
+const REGION_DANGER_PRESETS = [
+  'Rendah (Zona Aman / Kota Dalam)',
+  'Menengah (Patroli Rutin / Perbatasan)',
+  'Tinggi (Kabut Ilusi / Predator Liar)',
+  'Sangat Tinggi (Sarang Monster & Badai Eter)',
+  'Ekstrem (Zona Terkutuk / Anomali Mematikan)',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -189,12 +214,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     useState<string>('Semua Skala');
   const [powerTypologyFilter, setPowerTypologyFilter] =
     useState<string>('Semua');
+  const [nationGovFilter, setNationGovFilter] = useState<string>('Semua');
+  const [regionTypeFilter, setRegionTypeFilter] = useState<string>('Semua');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom array item inputs in editor (Character, Race, Faction, Power System & Skill)
+  // Custom array item inputs in editor (Character, Race, Faction, Power System, Skill, Nation & Region)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
   const [customSubRaceInput, setCustomSubRaceInput] = useState('');
@@ -205,6 +232,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [customPowerTierInput, setCustomPowerTierInput] = useState('');
   const [customElementBranchInput, setCustomElementBranchInput] = useState('');
   const [customExclusiveRaceInput, setCustomExclusiveRaceInput] = useState('');
+  const [customDominantRaceInput, setCustomDominantRaceInput] = useState('');
+  const [customLandmarkInput, setCustomLandmarkInput] = useState('');
+  const [customEndemicInput, setCustomEndemicInput] = useState('');
 
   // Quick-link state on Skill view mode
   const [selectedQuickRaceId, setSelectedQuickRaceId] = useState('');
@@ -231,6 +261,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setFactionTypeFilter('Semua');
     setFactionScaleFilter('Semua Skala');
     setPowerTypologyFilter('Semua');
+    setNationGovFilter('Semua');
+    setRegionTypeFilter('Semua');
     setShowAddRelation(false);
   }, [category]);
 
@@ -300,6 +332,35 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'nation') {
+      if (nationGovFilter !== 'Semua') {
+        const govStr = `${attrs.governmentType || ''} ${
+          attrs.government || ''
+        }`.toLowerCase();
+        const filterKeywords = nationGovFilter
+          .split('/')
+          .map((s) => s.trim().toLowerCase());
+        if (!filterKeywords.some((kw) => govStr.includes(kw))) {
+          return false;
+        }
+      }
+    }
+
+    if (category === 'region') {
+      if (regionTypeFilter !== 'Semua') {
+        const regStr = `${attrs.regionType || ''} ${e.subtitle || ''} ${e.tags.join(
+          ' '
+        )}`.toLowerCase();
+        const filterKeywords = regionTypeFilter
+          .split('/')
+          .flatMap((s) => s.split('&'))
+          .map((s) => s.trim().toLowerCase());
+        if (!filterKeywords.some((kw) => regStr.includes(kw))) {
+          return false;
+        }
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -319,7 +380,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       (attrs.parentPowerSystem || '').toLowerCase().includes(q) ||
       (attrs.skillExclusivity || '').toLowerCase().includes(q) ||
       (attrs.impactScale || '').toLowerCase().includes(q) ||
-      (attrs.exclusiveRaces || []).some((r) => r.toLowerCase().includes(q))
+      (attrs.exclusiveRaces || []).some((r) => r.toLowerCase().includes(q)) ||
+      (attrs.governmentType || '').toLowerCase().includes(q) ||
+      (attrs.government || '').toLowerCase().includes(q) ||
+      (attrs.capitalCity || '').toLowerCase().includes(q) ||
+      (attrs.ruler || '').toLowerCase().includes(q) ||
+      (attrs.dominantRaces || []).some((r) => r.toLowerCase().includes(q)) ||
+      (attrs.regionType || '').toLowerCase().includes(q) ||
+      (attrs.parentNation || '').toLowerCase().includes(q) ||
+      (attrs.climate || '').toLowerCase().includes(q) ||
+      (attrs.dangerLevel || '').toLowerCase().includes(q) ||
+      (attrs.landmarksList || []).some((l) => l.toLowerCase().includes(q)) ||
+      (attrs.endemicFloraFauna || []).some((f) => f.toLowerCase().includes(q))
     );
   });
 
@@ -361,6 +433,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const characterEntities = entities.filter((e) => e.category === 'character');
   const raceEntities = entities.filter((e) => e.category === 'race');
   const factionEntities = entities.filter((e) => e.category === 'faction');
+  const nationEntities = entities.filter((e) => e.category === 'nation');
+  const regionEntities = entities.filter((e) => e.category === 'region');
   const nationAndRegionEntities = entities.filter(
     (e) => e.category === 'nation' || e.category === 'region'
   );
@@ -388,6 +462,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         powerTiersList: [...(enriched.powerTiersList || [])],
         elementBranches: [...(enriched.elementBranches || [])],
         exclusiveRaces: [...(enriched.exclusiveRaces || [])],
+        dominantRaces: [...(enriched.dominantRaces || [])],
+        landmarksList: [...(enriched.landmarksList || [])],
+        endemicFloraFauna: [...(enriched.endemicFloraFauna || [])],
       },
       tags: [...entity.tags],
     });
@@ -401,6 +478,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomPowerTierInput('');
     setCustomElementBranchInput('');
     setCustomExclusiveRaceInput('');
+    setCustomDominantRaceInput('');
+    setCustomLandmarkInput('');
+    setCustomEndemicInput('');
     setIsEditing(true);
   };
 
@@ -422,6 +502,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           ? 'Arsitektur Sihir, Kultivasi, atau Hukum Kekuatan'
           : category === 'skill'
           ? 'Warisan Rasial Eksklusif / Teknik Skala Besar'
+          : category === 'nation'
+          ? 'Kedaulatan Kerajaan, Republik, atau Persemakmuran'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -483,6 +565,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               exclusiveRaces: [],
               impactScale: 'Skala Pasukan / Benteng (Radius 300 Meter)',
             }
+          : category === 'nation'
+          ? {
+              governmentType: 'Kekaisaran / Monarki',
+              government: 'Monarki Kerajaan',
+              dominantRaces: [],
+            }
+          : category === 'region'
+          ? {
+              regionType: 'Benteng & Kota Perbatasan',
+              parentNation: nationEntities[0]?.title || '',
+              dangerLevel: 'Menengah (Patroli Rutin / Perbatasan)',
+              landmarksList: [],
+              endemicFloraFauna: [],
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -497,6 +593,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomPowerTierInput('');
     setCustomElementBranchInput('');
     setCustomExclusiveRaceInput('');
+    setCustomDominantRaceInput('');
+    setCustomLandmarkInput('');
+    setCustomEndemicInput('');
     setIsEditing(true);
   };
 
@@ -537,7 +636,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       | 'factionArtifacts'
       | 'powerTiersList'
       | 'elementBranches'
-      | 'exclusiveRaces',
+      | 'exclusiveRaces'
+      | 'dominantRaces',
     itemValue: string
   ) => {
     if (!draftEntity) return;
@@ -676,6 +776,58 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     };
     onSaveEntity(newSkill);
     jumpToEntity(newSkill.id);
+  };
+
+  // 1-Click Create Region from active Nation
+  const handleCreateRegionFromNation = (nationEntity: LoreEntity) => {
+    const newRegion: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'region',
+      title: `Provinsi ${nationEntity.title} Baru`,
+      subtitle: `Wilayah Kedaulatan ${nationEntity.title}`,
+      summary: `Wilayah strategis yang berada di bawah kedaulatan [[${nationEntity.title}]].`,
+      content: `### Geografi & Peran Strategis\nMerupakan salah satu provinsi atau kawasan penting di dalam wilayah [[${nationEntity.title}]].\n\nTambahkan kondisi geografis, benteng, atau sumber daya wilayah ini di sini.`,
+      tags: ['Wilayah', nationEntity.title],
+      attributes: {
+        regionType: 'Benteng & Kota Perbatasan',
+        parentNation: nationEntity.title,
+        climate: 'Sedang, dipengaruhi angin pesisir dan musim setempat',
+        landmarks: 'Benteng Perbatasan & Pos Dagang Utama',
+        landmarksList: ['Benteng Perbatasan Utama', 'Pasar Karavan Provinsi'],
+        resources: 'Hasil Bumi, Bijih Logam & Jalur Karavan',
+        endemicFloraFauna: [],
+        dangerLevel: 'Menengah (Patroli Rutin / Perbatasan)',
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+    onSaveEntity(newRegion);
+    jumpToEntity(newRegion.id);
+  };
+
+  // 1-Click Create Character from active Region
+  const handleCreateCharacterFromRegion = (regionEntity: LoreEntity) => {
+    const regAttrs = getEnrichedAttributes(regionEntity);
+    const newChar: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'character',
+      title: `Tokoh ${regionEntity.title} Baru`,
+      subtitle: `Penjaga / Penduduk dari ${regionEntity.title}`,
+      summary: `Tokoh yang berasal dari atau beroperasi di wilayah [[${regionEntity.title}]]${
+        regAttrs.parentNation ? ` ([[${regAttrs.parentNation}]])` : ''
+      }.`,
+      content: `### Latar Belakang di ${regionEntity.title}\nMerupakan tokoh lokal yang mengenal seluk-beluk medan [[${regionEntity.title}]].\n\nTambahkan peran dan tujuannya di wilayah ini.`,
+      tags: ['Character', regionEntity.title],
+      attributes: {
+        role: 'Pendukung',
+        status: 'Hidup',
+        originNation: regionEntity.title,
+        knownSkills: [],
+        ownedArtifacts: [],
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+    onSaveEntity(newChar);
+    jumpToEntity(newChar.id);
   };
 
   // 1-Click Link active Skill to a Race
@@ -874,6 +1026,124 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         })
       : [];
 
+  // Automatic Roster of Regions under the active Nation
+  const regionsOfActiveNation =
+    category === 'nation' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'region') return false;
+          const regAttrs = getEnrichedAttributes(e);
+          const nTitle = activeEntity.title.toLowerCase();
+          const pNation = (regAttrs.parentNation || '').toLowerCase();
+          const capCity = (activeAttrs.capitalCity || '').toLowerCase();
+          const regTitle = e.title.toLowerCase();
+          return (
+            pNation.includes(nTitle) ||
+            nTitle.includes(pNation && pNation.length > 3 ? pNation : '___') ||
+            (capCity &&
+              (regTitle.includes(capCity) || capCity.includes(regTitle))) ||
+            e.content.toLowerCase().includes(`[[${nTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Factions operating in the active Nation
+  const factionsOfActiveNation =
+    category === 'nation' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'faction') return false;
+          const fAttrs = getEnrichedAttributes(e);
+          const nTitle = activeEntity.title.toLowerCase();
+          const hq = (fAttrs.headquarters || '').toLowerCase();
+          const capCity = (activeAttrs.capitalCity || '').toLowerCase();
+          return (
+            hq.includes(nTitle) ||
+            (capCity && hq.includes(capCity)) ||
+            e.content.toLowerCase().includes(`[[${nTitle}]]`) ||
+            activeEntity.content
+              .toLowerCase()
+              .includes(`[[${e.title.toLowerCase()}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Citizens / Leaders of the active Nation
+  const citizensOfActiveNation =
+    category === 'nation' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const nTitle = activeEntity.title.toLowerCase();
+          const orig = (cAttrs.originNation || '').toLowerCase();
+          const rulerName = (activeAttrs.ruler || '').toLowerCase();
+          const capCity = (activeAttrs.capitalCity || '').toLowerCase();
+          return (
+            orig.includes(nTitle) ||
+            (capCity && orig.includes(capCity)) ||
+            (rulerName && e.title.toLowerCase() === rulerName) ||
+            e.content.toLowerCase().includes(`[[${nTitle}]]`) ||
+            activeEntity.content
+              .toLowerCase()
+              .includes(`[[${e.title.toLowerCase()}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Map Stamps linked to the active Region
+  const mapStampsOfActiveRegion =
+    category === 'region' && activeEntity
+      ? mapStamps.filter((s) => {
+          const rTitle = activeEntity.title.toLowerCase();
+          const linkedLabel = (
+            activeAttrs.linkedMapStampLabel || ''
+          ).toLowerCase();
+          const sLabel = s.label.toLowerCase();
+          return (
+            s.linkedEntityId === activeEntity.id ||
+            (linkedLabel && sLabel === linkedLabel) ||
+            sLabel.includes(rTitle) ||
+            rTitle.includes(sLabel.split('(')[0].trim())
+          );
+        })
+      : [];
+
+  // Automatic Roster of Factions headquartered or operating in the active Region
+  const factionsOfActiveRegion =
+    category === 'region' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'faction') return false;
+          const fAttrs = getEnrichedAttributes(e);
+          const rTitle = activeEntity.title.toLowerCase();
+          const hq = (fAttrs.headquarters || '').toLowerCase();
+          return (
+            hq.includes(rTitle) ||
+            rTitle.includes(hq && hq.length > 3 ? hq : '___') ||
+            e.content.toLowerCase().includes(`[[${rTitle}]]`) ||
+            activeEntity.content
+              .toLowerCase()
+              .includes(`[[${e.title.toLowerCase()}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Characters originating from or active in the active Region
+  const charactersOfActiveRegion =
+    category === 'region' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const rTitle = activeEntity.title.toLowerCase();
+          const orig = (cAttrs.originNation || '').toLowerCase();
+          return (
+            orig.includes(rTitle) ||
+            rTitle.includes(orig && orig.length > 3 ? orig : '___') ||
+            e.content.toLowerCase().includes(`[[${rTitle}]]`) ||
+            activeEntity.content
+              .toLowerCase()
+              .includes(`[[${e.title.toLowerCase()}]]`)
+          );
+        })
+      : [];
+
   return (
     <div className="space-y-5">
       {/* Dedicated Section Header Bar */}
@@ -1061,6 +1331,56 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
+          {/* Nation-Specific Government Type Filters */}
+          {category === 'nation' && (
+            <div className="space-y-1.5 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Bentuk Pemerintahan:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {NATION_GOVERNMENT_FILTERS.map((gf) => (
+                  <button
+                    key={gf}
+                    type="button"
+                    onClick={() => setNationGovFilter(gf)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      nationGovFilter === gf
+                        ? 'bg-[#9E2A2B] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {gf}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Region-Specific Typology Filters */}
+          {category === 'region' && (
+            <div className="space-y-1.5 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Tipologi Wilayah:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {REGION_TYPOLOGY_FILTERS.map((rt) => (
+                  <button
+                    key={rt}
+                    type="button"
+                    onClick={() => setRegionTypeFilter(rt)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      regionTypeFilter === rt
+                        ? 'bg-[#264653] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {rt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
@@ -1153,6 +1473,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   itemAttrs.skillRank ||
                                   'Teknik Khusus'
                                 }`
+                              : category === 'nation'
+                              ? `${
+                                  itemAttrs.governmentType ||
+                                  itemAttrs.government ||
+                                  'Kedaulatan'
+                                } · ${itemAttrs.capitalCity || 'Ibu Kota'}`
+                              : category === 'region'
+                              ? `${
+                                  itemAttrs.regionType || 'Zona Geografis'
+                                } · ${
+                                  itemAttrs.parentNation || 'Wilayah Otonom'
+                                }`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -1205,6 +1537,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {itemAttrs.exclusiveRaces &&
                             itemAttrs.exclusiveRaces.length > 0
                               ? ` · Ras: ${itemAttrs.exclusiveRaces.join(', ')}`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'nation' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Penguasa: {itemAttrs.ruler || 'Majelis / Kolektif'}
+                            {itemAttrs.dominantRaces &&
+                            itemAttrs.dominantRaces.length > 0
+                              ? ` · ${itemAttrs.dominantRaces.length} Ras Mayoritas`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'region' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Bahaya: {itemAttrs.dangerLevel || 'Menengah'}
+                            {itemAttrs.landmarksList &&
+                            itemAttrs.landmarksList.length > 0
+                              ? ` · ${itemAttrs.landmarksList.length} Landmark`
                               : ''}
                           </div>
                         )}
@@ -3662,22 +4014,57 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   );
                 })()}
 
-              {/* Other Categories Structured Fields */}
-              {category !== 'character' &&
-                category !== 'race' &&
-                category !== 'faction' &&
-                category !== 'power_system' &&
-                category !== 'skill' && (
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
-                      Parameter Khusus {sectionMeta.label}
+              {/* ============================================================= */}
+              {/* NATION-SPECIFIC RICH EDITOR (GEOPOLITICAL & SOVEREIGN ATLAS)  */}
+              {/* ============================================================= */}
+              {category === 'nation' && (
+                <div className="space-y-5">
+                  {/* Section 1: Bentuk Pemerintahan, Penguasa, Ibu Kota & Simbol Kedaulatan */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                      <Crown className="w-3.5 h-3.5" />
+                      <span>
+                        1. Kedaulatan Politik, Penguasa, Ibu Kota & Lambang Negara
+                      </span>
                     </div>
 
-                    {category === 'nation' && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Klasifikasi Bentuk Pemerintahan (Filter Direktori)
+                        </label>
+                        <select
+                          value={
+                            draftEntity.attributes.governmentType ||
+                            'Kekaisaran / Monarki'
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                governmentType: e.target.value,
+                              },
+                            })
+                          }
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        >
+                          {NATION_GOVERNMENT_FILTERS.filter(
+                            (f) => f !== 'Semua'
+                          ).map((gov) => (
+                            <option key={gov} value={gov}>
+                              {gov}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Detail Struktur Pemerintahan & Parlemen/Tahta
+                        </label>
                         <input
                           type="text"
-                          placeholder="Bentuk Pemerintahan"
                           value={draftEntity.attributes.government || ''}
                           onChange={(e) =>
                             setDraftEntity({
@@ -3688,41 +4075,152 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Contoh: Monarki Teokratis Absolut / Serikat Klan Bawah Tanah..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
+                      </div>
+
+                      {/* Hybrid Ruler Picker (From Character Codex or Custom) */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Penguasa / Kepala Negara Saat Ini (Pilih dari Character atau Ketik)
+                        </label>
+                        <div className="space-y-1.5">
+                          <select
+                            value={
+                              characterEntities.some(
+                                (c) => c.title === draftEntity.attributes.ruler
+                              )
+                                ? draftEntity.attributes.ruler
+                                : '__CUSTOM__'
+                            }
+                            onChange={(e) => {
+                              if (e.target.value !== '__CUSTOM__') {
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    ruler: e.target.value,
+                                  },
+                                });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="__CUSTOM__">
+                              -- Pilih dari Daftar Tokoh atau Ketik Manual --
+                            </option>
+                            {characterEntities.map((c) => (
+                              <option key={c.id} value={c.title}>
+                                {c.title} ({c.subtitle})
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.ruler || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  ruler: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Nama Raja / Kaisar / Kanselir / Dewan Penguasa..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Capital City Picker (From Region Codex / Map Stamps or Custom) */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Ibu Kota & Pusat Pemerintahan (Pilih dari Wilayah/Peta atau Ketik)
+                        </label>
+                        <div className="space-y-1.5">
+                          <select
+                            value={
+                              regionEntities.some(
+                                (r) =>
+                                  r.title === draftEntity.attributes.capitalCity
+                              )
+                                ? draftEntity.attributes.capitalCity
+                                : '__CUSTOM__'
+                            }
+                            onChange={(e) => {
+                              if (e.target.value !== '__CUSTOM__') {
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    capitalCity: e.target.value,
+                                  },
+                                });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="__CUSTOM__">
+                              -- Pilih dari Daftar Wilayah / Pin Peta atau Ketik Manual --
+                            </option>
+                            {regionEntities.map((r) => (
+                              <option key={r.id} value={r.title}>
+                                [Wilayah] {r.title}
+                              </option>
+                            ))}
+                            {(mapStamps || []).map((st) => (
+                              <option key={st.id} value={st.label}>
+                                [Pin Peta] {st.label}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.capitalCity || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  capitalCity: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Nama Ibu Kota atau Benteng Takhta..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Agama Negara / Kepercayaan Resmi
+                        </label>
                         <input
                           type="text"
-                          placeholder="Ibu Kota Kerajaan"
-                          value={draftEntity.attributes.capitalCity || ''}
+                          value={draftEntity.attributes.stateReligion || ''}
                           onChange={(e) =>
                             setDraftEntity({
                               ...draftEntity,
                               attributes: {
                                 ...draftEntity.attributes,
-                                capitalCity: e.target.value,
+                                stateReligion: e.target.value,
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Contoh: Gereja Cahaya Sol-Aurea / Kultus Leluhur..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Mata Uang Resmi & Standar Nilai Tukar
+                        </label>
                         <input
                           type="text"
-                          placeholder="Raja / Penguasa Saat Ini"
-                          value={draftEntity.attributes.ruler || ''}
-                          onChange={(e) =>
-                            setDraftEntity({
-                              ...draftEntity,
-                              attributes: {
-                                ...draftEntity.attributes,
-                                ruler: e.target.value,
-                              },
-                            })
-                          }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Mata Uang & Ekonomi"
                           value={draftEntity.attributes.currency || ''}
                           onChange={(e) =>
                             setDraftEntity({
@@ -3733,31 +4231,500 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Contoh: Dinar Emas Surya, Keping Perak..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
                       </div>
-                    )}
+                    </div>
 
-                    {category === 'region' && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#B5832A] mb-1">
+                        Lambang Kebesaran Negara, Panji Bendera & Semboyan Kedaulatan
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.nationalEmblem || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              nationalEmblem: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Contoh: Elang Kembar Bermahkota Matahari — 'Di Bawah Terang Surya, Tak Ada Bayangan yang Abadi'"
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Section 2: Demografi Ras Mayoritas, Komoditas Ekonomi & Kekuatan Militer */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                      <Users className="w-3.5 h-3.5" />
+                      <span>
+                        2. Demografi Ras Mayoritas, Komoditas Ekonomi & Kekuatan Militer
+                      </span>
+                    </div>
+
+                    {/* Hybrid Dominant Races Multi-Picker */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                        Demografi Ras Penduduk Negara Ini (Pilih dari Tab Ras atau Ketik Manual)
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.dominantRaces || []).map(
+                          (rName) => (
+                            <span
+                              key={rName}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-medium text-[#231C14]"
+                            >
+                              {rName}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      dominantRaces: (
+                                        draftEntity.attributes.dominantRaces ||
+                                        []
+                                      ).filter((item) => item !== rName),
+                                    },
+                                  })
+                                }
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      {raceEntities.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[11px] text-[#695A47]">
+                            Pilih Cepat dari Tab Ras:
+                          </span>
+                          {raceEntities.map((rEnt) => {
+                            const already = (
+                              draftEntity.attributes.dominantRaces || []
+                            ).includes(rEnt.title);
+                            return (
+                              <button
+                                key={rEnt.id}
+                                type="button"
+                                onClick={() => {
+                                  const current =
+                                    draftEntity.attributes.dominantRaces || [];
+                                  const next = already
+                                    ? current.filter((x) => x !== rEnt.title)
+                                    : [...current, rEnt.title];
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      dominantRaces: next,
+                                    },
+                                  });
+                                }}
+                                className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
+                                  already
+                                    ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
+                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                }`}
+                              >
+                                {already ? '✓ ' : '+ '}
+                                {rEnt.title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-1.5 pt-1">
                         <input
                           type="text"
-                          placeholder="Negara / Kedaulatan Induk"
-                          value={draftEntity.attributes.parentNation || ''}
+                          value={customDominantRaceInput}
+                          onChange={(e) =>
+                            setCustomDominantRaceInput(e.target.value)
+                          }
+                          placeholder="Ketik ras/etnis demografi lain (misal: Manusia Dataran Aurelia 70%)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customDominantRaceInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.dominantRaces || [];
+                            if (!current.includes(val)) {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  dominantRaces: [...current, val],
+                                },
+                              });
+                            }
+                            setCustomDominantRaceInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#2D5A43] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Demografi
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#8F5B14] mb-1">
+                          Komoditas Ekonomi Utama, Perdagangan & Sumber Daya Strategis
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={
+                            draftEntity.attributes.economicCommodities || ''
+                          }
                           onChange={(e) =>
                             setDraftEntity({
                               ...draftEntity,
                               attributes: {
                                 ...draftEntity.attributes,
-                                parentNation: e.target.value,
+                                economicCommodities: e.target.value,
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Apa komoditas ekspor utama, monopoli tambang/pertanian, dan jalur niaga yang menghidupi negara ini..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Kekuatan Militer, Pasukan Elit & Pertahanan Strategis
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={draftEntity.attributes.militaryStrength || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                militaryStrength: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Jumlah legiun/armada, unit ksatria atau penyihir elit, serta benteng pertahanan utama negara..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 3: Hukum Utama, Budaya Masyarakat & Peta Diplomasi / Konflik Perbatasan */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                      <Swords className="w-3.5 h-3.5" />
+                      <span>
+                        3. Hukum Utama, Budaya Masyarakat & Peta Diplomasi / Konflik Perbatasan
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        Hukum Utama, Larangan Negara & Adat Budaya Masyarakat
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.lawsAndCulture || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              lawsAndCulture: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Undang-undang mutlak (misal: larangan sihir tanpa lisensi), sistem kasta warga, dan tradisi masyarakat..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Aliansi Diplomatik & Perjanjian Dagang (Gunakan [[Nama]] untuk tautan)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.diplomaticAllies || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                diplomaticAllies: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Negara sahabat, pakta pertahanan, atau kelompok sekutu..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Rival Geopolitik, Musuh & Konflik Perbatasan Aktif
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.borderConflicts || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                borderConflicts: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Sengketa wilayah perbatasan, perang dingin, embargo, atau ancaman invasi..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* REGION-SPECIFIC RICH EDITOR (ATLAS LOKASI & PANDUAN ADEGAN)   */}
+              {/* ============================================================= */}
+              {category === 'region' && (
+                <div className="space-y-5">
+                  {/* Section 1: Klasifikasi Tipologi, Negara Induk, Pin Peta & Iklim/Bahaya */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>
+                        1. Klasifikasi Geografis, Kedaulatan Negara Induk & Pin Peta Dunia
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tipologi Wilayah (Filter Direktori Kiri)
+                        </label>
+                        <select
+                          value={
+                            draftEntity.attributes.regionType ||
+                            'Benteng & Kota Perbatasan'
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                regionType: e.target.value,
+                              },
+                            })
+                          }
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        >
+                          {REGION_TYPOLOGY_FILTERS.filter(
+                            (f) => f !== 'Semua'
+                          ).map((rt) => (
+                            <option key={rt} value={rt}>
+                              {rt}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tingkat Bahaya Wilayah (Pilih Preset atau Ketik Manual)
+                        </label>
+                        <div className="space-y-1.5">
+                          <select
+                            value={
+                              REGION_DANGER_PRESETS.includes(
+                                draftEntity.attributes.dangerLevel || ''
+                              )
+                                ? draftEntity.attributes.dangerLevel
+                                : '__CUSTOM__'
+                            }
+                            onChange={(e) => {
+                              if (e.target.value !== '__CUSTOM__') {
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    dangerLevel: e.target.value,
+                                  },
+                                });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="__CUSTOM__">
+                              -- Pilih Preset Bahaya atau Ketik Manual --
+                            </option>
+                            {REGION_DANGER_PRESETS.map((dp) => (
+                              <option key={dp} value={dp}>
+                                {dp}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.dangerLevel || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  dangerLevel: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Contoh: Sangat Tinggi (Predator Wyvern & Badai Eter)..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Parent Nation Picker */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Negara / Kedaulatan Induk (Pilih dari Tab Negara atau Ketik)
+                        </label>
+                        <div className="space-y-1.5">
+                          <select
+                            value={
+                              nationEntities.some(
+                                (n) =>
+                                  n.title ===
+                                  draftEntity.attributes.parentNation
+                              )
+                                ? draftEntity.attributes.parentNation
+                                : '__CUSTOM__'
+                            }
+                            onChange={(e) => {
+                              if (e.target.value !== '__CUSTOM__') {
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    parentNation: e.target.value,
+                                  },
+                                });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="__CUSTOM__">
+                              -- Pilih dari Daftar Negara atau Ketik Wilayah Bebas --
+                            </option>
+                            {nationEntities.map((n) => (
+                              <option key={n.id} value={n.title}>
+                                {n.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.parentNation || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  parentNation: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Contoh: Kekaisaran Gondoria / Zona Bebas Perbatasan Utara..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Map Stamp Picker */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tautan Pin Lokasi di Map Dunia (Pilih dari Pin Peta atau Ketik)
+                        </label>
+                        <div className="space-y-1.5">
+                          <select
+                            value={
+                              (mapStamps || []).some(
+                                (st) =>
+                                  st.label ===
+                                  draftEntity.attributes.linkedMapStampLabel
+                              )
+                                ? draftEntity.attributes.linkedMapStampLabel
+                                : '__CUSTOM__'
+                            }
+                            onChange={(e) => {
+                              if (e.target.value !== '__CUSTOM__') {
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    linkedMapStampLabel: e.target.value,
+                                  },
+                                });
+                              }
+                            }}
+                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="__CUSTOM__">
+                              -- Pilih dari Daftar Pin Peta Dunia atau Ketik Manual --
+                            </option>
+                            {(mapStamps || []).map((st) => (
+                              <option key={st.id} value={st.label}>
+                                {st.label} (X:{Math.round(st.x)}%, Y:
+                                {Math.round(st.y)}%)
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={
+                              draftEntity.attributes.linkedMapStampLabel || ''
+                            }
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  linkedMapStampLabel: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Nama Pin di Map Dunia (opsional)..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Iklim, Cuaca & Siklus Musim Wilayah
+                        </label>
                         <input
                           type="text"
-                          placeholder="Iklim & Cuaca"
                           value={draftEntity.attributes.climate || ''}
                           onChange={(e) =>
                             setDraftEntity({
@@ -3768,11 +4735,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Contoh: Lembap berkabut abadi dengan bioluminesensi malam..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Sumber Daya Alam, Magis & Komoditas Lokal
+                        </label>
                         <input
                           type="text"
-                          placeholder="Sumber Daya Alam / Magis"
                           value={draftEntity.attributes.resources || ''}
                           onChange={(e) =>
                             setDraftEntity({
@@ -3783,25 +4756,279 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Tingkat Bahaya Wilayah"
-                          value={draftEntity.attributes.dangerLevel || ''}
-                          onChange={(e) =>
-                            setDraftEntity({
-                              ...draftEntity,
-                              attributes: {
-                                ...draftEntity.attributes,
-                                dangerLevel: e.target.value,
-                              },
-                            })
-                          }
-                          className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          placeholder="Contoh: Bijih Bintang Jatuh, Getah Eter, Bunga Lentera Malam..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                         />
                       </div>
-                    )}
+                    </div>
+                  </div>
+
+                  {/* Section 2: Atmosfer Sensorik Latar Adegan Novel & Daftar Landmark Lokal */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>
+                        2. Atmosfer Sensorik Latar Adegan Novel & Daftar Titik Penting (Landmark)
+                      </span>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#8F5B14] mb-1">
+                        Atmosfer Sensorik, Pencahayaan, Aroma & Suara Latar (Panduan Deskripsi Adegan Novel)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={draftEntity.attributes.sensoryAtmosphere || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              sensoryAtmosphere: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Bagaimana warna langit, aroma udara, suara langkah kaki/alam, dan suasana arsitektur saat tokoh melangkah masuk ke wilayah ini..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+
+                    {/* Landmarks List Chip Builder */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-[#264653]">
+                        Daftar Titik Penting (Landmark), Distrik & Reruntuhan Lokal di Wilayah Ini
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.landmarksList || []).map(
+                          (lm, idx) => (
+                            <span
+                              key={lm}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#264653]/40 text-xs font-medium text-[#231C14]"
+                            >
+                              <span className="text-[#264653] font-bold">
+                                #{idx + 1}
+                              </span>{' '}
+                              {lm}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      landmarksList: (
+                                        draftEntity.attributes.landmarksList ||
+                                        []
+                                      ).filter((item) => item !== lm),
+                                    },
+                                  })
+                                }
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customLandmarkInput}
+                          onChange={(e) =>
+                            setCustomLandmarkInput(e.target.value)
+                          }
+                          placeholder="Ketik nama tempat/bangunan penting (misal: Observatorium Cakrawala Perak)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customLandmarkInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.landmarksList || [];
+                            if (!current.includes(val)) {
+                              const next = [...current, val];
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  landmarksList: next,
+                                  landmarks: next.join(', '),
+                                },
+                              });
+                            }
+                            setCustomLandmarkInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#264653] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Landmark
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 3: Ekologi Monster, Flora/Fauna Endemik & Anomali Bahaya */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                      <ShieldAlert className="w-3.5 h-3.5" />
+                      <span>
+                        3. Ekologi Monster, Flora/Fauna Endemik & Anomali Bahaya Lingkungan
+                      </span>
+                    </div>
+
+                    {/* Hybrid Endemic Flora/Fauna/Artifacts Multi-Picker */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                        Flora, Fauna, Monster & Pusaka Endemik Wilayah Ini (Pilih dari Artefak & Flora atau Ketik)
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.endemicFloraFauna || []).map(
+                          (ef) => (
+                            <span
+                              key={ef}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-medium text-[#231C14]"
+                            >
+                              {ef}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      endemicFloraFauna: (
+                                        draftEntity.attributes
+                                          .endemicFloraFauna || []
+                                      ).filter((item) => item !== ef),
+                                    },
+                                  })
+                                }
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      {artifactEntities.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[11px] text-[#695A47]">
+                            Pilih Cepat dari Artefak & Flora:
+                          </span>
+                          {artifactEntities.map((artEnt) => {
+                            const already = (
+                              draftEntity.attributes.endemicFloraFauna || []
+                            ).includes(artEnt.title);
+                            return (
+                              <button
+                                key={artEnt.id}
+                                type="button"
+                                onClick={() => {
+                                  const current =
+                                    draftEntity.attributes.endemicFloraFauna ||
+                                    [];
+                                  const next = already
+                                    ? current.filter((x) => x !== artEnt.title)
+                                    : [...current, artEnt.title];
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      endemicFloraFauna: next,
+                                    },
+                                  });
+                                }}
+                                className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
+                                  already
+                                    ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
+                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                }`}
+                              >
+                                {already ? '✓ ' : '+ '}
+                                {artEnt.title}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          value={customEndemicInput}
+                          onChange={(e) =>
+                            setCustomEndemicInput(e.target.value)
+                          }
+                          placeholder="Ketik makhluk/tanaman/anomali endemik lain (misal: Wyvern Sayap-Es Utara)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customEndemicInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.endemicFloraFauna || [];
+                            if (!current.includes(val)) {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  endemicFloraFauna: [...current, val],
+                                },
+                              });
+                            }
+                            setCustomEndemicInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#2D5A43] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Entri
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        Detail Anomali Bahaya, Monster Penguasa Medan & Pantangan Penjelajah
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={
+                          draftEntity.attributes.localEcologyAndHazards || ''
+                        }
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              localEcologyAndHazards: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Ancaman spesifik saat tokoh melintasi wilayah ini (misal: kabut penghilang ingatan, badai kaca eter, atau patroli predator)..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Other Categories Structured Fields */}
+              {category !== 'character' &&
+                category !== 'race' &&
+                category !== 'faction' &&
+                category !== 'power_system' &&
+                category !== 'skill' &&
+                category !== 'nation' &&
+                category !== 'region' && (
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                      Parameter Khusus {sectionMeta.label}
+                    </div>
 
                   {category === 'history' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -4068,6 +5295,40 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* Nation National Emblem & Royal Motto Banner */}
+              {category === 'nation' && activeAttrs.nationalEmblem && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#B5832A]">
+                    <Crown className="w-3.5 h-3.5" />
+                    <span>
+                      Lambang Kebesaran Negara & Semboyan Kedaulatan
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-[#231C14] leading-relaxed">
+                    {activeAttrs.nationalEmblem}
+                  </p>
+                </div>
+              )}
+
+              {/* Region Sensory Atmosphere & Scene-Setting Banner */}
+              {category === 'region' && activeAttrs.sensoryAtmosphere && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#264653]">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>
+                      Atmosfer Sensorik, Suasana & Panduan Latar Adegan Novel
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.sensoryAtmosphere}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -4163,6 +5424,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'exclusiveRaces',
                             'strategicImpact',
                             'visualManifestation',
+                            'nationalEmblem',
+                            'dominantRaces',
+                            'economicCommodities',
+                            'militaryStrength',
+                            'lawsAndCulture',
+                            'diplomaticAllies',
+                            'borderConflicts',
+                            'sensoryAtmosphere',
+                            'landmarksList',
+                            'endemicFloraFauna',
+                            'localEcologyAndHazards',
                           ].includes(key)
                         ) {
                           return false;
@@ -4188,16 +5460,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           influenceScale: 'Skala Pengaruh',
                           leader: 'Pucuk Pimpinan',
                           headquarters: 'Markas Besar Utama',
-                          government: 'Pemerintahan',
+                          governmentType: 'Klasifikasi Pemerintahan',
+                          government: 'Struktur Pemerintahan',
                           capitalCity: 'Ibu Kota',
                           ruler: 'Penguasa Saat Ini',
                           stateReligion: 'Kepercayaan Resmi',
                           currency: 'Mata Uang',
-                          parentNation: 'Kedaulatan Induk',
+                          regionType: 'Tipologi Wilayah',
+                          parentNation: 'Kedaulatan Negara Induk',
                           climate: 'Iklim & Cuaca',
-                          landmarks: 'Titik Penting',
-                          resources: 'Sumber Daya',
-                          dangerLevel: 'Tingkat Bahaya',
+                          landmarks: 'Ringkasan Titik Penting',
+                          resources: 'Sumber Daya Utama',
+                          dangerLevel: 'Tingkat Bahaya Wilayah',
+                          linkedMapStampLabel: 'Pin Lokasi di Map Dunia',
                           era: 'Era Penanggalan',
                           year: 'Tahun Kejadian',
                           belligerents: 'Pihak Terlibat',
@@ -4227,10 +5502,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             ? 'faction'
                             : key === 'leader' || key === 'ruler'
                             ? 'character'
+                            : key === 'parentNation'
+                            ? 'nation'
                             : key === 'originNation' ||
-                              key === 'parentNation' ||
                               key === 'homeland' ||
-                              key === 'headquarters'
+                              key === 'headquarters' ||
+                              key === 'capitalCity'
                             ? 'region'
                             : key === 'catalystMedium'
                             ? 'encyclopedia'
@@ -4546,6 +5823,109 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               </span>
                             );
                           })}
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Nation Dominant Races Interactive Cards */}
+                  {category === 'nation' &&
+                    activeAttrs.dominantRaces &&
+                    activeAttrs.dominantRaces.length > 0 && (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                          <Users className="w-3.5 h-3.5" />
+                          <span>
+                            Demografi Ras Mayoritas & Komposisi Penduduk
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(activeAttrs.dominantRaces || []).map((rName) => {
+                            const matchedRace = findMatchingEntityByName(
+                              rName,
+                              'race'
+                            );
+                            return matchedRace ? (
+                              <button
+                                key={rName}
+                                type="button"
+                                onClick={() => jumpToEntity(matchedRace.id)}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                              >
+                                <span>{rName}</span>
+                                <ArrowUpRight className="w-3 h-3" />
+                              </button>
+                            ) : (
+                              <span
+                                key={rName}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                              >
+                                {rName}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Region Landmarks List & Endemic Flora/Fauna Interactive Cards */}
+                  {category === 'region' &&
+                    ((activeAttrs.landmarksList &&
+                      activeAttrs.landmarksList.length > 0) ||
+                      (activeAttrs.endemicFloraFauna &&
+                        activeAttrs.endemicFloraFauna.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span>
+                              Titik Penting (Landmark), Distrik & Reruntuhan
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.landmarksList || []).map((lm) => (
+                              <span
+                                key={lm}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#264653]/40 text-xs font-semibold text-[#231C14]"
+                              >
+                                {lm}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>
+                              Flora, Fauna & Pusaka Endemik Wilayah Ini
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.endemicFloraFauna || []).map((ef) => {
+                              const matchedEnc = findMatchingEntityByName(
+                                ef,
+                                'encyclopedia'
+                              );
+                              return matchedEnc ? (
+                                <button
+                                  key={ef}
+                                  type="button"
+                                  onClick={() => jumpToEntity(matchedEnc.id)}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                                >
+                                  <span>{ef}</span>
+                                  <ArrowUpRight className="w-3 h-3" />
+                                </button>
+                              ) : (
+                                <span
+                                  key={ef}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                >
+                                  {ef}
+                                </span>
+                              );
+                            })}
+                          </div>
                         </div>
                       </div>
                     )}
@@ -4949,6 +6329,147 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     )}
                   </div>
                 )}
+
+              {/* ============================================================= */}
+              {/* NATION ECONOMY, MILITARY, LAWS & DIPLOMACY / BORDER CONFLICTS */}
+              {/* ============================================================= */}
+              {category === 'nation' &&
+                (activeAttrs.economicCommodities ||
+                  activeAttrs.militaryStrength ||
+                  activeAttrs.lawsAndCulture ||
+                  activeAttrs.diplomaticAllies ||
+                  activeAttrs.borderConflicts) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#B5832A]">
+                      <Crown className="w-4 h-4" />
+                      <span>
+                        Dossier Geopolitik: Ekonomi, Militer, Hukum & Peta Diplomasi Negara
+                      </span>
+                    </div>
+
+                    {/* Economic Commodities vs Military Strength */}
+                    {(activeAttrs.economicCommodities ||
+                      activeAttrs.militaryStrength) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>
+                              Komoditas Ekonomi Utama & Jalur Perdagangan
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.economicCommodities ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Swords className="w-3.5 h-3.5" />
+                            <span>
+                              Kekuatan Militer, Legiun Elit & Pertahanan Negara
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.militaryStrength || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Laws & Culture */}
+                    {activeAttrs.lawsAndCulture && (
+                      <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                        <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <span>
+                            Hukum Utama Kerajaan, Konstitusi & Adat Budaya Masyarakat
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.lawsAndCulture}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Diplomatic Allies vs Border Conflicts */}
+                    {(activeAttrs.diplomaticAllies ||
+                      activeAttrs.borderConflicts) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43]">
+                            Aliansi Diplomatik & Perjanjian Dagang Internasional
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.diplomaticAllies || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Rival Geopolitik, Sengketa & Konflik Perbatasan
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.borderConflicts || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              {/* ============================================================= */}
+              {/* REGION ECOLOGY, MONSTERS & ENVIRONMENTAL HAZARDS DOSSIER      */}
+              {/* ============================================================= */}
+              {category === 'region' && activeAttrs.localEcologyAndHazards && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#9E2A2B]">
+                    <ShieldAlert className="w-4 h-4" />
+                    <span>
+                      Ekologi Monster, Anomali Magis & Bahaya Medan ({activeAttrs.dangerLevel || 'Bahaya Wilayah'})
+                    </span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.localEcologyAndHazards}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
               <div className="pt-4 border-t border-[#D8CBB3]">
@@ -5396,6 +6917,314 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     ? `${pAttrs.raceName} · `
                                     : ''}
                                   {pAttrs.powerTier || prac.subtitle}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF REGIONS, FACTIONS & CITIZENS (NATION)     */}
+              {/* ============================================================= */}
+              {category === 'nation' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                  {/* Regions / Provinces under this Nation */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <MapPin className="w-4 h-4 text-[#264653]" />
+                        <span>
+                          Daftar Wilayah, Provinsi & Kota di Bawah Kedaulatan{' '}
+                          {activeEntity.title} ({regionsOfActiveNation.length})
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCreateRegionFromNation(activeEntity)
+                        }
+                        className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                      >
+                        <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        + Buat Wilayah di Negara Ini
+                      </button>
+                    </div>
+
+                    {regionsOfActiveNation.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada entri di tab <strong>Wilayah</strong> yang
+                        tercatat berada di bawah kedaulatan negara ini. Klik{' '}
+                        <strong>+ Buat Wilayah di Negara Ini</strong> untuk
+                        menambahkan kota, provinsi, atau benteng baru secara
+                        instan.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {regionsOfActiveNation.map((reg) => {
+                          const regAttrs = getEnrichedAttributes(reg);
+                          return (
+                            <button
+                              key={reg.id}
+                              type="button"
+                              onClick={() => jumpToEntity(reg.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#264653]">
+                                <span>
+                                  {regAttrs.climate || 'Zona Geografis'}
+                                </span>
+                                <span>
+                                  {regAttrs.dangerLevel || 'Wilayah Kanon'}
+                                </span>
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{reg.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-2">
+                                {reg.summary}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Factions / Organizations operating in this Nation */}
+                  {factionsOfActiveNation.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                        <span>
+                          Kelompok, Ordo & Organisasi yang Beroperasi di Negara Ini (
+                          {factionsOfActiveNation.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {factionsOfActiveNation.map((fac) => {
+                          const fAttrs = getEnrichedAttributes(fac);
+                          return (
+                            <button
+                              key={fac.id}
+                              type="button"
+                              onClick={() => jumpToEntity(fac.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                                {fAttrs.factionType || 'Organisasi'} · Markas:{' '}
+                                {fAttrs.headquarters || 'Tersembunyi'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{fac.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-1">
+                                {fac.subtitle}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Citizens / Characters from this Nation */}
+                  {citizensOfActiveNation.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                        <span>
+                          Penguasa, Bangsawan & Tokoh Asal {activeEntity.title}{' '}
+                          ({citizensOfActiveNation.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {citizensOfActiveNation.map((cit) => {
+                          const cAttrs = getEnrichedAttributes(cit);
+                          return (
+                            <button
+                              key={cit.id}
+                              type="button"
+                              onClick={() => jumpToEntity(cit.id)}
+                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                            >
+                              {cit.imageUrl ? (
+                                <img
+                                  src={cit.imageUrl}
+                                  alt={cit.title}
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                  <span className="truncate">{cit.title}</span>
+                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                </div>
+                                <div className="text-[11px] text-[#695A47] truncate">
+                                  {cAttrs.role || 'Tokoh'} ·{' '}
+                                  {cAttrs.originNation || cit.subtitle}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF MAP PINS, FACTIONS & CHARACTERS (REGION)  */}
+              {/* ============================================================= */}
+              {category === 'region' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                  {/* Map Stamps / Coordinates linked to this Region */}
+                  {mapStampsOfActiveRegion.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <MapPin className="w-4 h-4 text-[#264653]" />
+                        <span>
+                          Titik Pin & Koordinat di Map Dunia (
+                          {mapStampsOfActiveRegion.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {mapStampsOfActiveRegion.map((st) => (
+                          <button
+                            key={st.id}
+                            type="button"
+                            onClick={() => onOpenMapAtStamp(st.id)}
+                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center justify-between gap-3 cursor-pointer"
+                          >
+                            <div className="min-w-0">
+                              <div className="text-[11px] font-semibold text-[#264653]">
+                                Pin Peta Dunia · Koordinat X:{Math.round(st.x)}%
+                                , Y:{Math.round(st.y)}%
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] truncate">
+                                {st.label}
+                              </div>
+                            </div>
+                            <span className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-[11px] font-semibold whitespace-nowrap shrink-0 flex items-center gap-1">
+                              <span>Buka di Peta</span>
+                              <ArrowUpRight className="w-3 h-3 text-[#B5832A]" />
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Factions / Organizations headquartered or operating in this Region */}
+                  {factionsOfActiveRegion.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                        <span>
+                          Kelompok & Organisasi yang Bermarkas / Beroperasi di{' '}
+                          {activeEntity.title} ({factionsOfActiveRegion.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {factionsOfActiveRegion.map((fac) => {
+                          const fAttrs = getEnrichedAttributes(fac);
+                          return (
+                            <button
+                              key={fac.id}
+                              type="button"
+                              onClick={() => jumpToEntity(fac.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                                {fAttrs.factionType || 'Organisasi'} · Pemimpin:{' '}
+                                {fAttrs.leader || 'Dewan'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{fac.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-1">
+                                {fac.subtitle}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Characters originating from or active in this Region */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                        <span>
+                          Tokoh & Karakter Terkait Wilayah {activeEntity.title}{' '}
+                          ({charactersOfActiveRegion.length})
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleCreateCharacterFromRegion(activeEntity)
+                        }
+                        className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                      >
+                        <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        + Buat Karakter di Wilayah Ini
+                      </button>
+                    </div>
+
+                    {charactersOfActiveRegion.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada tokoh di tab <strong>Character</strong> yang
+                        tercatat berasal dari atau berada di wilayah ini. Klik{' '}
+                        <strong>+ Buat Karakter di Wilayah Ini</strong> untuk
+                        menambahkan tokoh lokal baru secara instan.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {charactersOfActiveRegion.map((char) => {
+                          const cAttrs = getEnrichedAttributes(char);
+                          return (
+                            <button
+                              key={char.id}
+                              type="button"
+                              onClick={() => jumpToEntity(char.id)}
+                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                            >
+                              {char.imageUrl ? (
+                                <img
+                                  src={char.imageUrl}
+                                  alt={char.title}
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                  <span className="truncate">{char.title}</span>
+                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                </div>
+                                <div className="text-[11px] text-[#695A47] truncate">
+                                  {cAttrs.role || 'Tokoh'} ·{' '}
+                                  {cAttrs.raceName || char.subtitle}
                                 </div>
                               </div>
                             </button>

@@ -75,17 +75,31 @@ export interface LoreAttributes {
   alliedFactions?: string;
   rivalFactions?: string;
   // Nation specific
+  governmentType?: string;
   government?: string;
   capitalCity?: string;
   ruler?: string;
   stateReligion?: string;
   currency?: string;
+  nationalEmblem?: string;
+  dominantRaces?: string[];
+  economicCommodities?: string;
+  militaryStrength?: string;
+  lawsAndCulture?: string;
+  diplomaticAllies?: string;
+  borderConflicts?: string;
   // Region specific
+  regionType?: string;
   parentNation?: string;
   climate?: string;
   landmarks?: string;
+  landmarksList?: string[];
   resources?: string;
+  endemicFloraFauna?: string[];
   dangerLevel?: string;
+  sensoryAtmosphere?: string;
+  localEcologyAndHazards?: string;
+  linkedMapStampLabel?: string;
   // History specific
   era?: string;
   year?: number;
