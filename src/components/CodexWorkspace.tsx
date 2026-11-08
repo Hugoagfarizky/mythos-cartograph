@@ -7,16 +7,21 @@ import {
   Edit3,
   Flame,
   GitBranch,
+  Globe,
+  Languages,
   Link2,
   MapPin,
   Plus,
   Quote,
   Search,
+  ShieldAlert,
   ShieldCheck,
   Sparkles,
   Swords,
   Trash2,
   User,
+  UserPlus,
+  Users,
   Wand2,
   X,
 } from 'lucide-react';
@@ -70,6 +75,15 @@ const CHARACTER_STATUS_OPTIONS = [
   'Gugur',
 ];
 
+const RACE_ORIGIN_FILTERS = [
+  'Semua',
+  'Sylvan / Fae',
+  'Subterranean / Kriya',
+  'Manusia / Aethel-Born',
+  'Astral / Kuno',
+  'Drakonik / Buas',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -95,9 +109,8 @@ const RELATION_TYPE_LABELS: Record<RelationType, string> = {
   betrayed: 'Pengkhianatan',
 };
 
-// Merge starter character psychology/arc attributes if user's localStorage has an older version of a starter character
+// Merge starter attributes if user's localStorage has an older version of a starter entity
 function getEnrichedAttributes(entity: LoreEntity): LoreAttributes {
-  if (entity.category !== 'character') return entity.attributes;
   const starterMatch = STARTER_WORLD_PROJECT.entities.find(
     (s) => s.id === entity.id
   );
@@ -128,14 +141,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('Semua');
   const [statusFilter, setStatusFilter] = useState<string>('Semua');
+  const [raceClassFilter, setRaceClassFilter] = useState<string>('Semua');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom skill & artifact text inputs in Character editor
+  // Custom array item inputs in editor (Character & Race)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
+  const [customSubRaceInput, setCustomSubRaceInput] = useState('');
+  const [customRaceSkillInput, setCustomRaceSkillInput] = useState('');
 
   // Inline Relationship Creator state for Character Sheet
   const [showAddRelation, setShowAddRelation] = useState(false);
@@ -154,6 +170,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setSearchQuery('');
     setRoleFilter('Semua');
     setStatusFilter('Semua');
+    setRaceClassFilter('Semua');
     setShowAddRelation(false);
   }, [category]);
 
@@ -176,6 +193,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'race') {
+      if (
+        raceClassFilter !== 'Semua' &&
+        !(attrs.raceOriginClass || '')
+          .toLowerCase()
+          .includes(raceClassFilter.split('/')[0].trim().toLowerCase())
+      ) {
+        return false;
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -184,7 +212,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       e.summary.toLowerCase().includes(q) ||
       e.tags.some((t) => t.toLowerCase().includes(q)) ||
       (attrs.raceName || '').toLowerCase().includes(q) ||
-      (attrs.factionName || '').toLowerCase().includes(q)
+      (attrs.factionName || '').toLowerCase().includes(q) ||
+      (attrs.homeland || '').toLowerCase().includes(q) ||
+      (attrs.raceOriginClass || '').toLowerCase().includes(q)
     );
   });
 
@@ -230,12 +260,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         ...enriched,
         knownSkills: [...(enriched.knownSkills || [])],
         ownedArtifacts: [...(enriched.ownedArtifacts || [])],
+        subRaces: [...(enriched.subRaces || [])],
+        signatureSkills: [...(enriched.signatureSkills || [])],
       },
       tags: [...entity.tags],
     });
     setTagInput(entity.tags.join(', '));
     setCustomSkillInput('');
     setCustomArtifactInput('');
+    setCustomSubRaceInput('');
+    setCustomRaceSkillInput('');
     setIsEditing(true);
   };
 
@@ -247,6 +281,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       subtitle:
         category === 'character'
           ? 'Gelar atau Julukan Tokoh'
+          : category === 'race'
+          ? 'Julukan Bangsa & Spesies'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -259,6 +295,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               knownSkills: [],
               ownedArtifacts: [],
             }
+          : category === 'race'
+          ? {
+              raceOriginClass: 'Sylvan / Fae',
+              lifespan: '100 - 300 Tahun',
+              subRaces: [],
+              signatureSkills: [],
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -266,6 +309,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setTagInput(newEnt.tags.join(', '));
     setCustomSkillInput('');
     setCustomArtifactInput('');
+    setCustomSubRaceInput('');
+    setCustomRaceSkillInput('');
     setIsEditing(true);
   };
 
@@ -297,7 +342,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   };
 
   const toggleDraftArrayItem = (
-    field: 'knownSkills' | 'ownedArtifacts',
+    field: 'knownSkills' | 'ownedArtifacts' | 'subRaces' | 'signatureSkills',
     itemValue: string
   ) => {
     if (!draftEntity) return;
@@ -336,6 +381,36 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setShowAddRelation(false);
   };
 
+  // 1-Click Create Character from active Race
+  const handleCreateCharacterFromRace = (raceEntity: LoreEntity) => {
+    const rAttrs = getEnrichedAttributes(raceEntity);
+    const newChar: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: 'character',
+      title: `Tokoh ${raceEntity.title} Baru`,
+      subtitle: `Utusan dari ${rAttrs.homeland || raceEntity.title}`,
+      summary: `Tokoh keturunan [[${raceEntity.title}]] yang berasal dari [[${
+        rAttrs.homeland || raceEntity.title
+      }]].`,
+      content: `### Latar Belakang & Asal-Usul\nMerupakan anggota bangsa [[${
+        raceEntity.title
+      }]] yang mewarisi bakat alami mereka.\n\nTambahkan sejarah dan hubungannya dengan entitas lain di sini.`,
+      tags: ['Character', raceEntity.title],
+      attributes: {
+        role: 'Pendukung',
+        status: 'Hidup',
+        raceName: raceEntity.title,
+        originNation: rAttrs.homeland || '',
+        knownSkills: [...(rAttrs.signatureSkills || [])],
+        ownedArtifacts: [],
+        appearance: rAttrs.traits || '',
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+    onSaveEntity(newChar);
+    jumpToEntity(newChar.id);
+  };
+
   const backlinks = activeEntity
     ? findBacklinksForEntity(activeEntity, entities, chapters)
     : { linkedEntities: [], linkedChapters: [] };
@@ -351,16 +426,34 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       )
     : [];
 
-  // Lists of existing entities by category for Character hybrid pickers
+  // Lists of existing entities by category for hybrid pickers
   const raceEntities = entities.filter((e) => e.category === 'race');
   const factionEntities = entities.filter((e) => e.category === 'faction');
-  const nationEntities = entities.filter(
+  const nationAndRegionEntities = entities.filter(
     (e) => e.category === 'nation' || e.category === 'region'
   );
   const skillEntities = entities.filter((e) => e.category === 'skill');
   const artifactEntities = entities.filter(
     (e) => e.category === 'encyclopedia'
   );
+
+  // Automatic Roster of Characters belonging to the active Race
+  const charactersOfActiveRace =
+    category === 'race' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const rName = (cAttrs.raceName || '').toLowerCase();
+          const raceTitle = activeEntity.title.toLowerCase();
+          const raceFirstWord = raceTitle.split(' ')[0];
+          return (
+            rName.includes(raceTitle) ||
+            raceTitle.includes(rName && rName.length > 3 ? rName : '___') ||
+            (raceFirstWord.length > 3 && rName.includes(raceFirstWord)) ||
+            e.content.toLowerCase().includes(`[[${raceTitle}]]`)
+          );
+        })
+      : [];
 
   return (
     <div className="space-y-5">
@@ -405,7 +498,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       {/* Main Split: Section Entity List (Left 4 cols) + Full Sheet (Right 8 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* ================================================================= */}
-        {/* LEFT DIRECTORY COLUMN (With Role/Status Filters & Mini Portraits) */}
+        {/* LEFT DIRECTORY COLUMN                                             */}
         {/* ================================================================= */}
         <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
           <div className="relative">
@@ -454,6 +547,31 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </option>
                   ))}
                 </select>
+              </div>
+            </div>
+          )}
+
+          {/* Race-Specific Origin Classification Filters */}
+          {category === 'race' && (
+            <div className="space-y-1.5 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Klasifikasi Asal-Usul Ras:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {RACE_ORIGIN_FILTERS.map((rc) => (
+                  <button
+                    key={rc}
+                    type="button"
+                    onClick={() => setRaceClassFilter(rc)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      raceClassFilter === rc
+                        ? 'bg-[#2D5A43] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {rc}
+                  </button>
+                ))}
               </div>
             </div>
           )}
@@ -526,6 +644,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ? `${itemAttrs.role || 'Tokoh'} · ${
                                   itemAttrs.status || 'Hidup'
                                 }`
+                              : category === 'race'
+                              ? `${
+                                  itemAttrs.raceOriginClass || 'Ras Kanon'
+                                } · ${itemAttrs.lifespan || 'Usia Bervariasi'}`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -542,6 +664,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {itemAttrs.raceName || item.subtitle}
                             {itemAttrs.powerTier
                               ? ` · ${itemAttrs.powerTier}`
+                              : ''}
+                          </div>
+                        )}
+
+                        {category === 'race' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Habitat: {itemAttrs.homeland || 'Belum ditentukan'}
+                            {itemAttrs.subRaces && itemAttrs.subRaces.length > 0
+                              ? ` · ${itemAttrs.subRaces.length} Sub-Ras`
                               : ''}
                           </div>
                         )}
@@ -653,14 +784,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    placeholder="Contoh: Protagonis, Kuno, Kerajaan Utara"
+                    placeholder="Contoh: Ras Kuno, Penjaga Hutan, Sensitif Eter"
                     className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
                   />
                 </div>
               </div>
 
               {/* Portrait / Image URL Selector */}
-              {(category === 'character' || category === 'encyclopedia') && (
+              {(category === 'character' ||
+                category === 'race' ||
+                category === 'encyclopedia') && (
                 <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <label className="text-xs font-semibold text-[#695A47]">
@@ -721,7 +854,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* =========================================================== */}
               {category === 'character' && (
                 <div className="space-y-4">
-                  {/* 1. Identity & Relational Pickers (Race, Faction, Nation, Role, Status, Tier) */}
+                  {/* 1. Identity & Relational Pickers */}
                   <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
                     <div className="text-xs font-semibold text-[#9E2A2B]">
                       1. Identitas Kanon & Afiliasi (Pilih dari Entitas atau Ketik Baru)
@@ -920,10 +1053,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
                           >
                             <option value="">
-                              -- Pilih Negara / Wilayah ({nationEntities.length}
-                              ) --
+                              -- Pilih Negara / Wilayah (
+                              {nationAndRegionEntities.length}) --
                             </option>
-                            {nationEntities.map((n) => (
+                            {nationAndRegionEntities.map((n) => (
                               <option key={n.id} value={n.title}>
                                 {n.title}
                               </option>
@@ -972,7 +1105,6 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                   {/* 2. Interactive Skill & Artifact / Relic Pickers */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Skills Picker */}
                     <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
                       <div className="text-xs font-semibold text-[#9E2A2B]">
                         2A. Keahlian & Skill yang Dikuasai
@@ -1056,7 +1188,6 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     </div>
 
-                    {/* Owned Artifacts / Relics Picker */}
                     <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
                       <div className="text-xs font-semibold text-[#B5832A]">
                         2B. Senjata, Artefak & Pusaka Milik Tokoh
@@ -1326,48 +1457,265 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
-              {/* Other Categories Structured Fields */}
-              {category !== 'character' && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                  <div className="text-xs font-semibold text-[#9E2A2B]">
-                    Parameter Khusus {sectionMeta.label}
+              {/* =========================================================== */}
+              {/* RACE-SPECIFIC RICH EDITOR (Ancestry & Species Codex)        */}
+              {/* =========================================================== */}
+              {category === 'race' && (
+                <div className="space-y-4">
+                  {/* 1. Origin Classification, Lifespan & Hybrid Homeland Picker */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#2D5A43]">
+                      1. Klasifikasi Spesies, Rentang Usia & Tanah Kelahiran
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Klasifikasi Asal-Usul Ras
+                        </label>
+                        <input
+                          type="text"
+                          list="race-origin-list"
+                          value={draftEntity.attributes.raceOriginClass || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                raceOriginClass: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Sylvan / Subterranean / Manusia..."
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <datalist id="race-origin-list">
+                          {RACE_ORIGIN_FILTERS.filter((f) => f !== 'Semua').map(
+                            (rc) => (
+                              <option key={rc} value={rc} />
+                            )
+                          )}
+                        </datalist>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Rentang Usia (Lifespan)
+                        </label>
+                        <input
+                          type="text"
+                          value={draftEntity.attributes.lifespan || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                lifespan: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Contoh: 450 - 700 Tahun"
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tanah Kelahiran / Habitat Utama
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  homeland: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                          >
+                            <option value="">
+                              -- Pilih Wilayah / Negara (
+                              {nationAndRegionEntities.length}) --
+                            </option>
+                            {nationAndRegionEntities.map((nr) => (
+                              <option key={nr.id} value={nr.title}>
+                                [{CATEGORY_META[nr.category].singular}]{' '}
+                                {nr.title}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            value={draftEntity.attributes.homeland || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  homeland: e.target.value,
+                                },
+                              })
+                            }
+                            placeholder="Atau ketik nama wilayah..."
+                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
-                  {category === 'race' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                      <input
-                        type="text"
-                        placeholder="Rentang Usia (Lifespan)"
-                        value={draftEntity.attributes.lifespan || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              lifespan: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Tanah Kelahiran / Habitat"
-                        value={draftEntity.attributes.homeland || ''}
-                        onChange={(e) =>
-                          setDraftEntity({
-                            ...draftEntity,
-                            attributes: {
-                              ...draftEntity.attributes,
-                              homeland: e.target.value,
-                            },
-                          })
-                        }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Ciri Fisik & Kemampuan Bawaan"
+                  {/* 2. Sub-Races / Bloodlines & Signature Skills Pickers */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Sub-Races Picker */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#2D5A43]">
+                        2A. Cabang Sub-Ras / Garis Keturunan Darah
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.subRaces || []).map((sr) => (
+                          <span
+                            key={sr}
+                            className="px-2.5 py-1 rounded bg-[#2D5A43] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                          >
+                            {sr}
+                            <button
+                              type="button"
+                              onClick={() =>
+                                toggleDraftArrayItem('subRaces', sr)
+                              }
+                              className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customSubRaceInput}
+                          onChange={(e) =>
+                            setCustomSubRaceInput(e.target.value)
+                          }
+                          placeholder="Contoh: Aelfir Kanopi Perak..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customSubRaceInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'subRaces',
+                              customSubRaceInput
+                            );
+                            setCustomSubRaceInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah Sub-Ras
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Signature Skills Picker */}
+                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                        2B. Teknik / Skill Khas Warisan Ras
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.signatureSkills || []).map(
+                          (sk) => (
+                            <span
+                              key={sk}
+                              className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-xs font-medium flex items-center gap-1.5"
+                            >
+                              {sk}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  toggleDraftArrayItem('signatureSkills', sk)
+                                }
+                                className="text-[#E6D5B8] hover:text-white cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        <span className="text-[11px] text-[#695A47]">
+                          Pilih dari Tab Skill:
+                        </span>
+                        {skillEntities.map((skEnt) => {
+                          const active = (
+                            draftEntity.attributes.signatureSkills || []
+                          ).includes(skEnt.title);
+                          return (
+                            <button
+                              key={skEnt.id}
+                              type="button"
+                              onClick={() =>
+                                toggleDraftArrayItem(
+                                  'signatureSkills',
+                                  skEnt.title
+                                )
+                              }
+                              className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
+                                active
+                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
+                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                              }`}
+                            >
+                              {active ? '✓ ' : '+ '}
+                              {skEnt.title}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="text"
+                          value={customRaceSkillInput}
+                          onChange={(e) =>
+                            setCustomRaceSkillInput(e.target.value)
+                          }
+                          placeholder="Ketik teknik khas lain..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!customRaceSkillInput.trim()) return;
+                            toggleDraftArrayItem(
+                              'signatureSkills',
+                              customRaceSkillInput
+                            );
+                            setCustomRaceSkillInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                        >
+                          + Tambah
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3. Biology, Physical Traits, Innate Abilities & Racial Weakness */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#2D5A43]">
+                      3. Anatomi Fisik, Bakat Bawaan & Kelemahan Biologis Ras
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Ciri Anatomi & Fisik Khas (Traits)
+                      </label>
+                      <textarea
+                        rows={2}
                         value={draftEntity.attributes.traits || ''}
                         onChange={(e) =>
                           setDraftEntity({
@@ -1378,10 +1726,135 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             },
                           })
                         }
-                        className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        placeholder="Ciri mata, telinga, perawakan, atau penanda biologis..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
                       />
                     </div>
-                  )}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Bakat Magis & Kemampuan Bawaan (Innate Abilities)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.innateAbilities || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                innateAbilities: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Keunggulan alami, pancaindra khusus, atau afinitas elemen..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Kelemahan Biologis / Pantangan Rasial (Racial Weakness)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.racialWeakness || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                racialWeakness: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Kerentanan terhadap elemen tertentu, kutukan darah, atau batasan fisik..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4. Language & Naming Conventions, Culture/Traditions & Inter-Race Relations */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                    <div className="text-xs font-semibold text-[#B5832A]">
+                      4. Bahasa, Pola Nama Khas (Naming Conventions), Budaya & Diplomasi
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Bahasa, Aksara & Pola Penamaan Tokoh (Naming Conventions)
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.languageAndNaming || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              languageAndNaming: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Nama bahasa, bentuk aksara, dan contoh format nama depan/marga khas ras ini..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Struktur Sosial, Tradisi & Tabu Budaya
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={
+                            draftEntity.attributes.cultureAndTraditions || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                cultureAndTraditions: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Adat istiadat, ritual sakral, dan pantangan sosial..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Pandangan & Hubungan dengan Ras Lain
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={
+                            draftEntity.attributes.interRaceRelations || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                interRaceRelations: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Bangsa mana yang menjadi sekutu atau rival sejarah mereka..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Other Categories Structured Fields */}
+              {category !== 'character' && category !== 'race' && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
+                  <div className="text-xs font-semibold text-[#9E2A2B]">
+                    Parameter Khusus {sectionMeta.label}
+                  </div>
 
                   {category === 'faction' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1814,7 +2287,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
                   <label className="text-xs font-semibold text-[#695A47]">
-                    Biografi & Catatan Lore Lengkap (Gunakan [[Nama Entitas]] untuk Cross-Link otomatis)
+                    Catatan Sejarah & Lore Lengkap (Gunakan [[Nama Entitas]] untuk Cross-Link otomatis)
                   </label>
                   <div className="flex items-center gap-1 flex-wrap">
                     <span className="text-[11px] text-[#695A47]">
@@ -1965,7 +2438,6 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
                   </div>
 
-                  {/* If character has no portrait image, still display Appearance prominently */}
                   {category === 'character' &&
                     !activeEntity.imageUrl &&
                     activeAttrs.appearance && (
@@ -1981,7 +2453,6 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {Object.entries(activeAttrs)
                       .filter(([key, val]) => {
-                        // Exclude fields that have their own dedicated visual sections
                         if (
                           [
                             'signatureQuote',
@@ -1994,6 +2465,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'arcEndgame',
                             'knownSkills',
                             'ownedArtifacts',
+                            'innateAbilities',
+                            'racialWeakness',
+                            'languageAndNaming',
+                            'cultureAndTraditions',
+                            'interRaceRelations',
+                            'subRaces',
+                            'signatureSkills',
                           ].includes(key)
                         ) {
                           return false;
@@ -2011,9 +2489,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           age: 'Usia',
                           status: 'Status Kanon',
                           powerTier: 'Tingkat Kekuatan',
+                          raceOriginClass: 'Klasifikasi Spesies',
                           lifespan: 'Rentang Usia',
-                          traits: 'Ciri Khas',
-                          homeland: 'Tanah Kelahiran',
+                          traits: 'Anatomi & Ciri Fisik',
+                          homeland: 'Tanah Kelahiran / Habitat',
                           factionType: 'Bentuk Organisasi',
                           leader: 'Pemimpin',
                           headquarters: 'Markas Utama',
@@ -2047,14 +2526,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           magicalProperties: 'Khasiat / Efek Arcane',
                         };
 
-                        // Check if this attribute value matches a World Bible entity for 1-click navigation
                         const preferredCat: LoreCategory | undefined =
                           key === 'raceName'
                             ? 'race'
                             : key === 'factionName'
                             ? 'faction'
-                            : key === 'originNation' || key === 'parentNation'
-                            ? 'nation'
+                            : key === 'originNation' ||
+                              key === 'parentNation' ||
+                              key === 'homeland'
+                            ? 'region'
                             : key === 'parentPowerSystem'
                             ? 'power_system'
                             : undefined;
@@ -2067,7 +2547,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         return (
                           <div
                             key={key}
-                            className="px-3.5 py-2.5 rounded-lg bg-[#F6F1E6]/75 border border-[#D8CBB3]/85"
+                            className={`px-3.5 py-2.5 rounded-lg bg-[#F6F1E6]/75 border border-[#D8CBB3]/85 ${
+                              key === 'traits' ? 'sm:col-span-2' : ''
+                            }`}
                           >
                             <div className="text-[11px] text-[#695A47]">
                               {labelMap[key] || key}
@@ -2082,7 +2564,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
                               </button>
                             ) : (
-                              <div className="text-xs font-semibold text-[#231C14] mt-0.5">
+                              <div className="text-xs font-semibold text-[#231C14] mt-0.5 leading-relaxed">
                                 {Array.isArray(val)
                                   ? val.join(' · ')
                                   : String(val)}
@@ -2167,6 +2649,65 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         </div>
                       </div>
                     )}
+
+                  {/* Race Sub-Races & Signature Skills Interactive Cards */}
+                  {category === 'race' &&
+                    ((activeAttrs.subRaces &&
+                      activeAttrs.subRaces.length > 0) ||
+                      (activeAttrs.signatureSkills &&
+                        activeAttrs.signatureSkills.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5" />
+                            <span>Cabang Sub-Ras & Garis Keturunan</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.subRaces || []).map((sr) => (
+                              <span
+                                key={sr}
+                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/35 text-xs font-semibold text-[#231C14]"
+                              >
+                                {sr}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <Swords className="w-3.5 h-3.5" />
+                            <span>Teknik & Skill Khas Ras</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(activeAttrs.signatureSkills || []).map((sk) => {
+                              const matchedSkill = findMatchingEntityByName(
+                                sk,
+                                'skill'
+                              );
+                              return matchedSkill ? (
+                                <button
+                                  key={sk}
+                                  type="button"
+                                  onClick={() => jumpToEntity(matchedSkill.id)}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/40 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                >
+                                  <span>{sk}</span>
+                                  <ArrowUpRight className="w-3 h-3" />
+                                </button>
+                              ) : (
+                                <span
+                                  key={sk}
+                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                >
+                                  {sk}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                 </div>
               </div>
 
@@ -2242,11 +2783,116 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
+              {/* ============================================================= */}
+              {/* RACE BIOLOGY (INNATE ABILITIES VS WEAKNESS) & CULTURE/NAMING  */}
+              {/* ============================================================= */}
+              {category === 'race' &&
+                (activeAttrs.innateAbilities ||
+                  activeAttrs.racialWeakness ||
+                  activeAttrs.languageAndNaming ||
+                  activeAttrs.cultureAndTraditions ||
+                  activeAttrs.interRaceRelations) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#2D5A43]">
+                      <Globe className="w-4 h-4" />
+                      <span>
+                        Biologi Spesies, Bahasa & Antropologi Budaya Ras
+                      </span>
+                    </div>
+
+                    {/* Innate Abilities vs Racial Weakness */}
+                    {(activeAttrs.innateAbilities ||
+                      activeAttrs.racialWeakness) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>
+                              Bakat Magis & Kemampuan Bawaan (Innate Abilities)
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#231C14] leading-relaxed">
+                            {activeAttrs.innateAbilities || 'Belum diisi.'}
+                          </p>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Kelemahan Biologis & Pantangan Rasial (Weakness)
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#231C14] leading-relaxed">
+                            {activeAttrs.racialWeakness || 'Belum diisi.'}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Language & Naming Conventions */}
+                    {activeAttrs.languageAndNaming && (
+                      <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                        <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                          <Languages className="w-3.5 h-3.5" />
+                          <span>
+                            Bahasa, Aksara & Pola Penamaan Tokoh (Naming Conventions)
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.languageAndNaming}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Culture & Inter-Race Relations */}
+                    {(activeAttrs.cultureAndTraditions ||
+                      activeAttrs.interRaceRelations) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#231C14]">
+                            Struktur Sosial, Kepercayaan & Tradisi Adat
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.cultureAndTraditions ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#264653]">
+                            Hubungan Diplomatik dengan Bangsa / Ras Lain
+                          </div>
+                          <div className="text-xs text-[#695A47] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.interRaceRelations || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
               <div className="pt-4 border-t border-[#D8CBB3]">
                 <div className="flex items-center gap-2 text-xs font-semibold text-[#695A47] mb-3">
                   <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
-                  <span>Biografi & Catatan Manuskrip Dunia</span>
+                  <span>Arsip Sejarah & Catatan Manuskrip Dunia</span>
                 </div>
                 <div className="p-5 rounded-xl bg-[#F6F1E6]/60 border border-[#D8CBB3]">
                   <WikiTextRenderer
@@ -2256,6 +2902,80 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   />
                 </div>
               </div>
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF CHARACTERS BELONGING TO THIS RACE         */}
+              {/* ============================================================= */}
+              {category === 'race' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                      <Users className="w-4 h-4 text-[#2D5A43]" />
+                      <span>
+                        Tokoh Tercatat dari Ras {activeEntity.title} (
+                        {charactersOfActiveRace.length})
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleCreateCharacterFromRace(activeEntity)}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                      + Buat Karakter dari Ras Ini
+                    </button>
+                  </div>
+
+                  {charactersOfActiveRace.length === 0 ? (
+                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      Belum ada tokoh di tab <strong>Character</strong> yang
+                      tercatat berasal dari ras ini. Klik{' '}
+                      <strong>+ Buat Karakter dari Ras Ini</strong> untuk
+                      membuat tokoh baru secara instan.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {charactersOfActiveRace.map((char) => {
+                        const cAttrs = getEnrichedAttributes(char);
+                        return (
+                          <button
+                            key={char.id}
+                            type="button"
+                            onClick={() => jumpToEntity(char.id)}
+                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-start gap-3 cursor-pointer"
+                          >
+                            {char.imageUrl ? (
+                              <img
+                                src={char.imageUrl}
+                                alt={char.title}
+                                referrerPolicy="no-referrer"
+                                className="w-12 h-12 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                <User className="w-5 h-5 text-[#9E2A2B]" />
+                              </div>
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <div className="text-[11px] font-semibold text-[#9E2A2B] truncate">
+                                {cAttrs.role || 'Tokoh'} ·{' '}
+                                {cAttrs.status || 'Hidup'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <span className="truncate">{char.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <div className="text-[11px] text-[#695A47] truncate">
+                                {cAttrs.powerTier || char.subtitle}
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* ============================================================= */}
               {/* INLINE CHARACTER / ENTITY RELATIONSHIPS MATRIX                */}

@@ -95,6 +95,18 @@ export default function App() {
       if (saved) {
         const parsed = JSON.parse(saved) as WorldProject;
         if (parsed && Array.isArray(parsed.entities) && parsed.mapData) {
+          if (parsed.id === STARTER_WORLD_PROJECT.id) {
+            const existingIds = new Set(parsed.entities.map((e) => e.id));
+            const missingStarterEntities = STARTER_WORLD_PROJECT.entities.filter(
+              (e) => !existingIds.has(e.id)
+            );
+            if (missingStarterEntities.length > 0) {
+              return {
+                ...parsed,
+                entities: [...parsed.entities, ...missingStarterEntities],
+              };
+            }
+          }
           return parsed;
         }
       }

@@ -1,42 +1,39 @@
-# Rencana Pembaruan Tab Character (Character Dossier & Arc Studio)
+# Rencana Pembaruan Tab Ras (Ancestry & Species Codex)
 
-Pembaruan ini menyulap tab **Character** menjadi studio perancangan tokoh fiksi (*Character Bible*) yang lengkap, terstruktur, dan terhubung langsung dengan entitas Ras, Kelompok, Negara, Skill, Pusaka, serta Peta Relasi.
-
----
-
-## 1. Anatomi Psikologi, Kutipan Khas, Penampilan & *Character Arc*
-Menambahkan atribut khusus karakter pada `LoreAttributes` (`src/types/world.ts`) dan menampilkannya secara elegan di lembar profil karakter:
-- **Kutipan Khas (*Signature Quote*) & Gaya Bicara (*Voice/Mannerism*)**: Ditampilkan sebagai blok epigrafi karakter di bagian atas profil tokoh.
-- **Ciri Fisik & Penampilan (*Appearance*)**: Postur, ciri mata/rambut, pakaian khas, atau bekas luka/tanda sihir.
-- **Psikologi & Konflik Batin**:
-  - **Motivasi / Tujuan Utama (*Desire & Goal*)**: Apa yang paling ingin dicapai tokoh ini.
-  - **Ketakutan / Kelemahan Fatal (*Fatal Flaw / Internal Conflict*)**: Kerentanan psikologis atau fisik yang menghambatnya.
-- **Busur Perkembangan Tokoh (*Character Arc* 3 Babak)**:
-  - **Fase Awal (*Starting State*)**: Jati diri dan keyakinan tokoh di awal cerita.
-  - **Titik Balik / Krisis (*Crucible / Turning Point*)**: Ujian terbesar yang mengguncang prinsipnya.
-  - **Transformasi Akhir (*Resolution / Endgame*)**: Akan menjadi sosok seperti apa tokoh ini di akhir cerita.
+Pembaruan ini menyempurnakan tab **Ras** menjadi ensiklopedia bangsa & spesies (*Ancestry & Species Codex*) yang terhubung secara dua arah dengan tab **Character**, **Wilayah**, **Negara**, dan **Skill**.
 
 ---
 
-## 2. Pemilih Entitas Terhubung (Ras, Kelompok, Negara, Skill & Pusaka)
-- **Input Hibrida (Pilih dari World Bible atau Ketik Baru)**:
-  - Saat menyunting **Ras**, **Kelompok/Faksi**, dan **Negara Asal**, penulis dapat memilih langsung dari daftar entitas Ras/Kelompok/Negara yang sudah ada di *World Bible* melalui *datalist/selector* cepat atau mengetik nama baru.
-- **Daftar Skill & Artefak/Pusaka Milik Tokoh (`knownSkills` & `ownedArtifacts`)**:
-  - Menyediakan pemilih multi-item di mode sunting untuk menambahkan/menghapus **Skill / Teknik** (dari tab *Skill*) dan **Artefak / Senjata Pusaka** (dari tab *Artefak & Biota*).
-  - Di mode baca, setiap atribut Ras, Kelompok, Negara, Skill, dan Pusaka yang cocok dengan entitas di *World Bible* dapat **diklik langsung** untuk melompat ke lembar lore entitas tersebut.
+## 1. Biologi, Klasifikasi Asal-Usul, Bakat Bawaan & Kelemahan Rasial
+Menambahkan atribut khusus ras pada `LoreAttributes` (`src/types/world.ts`) dan menampilkannya secara terstruktur di lembar profil Ras:
+- **Klasifikasi Asal-Usul (`raceOriginClass`)**: Kategorisasi spesies seperti *Bangsa Manusia (Aethel-Born)*, *Bangsa Hutan / Fae (Sylvan)*, *Bangsa Bawah Tanah (Subterranean)*, *Drakonik / Astral*, atau *Hibrida / Kuno*.
+- **Anatomi & Ciri Fisik (`traits`)** serta **Rentang Usia (`lifespan`)**.
+- **Bakat Magis & Kemampuan Bawaan (`innateAbilities`)** vs **Kelemahan Biologis / Pantangan Rasial (`racialWeakness`)**: Ditampilkan berdampingan agar kekuatan dan kerentanan ras terlihat seimbang.
 
 ---
 
-## 3. Panel Ikatan Relasi & Konflik Langsung di Lembar Karakter
-- **Kartu Jaringan Hubungan Tokoh**:
-  - Menampilkan semua relasi yang melibatkan tokoh aktif (misalnya *Rival*, *Sekutu*, *Guru/Murid*, *Keluarga*, *Anggota Faksi*) lengkap dengan catatan dinamika hubungannya dan tautan cepat ke tokoh/faksi lawan bicara.
-- **Tambah Relasi Cepat Tanpa Pindah Tab**:
-  - Menyediakan form ringkas **"+ Tambah Relasi Tokoh"** langsung di dalam lembar karakter untuk menghubungkan tokoh ini dengan karakter atau faksi lain (otomatis tersimpan ke `project.relationships` dan tersinkronisasi dengan tab *Peta Relasi*).
+## 2. Budaya, Bahasa, Pola Penamaan (*Naming Conventions*) & Tradisi
+- **Bahasa, Aksara & Pola Nama Khas (`languageAndNaming`)**: Panduan bunyi bahasa, contoh nama depan, dan marga/gelar khas ras tersebut agar penulis selalu konsisten saat menamai tokoh baru.
+- **Struktur Sosial, Kepercayaan & Tabu Budaya (`cultureAndTraditions`)**: Sistem kepemimpinan, nilai luhur, ritual, dan pantangan adat.
+- **Hubungan Diplomatik Antar-Ras (`interRaceRelations`)**: Bagaimana ras ini memandang bangsa lain (sekutu alami, rival sejarah, atau terisolasi).
 
 ---
 
-## 4. Direktori Karakter Kiri dengan Filter Peran, Status & Potret Mini
-- **Filter Cepat Direktori Karakter**:
-  - Menambahkan filter berdasarkan **Peran Cerita** (*Semua*, *Protagonis*, *Deuteragonis*, *Antagonis*, *Mentor/Pendukung*) dan **Status** (*Hidup*, *Diasingkan*, *Gugur*).
-- **Kartu Daftar Berpotret Mini & Editor URL/Preset Potret**:
-  - Menampilkan *thumbnail* potret karakter, peran, tingkatan kekuatan (*power tier*), serta faksi pada kartu di daftar sebelah kiri, dan menyediakan input/pilihan cepat gambar potret di dalam mode sunting karakter.
+## 3. Varian Sub-Ras / Garis Keturunan & Pemilih Hibrida Tanah Kelahiran
+- **Cabang Sub-Ras / Garis Keturunan Darah (`subRaces: string[]`)**:
+  - Menyediakan daftar interaktif untuk mencatat sub-ras atau klan keturunan (contoh: *Sylvan Kanopi Perak*, *Sylvan Rawa Abu*, atau *Dvergr Kubah Besi* vs *Dvergr Permukaan*).
+- **Pemilih Hibrida Tanah Kelahiran (`homeland`) & Skill Khas (`signatureSkills`)**:
+  - Di mode sunting, penulis dapat memilih **Tanah Kelahiran / Habitat** langsung dari daftar entitas **Wilayah** atau **Negara** yang ada di *World Bible* (atau mengetik baru), serta memilih **Teknik / Skill Khas Ras**.
+  - Di mode baca, mengeklik *Tanah Kelahiran* atau *Skill Khas* akan langsung membuka lembar Wilayah/Negara/Skill tersebut.
+
+---
+
+## 4. Daftar Otomatis Tokoh dari Ras Ini & Tombol 1-Klik "+ Buat Karakter"
+- **Sensus Karakter dari Ras Ini**:
+  - Di bagian bawah lembar Ras, sistem secara otomatis mendeteksi dan menampilkan kartu semua **Character** yang memiliki ras tersebut (beserta potret mini, peran, dan *power tier*-nya).
+  - Dilengkapi tombol **"+ Buat Karakter Baru dari Ras Ini"** yang langsung membuat draf karakter baru dengan atribut `raceName` dan `originNation` terisi otomatis lalu membuka editor di tab **Character**.
+
+---
+
+## 5. Filter Klasifikasi Asal-Usul Ras di Direktori Kiri
+- Menambahkan tombol filter klasifikasi di daftar direktori sebelah kiri (*Semua*, *Sylvan / Fae*, *Subterranean / Kriya*, *Manusia / Aethel-Born*, *Astral / Kuno*) serta menambahkan entri ras ketiga pada data contoh (`Aethel-Born (Manusia Tinggi)`) agar ketiga ras utama di Benua Aethelia memiliki lembar kanon lengkap.

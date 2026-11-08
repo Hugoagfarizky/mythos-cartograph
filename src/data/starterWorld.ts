@@ -236,9 +236,26 @@ Meskipun berselisih tajam dengan mantan gurunya, [[Archmage Vaelen Thorne]], Ser
       summary: 'Ras berumur panjang penghuni [[Rimba Bayang-Bayang (Shadowwood)]] yang menyimpan sejarah dunia melalui getah pohon kristal.',
       tags: ['Ras Kuno', 'Penjaga Hutan', 'Sensitif Eter'],
       attributes: {
+        raceOriginClass: 'Sylvan / Fae',
         lifespan: '450 - 700 Tahun',
-        traits: 'Iris mata berwarna ambar bercahaya, pendengaran frekuensi eter, kebal terhadap ilusi mental',
+        traits: 'Iris mata berwarna ambar bercahaya, telinga meruncing halus, pendengaran frekuensi eter, langkah tanpa suara di atas dedaunan.',
         homeland: 'Rimba Bayang-Bayang (Shadowwood)',
+        innateAbilities:
+          'Mampu mendengar resonansi memori dari akar pohon Lumin-Oak, bernavigasi menembus kabut ilusi tanpa kompas, serta afinitas alami terhadap Jalur Lunar dan Sidereal.',
+        racialWeakness:
+          'Sangat rentan terhadap polusi abu besi dan panas radiasi Jalur Solar murni; terputus dari tanah hutan terlalu lama membuat regenerasi eter mereka melambat separuhnya.',
+        languageAndNaming:
+          'Bahasa: *Sylva-Lir* (aksara lengkung menyerupai sulur daun). Pola Nama: Nama pendek beraliran vokal lembut diikuti gelar alam tempat lahir (contoh: *Kaelen dari Kabut Perak*, *Liora Akar-Bintang*, *Veylan Embun-Senja*).',
+        cultureAndTraditions:
+          'Dipimpin oleh Majelis Penenun Memori. Ketika seorang Aelfir wafat, kenangan terpentingnya disematkan ke dalam getah kristal Pohon Memori Eldath. Menebang pohon hidup tanpa ritual izin dianggap kejahatan tertinggi.',
+        interRaceRelations:
+          'Bersekutu secara hati-hati dengan [[Ordo Cakrawala Perak]], curiga terhadap ekspansi militer [[Kekaisaran Gondoria]], dan berdagang herbal langka dengan [[Dvergr Besi-Bintang]].',
+        subRaces: [
+          'Aelfir Kanopi Perak (Penjaga Pohon Memori)',
+          'Aelfir Kabut Malam (Pengintai Perbatasan)',
+          'Aelfir Rawa Abu (Klan Terbuang Selatan)',
+        ],
+        signatureSkills: ['Tenunan Gravitasi Bintang'],
       },
       content: `Bangsa Sylvan Aelfir tidak menulis buku sejarah di atas kertas; mereka mengukir ingatan langsung ke dalam serat pohon *Lumin-Oak* di jantung [[Rimba Bayang-Bayang (Shadowwood)]].
 
@@ -253,13 +270,62 @@ Sejak meletusnya [[Konvergensi Gerhana Merah]], populasi mereka menurun drastis 
       summary: 'Bangsa kriya logam penghuni [[Kerajaan Bawah Tanah Nidavellir]] yang memadukan roda gigi kuningan dengan inti energi bintang.',
       tags: ['Penempa Pusaka', 'Insinyur', 'Nidavellir'],
       attributes: {
+        raceOriginClass: 'Subterranean / Kriya',
         lifespan: '250 - 320 Tahun',
-        traits: 'Tulang padat tahan tekanan tinggi, penglihatan termal di kegelapan, ahli metalurgi astral',
+        traits: 'Postur kekar berotot dengan kepadatan tulang dua kali manusia, janggut dikepang cincin perunggu, mata beradaptasi dengan pendaran termal.',
         homeland: 'Kerajaan Bawah Tanah Nidavellir',
+        innateAbilities:
+          'Tahan terhadap suhu tungku ekstrem dan tekanan bawah tanah, memiliki kepekaan magnetik terhadap bijih meteorit serta keahlian mengukir segel mekanis penampung cahaya.',
+        racialWeakness:
+          'Tidak dapat merapal sihir secara langsung dari tubuh tanpa medium alat atau senjata tempaan; rentan mengalami disorientasi vertigo di ruang terbuka yang terlalu luas.',
+        languageAndNaming:
+          'Bahasa: *Khaz-Runa* (aksara geometris bersudut tegas yang dipahat di logam). Pola Nama: Nama satu-dua suku kata keras diikuti nama klan tempaan (contoh: *Thrain Ironstar*, *Borin Brassgear*, *runa Vahl-Forge*).',
+        cultureAndTraditions:
+          'Status sosial ditentukan oleh mahakarya (*Masterwork*) yang pernah ditempa. Sumpah kontrak diukir di atas keping ingot perak dan tidak boleh dilanggar hingga tujuh turunan.',
+        interRaceRelations:
+          'Menuntut pengembalian [[Astrolabe Api Surya]] dari [[Kekaisaran Gondoria]], namun tetap menghormati para cendekiawan [[Ordo Cakrawala Perak]].',
+        subRaces: [
+          'Dvergr Kubah Besi (Klan Penempa Inti)',
+          'Dvergr Cermin Surya (Insinyur Optik & Astrolabe)',
+          'Dvergr Pengelana Permukaan (Pedagang Karavan)',
+        ],
+        signatureSkills: ['Keputusan Tombak Surya'],
       },
       content: `Para Dvergr Besi-Bintang percaya bahwa gunung-gunung di timur Aethelia adalah pecahan meteor raksasa yang jatuh pada awal penciptaan dunia. Mereka adalah pencipta asli dari [[Astrolabe Api Surya]] sebelum artefak tersebut diserahkan sebagai tanda perdamaian kepada [[Kekaisaran Gondoria]] tiga abad silam.
 
 Para tetua Dvergr menuntut pengembalian artefak tersebut karena tungku utama di [[Kerajaan Bawah Tanah Nidavellir]] mulai mendingin.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'race-aethelborn',
+      category: 'race',
+      title: 'Aethel-Born (Manusia Tinggi)',
+      subtitle: 'Pewaris Takhta Pesisir & Penjelajah Cakrawala',
+      summary: 'Bangsa manusia adaptif yang mendominasi [[Kekaisaran Gondoria]] serta pelabuhan-pelabuhan besar di tepi Teluk Naga.',
+      tags: ['Manusia', 'Gondoria', 'Adaptif'],
+      attributes: {
+        raceOriginClass: 'Manusia / Aethel-Born',
+        lifespan: '75 - 110 Tahun (Hingga 140 tahun bagi praktisi Lingkar ke-6)',
+        traits: 'Perawakan bervariasi, daya adaptasi meridian jiwa sangat fleksibel terhadap ketiga jalur Resonansi Astral.',
+        homeland: 'Kekaisaran Gondoria',
+        innateAbilities:
+          'Fleksibilitas meridian eter yang memungkinkan mereka mempelajari Jalur Solar, Lunar, maupun Sidereal lebih cepat dibanding ras berumur panjang.',
+        racialWeakness:
+          'Kapasitas fisik tubuh yang lebih rapuh membuat mereka paling cepat terserang kutukan *Kristalisasi Organ* bila memaksakan merapal teknik Lingkar ke-6.',
+        languageAndNaming:
+          'Bahasa: *Aethelian Klasik* (turunan bahasa kekaisaran kuno). Pola Nama: Nama diri bernuansa Latin/Klasik diikuti nama wangsa atau tempat asal (contoh: *Seraphina Valorian*, *Vaelen Thorne*, *Cassian dari Solis*).',
+        cultureAndTraditions:
+          'Sangat menghargai warisan sejarah, pencatatan kartografi, dan ketertiban hukum. Masyarakatnya terbagi antara kaum bangsawan militer Solis Prime dan serikat cendekiawan merdeka.',
+        interRaceRelations:
+          'Mendominasi perdagangan maritim, namun ambisi penyatuan paksa dari takhta Gondoria memicu gesekan dengan bangsa [[Sylvan Aelfir]] dan [[Dvergr Besi-Bintang]].',
+        subRaces: [
+          'Aethel-Born Darah Surya (Bangsawan Gondoria)',
+          'Aethel-Born Pesisir Teluk Naga (Pelaut & Saudagar)',
+          'Aethel-Born Utara (Penjaga Perbatasan Puncak Wyvern)',
+        ],
+        signatureSkills: ['Keputusan Tombak Surya', 'Tenunan Gravitasi Bintang'],
+      },
+      content: `Meskipun memiliki rentang usia paling singkat di antara penghuni Benua Aethelia, bangsa **Aethel-Born** dikenal karena ambisi intelektual dan militer mereka yang tak pernah padam. Baik [[Archmage Vaelen Thorne]] maupun [[Empress Seraphina Valorian]] berasal dari ras ini, mewakili dua sisi ekstrem dari watak manusia Aethelia: kebijaksanaan penjaga ilmu vs ambisi penakluk.`,
       updatedAt: '2026-11-08',
     },
 

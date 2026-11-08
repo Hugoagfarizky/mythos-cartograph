@@ -49,9 +49,17 @@ export interface LoreAttributes {
   arcCrisis?: string;
   arcEndgame?: string;
   // Race specific
+  raceOriginClass?: string;
   lifespan?: string;
   traits?: string;
   homeland?: string;
+  innateAbilities?: string;
+  racialWeakness?: string;
+  languageAndNaming?: string;
+  cultureAndTraditions?: string;
+  interRaceRelations?: string;
+  subRaces?: string[];
+  signatureSkills?: string[];
   // Faction / Group specific
   factionType?: string;
   leader?: string;

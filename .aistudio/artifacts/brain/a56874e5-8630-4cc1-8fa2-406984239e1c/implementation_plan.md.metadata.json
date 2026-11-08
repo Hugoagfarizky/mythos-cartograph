@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana pembaruan tab Character (Character Dossier & Arc Studio): (1) Anatomi Psikologi (Motivasi/Goal, Kelemahan Fatal/Flaw, Rahasia) & Busur Perkembangan Karakter (Awal, Krisis, Akhir), (2) Kutipan Khas (Signature Quote), Gaya Bicara, & Ciri Fisik/Penampilan, (3) Pemilih Relasional Interaktif untuk Ras, Kelompok, Negara, Skill yang dikuasai, dan Artefak/Pusaka milik tokoh (pilih dari entitas yang ada atau ketik baru, dan bisa diklik untuk pindah tab), (4) Panel Ikatan Relasi & Konflik Antar-Tokoh langsung di lembar karakter (lihat & tambah relasi baru), serta (5) Direktori Karakter Kiri dengan Filter Peran/Status dan Thumbnail Potret Mini.",
-  "updatedAt":  "2026-11-08T18:45:11.096081859Z",
+  "summary":  "Rencana pembaruan tab Ras (Ancestry & Species Codex): (1) Biologi, Klasifikasi Asal-Usul, Bakat Magis Bawaan vs Kelemahan/Pantangan Rasial, (2) Antropologi Budaya, Bahasa & Pola Penamaan Khas (Naming Conventions), serta Tradisi/Tabu, (3) Varian Sub-Ras / Garis Keturunan Darah & Pemilih Hibrida Tanah Kelahiran/Skill Khas, (4) Direktori Tokoh dari Ras Ini secara otomatis lengkap dengan tombol 1-klik \"+ Buat Karakter dari Ras Ini\", dan (5) Filter Klasifikasi Asal-Usul Ras di daftar sebelah kiri.",
+  "updatedAt":  "2026-11-08T18:54:24.756945102Z",
   "requestFeedback":  true,
   "userFacing":  true
 }
