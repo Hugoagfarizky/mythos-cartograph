@@ -1,12 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  BookOpen,
+  Calendar,
   CheckCircle2,
   Compass,
+  Crown,
+  Flame,
+  GitBranch,
+  Globe,
+  History,
   Loader2,
+  MapPin,
   RotateCcw,
   Settings,
+  Shield,
+  Sparkles,
+  Swords,
   Upload,
+  Users,
   X,
+  Zap,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
 import {
@@ -30,13 +43,58 @@ import {
 
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
 
-type ActiveModule =
-  | 'codex'
+export type WorkspaceTab =
   | 'map'
+  | 'character'
+  | 'race'
+  | 'faction'
+  | 'nation'
+  | 'region'
+  | 'power_system'
+  | 'skill'
+  | 'history'
   | 'timeline'
+  | 'encyclopedia'
   | 'graph'
   | 'outliner'
   | 'settings';
+
+const LORE_CATEGORY_TABS: LoreCategory[] = [
+  'character',
+  'race',
+  'faction',
+  'nation',
+  'region',
+  'power_system',
+  'skill',
+  'history',
+  'encyclopedia',
+];
+
+function isLoreCategoryTab(tab: WorkspaceTab): tab is LoreCategory {
+  return LORE_CATEGORY_TABS.includes(tab as LoreCategory);
+}
+
+const SECTION_TABS: Array<{
+  id: WorkspaceTab;
+  label: string;
+  group: 'core' | 'world' | 'story';
+}> = [
+  { id: 'map', label: 'Map Dunia', group: 'core' },
+  { id: 'character', label: 'Character', group: 'core' },
+  { id: 'race', label: 'Ras', group: 'core' },
+  { id: 'faction', label: 'Kelompok', group: 'core' },
+  { id: 'power_system', label: 'Power System', group: 'core' },
+  { id: 'skill', label: 'Skill', group: 'core' },
+  { id: 'nation', label: 'Negara', group: 'world' },
+  { id: 'region', label: 'Wilayah', group: 'world' },
+  { id: 'history', label: 'Sejarah', group: 'world' },
+  { id: 'timeline', label: 'Timeline', group: 'world' },
+  { id: 'encyclopedia', label: 'Artefak & Biota', group: 'world' },
+  { id: 'graph', label: 'Peta Relasi', group: 'story' },
+  { id: 'outliner', label: 'Alur Bab', group: 'story' },
+  { id: 'settings', label: 'Pengaturan Dunia', group: 'story' },
+];
 
 interface BrainstormIdea {
   title: string;
@@ -62,8 +120,7 @@ export default function App() {
     return STARTER_WORLD_PROJECT;
   });
 
-  const [activeModule, setActiveModule] = useState<ActiveModule>('codex');
-  const [activeCategory, setActiveCategory] = useState<LoreCategory | 'all'>('all');
+  const [activeTab, setActiveTab] = useState<WorkspaceTab>('character');
   const [selectedEntityId, setSelectedEntityId] = useState<string>(
     project.entities[0]?.id || ''
   );
@@ -105,6 +162,25 @@ export default function App() {
     }, 3200);
   };
 
+  const handleSwitchTab = (tab: WorkspaceTab) => {
+    setActiveTab(tab);
+    if (isLoreCategoryTab(tab)) {
+      const firstInCat = project.entities.find((e) => e.category === tab);
+      if (firstInCat) {
+        setSelectedEntityId(firstInCat.id);
+      }
+    }
+  };
+
+  // Navigate to any entity and automatically switch to that entity's dedicated section tab!
+  const handleNavigateToEntity = (entityId: string) => {
+    const target = project.entities.find((e) => e.id === entityId);
+    setSelectedEntityId(entityId);
+    if (target) {
+      setActiveTab(target.category);
+    }
+  };
+
   const handleSaveEntity = (entity: LoreEntity) => {
     setProject((prev) => {
       const exists = prev.entities.some((e) => e.id === entity.id);
@@ -113,7 +189,8 @@ export default function App() {
         : [entity, ...prev.entities];
       return { ...prev, entities: nextEntities };
     });
-    showToast(`Entri "${entity.title}" berhasil disimpan ke World Bible.`);
+    setActiveTab(entity.category);
+    showToast(`Entri "${entity.title}" berhasil disimpan ke tab ${CATEGORY_META[entity.category].singular}.`);
   };
 
   const handleDeleteEntity = (entityId: string) => {
@@ -121,7 +198,8 @@ export default function App() {
     setProject((prev) => {
       const remaining = prev.entities.filter((e) => e.id !== entityId);
       if (selectedEntityId === entityId && remaining.length > 0) {
-        setSelectedEntityId(remaining[0].id);
+        const sameCat = remaining.find((e) => e.category === target?.category);
+        setSelectedEntityId(sameCat?.id || remaining[0].id);
       }
       return {
         ...prev,
@@ -134,11 +212,6 @@ export default function App() {
     if (target) {
       showToast(`Entri "${target.title}" telah dihapus.`);
     }
-  };
-
-  const handleNavigateToEntity = (entityId: string) => {
-    setSelectedEntityId(entityId);
-    setActiveModule('codex');
   };
 
   const handleExportWorldJson = () => {
@@ -244,7 +317,7 @@ export default function App() {
 
     setProject(blankWorld);
     setSelectedEntityId(starterEntity.id);
-    setActiveModule('codex');
+    setActiveTab('character');
     showToast('Proyek World Bible kosong berhasil dibuat.');
   };
 
@@ -351,7 +424,18 @@ export default function App() {
     handleSaveEntity(newEnt);
     setSelectedEntityId(newEnt.id);
     setBrainstormOpen(false);
-    setActiveModule('codex');
+    setActiveTab(brainstormCategory);
+  };
+
+  const getTabCount = (tabId: WorkspaceTab): number | null => {
+    if (isLoreCategoryTab(tabId)) {
+      return project.entities.filter((e) => e.category === tabId).length;
+    }
+    if (tabId === 'map') return project.mapData.stamps.length;
+    if (tabId === 'timeline') return project.timeline.length;
+    if (tabId === 'graph') return project.relationships.length;
+    if (tabId === 'outliner') return project.chapters.length;
+    return null;
   };
 
   return (
@@ -363,7 +447,7 @@ export default function App() {
           href="#top"
           onClick={(e) => {
             e.preventDefault();
-            setActiveModule('codex');
+            handleSwitchTab('character');
           }}
           className="font-cartography text-xl font-bold tracking-tight text-[#231C14] whitespace-nowrap shrink-0"
         >
@@ -374,58 +458,58 @@ export default function App() {
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#695A47]">
           <button
             type="button"
-            onClick={() => setActiveModule('codex')}
+            onClick={() => handleSwitchTab('map')}
             className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeModule === 'codex'
+              activeTab === 'map'
                 ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
                 : 'hover:text-[#231C14]'
             }`}
           >
-            World Bible
+            Map Dunia
           </button>
           <button
             type="button"
-            onClick={() => setActiveModule('map')}
+            onClick={() => handleSwitchTab('character')}
             className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeModule === 'map'
+              activeTab === 'character'
                 ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
                 : 'hover:text-[#231C14]'
             }`}
           >
-            Peta Dunia
+            Character
           </button>
           <button
             type="button"
-            onClick={() => setActiveModule('timeline')}
+            onClick={() => handleSwitchTab('race')}
             className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeModule === 'timeline'
+              activeTab === 'race'
                 ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
                 : 'hover:text-[#231C14]'
             }`}
           >
-            Timeline
+            Ras
           </button>
           <button
             type="button"
-            onClick={() => setActiveModule('graph')}
+            onClick={() => handleSwitchTab('faction')}
             className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeModule === 'graph'
+              activeTab === 'faction'
                 ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
                 : 'hover:text-[#231C14]'
             }`}
           >
-            Peta Relasi
+            Kelompok
           </button>
           <button
             type="button"
-            onClick={() => setActiveModule('outliner')}
+            onClick={() => handleSwitchTab('power_system')}
             className={`transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeModule === 'outliner'
+              activeTab === 'power_system'
                 ? 'text-[#9E2A2B] font-semibold underline decoration-[#9E2A2B] underline-offset-8'
                 : 'hover:text-[#231C14]'
             }`}
           >
-            Alur Bab
+            Power System
           </button>
         </nav>
 
@@ -443,7 +527,7 @@ export default function App() {
 
       {/* Main Content Container (1440px baseline) */}
       <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
-        {/* Split-Screen World Overview Banner + Full-Width 4-Column Metric Row Below */}
+        {/* Split-Screen World Overview Banner */}
         <section className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch bg-[#FBF8F1] border border-[#D8CBB3] rounded-2xl p-6">
             {/* Left Column: World Typography & Studio Controls */}
@@ -460,28 +544,28 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Studio Mode & File Toolbar */}
+              {/* Studio File & Quick Actions Toolbar */}
               <div className="flex flex-wrap items-center gap-2.5 pt-2">
                 <button
                   type="button"
-                  onClick={() => setActiveModule('map')}
+                  onClick={() => handleSwitchTab('map')}
                   className="px-4 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 >
                   <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
-                  Buka Kanvas Peta Abad Pertengahan
+                  Buka Kanvas Map Abad Pertengahan
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => setActiveModule('settings')}
+                  onClick={() => handleSwitchTab('settings')}
                   className={`px-3.5 py-2 text-xs font-semibold rounded-lg border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                    activeModule === 'settings'
+                    activeTab === 'settings'
                       ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
                       : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
                   }`}
                 >
                   <Settings className="w-3.5 h-3.5" />
-                  Pengaturan Dunia & Matriks Kekuatan
+                  Pengaturan Dunia
                 </button>
 
                 <button
@@ -514,7 +598,7 @@ export default function App() {
 
             {/* Right Column: Matching Height Visual Container */}
             <div className="lg:col-span-5">
-              <div className="relative h-56 lg:h-full min-h-[210px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
+              <div className="relative h-56 lg:h-full min-h-[200px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
                 <img
                   src={project.heroBannerUrl}
                   alt={project.worldName}
@@ -535,106 +619,46 @@ export default function App() {
             </div>
           </div>
 
-          {/* Full-Width 4-Column World Bible Metrics Strip Below Hero Split */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <button
-              type="button"
-              onClick={() => setActiveModule('codex')}
-              className="text-left bg-[#FBF8F1] border border-[#D8CBB3] hover:border-[#9E2A2B] rounded-xl p-4 transition-colors cursor-pointer"
-            >
-              <div className="text-xs text-[#695A47]">
-                Entitas World Bible (9 Kategori)
-              </div>
-              <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                {project.entities.length} Entri Kanon
-              </div>
-              <div className="text-[11px] text-[#9E2A2B] mt-1">
-                Karakter · Ras · Negara · Power System · Skill
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveModule('map')}
-              className="text-left bg-[#FBF8F1] border border-[#D8CBB3] hover:border-[#9E2A2B] rounded-xl p-4 transition-colors cursor-pointer"
-            >
-              <div className="text-xs text-[#695A47]">
-                Titik Peta & Label Kartografi
-              </div>
-              <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                {project.mapData.stamps.length} Pin Lokasi
-              </div>
-              <div className="text-[11px] text-[#695A47] mt-1">
-                {project.mapData.regionLabels.length} Label Wilayah · {project.mapData.rivers.length} Aliran Sungai
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveModule('timeline')}
-              className="text-left bg-[#FBF8F1] border border-[#D8CBB3] hover:border-[#9E2A2B] rounded-xl p-4 transition-colors cursor-pointer"
-            >
-              <div className="text-xs text-[#695A47]">
-                Kronik Sejarah & Jaringan Relasi
-              </div>
-              <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                {project.timeline.length} Peristiwa Era
-              </div>
-              <div className="text-[11px] text-[#695A47] mt-1">
-                {project.relationships.length} Ikatan Relasi Karakter & Faksi
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveModule('outliner')}
-              className="text-left bg-[#FBF8F1] border border-[#D8CBB3] hover:border-[#9E2A2B] rounded-xl p-4 transition-colors cursor-pointer"
-            >
-              <div className="text-xs text-[#695A47]">
-                Alur Cerita & Target Naskah
-              </div>
-              <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                {project.chapters.length} Bab Aktif
-              </div>
-              <div className="text-[11px] text-[#695A47] mt-1">
-                Terhubung langsung ke elemen World Bible
-              </div>
-            </button>
+          {/* Dedicated Section Tab Bar — Every World Bible Section has its own tab */}
+          <div className="bg-[#EFE7D6] border border-[#D8CBB3] rounded-xl p-2">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {SECTION_TABS.map((tab) => {
+                const isActive = activeTab === tab.id;
+                const count = getTabCount(tab.id);
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => handleSwitchTab(tab.id)}
+                    className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                      isActive
+                        ? 'bg-[#9E2A2B] text-white shadow-xs'
+                        : 'bg-[#FBF8F1]/80 text-[#231C14] hover:bg-[#FBF8F1] border border-[#D8CBB3]/70'
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                    {count !== null && (
+                      <span
+                        className={`font-mono-tabular text-[11px] px-1.5 py-0.2 rounded ${
+                          isActive
+                            ? 'bg-black/20 text-white'
+                            : 'bg-[#EFE7D6] text-[#695A47]'
+                        }`}
+                      >
+                        {count}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </section>
 
-        {/* Mobile Module Switcher */}
-        <div className="flex md:hidden overflow-x-auto gap-1.5 bg-[#EFE7D6] p-1.5 rounded-xl border border-[#D8CBB3]">
-          {(
-            [
-              ['codex', 'World Bible'],
-              ['map', 'Peta Dunia'],
-              ['timeline', 'Timeline'],
-              ['graph', 'Peta Relasi'],
-              ['outliner', 'Alur Bab'],
-              ['settings', 'Pengaturan Dunia'],
-            ] as const
-          ).map(([mod, lbl]) => (
-            <button
-              key={mod}
-              type="button"
-              onClick={() => setActiveModule(mod)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 ${
-                activeModule === mod
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14]'
-              }`}
-            >
-              {lbl}
-            </button>
-          ))}
-        </div>
-
-        {/* Active Workspace Module */}
-        {activeModule === 'codex' && (
+        {/* Active Dedicated Section Tab Viewport */}
+        {isLoreCategoryTab(activeTab) && (
           <CodexWorkspace
-            activeCategory={activeCategory}
-            onChangeCategory={setActiveCategory}
+            category={activeTab}
             entities={project.entities}
             chapters={project.chapters}
             mapStamps={project.mapData.stamps}
@@ -642,10 +666,10 @@ export default function App() {
             onSelectEntity={setSelectedEntityId}
             onSaveEntity={handleSaveEntity}
             onDeleteEntity={handleDeleteEntity}
-            onOpenMapAtStamp={() => setActiveModule('map')}
+            onOpenMapAtStamp={() => handleSwitchTab('map')}
             onOpenChapter={(chId) => {
               setSelectedChapterId(chId);
-              setActiveModule('outliner');
+              handleSwitchTab('outliner');
             }}
             onRunAuditOnEntity={(ent) =>
               runLoreAudit(
@@ -663,7 +687,7 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'map' && (
+        {activeTab === 'map' && (
           <MedievalMapSandbox
             mapData={project.mapData}
             entities={project.entities}
@@ -674,7 +698,7 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'timeline' && (
+        {activeTab === 'timeline' && (
           <ChronicleTimelineView
             timeline={project.timeline}
             entities={project.entities}
@@ -686,7 +710,7 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'graph' && (
+        {activeTab === 'graph' && (
           <RelationshipGraphView
             entities={project.entities}
             relationships={project.relationships}
@@ -701,7 +725,7 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'outliner' && (
+        {activeTab === 'outliner' && (
           <ChapterOutlinerView
             chapters={project.chapters}
             entities={project.entities}
@@ -721,7 +745,7 @@ export default function App() {
           />
         )}
 
-        {activeModule === 'settings' && (
+        {activeTab === 'settings' && (
           <WorldSettingsAndPowerView
             project={project}
             onUpdateProjectMeta={(patch) =>
@@ -742,7 +766,7 @@ export default function App() {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              onClick={() => setActiveModule('settings')}
+              onClick={() => handleSwitchTab('settings')}
               className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
             >
               Pengaturan Semesta
@@ -970,7 +994,7 @@ export default function App() {
                         onClick={() => handleAdoptBrainstormIdea(idea)}
                         className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] cursor-pointer shrink-0"
                       >
-                        + Tambahkan ke World Bible
+                        + Tambahkan ke Tab {CATEGORY_META[brainstormCategory].singular}
                       </button>
                     </div>
                     <p className="text-xs font-medium text-[#231C14]">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BookOpen,
   Check,
@@ -26,8 +26,7 @@ import {
 } from './WikiTextRenderer';
 
 interface CodexWorkspaceProps {
-  activeCategory: LoreCategory | 'all';
-  onChangeCategory: (cat: LoreCategory | 'all') => void;
+  category: LoreCategory;
   entities: LoreEntity[];
   chapters: ChapterOutline[];
   mapStamps: MapStamp[];
@@ -41,21 +40,8 @@ interface CodexWorkspaceProps {
   onOpenBrainstormModal: (category: LoreCategory) => void;
 }
 
-const ALL_CATEGORIES: LoreCategory[] = [
-  'character',
-  'race',
-  'faction',
-  'nation',
-  'region',
-  'history',
-  'power_system',
-  'skill',
-  'encyclopedia',
-];
-
 export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
-  activeCategory,
-  onChangeCategory,
+  category,
   entities,
   chapters,
   mapStamps,
@@ -73,9 +59,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  const filteredEntities = entities.filter((e) => {
-    const matchesCat = activeCategory === 'all' || e.category === activeCategory;
-    if (!matchesCat) return false;
+  const sectionMeta = CATEGORY_META[category];
+
+  // Reset editing state when switching section tabs
+  useEffect(() => {
+    setIsEditing(false);
+    setDraftEntity(null);
+    setSearchQuery('');
+  }, [category]);
+
+  const sectionEntities = entities.filter((e) => e.category === category);
+
+  const filteredEntities = sectionEntities.filter((e) => {
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -87,9 +82,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   });
 
   const activeEntity =
-    entities.find((e) => e.id === selectedEntityId) ||
+    sectionEntities.find((e) => e.id === selectedEntityId) ||
     filteredEntities[0] ||
-    entities[0] ||
+    sectionEntities[0] ||
     null;
 
   const startEditing = (entity: LoreEntity) => {
@@ -103,16 +98,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   };
 
   const startCreatingNew = () => {
-    const defaultCat: LoreCategory =
-      activeCategory === 'all' ? 'character' : activeCategory;
     const newEnt: LoreEntity = {
       id: `ent-${Date.now()}`,
-      category: defaultCat,
-      title: `Entri ${CATEGORY_META[defaultCat].singular} Baru`,
-      subtitle: 'Subjudul atau Julukan',
-      summary: 'Ringkasan singkat mengenai peran entitas ini di dalam dunia cerita.',
+      category,
+      title: `${sectionMeta.singular} Baru`,
+      subtitle: `Julukan atau Klasifikasi ${sectionMeta.singular}`,
+      summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
-      tags: [CATEGORY_META[defaultCat].singular],
+      tags: [sectionMeta.singular],
       attributes: {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -130,7 +123,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       .filter(Boolean);
     const updated: LoreEntity = {
       ...draftEntity,
-      tags: parsedTags.length > 0 ? parsedTags : [CATEGORY_META[draftEntity.category].singular],
+      category,
+      tags: parsedTags.length > 0 ? parsedTags : [sectionMeta.singular],
       updatedAt: new Date().toISOString().slice(0, 10),
     };
     onSaveEntity(updated);
@@ -157,64 +151,44 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
   return (
     <div className="space-y-5">
-      {/* Category Filter Bar (Interactive Segmented Buttons) */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-3 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <button
-            type="button"
-            onClick={() => onChangeCategory('all')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeCategory === 'all'
-                ? 'bg-[#231C14] text-[#FBF8F1]'
-                : 'text-[#695A47] hover:bg-[#EFE7D6] hover:text-[#231C14]'
-            }`}
+      {/* Dedicated Section Header Bar */}
+      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div
+            className="text-xs font-semibold"
+            style={{ color: sectionMeta.accentColor }}
           >
-            Semua Codex ({entities.length})
-          </button>
-          {ALL_CATEGORIES.map((cat) => {
-            const count = entities.filter((e) => e.category === cat).length;
-            return (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => onChangeCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                  activeCategory === cat
-                    ? 'bg-[#9E2A2B] text-white'
-                    : 'text-[#695A47] hover:bg-[#EFE7D6] hover:text-[#231C14]'
-                }`}
-              >
-                {CATEGORY_META[cat].singular} ({count})
-              </button>
-            );
-          })}
+            Modul World Bible · {sectionEntities.length} {sectionMeta.singular} Tercatat
+          </div>
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+            {sectionMeta.label}
+          </h2>
+          <p className="text-xs sm:text-sm text-[#695A47] mt-0.5">
+            {sectionMeta.description}
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
-            onClick={() =>
-              onOpenBrainstormModal(
-                activeCategory === 'all' ? 'character' : activeCategory
-              )
-            }
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#B5832A] bg-[#FBF8F1] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={() => onOpenBrainstormModal(category)}
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold border border-[#B5832A] bg-[#F6F1E6] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Wand2 className="w-3.5 h-3.5 text-[#B5832A]" />
-            Brainstorm Lore AI
+            Ide {sectionMeta.singular} (AI)
           </button>
           <button
             type="button"
             onClick={startCreatingNew}
-            className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#9E2A2B] text-white hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-4 py-2 rounded-lg text-xs font-semibold bg-[#9E2A2B] text-white hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
-            Tambah Entri Baru
+            Tambah {sectionMeta.singular} Baru
           </button>
         </div>
       </div>
 
-      {/* Main Split: Entity Directory List (Left 4 cols) + Full Codex Entry Sheet (Right 8 cols) */}
+      {/* Main Split: Section Entity List (Left 4 cols) + Full Sheet (Right 8 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Directory Column */}
         <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
@@ -224,34 +198,35 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari karakter, negara, skill, pusaka..."
+              placeholder={`Cari ${sectionMeta.singular.toLowerCase()}...`}
               className="w-full pl-9 pr-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
             />
           </div>
 
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1">
-            <span>Menampilkan {filteredEntities.length} entri</span>
-            <span className="font-mono-tabular">Klik untuk membaca</span>
+            <span>
+              Daftar {sectionMeta.singular} ({filteredEntities.length})
+            </span>
+            <span className="font-mono-tabular">Klik untuk detail</span>
           </div>
 
           <div className="space-y-2 max-h-[640px] overflow-y-auto pr-1">
             {filteredEntities.length === 0 ? (
-              <div className="py-10 text-center space-y-2">
+              <div className="py-10 text-center space-y-3">
                 <p className="text-xs text-[#695A47]">
-                  Belum ada entri yang cocok dengan filter ini.
+                  Belum ada data {sectionMeta.singular.toLowerCase()} yang cocok.
                 </p>
                 <button
                   type="button"
                   onClick={startCreatingNew}
-                  className="px-3 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg cursor-pointer"
+                  className="px-3.5 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg cursor-pointer"
                 >
-                  Buat Entri Pertama
+                  + Buat {sectionMeta.singular} Pertama
                 </button>
               </div>
             ) : (
               filteredEntities.map((item) => {
                 const isSelected = activeEntity?.id === item.id && !isEditing;
-                const meta = CATEGORY_META[item.category];
                 return (
                   <button
                     key={item.id}
@@ -260,7 +235,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       setIsEditing(false);
                       onSelectEntity(item.id);
                     }}
-                    className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer ${
+                    className={`w-full text-left p-3.5 rounded-lg border transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-[#EFE7D6] border-[#9E2A2B] shadow-2xs'
                         : 'bg-[#F6F1E6]/70 border-[#D8CBB3] hover:bg-[#EFE7D6]/60'
@@ -269,11 +244,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     <div className="flex items-center justify-between text-[11px] text-[#695A47] mb-1">
                       <span
                         className="font-semibold"
-                        style={{ color: meta.accentColor }}
+                        style={{ color: sectionMeta.accentColor }}
                       >
-                        {meta.singular}
+                        {item.subtitle || sectionMeta.singular}
                       </span>
-                      <span className="font-mono-tabular">{item.updatedAt}</span>
+                      <span className="font-mono-tabular shrink-0 ml-2">
+                        {item.updatedAt}
+                      </span>
                     </div>
                     <div className="font-display text-lg font-bold text-[#231C14] leading-snug">
                       {item.title}
@@ -295,10 +272,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-4">
                 <div>
                   <span className="text-xs font-semibold text-[#9E2A2B]">
-                    Mode Penyuntingan Manuskrip World Bible
+                    Penyuntingan {sectionMeta.label}
                   </span>
                   <h3 className="font-display text-2xl font-bold text-[#231C14]">
-                    {draftEntity.title || 'Entri Baru'}
+                    {draftEntity.title || `${sectionMeta.singular} Baru`}
                   </h3>
                 </div>
                 <div className="flex items-center gap-2">
@@ -318,15 +295,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className="px-4 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 cursor-pointer"
                   >
                     <Check className="w-3.5 h-3.5" />
-                    Simpan ke World Bible
+                    Simpan {sectionMeta.singular}
                   </button>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
                   <label className="block text-xs font-semibold text-[#695A47] mb-1">
-                    Nama / Judul Entitas
+                    Nama {sectionMeta.singular}
                   </label>
                   <input
                     type="text"
@@ -340,31 +317,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-[#695A47] mb-1">
-                    Kategori World Bible
-                  </label>
-                  <select
-                    value={draftEntity.category}
-                    onChange={(e) =>
-                      setDraftEntity({
-                        ...draftEntity,
-                        category: e.target.value as LoreCategory,
-                      })
-                    }
-                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
-                  >
-                    {ALL_CATEGORIES.map((c) => (
-                      <option key={c} value={c}>
-                        {CATEGORY_META[c].label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
-                    Julukan / Subjudul
+                    Gelar / Julukan / Sub-Klasifikasi
                   </label>
                   <input
                     type="text"
@@ -375,41 +328,43 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
                   />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#695A47] mb-1">
-                    Tag Klasifikasi (pisahkan dengan koma)
+                    Ringkasan Singkat (1-2 Kalimat)
+                  </label>
+                  <input
+                    type="text"
+                    value={draftEntity.summary}
+                    onChange={(e) =>
+                      setDraftEntity({ ...draftEntity, summary: e.target.value })
+                    }
+                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                    Tag (pisahkan dengan koma)
                   </label>
                   <input
                     type="text"
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
-                    placeholder="Contoh: Protagonis, Ordo Sihir, Era Pertama"
+                    placeholder="Contoh: Protagonis, Kuno, Kerajaan Utara"
                     className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
-                  Ringkasan Eksekutif (1-2 Kalimat)
-                </label>
-                <input
-                  type="text"
-                  value={draftEntity.summary}
-                  onChange={(e) =>
-                    setDraftEntity({ ...draftEntity, summary: e.target.value })
-                  }
-                  className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
-                />
-              </div>
-
               {/* Category-Specific Structured Fields */}
               <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
                 <div className="text-xs font-semibold text-[#9E2A2B]">
-                  Atribut Khusus {CATEGORY_META[draftEntity.category].label}
+                  Parameter Khusus {sectionMeta.label}
                 </div>
 
-                {draftEntity.category === 'character' && (
+                {category === 'character' && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <input
                       type="text"
@@ -486,11 +441,211 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
-                {draftEntity.category === 'power_system' && (
+                {category === 'race' && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Rentang Usia (Lifespan)"
+                      value={draftEntity.attributes.lifespan || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, lifespan: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Tanah Kelahiran / Habitat"
+                      value={draftEntity.attributes.homeland || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, homeland: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Ciri Fisik & Kemampuan Bawaan"
+                      value={draftEntity.attributes.traits || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, traits: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
+                )}
+
+                {category === 'faction' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input
                       type="text"
-                      placeholder="Sumber Energi Utama"
+                      placeholder="Jenis Kelompok (Ordo/Serikat/Klan)"
+                      value={draftEntity.attributes.factionType || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, factionType: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Pemimpin Utama"
+                      value={draftEntity.attributes.leader || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, leader: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Markas Besar"
+                      value={draftEntity.attributes.headquarters || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, headquarters: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Ideologi / Tujuan Organisasi"
+                      value={draftEntity.attributes.ideology || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, ideology: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
+                )}
+
+                {category === 'nation' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Bentuk Pemerintahan"
+                      value={draftEntity.attributes.government || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, government: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Ibu Kota Kerajaan"
+                      value={draftEntity.attributes.capitalCity || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, capitalCity: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Raja / Penguasa Saat Ini"
+                      value={draftEntity.attributes.ruler || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, ruler: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Mata Uang & Ekonomi"
+                      value={draftEntity.attributes.currency || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, currency: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
+                )}
+
+                {category === 'region' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Negara / Kedaulatan Induk"
+                      value={draftEntity.attributes.parentNation || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, parentNation: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Iklim & Cuaca"
+                      value={draftEntity.attributes.climate || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, climate: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Sumber Daya Alam / Magis"
+                      value={draftEntity.attributes.resources || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, resources: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Tingkat Bahaya Wilayah"
+                      value={draftEntity.attributes.dangerLevel || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, dangerLevel: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
+                )}
+
+                {category === 'power_system' && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Sumber Energi / Asal Kekuatan"
                       value={draftEntity.attributes.energySource || ''}
                       onChange={(e) =>
                         setDraftEntity({
@@ -505,7 +660,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     />
                     <input
                       type="text"
-                      placeholder="Hirarki Tingkatan / Tier"
+                      placeholder="Urutan Tingkatan / Tier"
                       value={draftEntity.attributes.tierHierarchy || ''}
                       onChange={(e) =>
                         setDraftEntity({
@@ -532,7 +687,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     />
                     <input
                       type="text"
-                      placeholder="Risiko / Efek Samping Penggunaan"
+                      placeholder="Risiko / Efek Samping Berlebih"
                       value={draftEntity.attributes.corruptionCost || ''}
                       onChange={(e) =>
                         setDraftEntity({
@@ -548,11 +703,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
-                {draftEntity.category === 'skill' && (
+                {category === 'skill' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input
                       type="text"
-                      placeholder="Cabang Power System Induk"
+                      placeholder="Power System Induk"
                       value={draftEntity.attributes.parentPowerSystem || ''}
                       onChange={(e) =>
                         setDraftEntity({
@@ -579,7 +734,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     />
                     <input
                       type="text"
-                      placeholder="Biaya Aktivasi / Syarat"
+                      placeholder="Syarat / Biaya Aktivasi"
                       value={draftEntity.attributes.activationCost || ''}
                       onChange={(e) =>
                         setDraftEntity({
@@ -610,31 +765,71 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
-                {(draftEntity.category === 'nation' ||
-                  draftEntity.category === 'region' ||
-                  draftEntity.category === 'faction' ||
-                  draftEntity.category === 'race' ||
-                  draftEntity.category === 'history' ||
-                  draftEntity.category === 'encyclopedia') && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {category === 'history' && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <input
                       type="text"
-                      placeholder="Pemimpin / Penguasa / Asal-Usul"
-                      value={
-                        draftEntity.attributes.ruler ||
-                        draftEntity.attributes.leader ||
-                        draftEntity.attributes.homeland ||
-                        draftEntity.attributes.habitatOrOrigin ||
-                        draftEntity.attributes.era ||
-                        ''
+                      placeholder="Era Penanggalan"
+                      value={draftEntity.attributes.era || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, era: e.target.value },
+                        })
                       }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Pihak yang Terlibat"
+                      value={draftEntity.attributes.belligerents || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, belligerents: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Dampak Sejarah Utama"
+                      value={draftEntity.attributes.outcome || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, outcome: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                  </div>
+                )}
+
+                {category === 'encyclopedia' && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input
+                      type="text"
+                      placeholder="Tingkat Kelangkaan"
+                      value={draftEntity.attributes.rarity || ''}
+                      onChange={(e) =>
+                        setDraftEntity({
+                          ...draftEntity,
+                          attributes: { ...draftEntity.attributes, rarity: e.target.value },
+                        })
+                      }
+                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    />
+                    <input
+                      type="text"
+                      placeholder="Asal-Usul / Habitat"
+                      value={draftEntity.attributes.habitatOrOrigin || ''}
                       onChange={(e) =>
                         setDraftEntity({
                           ...draftEntity,
                           attributes: {
                             ...draftEntity.attributes,
-                            ruler: e.target.value,
-                            leader: e.target.value,
+                            habitatOrOrigin: e.target.value,
                           },
                         })
                       }
@@ -642,22 +837,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     />
                     <input
                       type="text"
-                      placeholder="Ibu Kota / Markas / Karakteristik Utama"
-                      value={
-                        draftEntity.attributes.capitalCity ||
-                        draftEntity.attributes.headquarters ||
-                        draftEntity.attributes.landmarks ||
-                        draftEntity.attributes.traits ||
-                        draftEntity.attributes.magicalProperties ||
-                        ''
-                      }
+                      placeholder="Khasiat / Efek Khusus"
+                      value={draftEntity.attributes.magicalProperties || ''}
                       onChange={(e) =>
                         setDraftEntity({
                           ...draftEntity,
                           attributes: {
                             ...draftEntity.attributes,
-                            capitalCity: e.target.value,
-                            traits: e.target.value,
+                            magicalProperties: e.target.value,
                           },
                         })
                       }
@@ -699,7 +886,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </form>
           ) : activeEntity ? (
             <div className="space-y-6">
-              {/* Header & Metadata Row (Unboxed clean metadata with middot separator) */}
+              {/* Header & Metadata Row */}
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-5">
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
@@ -799,7 +986,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         const labelMap: Record<string, string> = {
                           role: 'Peran Cerita',
                           raceName: 'Ras / Bangsa',
-                          factionName: 'Afiliasi Faksi',
+                          factionName: 'Afiliasi Kelompok',
                           originNation: 'Negara Asal',
                           age: 'Usia',
                           status: 'Status Kanon',
@@ -829,7 +1016,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           energySource: 'Sumber Energi',
                           hardRules: 'Hukum Mutlak',
                           tierHierarchy: 'Urutan Tingkatan',
-                          corruptionCost: 'Risiko / Harga Sihir',
+                          corruptionCost: 'Risiko / Harga Kekuatan',
                           parentPowerSystem: 'Sistem Kekuatan',
                           skillRank: 'Tingkat Teknik',
                           elementAffinity: 'Elemen / Afiliasi',
@@ -923,7 +1110,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         >
                           <span className="truncate">{pin.label}</span>
                           <span className="font-mono-tabular text-[11px] text-[#695A47]">
-                            {pin.x},{pin.y} →
+                            {pin.x}°,{pin.y}° →
                           </span>
                         </button>
                       ))}
