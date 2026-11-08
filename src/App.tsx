@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   CheckCircle2,
-  Compass,
   Loader2,
-  RotateCcw,
-  Upload,
   X,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
@@ -12,6 +9,7 @@ import {
   LoreAuditResult,
   LoreCategory,
   LoreEntity,
+  ScratchpadNote,
   TerrainType,
   WorldProject,
 } from './types/world';
@@ -24,8 +22,8 @@ import {
 } from './components/TimelineAndGraphView';
 import {
   ChapterOutlinerView,
-  WorldSettingsAndPowerView,
 } from './components/ChapterOutlinerAndPrdView';
+import { WorldOverviewTab } from './components/WorldOverviewTab';
 
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
 
@@ -270,6 +268,13 @@ export default function App() {
       calendarSystem: 'Tahun ke-1 Era Baru',
       authorName: project.authorName || 'Penulis',
       heroBannerUrl: project.heroBannerUrl,
+      epigraphQuote: 'Tuliskan kutipan epigrafi atau ramalan pembuka dunia Anda di sini.',
+      epigraphSource: 'Kronik Kuno Bab I',
+      centralConflict: 'Tuliskan konflik utama yang menggerakkan cerita di dunia ini. Gunakan [[Tokoh Utama Pertama]] untuk menautkan entitas.',
+      storyThemes: 'Takdir, Kekuasaan, dan Pengorbanan',
+      cosmologyCreationMyth: 'Tuliskan mitos penciptaan semesta atau sejarah awal mula terbentuknya dunia Anda.',
+      cosmologyLaws: 'Tuliskan aturan fundamental alam semesta, batas sihir, atau hukum kosmik yang tidak dapat dilanggar.',
+      scratchpadNotes: [],
       entities: [starterEntity],
       mapData: {
         mapTitle: 'Peta Dunia Baru',
@@ -306,6 +311,40 @@ export default function App() {
     setSelectedEntityId(starterEntity.id);
     setActiveTab('overview');
     showToast('Proyek World Bible kosong berhasil dibuat.');
+  };
+
+  const handlePromoteNoteToEntity = (note: ScratchpadNote) => {
+    const colonIdx = note.text.indexOf(':');
+    const derivedTitle =
+      colonIdx > 2 && colonIdx < 45
+        ? note.text.slice(0, colonIdx).trim()
+        : note.text.split(' ').slice(0, 5).join(' ').trim() ||
+          `Konsep ${CATEGORY_META[note.targetCategory].singular} Baru`;
+
+    const newEntity: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category: note.targetCategory,
+      title: derivedTitle,
+      subtitle: `Diangkat dari Catatan Ide Kilat (${note.createdAt})`,
+      summary: note.text,
+      content: `### Pengembangan Ide Awal\n${note.text}\n\nTambahkan rincian kanon dan hubungkan dengan entitas lain menggunakan sintaks \`[[Nama Entitas]]\`.`,
+      tags: [CATEGORY_META[note.targetCategory].singular, 'Dari Scratchpad'],
+      attributes: {},
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+
+    setProject((prev) => ({
+      ...prev,
+      entities: [newEntity, ...prev.entities],
+      scratchpadNotes: (prev.scratchpadNotes ?? []).filter(
+        (n) => n.id !== note.id
+      ),
+    }));
+    setSelectedEntityId(newEntity.id);
+    setActiveTab(note.targetCategory);
+    showToast(
+      `Ide berhasil dijadikan entri "${newEntity.title}" di tab ${CATEGORY_META[note.targetCategory].singular}.`
+    );
   };
 
   // Build world summary string for AI context
@@ -502,148 +541,36 @@ export default function App() {
           </div>
         </nav>
 
+        {/* Hidden file input for JSON import */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          onChange={handleImportWorldJson}
+          className="hidden"
+        />
+
         {/* TAB 1: OVERVIEW (BERANDA DUNIA) */}
         {activeTab === 'overview' && (
-          <div className="space-y-6">
-            {/* Split-Screen World Overview Hero Banner */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch bg-[#FBF8F1] border border-[#D8CBB3] rounded-2xl p-6">
-              {/* Left Column: World Typography & Studio Controls */}
-              <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <div className="text-xs text-[#9E2A2B] font-semibold">
-                    {project.genre} · {project.calendarSystem}
-                  </div>
-                  <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.12]">
-                    {project.worldName}
-                  </h1>
-                  <p className="text-sm sm:text-base text-[#695A47] max-w-2xl leading-relaxed">
-                    {project.tagline}
-                  </p>
-                </div>
-
-                {/* Studio File & Project Actions Toolbar */}
-                <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => handleSwitchTab('map')}
-                    className="px-4 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                  >
-                    <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
-                    Buka Map Dunia Abad Pertengahan
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    className="px-3.5 py-2 text-xs font-medium bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    Impor File JSON
-                  </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept=".json"
-                    onChange={handleImportWorldJson}
-                    className="hidden"
-                  />
-
-                  <button
-                    type="button"
-                    onClick={handleResetStarterWorld}
-                    className="px-3 py-2 text-xs font-medium text-[#695A47] hover:text-[#231C14] flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-                    title="Kembalikan data contoh dunia Aethelia"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    Reset Contoh Dunia
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Matching Height Visual Container */}
-              <div className="lg:col-span-5">
-                <div className="relative h-56 lg:h-full min-h-[210px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
-                  <img
-                    src={project.heroBannerUrl}
-                    alt={project.worldName}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent flex items-end p-4">
-                    <div className="text-[#FBF8F1]">
-                      <div className="text-[11px] text-[#E6D5B8]">
-                        Arsiparis Utama: {project.authorName} · Tersimpan Otomatis di Browser
-                      </div>
-                      <div className="font-cartography text-sm font-bold tracking-wide">
-                        Atlas & Ensiklopedia Kanon Terpadu
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Full-Width 4-Column World Bible Metrics Strip Below Hero Split */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
-                <div className="text-xs text-[#695A47]">
-                  Total Entitas World Bible
-                </div>
-                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                  {project.entities.length} Entri Kanon
-                </div>
-                <div className="text-[11px] text-[#9E2A2B] mt-1">
-                  Character · Ras · Kelompok · Power System
-                </div>
-              </div>
-
-              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
-                <div className="text-xs text-[#695A47]">
-                  Titik Peta & Label Kartografi
-                </div>
-                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                  {project.mapData.stamps.length} Lokasi Peta
-                </div>
-                <div className="text-[11px] text-[#695A47] mt-1">
-                  {project.mapData.regionLabels.length} Label Kaligrafi · {project.mapData.rivers.length} Sungai
-                </div>
-              </div>
-
-              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
-                <div className="text-xs text-[#695A47]">
-                  Kronik Sejarah & Relasi
-                </div>
-                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                  {project.timeline.length} Peristiwa Era
-                </div>
-                <div className="text-[11px] text-[#695A47] mt-1">
-                  {project.relationships.length} Ikatan Relasi Karakter & Kelompok
-                </div>
-              </div>
-
-              <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4">
-                <div className="text-xs text-[#695A47]">
-                  Alur Cerita & Naskah
-                </div>
-                <div className="font-mono-tabular text-2xl font-bold text-[#231C14] mt-1">
-                  {project.chapters.length} Bab Cerita
-                </div>
-                <div className="text-[11px] text-[#695A47] mt-1">
-                  Terhubung langsung ke elemen World Bible
-                </div>
-              </div>
-            </div>
-
-            {/* World Cosmology Settings & Power System / Geopolitics Matrix */}
-            <WorldSettingsAndPowerView
-              project={project}
-              onUpdateProjectMeta={(patch) =>
-                setProject((prev) => ({ ...prev, ...patch }))
-              }
-              onCreateBlankWorld={handleCreateBlankWorld}
-              onSelectEntity={handleNavigateToEntity}
-            />
-          </div>
+          <WorldOverviewTab
+            project={project}
+            onUpdateProjectMeta={(patch) => {
+              setProject((prev) => ({ ...prev, ...patch }));
+              showToast('Perubahan Overview & Kosmologi berhasil disimpan.');
+            }}
+            onSelectEntity={handleNavigateToEntity}
+            onOpenMapTab={() => handleSwitchTab('map')}
+            onOpenTimelineTab={() => handleSwitchTab('timeline')}
+            onOpenGraphTab={() => handleSwitchTab('graph')}
+            onOpenChapter={(chId) => {
+              setSelectedChapterId(chId);
+              handleSwitchTab('outliner');
+            }}
+            onPromoteNoteToEntity={handlePromoteNoteToEntity}
+            onCreateBlankWorld={handleCreateBlankWorld}
+            onResetStarterWorld={handleResetStarterWorld}
+            onTriggerImportJson={() => fileInputRef.current?.click()}
+          />
         )}
 
         {/* Dedicated Lore Category Tabs (Character, Ras, Kelompok, Power System, Skill, Negara, Wilayah, Sejarah, Artefak & Biota) */}

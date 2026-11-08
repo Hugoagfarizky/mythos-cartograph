@@ -192,6 +192,13 @@ export interface ChapterOutline {
   scenes: ChapterScene[];
 }
 
+export interface ScratchpadNote {
+  id: string;
+  text: string;
+  targetCategory: LoreCategory;
+  createdAt: string;
+}
+
 export interface AuditIssue {
   severity: string;
   category: string;
@@ -215,6 +222,14 @@ export interface WorldProject {
   calendarSystem: string;
   authorName: string;
   heroBannerUrl: string;
+  // Enhanced Overview fields
+  epigraphQuote?: string;
+  epigraphSource?: string;
+  centralConflict?: string;
+  storyThemes?: string;
+  cosmologyCreationMyth?: string;
+  cosmologyLaws?: string;
+  scratchpadNotes?: ScratchpadNote[];
   entities: LoreEntity[];
   mapData: MapSandboxData;
   relationships: RelationshipEdge[];

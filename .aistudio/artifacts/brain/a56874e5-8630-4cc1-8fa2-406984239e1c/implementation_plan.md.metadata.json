@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana Peningkatan Tab Overview (Beranda World Bible): Mode Baca Buku Klasik, Epigrafi/Ramalan Kuno, Sinopsis & Pilar Kosmologi, Global Search + Quick Idea Scratchpad, serta Pratinjau Mini Peta & Sorotan Tokoh/Konflik.",
-  "updatedAt":  "2026-11-08T17:48:42.696924885Z",
+  "summary":  "Rencana pembaruan komprehensif untuk tab Map Dunia (MedievalMapSandbox): (1) Alat gambar Sungai berliku & Rute Jalan/Ekspedisi interaktif di atas kanvas perkamen, (2) Pengukur Jarak & Kalkulator Waktu Tempuh dengan klik 2 titik lokasi di peta (Jalan Kaki, Kuda Perang, Kereta Dagang, Kapal Layar, & Naga/Terbang), (3) Editor penuh untuk Label Kaligrafi Wilayah (teks, gaya, rotasi derajat, hapus) serta pemilihan warna panji/bendera kerajaan pada tiap pin kastil/kota, (4) Pengaturan Judul & Skala Peta serta sakelar visibilitas layer (Sungai, Rute, Label, Pin, Garis Kompas), dan (5) Pembuatan Entri World Bible 1-klik langsung dari pin lokasi peta + ekspor PNG utuh.",
+  "updatedAt":  "2026-11-08T18:27:34.647318867Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

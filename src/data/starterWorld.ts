@@ -83,6 +83,28 @@ export const STARTER_WORLD_PROJECT: WorldProject = {
   calendarSystem: 'Penanggalan Surya pasca-Konvergensi (AE - Era Astral)',
   authorName: 'Arsiparis Agung',
   heroBannerUrl: '/src/assets/images/parchment_cartography_banner_1794157187078.jpg',
+  epigraphQuote:
+    'Ketika cincin ketiga Astrolabe berhenti berputar, bayang-bayang pohon perak akan menelan mahkota emas, dan laut barat akan kembali menagih kota yang tenggelam.',
+  epigraphSource: 'Gulungan Nubuat Pohon Memori Eldath, Bait IV (Tahun 12 AE)',
+  centralConflict: `Tiga tahun menjelang terulangnya siklus [[Konvergensi Gerhana Merah]], retakan halus ditemukan pada inti [[Astrolabe Api Surya]]. [[Archmage Vaelen Thorne]] dan [[Ordo Cakrawala Perak]] berusaha mencegah penggunaan artefak tersebut karena dapat meruntuhkan lempeng benua, sementara [[Empress Seraphina Valorian]] dari [[Kekaisaran Gondoria]] bertekad menggunakannya sebagai senjata suar demi menundukkan [[Kerajaan Bawah Tanah Nidavellir]] dan menyatukan Aethelia secara paksa.`,
+  storyThemes:
+    'Harga dari Pengetahuan Terlarang · Persatuan Paksa vs Kebebasan Otonom · Warisan Ekologis Sihir Kuno',
+  cosmologyCreationMyth: `Menurut kronik [[Sylvan Aelfir]] dan [[Dvergr Besi-Bintang]], Benua Aethelia terbentuk dari jatuhnya Bintang Purba yang terbelah menjadi tiga unsur: Inti Besi yang mengendap menjadi pegunungan [[Kerajaan Bawah Tanah Nidavellir]], Debu Cahaya yang melahirkan akar [[Rimba Bayang-Bayang (Shadowwood)]], serta Api Cakrawala yang terus berputar di langit sebagai matahari dan bulan kembar.`,
+  cosmologyLaws: `Seluruh energi magis di dunia ini tunduk pada hukum [[Resonansi Eteris Astral]]: sihir hanya dapat dipanen dari pantulan cahaya benda langit (Matahari, Bulan Kembar, atau Gugus Bintang) dan tidak dapat dirapal di ruang tertutup tanpa medium kristal. Penggunaan melebihi kapasitas jiwa akan memicu kutukan *Kristalisasi Organ* yang mengubah tubuh praktisi menjadi kuningan dan kaca hidup.`,
+  scratchpadNotes: [
+    {
+      id: 'note-1',
+      text: 'Klan Penyelundup Kabut di Pelabuhan Teluk Naga yang memperdagangkan Bunga Lentera Malam palsu kepada bangsawan Gondoria.',
+      targetCategory: 'faction',
+      createdAt: 'Hari ini',
+    },
+    {
+      id: 'note-2',
+      text: 'Teknik terlarang Jalur Gerhana: memadukan resonansi matahari dan bulan secara bersamaan dengan risiko kebutaan permanen.',
+      targetCategory: 'skill',
+      createdAt: 'Hari ini',
+    },
+  ],
   entities: [
     // 1. CHARACTERS
     {

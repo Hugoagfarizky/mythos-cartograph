@@ -1,107 +1,54 @@
-# Peningkatan Tab Overview — Beranda Ensiklopedia World Bible
+# Rencana Pembaruan Tab Map Dunia (Medieval Cartography Studio)
 
-Merombak tab **Overview** dari tampilan berbasis formulir menjadi halaman pembuka buku ensiklopedia klasik (*Book Frontispiece & World Command Center*) yang memadukan estetika sastra dengan alat produktivitas cepat bagi penulis.
-
----
-
-### User Review & Critical Decisions
-
-> [!IMPORTANT]
-> Seluruh pilihan yang Anda konfirmasi untuk tab **Overview** telah dirangkum ke dalam cetak biru di bawah ini. Silakan tinjau dan klik **Proceed** untuk menerapkan pembaruan pada aplikasi.
-
-- **Confirmed Decision 1 — Mode Baca Buku Bersih (*Clean Book Mode*) dengan Tombol Sunting**: Menghilangkan kolom-kolom input yang selalu terbuka di halaman Overview. Identitas dunia, epigrafi, sinopsis, dan kosmologi ditampilkan sebagai tipografi buku yang bersih, dan hanya berubah menjadi formulir saat tombol **Sunting Identitas & Kosmologi** diklik.
-- **Confirmed Decision 2 — Kutipan Epigrafi / Ramalan Kuno Pembuka Dunia**: Menambahkan blok kutipan epigrafi bergaya halaman depan novel fantasi klasik lengkap dengan sumber kutipan/nubuat di bagian pembuka Overview.
-- **Confirmed Decision 3 — Sinopsis Utama, Konflik Pusat, & Pilar Kosmologi**: Menambahkan bagian khusus untuk **Sinopsis & Konflik Utama Cerita**, **Tema Naratif**, serta **Tiga Pilar Kosmologi** (*Mitos Penciptaan*, *Hukum Alam & Eter*, dan *Benda Langit & Siklus Era*) yang mendukung tautan `[[Nama Entitas]]`.
-- **Confirmed Decision 4 — Global Search & Catatan Ide Kilat (*Quick Idea Scratchpad*)**: Menyediakan bilah pencarian instan lintas seluruh kategori World Bible serta papan catatan kilat tempat penulis menyimpan ide mendadak dan mengubahnya menjadi entri Character/Ras/Skill/Sejarah baru hanya dengan satu klik.
-- **Confirmed Decision 5 — Pratinjau Mini Peta Dunia & Sorotan Tokoh/Konflik Kelompok**: Menampilkan kartu visual interaktif di bagian bawah Overview berisi pratinjau lokasi kunci di Peta Dunia serta sorotan tokoh utama beserta sengketa faksi/kerajaan yang sedang berlangsung.
+Pembaruan ini menyempurnakan tab **Map Dunia** menjadi studio kartografi abad pertengahan yang lengkap bagi penulis *World Bible*—mulai dari melukis jaringan sungai dan jalur ekspedisi hingga menghitung jarak serta hari tempuh perjalanan antarkota.
 
 ---
 
-### 1. Overview & Core Concept
-
-- **What It Does**:
-  Menjadikan tab **Overview** sebagai "sampul dalam dan daftar isi hidup" dari World Bible penulis. Saat penulis membuka proyeknya, mereka langsung disambut oleh kutipan ramalan kuno, premis konflik besar, pencarian cepat ke seluruh entitas, buku catatan ide kilat (*scratchpad*), dan sorotan visual peta serta tokoh kunci.
-- **Target Audience / Persona**:
-  Penulis cerita dan *worldbuilder* yang membutuhkan satu halaman ringkasan eksekutif untuk menjaga fokus pada tema besar cerita sekaligus menangkap ide spontan tanpa harus berpindah-pindah tab.
-- **Key Value**:
-  Memisahkan dengan tegas antara **Mode Membaca Kanon** (yang imersif seperti membaca buku cetak) dan **Mode Menyunting**, sembari mempercepat alur kerja melalui *Global Search* dan *Idea Scratchpad*.
-
----
-
-### 2. User Experience & Visual Design
-
-- **Key User Flows**:
-  1. **Membaca & Menyunting Sampul Dalam Dunia (*Book Frontispiece & Cosmology*)**:
-     - Secara bawaan, bagian atas menampilkan judul dunia (`Fraunces`), kutipan epigrafi berhuruf miring (`Lora Italic`), sinopsis konflik utama, dan pilar kosmologi dalam tata letak editorial buku.
-     - Saat penulis menekan tombol **Sunting Overview Dunia**, muncul panel editor terstruktur untuk mengubah nama dunia, genre, kalender, epigrafi, sinopsis konflik, hingga mitos penciptaan.
-  2. **Pencarian Lintas Semesta (*Global Search*)**:
-     - Penulis mengetik kata kunci di bilah pencarian Overview (misal: *"Astrolabe"*, *"Surya"*, atau *"Vaelen"*).
-     - Hasil pencarian langsung dikelompokkan berdasarkan tab asal (*Character, Ras, Kelompok, Power System, Lokasi Peta, Timeline, Bab*) dan mengklik hasilnya langsung membawa penulis ke tab dan entri terkait.
-  3. **Menangkap Ide Mendadak (*Quick Idea Scratchpad*)**:
-     - Penulis mengetik ide singkat di panel *Catatan Ide Kilat* (misal: *"Klan pembunuh bayangan yang menggunakan gerhana bulan untuk menghilangkan jejak"*).
-     - Ide tersimpan otomatis di `localStorage`, dapat ditandai selesai/dihapus, atau ditekan tombol **Jadikan Entri →** untuk langsung mempromosikan ide tersebut menjadi entri baru di tab *Character*, *Kelompok*, *Skill*, atau *Sejarah*.
-  4. **Menjelajahi Pratinjau Peta & Sorotan Tokoh/Konflik**:
-     - Pada kartu **Pratinjau Atlas & Lokasi Kunci**, penulis melihat ilustrasi kanvas peta mini beserta daftar titik penting (Ibu Kota, Benteng, Menara) dan tombol untuk langsung melompat ke *Map Dunia*.
-     - Pada kartu **Sorotan Tokoh & Konflik Kelompok**, penulis melihat potret tokoh utama beserta ketegangan politik/rivalitas utama yang tercatat di *Peta Relasi*.
-
-- **Visual Identity & Theme**:
-  - Tetap mempertahankan palet **Warm Parchment Cartography** (`#F6F1E6` latar perkamen, `#FBF8F1` permukaan lembaran buku, `#231C14` tinta utama, `#9E2A2B` aksen merah segel lilin, dan `#B5832A` kuningan kompas) serta pasangan tipografi `Fraunces` + `Lora` + `JetBrains Mono` (`tabular-nums`).
+## 1. Alat Gambar Sungai & Rute Jalan / Ekspedisi (`Sungai & Rute`)
+- **Mode Gambar Alur Sungai (`river`)**:
+  - Penulis dapat mengeklik titik-titik berurutan di atas kanvas peta (misalnya dari pegunungan menuju pesisir laut) untuk membentuk aliran sungai melengkung (*smooth quadratic curve*) bergaya tinta sepia dan air biru-kelabu abad pertengahan, lalu menekan **"Selesai Gambar Sungai"**.
+  - Dilengkapi daftar sungai di panel inspektor untuk memberi nama sungai atau menghapus alur sungai tertentu.
+- **Mode Gambar Jalan Kerajaan & Rute Ekspedisi (`route`)**:
+  - Menambahkan struktur data `routes: MapRoute[]` pada `MapSandboxData` dengan3 gaya jalur kartografi:
+    1. **Jalan Raya Kerajaan / Jalur Dagang** (garis putus-putus tinta cokelat tua)
+    2. **Rute Ekspedisi / Perjalanan Tokoh** (garis titik-titik merah segel `#9E2A2B`)
+    3. **Jalur Pelayaran Samudra** (garis lengkung biru-sepia di lautan)
+  - Menampilkan nama rute di sepanjang jalur atau di daftar rute pada panel kanan.
 
 ---
 
-### 3. Key Product Decisions & Trade-Offs
-
-- **Decision 1: Mengganti Form Statis dengan Tampilan Editorial Buku + Toggle Sunting**
-  - *Chosen Approach*: Menyajikan seluruh metadata dunia dan kosmologi sebagai artikel buku yang rapi secara default, dengan mode sunting (*edit mode*) yang diaktifkan lewat tombol.
-  - *Why*: Mencegah ketidaksengajaan mengubah pengaturan dunia saat sedang membaca lore, serta memberikan kesan buku World Bible yang sesungguhnya.
-
-- **Decision 2: Menyematkan Konversi Satu Klik pada Quick Idea Scratchpad**
-  - *Chosen Approach*: Setiap butir ide di *Scratchpad* memiliki pemilih kategori cepat (*Character, Ras, Kelompok, Power System, Skill, Sejarah, dll.*) dan tombol **Buat Entri** yang otomatis membuat draf entitas baru dari teks catatan tersebut.
-  - *Why*: Ketika penulis mendapat inspirasi mendadak, mereka sering kali belum tahu detail atributnya; *Scratchpad* menjembatani ide mentah menjadi entitas terstruktur tanpa hambatan.
+## 2. Pengukur Jarak & Kalkulator Waktu Tempuh (`Ukur Jarak & Hari Tempuh`)
+- **Interaksi Klik 2 Titik di Peta**:
+  - Saat mode **Ukur Jarak** aktif, penulis cukup mengeklik **Titik Awal (A)** dan **Titik Tujuan (B)** di mana saja pada peta (otomatis menempel/*snap* ke nama kota/kastil terdekat bila diklik di atas simbol lokasi).
+  - Kanvas menampilkan garis kompas terukur di antara Titik A dan Titik B lengkap dengan lencana jarak dalam **Liga** dan **Kilometer** berdasarkan skala peta.
+- **Kalkulator Waktu Tempuh Otomatis**:
+  - Menampilkan kartu estimasi waktu perjalanan di bilah alat dan panel samping untuk 5 moda transportasi fiksi abad pertengahan:
+    - **Berjalan Kaki / Infanteri** (~15 mil / 5 liga per hari)
+    - **Kereta Kuda / Karavan Dagang** (~24 mil / 8 liga per hari)
+    - **Kavaleri / Kuda Perang Cepat** (~40 mil / 13 liga per hari)
+    - **Kapal Layar Kerajaan** (~75 mil / 25 liga per hari)
+    - **Tunggangan Udara / Naga / Wyvern** (~150 mil / 50 liga per hari)
 
 ---
 
-### 4. Technical Architecture & Data Strategy *(Technical Reference)*
+## 3. Editor Label Kaligrafi Wilayah & Warna Bendera Kerajaan
+- **Inspektor Label Kaligrafi**:
+  - Mengeklik teks kaligrafi wilayah di peta pada mode *Jelajah* akan membuka editor label di panel kanan: penulis dapat mengubah **isi teks**, **gaya kaligrafi** (*Kerajaan Besar*, *Wilayah/Rimba*, *Samudra/Teluk*), mengatur **kemiringan/rotasi (`-45°` s.d. `+45°`)**, atau **menghapus label**.
+- **Pemilih Warna Bendera / Panji Faksi pada Simbol Lokasi**:
+  - Setiap simbol Ibu Kota, Kastil, Menara, atau Pelabuhan dapat diatur **Warna Panji Kerajaannya** (Merah Kekaisaran, Emas Surya, Hijau Sylvan, Biru Samudra, Ungu Arkana, atau Hitam Besi) untuk membedakan penguasa wilayah secara visual.
 
-- **Architecture & Component Diagram**:
+---
 
-```
-┌───────────────────────────────────────────────────────────────────────────────┐
-│                         OVERVIEW TAB (WORLD FRONTISPIECE)                     │
-│                                                                               │
-│  ┌─────────────────────────────────────────────────────────────────────────┐  │
-│  │ 1. Hero Frontispiece & World Epigraph Banner                            │  │
-│  │    - World Title, Genre, Calendar, Author & Toggle [Sunting Overview]   │  │
-│  │    - Italicized Ancient Prophecy / Epigraph Quote Block                 │  │
-│  │    - Project Actions: Impor JSON, Buat Dunia Kosong, Reset Contoh       │  │
-│  └─────────────────────────────────────────────────────────────────────────┘  │
-│                                                                               │
-│  ┌────────────────────────────────────┬────────────────────────────────────┐  │
-│  │ 2. Global Omnibar Search           │ 3. Quick Idea Scratchpad           │  │
-│  │    - Live search across Entities,  │    - Instant note capture          │  │
-│  │      Map Pins, Timeline & Chapters │    - 1-Click "Promote to Entity"   │  │
-│  └────────────────────────────────────┴────────────────────────────────────┘  │
-│                                                                               │
-│  ┌────────────────────────────────────┬────────────────────────────────────┐  │
-│  │ 4. Sinopsis & Konflik Pusat Dunia  │ 5. Tiga Pilar Kosmologi Semesta    │  │
-│  │    - Core Conflict & Story Themes  │    - Mitos Penciptaan              │  │
-│  │    - Supports [[Wiki Cross-Links]] │    - Hukum Alam & Kosmos           │  │
-│  └────────────────────────────────────┴────────────────────────────────────┘  │
-│                                                                               │
-│  ┌────────────────────────────────────┬────────────────────────────────────┐  │
-│  │ 6. Pratinjau Mini Peta Dunia       │ 7. Sorotan Tokoh & Konflik Kelompok│  │
-│  │    - Visual Map Preview & Key Pins │    - Featured Character Portraits  │  │
-│  │    - Direct Jump to Map Sandbox    │    - Active Faction Rivalries      │  │
-│  └────────────────────────────────────┴────────────────────────────────────┘  │
-└───────────────────────────────────────────────────────────────────────────────┘
-```
+## 4. Pengaturan Judul & Skala Peta + Sakelar Layer Kartografi
+- **Sunting Identitas Peta**:
+  - Tombol **"Atur Judul & Skala Peta"** untuk mengubah *Judul Peta* (yang tercetak pada lencana *Liber Mundi Cartouche* di pojok kiri atas peta), *Subjudul*, serta *Skala Liga per Grid* (yang langsung menjadi acuan rumus Pengukur Jarak).
+- **Toggle Visibilitas Layer Peta**:
+  - Baris sakelar cepat untuk menampilkan/menyembunyikan: **Simbol Kota/Kastil**, **Kaligrafi Wilayah**, **Jaringan Sungai**, **Rute Jalan/Ekspedisi**, dan **Garis Kompas Portolan**.
+- **Ekspor Peta PNG Utuh**:
+  - Memperbarui fungsi **Unduh Peta PNG** agar menggambar daratan, sungai, rute perjalanan, lencana judul *Liber Mundi*, simbol kastil/kota, dan kaligrafi wilayah ke dalam satu gambar PNG resolusi tinggi yang siap diunduh.
 
-- **Data Model & State Extensions**:
-  - Memperluas `WorldProject` dengan atribut opsional yang kompatibel ke belakang (*backward-compatible* dengan data `localStorage` yang sudah ada):
-    - `epigraphQuote`: Teks kutipan atau ramalan kuno pembuka dunia.
-    - `epigraphSource`: Sumber kutipan / nama naskah kuno.
-    - `centralConflict`: Uraian sinopsis utama dan konflik pusat cerita (mendukung `[[Nama Entitas]]`).
-    - `storyThemes`: Tema-tema utama cerita.
-    - `cosmologyCreationMyth`: Mitos penciptaan dan asal-usul semesta.
-    - `cosmologyLaws`: Hukum alam, arsitektur benda langit, atau anomali dunia.
-    - `scratchpadNotes`: Daftar catatan ide kilat (`id`, `text`, `targetCategory`, `createdAt`).
+---
+
+## 5. Buat Entri World Bible Langsung dari Pin Lokasi Peta
+- **1-Klik Promosi Pin ke Entitas Kanon**:
+  - Jika sebuah pin lokasi di peta belum terhubung ke entitas *World Bible*, panel kanan menyediakan tombol **"+ Buat Entri World Bible dari Lokasi Ini"** (dengan pilihan kategori *Wilayah*, *Negara*, atau *Artefak/Situs*) yang otomatis membuat lembar lore baru, menautkannya ke pin tersebut, dan membuka tabnya bila diinginkan.
