@@ -288,6 +288,39 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       : [...timeline, payload];
 
     onUpdateTimeline(nextList.sort((a, b) => a.year - b.year));
+
+    // Also auto-sync linked History document in World Bible if one is connected
+    if (onSaveEntity) {
+      const matchedHist = entities.find(
+        (ent) =>
+          ent.category === 'history' &&
+          (payload.linkedEntityIds.includes(ent.id) ||
+            ent.title.toLowerCase() === payload.title.toLowerCase())
+      );
+      if (matchedHist) {
+        onSaveEntity({
+          ...matchedHist,
+          title: payload.title,
+          summary: payload.summary || matchedHist.summary,
+          attributes: {
+            ...matchedHist.attributes,
+            era: payload.era,
+            year: payload.year,
+            displayDate: payload.displayDate,
+            eventLocation:
+              payload.regionName || matchedHist.attributes.eventLocation,
+            worldImpactLegacy:
+              payload.consequenceImpact ||
+              matchedHist.attributes.worldImpactLegacy,
+            hiddenHistoricalTruth:
+              payload.secretTruthNote ||
+              matchedHist.attributes.hiddenHistoricalTruth,
+          },
+          updatedAt: new Date().toISOString().slice(0, 10),
+        });
+      }
+    }
+
     setShowEditorForm(false);
     setEditingEventId(null);
   };

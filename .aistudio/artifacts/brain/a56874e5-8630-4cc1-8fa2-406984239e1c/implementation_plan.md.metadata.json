@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana implementasi peningkatan tab Sejarah (Arsip Historiografi, Pemicu & Dampak Jangka Panjang, Sejarah Resmi vs Kebenaran Tersembunyi, Pemilih Hibrida Pihak Terlibat/Tokoh Kunci/Lokasi, Filter Jenis Peristiwa, dan Sinkronisasi ke Pita Kronologi) pada aplikasi MythosCartograph.",
-  "updatedAt":  "2026-11-08T20:07:50.944006224Z",
+  "summary":  "Dokumentasi arsitektur dan rencana implementasi terbaru yang mencakup penyelesaian modul Sejarah (Historiografi & Konflik Kanon) serta modul Timeline / Kronologi (Pita Kronologi Dunia, Kalkulator Jarak Tahun & Usia, serta Sinkronisasi Dokumen Dua Arah).",
+  "updatedAt":  "2026-11-08T20:29:05.784643072Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

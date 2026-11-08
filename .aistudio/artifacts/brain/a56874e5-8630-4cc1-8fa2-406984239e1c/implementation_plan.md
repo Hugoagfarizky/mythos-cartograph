@@ -1,67 +1,40 @@
-# Rencana Peningkatan Tab Sejarah (Grand Historical Archive & Lore Revisionism Sheet) — MythosCartograph
+# Dokumentasi Arsitektur & Peningkatan Modul Sejarah + Timeline (Kronologi) — MythosCartograph
 
-## 1. Konteks & Tujuan
-Menyempurnakan tab **Sejarah** (`history`) agar berfungsi sebagai **Arsip Historiografi & Dossier Peristiwa Besar Dunia** yang tidak hanya mencatat apa yang terjadi di masa lalu, tetapi juga membedakan antara **Sejarah Resmi yang Diajarkan Pemenang** dengan **Kebenaran Tersembunyi (Plot Twist)** serta terhubung langsung ke **Pita Kronologi Dunia** (`timeline`), **Negara**, **Kelompok**, **Character**, dan **Wilayah**.
-
-Berdasarkan preferensi Anda, pembaruan tab **Sejarah** mencakup 5 fokus utama:
-1. **Pemicu Awal Konflik (Casus Belli), Korban/Kerugian & Dampak Jangka Panjang Dunia**:
-   - Mencatat pemicu meletusnya peristiwa (`historicalTrigger`), skala korban atau kehancuran (`casualtiesAndLosses`), hasil akhir langsung (`outcome`), serta warisan geopolitik/magis jangka panjang hingga era cerita saat ini (`worldImpactLegacy`).
-2. **Sejarah Resmi Pemenang vs Kebenaran Rahasia Tersembunyi (Propaganda vs Kanon Rahasia)**:
-   - Panel berdampingan khusus penulis novel untuk membandingkan **Versi Sejarah Resmi / Doktrin Umum (`officialHistoryVersion`)** dengan **Kebenaran Sejarah yang Disembunyikan (`hiddenHistoricalTruth`)**.
-3. **Pemilih Hibrida Pihak Terlibat, Tokoh Kunci & Lokasi Kejadian**:
-   - Saat mengedit catatan Sejarah, pengguna dapat memilih **Pihak / Fraksi Terlibat (`belligerentsList`)** dari daftar **Negara**, **Kelompok**, atau **Ras** yang ada (atau mengetik manual), memilih **Tokoh Kunci Sejarah (`keyHistoricalFigures`)** dari daftar **Character** (atau mengetik tokoh leluhur manual), serta memilih **Lokasi Kejadian Utama (`eventLocation`)** dari daftar **Wilayah** / **Pin Peta**.
-   - Di mode baca, seluruh nama pihak terlibat, tokoh kunci, dan lokasi kejadian tampil sebagai tombol interaktif yang dapat diklik untuk melompat ke profil entitas terkait.
-4. **Filter Jenis / Skala Peristiwa di Direktori Kiri**:
-   - Menambahkan tombol filter di kolom kiri: **Semua**, **Bencana Kosmik / Arcane**, **Perang Besar & Pengepungan**, **Berdirinya / Runtuhnya Dinasti**, dan **Traktat, Pakta & Penemuan Agung**.
-5. **Sinkronisasi Otomatis & Tombol 1-Klik Kirim ke Tab Kronologi**:
-   - Menampilkan daftar titik waktu di tab **Kronologi** (`TimelineEvent`) yang terhubung dengan catatan Sejarah ini.
-   - Menyediakan tombol 1-klik **+ Catat / Sinkronkan ke Pita Kronologi** di lembar Sejarah agar peristiwa tersebut langsung masuk ke lini masa **Kronologi** sesuai tahun dan eranya tanpa perlu mengetik ulang.
+## 1. Status Implementasi Modul World Bible
+Seluruh modul berikut telah selesai dibangun, diverifikasi, dan terhubung secara dua arah:
+- **Overview** (`WorldOverviewTab.tsx`) — Dasbor Statistik Kanon, Kosmologi, Audit Kesehatan Dunia & Catatan Cepat.
+- **Map Dunia** (`MedievalMapSandbox.tsx`) — Kanvas Peta Abad Pertengahan, Pin Interaktif, Rute Ekspedisi, Pengukur Jarak & Generator Benua Prosedural.
+- **Character** (`CodexWorkspace.tsx`) — Profil Psikologi, Kutipan Khas, Busur 3 Babak, Pemilih Hibrida Skill/Artefak & Matriks Relasi.
+- **Ras** (`CodexWorkspace.tsx`) — Biologi Spesies, Sub-Ras, Kelemahan Biologis, Bahasa/Penamaan & Daftar Karakter Otomatis.
+- **Kelompok** (`CodexWorkspace.tsx`) — Hirarki Pangkat, Sumpah Perekrutan, Ideologi Publik vs Agenda Rahasia & Anggota Otomatis.
+- **Power System** (`CodexWorkspace.tsx`) — Hukum Besi (*Hard Magic*), Tangga Tier, Cabang Elemen, Harga Kekuatan (*Backlash*) & Daftar Skill Turunan.
+- **Skill** (`CodexWorkspace.tsx`) — Silsilah Sistem Induk, Eksklusivitas Ras/Garis Darah, Skala Dampak Strategis & Praktisi Otomatis.
+- **Negara** (`CodexWorkspace.tsx`) — Pemerintahan, Penguasa, Ibu Kota, Demografi Ras, Ekonomi, Militer, Hukum & Konflik Perbatasan.
+- **Wilayah** (`CodexWorkspace.tsx`) — Tipologi Geografis, Atmosfer Sensorik Latar Adegan, Landmark Lokal, Ekologi Monster/Bahaya & Pin Peta.
+- **Sejarah** (`CodexWorkspace.tsx`) — Dossier Historiografi, Pemicu Awal (*Casus Belli*), Sejarah Resmi Pemenang vs Kebenaran Rahasia, Pihak Terlibat & Tokoh Kunci.
+- **Timeline / Kronologi** (`TimelineAndGraphView.tsx`) — Pita Kronologi Lintas Era, Penanda Selisih Tahun (`Δ Tahun`), Kalkulator Usia & Generasi Ras, serta Sinkronisasi Dua Arah Otomatis dengan Dokumen Sejarah & Alur Bab.
 
 ---
 
-## 2. Perubahan Struktur Data (`src/types/world.ts` & `src/data/starterWorld.ts`)
-- Menambahkan properti baru yang kompatibel ke belakang pada `LoreAttributes` di `src/types/world.ts`:
-  - `historyEventType?: string` — Klasifikasi jenis/skala peristiwa (`Bencana Kosmik / Arcane`, `Perang Besar & Pengepungan`, `Berdirinya / Runtuhnya Dinasti`, `Traktat, Pakta & Penemuan Agung`).
-  - `displayDate?: string` — Penanggalan lengkap peristiwa (misal: `Tahun 1 AE · Malam Gerhana Ganda`).
-  - `eventLocation?: string` — Lokasi/wilayah terjadinya peristiwa (terhubung ke tab **Wilayah**).
-  - `belligerentsList?: string[]` — Daftar negara, faksi, atau ras yang terlibat (chip interaktif).
-  - `keyHistoricalFigures?: string[]` — Daftar tokoh kunci yang berperan dalam peristiwa tersebut (chip interaktif).
-  - `historicalTrigger?: string` — Pemicu awal / penyebab langsung meletusnya peristiwa.
-  - `casualtiesAndLosses?: string` — Korban jiwa, kehancuran kota, atau hilangnya artefak/ilmu kuno.
-  - `worldImpactLegacy?: string` — Dampak jangka panjang terhadap peta politik dan hukum sihir saat ini.
-  - `officialHistoryVersion?: string` — Narasi sejarah resmi yang diajarkan kepada masyarakat umum / bangsawan.
-  - `hiddenHistoricalTruth?: string` — Kebenaran rahasia di balik peristiwa yang hanya diketahui segelintir tokoh.
-- Memperkaya data awal Sejarah di `src/data/starterWorld.ts`:
-  - Memperbarui **Konvergensi Gerhana Merah** (`hist-gerhana-merah`, jenis: `Bencana Kosmik / Arcane`).
-  - Menambahkan catatan sejarah kedua **Perang Rantai Besi & Sumpah Kubah Ketujuh** (`hist-perang-rantai-besi`, jenis: `Perang Besar & Pengepungan`, menceritakan konflik perbatasan masa lalu antara [[Kekaisaran Gondoria]] dan [[Kerajaan Bawah Tanah Nidavellir]]).
-  - Menambahkan catatan sejarah ketiga **Traktat Menara Cakrawala & Penempaan Astrolabe** (`hist-traktat-astrolabe`, jenis: `Traktat, Pakta & Penemuan Agung`).
+## 2. Arsitektur Tab Timeline (Kronologi) & Sinkronisasi Dokumen Dua Arah
 
----
+### A. Kalkulator Rentang Waktu, Generasi & Usia Karakter (`Kalkulator Jarak Tahun & Usia`)
+- Memungkinkan penulis memilih **Titik Waktu A (Peristiwa Awal / Kelahiran)** dan **Titik Waktu B (Peristiwa Pembanding / Tahun Cerita Saat Ini)** untuk menghitung selisih waktu (`Δ Tahun`) secara otomatis.
+- Menampilkan konversi langsung ke:
+  - **Skala Generasi Manusia** (~25 tahun per generasi)
+  - **Rentang Hidup Dvergr Besi-Bintang** (~350 tahun masa hidup)
+  - **Rentang Hidup Sylvan Aelfir** (~700 tahun masa hidup)
 
-## 3. Desain Antarmuka & Komponen (`src/components/CodexWorkspace.tsx` & `src/App.tsx`)
+### B. Pita Kronologi Berkelompok per Era & Penanda Selisih Waktu
+- Setiap pergantian era menampilkan **Banner Babak Era Sejarah**.
+- Di antara dua peristiwa berurutan pada garis waktu kuningan (`#B5832A`), sistem menghitung dan menampilkan badge jarak waktu otomatis (`+ X tahun kemudian` atau `- X tahun sebelumnya`).
+- Dilengkapi filter ganda berdasarkan **Era Sejarah**, **Jenis Peristiwa** (*Peperangan*, *Bencana Arcane*, *Berdirinya Kerajaan*, *Penemuan Pusaka*, *Kelahiran Tokoh*), pencarian kata kunci, dan pengubah urutan waktu (**Kuno → Kini** vs **Kini → Kuno**).
 
-### A. Filter Jenis Peristiwa Sejarah di Kolom Direktori Kiri
-- Saat berada di tab **Sejarah** (`category === 'history'`), menampilkan baris tombol filter:
-  - `Semua`
-  - `Bencana Kosmik / Arcane`
-  - `Perang Besar & Pengepungan`
-  - `Berdirinya / Runtuhnya Dinasti`
-  - `Traktat, Pakta & Penemuan Agung`
-- Setiap kartu Sejarah di daftar kiri menampilkan lencana jenis peristiwa, tahun/era penanggalan, serta lokasi kejadian.
-
-### B. Lembar Profil Sejarah (View Mode)
-1. **Banner Penanggalan Kronik, Pemicu Awal & Lokasi Kejadian** di bagian atas lembar Sejarah.
-2. **Grid Parameter Historiografi & Kartu Interaktif Pihak Terlibat / Tokoh Kunci**:
-   - Menampilkan **Jenis Peristiwa**, **Era & Tahun Penanggalan**, **Lokasi Kejadian** (tautan klik ke tab **Wilayah**), serta **Korban & Kerugian Besar**.
-   - Menampilkan chip interaktif **Pihak / Negara / Kelompok Terlibat (`belligerentsList`)** dan **Tokoh Kunci Sejarah (`keyHistoricalFigures`)** yang langsung melompat ke entitas terkait saat diklik.
-3. **Panel Perbandingan: Sejarah Resmi Pemenang vs Kebenaran Rahasia Tersembunyi**:
-   - Dua kartu berdampingan yang mengontraskan apa yang diyakini rakyat umum vs fakta rahasia kanon untuk mendukung penulisan misteri/intrik novel.
-4. **Dossier Hasil Akhir & Warisan Dampak Jangka Panjang Dunia (`outcome` & `worldImpactLegacy`)**.
-5. **Panel Sinkronisasi Pita Kronologi Dunia**:
-   - Menampilkan daftar kejadian di tab **Kronologi** yang merujuk pada catatan Sejarah ini, disertai tombol **+ Catat / Sinkronkan ke Pita Kronologi** untuk menambahkan atau memperbarui titik lini masa secara otomatis.
-
-### C. Form Editor Khusus Sejarah (Edit Mode)
-- Mengganti form input dasar Sejarah menjadi 3 bagian terstruktur:
-  1. **Klasifikasi Peristiwa, Penanggalan Era/Tahun & Lokasi Kejadian (Pemilih Hibrida Wilayah)**.
-  2. **Pihak Terlibat & Tokoh Kunci Sejarah (Pemilih Hibrida Negara/Kelompok/Ras/Character)**.
-  3. **Pemicu Konflik, Dampak Dunia, serta Narasi Sejarah Resmi vs Kebenaran Rahasia**.
+### C. Sinkronisasi Dokumen Dua Arah Otomatis (Timeline ↔ Dokumen Sejarah & Alur Bab)
+1. **Simpan di Tab Sejarah → Otomatis Memperbarui Pita Timeline**:
+   - Saat Anda menyunting dan menyimpan dokumen di tab **Sejarah**, perubahan tanggal, tahun, era, lokasi, dampak, serta daftar pihak terlibat dan tokoh kunci langsung disinkronkan ke **Pita Kronologi Dunia**.
+2. **Simpan di Tab Timeline → Otomatis Memperbarui Dokumen Sejarah**:
+   - Saat Anda menyunting tonggak peristiwa di tab **Timeline**, sistem otomatis memperbarui dokumen **Sejarah** yang terhubung (judul, ringkasan, era, tahun, penanggalan, lokasi, dampak dunia, dan catatan rahasia).
+3. **Promosi 1-Klik (`+ Jadikan Lembar Sejarah`) & Tarik Massal (`Sinkronkan dari Tab Sejarah`)**:
+   - Peristiwa baru yang dibuat di **Timeline** dapat dipromosikan menjadi dokumen **Sejarah** lengkap hanya dengan 1 klik, atau seluruh dokumen **Sejarah** dapat ditarik sekaligus ke **Timeline**.
+   - Setiap peristiwa di **Timeline** juga dapat ditautkan langsung ke **Bab Novel** di tab **Alur Bab**.

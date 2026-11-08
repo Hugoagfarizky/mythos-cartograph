@@ -683,6 +683,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       updatedAt: new Date().toISOString().slice(0, 10),
     };
     onSaveEntity(updated);
+    if (category === 'history' && onUpdateTimeline) {
+      handleSyncHistoryToTimeline(updated);
+    }
     onSelectEntity(updated.id);
     setIsEditing(false);
     setDraftEntity(null);
