@@ -100,12 +100,30 @@ export default function App() {
             const missingStarterEntities = STARTER_WORLD_PROJECT.entities.filter(
               (e) => !existingIds.has(e.id)
             );
-            if (missingStarterEntities.length > 0) {
-              return {
-                ...parsed,
-                entities: [...parsed.entities, ...missingStarterEntities],
-              };
-            }
+            const existingTimelineIds = new Set(
+              (parsed.timeline || []).map((t) => t.id)
+            );
+            const missingStarterTimeline =
+              STARTER_WORLD_PROJECT.timeline.filter(
+                (t) => !existingTimelineIds.has(t.id)
+              );
+            const enrichedTimeline = [
+              ...(parsed.timeline || []).map((t) => {
+                const starterMatch = STARTER_WORLD_PROJECT.timeline.find(
+                  (st) => st.id === t.id
+                );
+                return starterMatch ? { ...starterMatch, ...t } : t;
+              }),
+              ...missingStarterTimeline,
+            ];
+            return {
+              ...parsed,
+              entities:
+                missingStarterEntities.length > 0
+                  ? [...parsed.entities, ...missingStarterEntities]
+                  : parsed.entities,
+              timeline: enrichedTimeline,
+            };
           }
           return parsed;
         }
@@ -691,11 +709,19 @@ export default function App() {
           <ChronicleTimelineView
             timeline={project.timeline}
             entities={project.entities}
+            chapters={project.chapters}
+            mapStamps={project.mapData.stamps}
             calendarSystem={project.calendarSystem}
-            onUpdateTimeline={(nextTimeline) =>
-              setProject((prev) => ({ ...prev, timeline: nextTimeline }))
-            }
+            onUpdateTimeline={(nextTimeline) => {
+              setProject((prev) => ({ ...prev, timeline: nextTimeline }));
+              showToast('Pita Kronologi Dunia berhasil diperbarui.');
+            }}
+            onSaveEntity={handleSaveEntity}
             onSelectEntity={handleNavigateToEntity}
+            onOpenChapter={(chId) => {
+              setSelectedChapterId(chId);
+              handleSwitchTab('outliner');
+            }}
           />
         )}
 

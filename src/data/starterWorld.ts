@@ -1224,59 +1224,147 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
 
   timeline: [
     {
-      id: 'time-1',
-      era: 'AE (Era Astral)',
-      year: 1,
-      displayDate: 'Tahun 1 AE · Musim Gugur',
-      title: 'Bencana Konvergensi Gerhana Merah',
-      category: 'Bencana Arcane',
-      summary: 'Eksperimen penarikan energi surya gagal saat gerhana ganda, menenggelamkan lembah barat menjadi Teluk Naga.',
-      linkedEntityIds: ['hist-gerhana-merah'],
-      regionName: 'Teluk Naga',
-    },
-    {
-      id: 'time-2',
-      era: 'AE (Era Astral)',
-      year: 2,
-      displayDate: 'Tahun 2 AE · Musim Dingin',
-      title: 'Penempaan Astrolabe Api Surya',
+      id: 'time-0a',
+      era: 'Era Surya Emas (Pra-Gerhana)',
+      year: -340,
+      displayDate: 'Tahun 340 Pra-Gerhana',
+      seasonOrPhase: 'Titik Balik Matahari Musim Panas',
+      title: 'Penempaan Astrolabe Api Surya & Pakta Aethelgard',
       category: 'Penemuan Pusaka',
-      summary: 'Tetua Dvergr Besi-Bintang dan penyihir Gondoria menciptakan Astrolabe Api Surya untuk menstabilkan lempeng dan iklim.',
-      linkedEntityIds: ['enc-astrolabe-surya', 'race-dvergr', 'nat-gondoria'],
+      summary:
+        'Para empu Dvergr Besi-Bintang dan penyihir Kekaisaran Gondoria menempa Astrolabe Api Surya di Kubah Besi Nidavellir untuk menstabilkan jaringan lempeng benua.',
+      consequenceImpact:
+        'Memulai tiga abad kemakmuran masa keemasan; jaringan menara suar surya berdiri di seluruh kota besar.',
+      secretTruthNote:
+        'Raja Thrain mengukir segel pengunci rahasia pada cincin ketiga Astrolabe yang hanya dapat dibuka dengan darah murni Dvergr atau tumbal mata penyihir tingkat Sovereign.',
+      linkedEntityIds: [
+        'hist-traktat-astrolabe',
+        'enc-astrolabe-surya',
+        'race-dvergr',
+        'nat-nidavellir',
+        'nat-gondoria',
+      ],
       regionName: 'Kerajaan Bawah Tanah Nidavellir',
     },
     {
+      id: 'time-0b',
+      era: 'Era Surya Emas (Pra-Gerhana)',
+      year: -85,
+      displayDate: 'Tahun 85 Pra-Gerhana',
+      seasonOrPhase: 'Malam Hujan Meteor Perak',
+      title: 'Kelahiran & Kebangkitan Meridian Archmage Vaelen Thorne',
+      category: 'Kelahiran Tokoh',
+      summary:
+        'Vaelen Thorne lahir di provinsi utara Gondoria di bawah konjungsi bintang perak dan menunjukkan bakat langka membaca getaran meridian kosmik sejak usia belia.',
+      consequenceImpact:
+        'Kelak diangkat menjadi Arsiparis Agung termuda dalam sejarah Akademi Cakrawala dan guru bagi putri mahkota Seraphina.',
+      secretTruthNote:
+        'Garis darah keluarga Thorne diam-diam memiliki keterikatan kuno dengan penjaga hutan Sylvan Aelfir.',
+      linkedEntityIds: ['char-vaelen', 'pwr-resonansi-astral', 'nat-gondoria'],
+      regionName: 'Kekaisaran Gondoria',
+    },
+    {
+      id: 'time-1',
+      era: 'Era Abu (Post-Gerhana)',
+      year: 0,
+      displayDate: 'Tahun 0 PG · Malam Tanpa Bayangan',
+      seasonOrPhase: 'Gerhana Merah Ganda',
+      title: 'Bencana Konvergensi Gerhana Merah',
+      category: 'Bencana Arcane',
+      summary:
+        'Eksperimen penarikan energi kosmik terlarang meledak saat gerhana ganda, meruntuhkan ibu kota lama Aethelgard dan menenggelamkan lembah barat menjadi Teluk Naga.',
+      consequenceImpact:
+        'Runtuhnya dinasti lama, lahirnya kalender Post-Gerhana (PG), dan munculnya kabut spora abadi di Rimba Bayang-Bayang.',
+      secretTruthNote:
+        'Tragedi ini bukan sabotase bangsa Aelfir seperti yang tertulis di buku sejarah istana, melainkan keserakahan Kanselir Agung Gondoria yang memaksa cincin ketiga Astrolabe melampaui batas.',
+      linkedEntityIds: [
+        'hist-gerhana-merah',
+        'nat-gondoria',
+        'race-aelfir',
+        'enc-astrolabe-surya',
+      ],
+      regionName: 'Teluk Naga',
+    },
+    {
       id: 'time-3',
-      era: 'AE (Era Astral)',
+      era: 'Era Abu (Post-Gerhana)',
       year: 52,
-      displayDate: 'Tahun 52 AE · Musim Semi',
+      displayDate: 'Tahun 52 PG · Musim Semi',
+      seasonOrPhase: 'Bulan Sabit Pertama',
       title: 'Deklarasi Berdirinya Ordo Cakrawala Perak',
       category: 'Berdirinya Kerajaan',
-      summary: 'Para kartografer dan penyihir astral mendirikan observatorium independen di Puncak Wyvern.',
+      summary:
+        'Para kartografer dan penyihir astral yang selamat dari Gerhana Merah mendirikan observatorium netral di Puncak Wyvern guna memantau anomali langit.',
+      consequenceImpact:
+        'Menjadi satu-satunya lembaga pemetaan dan penjaga arsip bintang yang diakui lintas batas negara.',
+      secretTruthNote:
+        'Ruang bawah tanah observatorium menyimpan salinan asli jurnal ritual Tahun 0 PG yang diburu oleh intelijen Gondoria.',
       linkedEntityIds: ['fac-ordo-cakrawala', 'reg-wyvern-peaks'],
       regionName: 'Puncak Wyvern',
     },
     {
+      id: 'time-3b',
+      era: 'Era Abu (Post-Gerhana)',
+      year: 214,
+      displayDate: 'Tahun 214 PG · Musim Gugur',
+      seasonOrPhase: 'Angin Barat Lautan Abu',
+      title: 'Perang Rantai Besi & Kemerdekaan Valdoria',
+      category: 'Peperangan',
+      summary:
+        'Pemberontakan armada serikat dagang pelabuhan timur yang memutus blokade rantai laut Kekaisaran Gondoria dan mendirikan Republik Maritim Valdoria.',
+      consequenceImpact:
+        'Kekaisaran Gondoria kehilangan monopoli bea cukai samudra timur; lahirnya Dewan Nakhoda Sembilan.',
+      secretTruthNote:
+        'Kemenangan Valdoria dibiayai secara rahasia oleh Sindikat Gagak Senja dan pasokan torpedo uap dari klan Dvergr.',
+      linkedEntityIds: [
+        'hist-perang-rantai-besi',
+        'nat-valdoria',
+        'nat-gondoria',
+        'fac-sindikat-gagak',
+      ],
+      regionName: 'Pelabuhan Bebas Valdoria',
+    },
+    {
       id: 'time-4',
-      era: 'AE (Era Astral)',
+      era: 'Era Abu (Post-Gerhana)',
       year: 398,
-      displayDate: 'Tahun 398 AE · Musim Panas',
+      displayDate: 'Tahun 398 PG · Musim Panas',
+      seasonOrPhase: 'Zenith Surya Tahunan',
       title: 'Penobatan Empress Seraphina Valorian',
       category: 'Berdirinya Kerajaan',
-      summary: 'Seraphina naik takhta di Solis Prime dan memulai reformasi militer Legiun Cinnabar.',
-      linkedEntityIds: ['char-seraphina', 'nat-gondoria'],
+      summary:
+        'Seraphina Valorian naik takhta di Solis Prime pada usia muda dan memulai reformasi militer besar-besaran bersama Legiun Cinnabar.',
+      consequenceImpact:
+        'Kebijakan ekspansionis Gondoria kembali menguat; tekanan diplomatik terhadap Nidavellir dan Puncak Wyvern meningkat tajam.',
+      secretTruthNote:
+        'Seraphina bersumpah akan menyatukan kembali seluruh pecahan benua sebelum siklus Gerhana Merah kedua tiba.',
+      linkedEntityIds: ['char-seraphina', 'nat-gondoria', 'skl-tombak-surya'],
       regionName: 'Solis Prime',
+      linkedChapterId: 'chap-2',
     },
     {
       id: 'time-5',
-      era: 'AE (Era Astral)',
+      era: 'Era Abu (Post-Gerhana)',
       year: 410,
-      displayDate: 'Tahun 410 AE · Malam Titik Balik',
-      title: 'Pengasingan Archmage Vaelen Thorne',
+      displayDate: 'Tahun 410 PG · Malam Titik Balik Dingin',
+      seasonOrPhase: 'Badai Salju Puncak Utara',
+      title: 'Pengadilan & Pengasingan Archmage Vaelen Thorne',
       category: 'Peperangan',
-      summary: 'Vaelen membawa pergi Astrolabe Api Surya dari ibu kota setelah menemukan retakan berbahaya pada cincin intinya.',
-      linkedEntityIds: ['char-vaelen', 'char-seraphina', 'enc-astrolabe-surya'],
+      summary:
+        'Setelah mengorbankan mata kirinya untuk menghentikan kebocoran cincin Astrolabe Api Surya, Vaelen menolak menyerahkan relik itu kepada takhta dan melarikan diri ke Puncak Wyvern.',
+      consequenceImpact:
+        'Vaelen dicap sebagai pengkhianat negara; memicu krisis diplomatik yang menjadi pembuka alur cerita utama di Bab 1.',
+      secretTruthNote:
+        'Jika Vaelen tidak membawa pergi Astrolabe malam itu, pemaksaan aktivasi oleh Senat Solis Prime akan memicu ledakan kedua di jantung ibu kota.',
+      linkedEntityIds: [
+        'hist-pengasingan-vaelen',
+        'char-vaelen',
+        'char-seraphina',
+        'enc-astrolabe-surya',
+        'reg-wyvern-peaks',
+      ],
       regionName: 'Puncak Wyvern',
+      linkedChapterId: 'chap-1',
     },
   ],
 

@@ -236,11 +236,15 @@ export interface TimelineEvent {
   era: string;
   year: number;
   displayDate: string;
+  seasonOrPhase?: string;
   title: string;
   category: 'Peperangan' | 'Bencana Arcane' | 'Berdirinya Kerajaan' | 'Penemuan Pusaka' | 'Kelahiran Tokoh';
   summary: string;
+  consequenceImpact?: string;
+  secretTruthNote?: string;
   linkedEntityIds: string[];
   regionName?: string;
+  linkedChapterId?: string;
 }
 
 export interface ChapterScene {
