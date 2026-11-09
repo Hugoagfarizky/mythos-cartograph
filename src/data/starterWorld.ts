@@ -1298,15 +1298,30 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       targetId: 'char-seraphina',
       type: 'rival',
       label: 'Mantan Guru & Sengketa Astrolabe',
-      notes: 'Vaelen pernah mendidik Seraphina dalam filsafat astronomi, namun kini berseberangan demi mencegah penyalahgunaan Astrolabe Api Surya.',
+      notes:
+        'Vaelen pernah mendidik Seraphina dalam filsafat astronomi, namun kini berseberangan demi mencegah penyalahgunaan Astrolabe Api Surya.',
+      visibilityStatus: 'Publik / Diketahui Umum',
+      tensionOrLoyalty: 'Ketegangan Dingin & Rasa Hormat Lama',
+      directionality: 'bidirectional',
+      originHistory:
+        'Terbentuk di Akademi Cakrawala Solis Prime sebelum pecahnya [[Konvergensi Gerhana Merah]], lalu retak ketika Vaelen menolak menyerahkan kunci [[Astrolabe Api Surya]].',
+      storyEvolution:
+        'Bab 1–2: Perang dingin melalui utusan militer; Bab 3+: Dipaksa berunding kembali saat anomali eter mengancam seluruh benua.',
     },
     {
       id: 'rel-2',
       sourceId: 'char-vaelen',
       targetId: 'fac-ordo-cakrawala',
       type: 'member',
-      label: 'Arsiparis & Pemimpin',
+      label: 'Arsiparis Agung & Pimpinan',
       notes: 'Memimpin markas pengasingan Ordo di Puncak Wyvern.',
+      visibilityStatus: 'Publik / Diketahui Umum',
+      tensionOrLoyalty: 'Sumpah Mati / Tak Terputuskan',
+      directionality: 'directed',
+      originHistory:
+        'Mengambil alih kepemimpinan [[Ordo Cakrawala Perak]] setelah separuh menara observatorium runtuh pada Tahun 0 PG.',
+      storyEvolution:
+        'Vaelen menyembunyikan rahasia cincin ketiga Astrolabe bahkan dari sebagian dewan mudanya demi keselamatan mereka.',
     },
     {
       id: 'rel-3',
@@ -1314,7 +1329,15 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       targetId: 'nat-gondoria',
       type: 'member',
       label: 'Maharani Penguasa',
-      notes: 'Memegang komando tertinggi atas militer dan senat Kekaisaran Gondoria.',
+      notes:
+        'Memegang komando tertinggi atas militer dan senat Kekaisaran Gondoria.',
+      visibilityStatus: 'Publik / Diketahui Umum',
+      tensionOrLoyalty: 'Otoritas Mutlak namun Ditekan Senat',
+      directionality: 'directed',
+      originHistory:
+        'Naik takhta pada usia muda di [[Ibu Kota Solis Prime]] setelah krisis suksesi Dinasti Valorian.',
+      storyEvolution:
+        'Berusaha memulihkan kejayaan [[Kekaisaran Gondoria]] sambil menahan kudeta diam-diam para jenderal garis keras.',
     },
     {
       id: 'rel-4',
@@ -1322,7 +1345,15 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       targetId: 'race-aelfir',
       type: 'ally',
       label: 'Pakta Penjaga Rimba',
-      notes: 'Saling bertukar informasi mengenai anomali eter dan suplai Bunga Lentera Malam.',
+      notes:
+        'Saling bertukar informasi mengenai anomali eter dan suplai Bunga Lentera Malam.',
+      visibilityStatus: 'Terselubung / Disamarkan',
+      tensionOrLoyalty: 'Aliansi Strategis Saling Percaya',
+      directionality: 'bidirectional',
+      originHistory:
+        'Disepakati di bawah Pohon Memori Eldath di [[Rimba Shadowwood]] untuk menjaga stabilitas meridian alam.',
+      storyEvolution:
+        'Diperkuat pada Bab 2 ketika utusan [[Sylvan Aelfir]] menyelamatkan kurir Ordo dari sergapan tentara bayaran.',
     },
     {
       id: 'rel-5',
@@ -1330,26 +1361,58 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       targetId: 'nat-nidavellir',
       type: 'rival',
       label: 'Ultimatum Pengembalian Pusaka',
-      notes: 'Ketegangan dagang dan militer terkait hak kepemilikan Astrolabe Api Surya.',
+      notes:
+        'Ketegangan dagang dan militer terkait hak kepemilikan Astrolabe Api Surya.',
+      visibilityStatus: 'Publik / Diketahui Umum',
+      tensionOrLoyalty: 'Ambang Perang Terbuka',
+      directionality: 'bidirectional',
+      originHistory:
+        'Berakar dari pelanggaran [[Traktat Baja-Surya Aethelgard]] setelah Gondoria menolak mengembalikan [[Astrolabe Api Surya]] ke Nidavellir.',
+      storyEvolution:
+        'Embargo baja runik oleh [[Kerajaan Bawah Tanah Nidavellir]] memicu krisis persenjataan di perbatasan Gondoria.',
     },
     {
       id: 'rel-6',
       sourceId: 'race-dvergr',
       targetId: 'nat-nidavellir',
       type: 'member',
-      label: 'Bangsa Pendiri',
+      label: 'Bangsa Pendiri & Penguasa Kubah',
       notes: 'Menguasai tujuh kubah penempaan di jantung gunung.',
+      visibilityStatus: 'Publik / Diketahui Umum',
+      tensionOrLoyalty: 'Sumpah Mati / Tak Terputuskan',
+      directionality: 'directed',
+      originHistory:
+        'Para leluhur [[Dvergr Besi-Bintang]] memahat kubah pertama Nidavellir ribuan tahun sebelum Era Surya Emas.',
+      storyEvolution:
+        'Dewan Gilda Empu bersiap mengaktifkan kembali Golem Jantung-Magma jika kedaulatan kubah dilanggar.',
+    },
+    {
+      id: 'rel-7',
+      sourceId: 'char-seraphina',
+      targetId: 'fac-gagak-senja',
+      type: 'vassal',
+      label: 'Kontrak Intelijen & Operasi Hitam',
+      notes:
+        'Istana secara diam-diam menyewa mata-mata Sindikat Gagak Senja untuk melacak pergerakan Vaelen dan mengamankan jalur penyelundupan kristal eter.',
+      visibilityStatus: 'Rahasia di Balik Layar (Konspirasi)',
+      tensionOrLoyalty: 'Aliansi Taktis / Penuh Curiga',
+      directionality: 'directed',
+      originHistory:
+        'Dimulai melalui pertemuan rahasia di kanal bawah tanah [[Ibu Kota Solis Prime]] tanpa sepengetahuan Senat Agung.',
+      storyEvolution:
+        'Berisiko menjadi skandal besar di Bab 3 apabila bukti kontrak bersegel maharani jatuh ke tangan oposisi.',
     },
   ],
 
   nodePositions: [
-    { entityId: 'char-vaelen', x: 240, y: 160 },
-    { entityId: 'char-seraphina', x: 620, y: 160 },
-    { entityId: 'fac-ordo-cakrawala', x: 160, y: 340 },
-    { entityId: 'race-aelfir', x: 370, y: 390 },
-    { entityId: 'nat-gondoria', x: 700, y: 340 },
-    { entityId: 'nat-nidavellir', x: 520, y: 450 },
-    { entityId: 'race-dvergr', x: 760, y: 490 },
+    { entityId: 'char-vaelen', x: 230, y: 150 },
+    { entityId: 'char-seraphina', x: 640, y: 150 },
+    { entityId: 'fac-ordo-cakrawala', x: 150, y: 330 },
+    { entityId: 'fac-gagak-senja', x: 440, y: 250 },
+    { entityId: 'race-aelfir', x: 330, y: 420 },
+    { entityId: 'nat-gondoria', x: 740, y: 330 },
+    { entityId: 'nat-nidavellir', x: 540, y: 450 },
+    { entityId: 'race-dvergr', x: 770, y: 480 },
   ],
 
   timeline: [
@@ -1505,11 +1568,31 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       act: 'Babak I: Bayang-Bayang di Atas Kertas Perkamen',
       title: 'Jarum Kuningan yang Bergetar',
       status: 'Selesai',
-      synopsis: 'Di puncak menara observatorium yang membeku, Archmage Vaelen Thorne mendapati cincin ketiga Astrolabe Api Surya berputar sendiri saat badai salju melanda Puncak Wyvern.',
+      storyDateOrTime: 'Tahun 412 PG · Malam Badai Salju Bulan Kesebelas',
+      primaryPov: 'Archmage Vaelen Thorne',
+      primaryLocation: 'Puncak Wyvern',
+      synopsis:
+        'Di puncak menara observatorium yang membeku, Archmage Vaelen Thorne mendapati cincin ketiga Astrolabe Api Surya berputar sendiri saat badai salju melanda Puncak Wyvern.',
+      chapterGoal:
+        'Memperkenalkan anomali bangkitnya [[Astrolabe Api Surya]] dan memaksa [[Archmage Vaelen Thorne]] meninggalkan menara pengasingannya di [[Puncak Wyvern]].',
+      centralConflict:
+        'Badai eter membuat mata kuningan Vaelen mengalami perdarahan kristal, sementara kurir [[Sylvan Aelfir]] yang sekarat membawa bukti bahwa pasukan [[Kekaisaran Gondoria]] telah memasuki [[Rimba Bayang-Bayang (Shadowwood)]].',
+      endingHookOrTwist:
+        'Di balik jubah kurir Aelfir yang gugur, Vaelen menemukan lencana operasi hitam [[Sindikat Gagak Senja]] yang dicap dengan segel pribadi [[Empress Seraphina Valorian]].',
+      foreshadowingNotes:
+        'Getaran jarum Astrolabe pada frekuensi 7-Oktaf memberi petunjuk awal bahwa segel di dasar Teluk Naga mulai retak.',
       draftNotes: `Udara di Observatorium [[Puncak Wyvern]] cukup dingin untuk membekukan tinta di ujung pena bulu. [[Archmage Vaelen Thorne]] menatap permukaan meja kartografinya; di sana, [[Astrolabe Api Surya]] memancarkan denyut merah samar meskipun malam sedang gelap gulita tanpa bulan.
 
-Menurut hukum [[Resonansi Eteris Astral]], artefak jalur surya seharusnya tertidur di malam hari. Namun jarum penunjuknya terus bergetar menunjuk ke arah tenggara—tepat ke jantung [[Rimba Bayang-Bayang (Shadowwood)]].`,
-      featuredEntityIds: ['char-vaelen', 'reg-wyvern-peaks', 'enc-astrolabe-surya', 'pwr-resonansi-astral'],
+Menurut hukum [[Resonansi Eteris Astral]], artefak jalur surya seharusnya tertidur di malam hari. Namun jarum penunjuknya terus bergetar menunjuk ke arah tenggara—tepat ke jantung [[Rimba Bayang-Bayang (Shadowwood)]].
+
+Ketika pintu menara digedor dari luar, seekor [[Wyvern Sayap-Kaca Utara]] mendarat darurat di balkon batu dengan penunggang kurir [[Sylvan Aelfir]] yang terluka parah oleh tombak surya.`,
+      featuredEntityIds: [
+        'char-vaelen',
+        'reg-wyvern-peaks',
+        'enc-astrolabe-surya',
+        'pwr-resonansi-astral',
+        'reg-shadowwood',
+      ],
       wordCountTarget: 3500,
       currentWordCount: 3420,
       scenes: [
@@ -1518,14 +1601,26 @@ Menurut hukum [[Resonansi Eteris Astral]], artefak jalur surya seharusnya tertid
           title: 'Anomali Tengah Malam di Observatorium',
           povCharacter: 'Archmage Vaelen Thorne',
           settingRegion: 'Puncak Wyvern',
-          summary: 'Vaelen mencatat pergeseran bintang dan merasakan nyeri pada mata kristal kuningannya.',
+          timeOfDay: 'Tengah Malam · Badai Salju',
+          summary:
+            'Vaelen mencatat pergeseran bintang dan merasakan nyeri hebat pada mata kristal kuningannya saat cincin ketiga Astrolabe berputar sendiri.',
+          sceneGoalOrConflict:
+            'Menahan lonjakan energi [[Astrolabe Api Surya]] agar tidak terdeteksi oleh menara pengawas [[Kekaisaran Gondoria]].',
+          sceneOutcome:
+            'Vaelen berhasil meredam pancaran suar dengan glif [[Aksara Bintang Aethel & Glif Khaz-Runa]], namun mengetahui lokasi retakan berada di Shadowwood.',
         },
         {
           id: 'sc-1b',
           title: 'Utusan Bersayap dari Shadowwood',
           povCharacter: 'Archmage Vaelen Thorne',
           settingRegion: 'Puncak Wyvern',
-          summary: 'Seorang kurir Sylvan Aelfir tiba dengan luka bakar senjata surya milik Kekaisaran Gondoria.',
+          timeOfDay: 'Menjelang Fajar',
+          summary:
+            'Seorang kurir Sylvan Aelfir tiba di balkon observatorium dengan luka bakar senjata surya milik Kekaisaran Gondoria.',
+          sceneGoalOrConflict:
+            'Menyelamatkan nyawa kurir dan menggali informasi sebelum racun abu merenggut kesadarannya.',
+          sceneOutcome:
+            'Kurir menyerahkan peta jalur rahasia [[Rimba Bayang-Bayang (Shadowwood)]] dan memperingatkan Vaelen tentang perburuan [[Bunga Lentera Malam]].',
         },
       ],
     },
@@ -1535,11 +1630,29 @@ Menurut hukum [[Resonansi Eteris Astral]], artefak jalur surya seharusnya tertid
       act: 'Babak I: Bayang-Bayang di Atas Kertas Perkamen',
       title: 'Dekrit Segel Merah Solis Prime',
       status: 'Sedang Ditulis',
-      synopsis: 'Empress Seraphina Valorian menghadapi ultimatum utusan Dvergr dari Nidavellir sembari memerintahkan ekspedisi rahasia memburu keberadaan Vaelen.',
-      draftNotes: `Di ruang takhta Solis Prime, ibu kota [[Kekaisaran Gondoria]], [[Empress Seraphina Valorian]] membuka gulungan peta perbatasan timur. Utusan dari [[Kerajaan Bawah Tanah Nidavellir]] baru saja mengancam akan menghentikan pasokan baja meteorit jika [[Astrolabe Api Surya]] tidak dikembalikan sebelum musim dingin berakhir.
+      storyDateOrTime: 'Tahun 412 PG · Tiga Hari Setelah Anomali Puncak Wyvern',
+      primaryPov: 'Empress Seraphina Valorian',
+      primaryLocation: 'Ibu Kota Solis Prime',
+      synopsis:
+        'Empress Seraphina Valorian menghadapi ultimatum utusan Dvergr dari Nidavellir sembari memerintahkan ekspedisi rahasia memburu keberadaan Vaelen.',
+      chapterGoal:
+        'Memperlihatkan tekanan geopolitik yang dihadapi [[Empress Seraphina Valorian]] di [[Ibu Kota Solis Prime]] serta alasan mendesaknya menguasai kembali [[Astrolabe Api Surya]].',
+      centralConflict:
+        'Delegasi [[Kerajaan Bawah Tanah Nidavellir]] mengancam embargo baja meteorit berdasarkan [[Traktat Baja-Surya Aethelgard]], sementara Senat menuntut perang terbuka.',
+      endingHookOrTwist:
+        'Seraphina diam-diam menandatangani surat perintah rahasia kepada [[Sindikat Gagak Senja]] untuk menangkap Vaelen hidup-hidup sebelum Legiun Cinnabar menemukannya.',
+      foreshadowingNotes:
+        'Luka bakar halus di telapak tangan Seraphina menunjukkan bahwa ia telah berlatih [[Keputusan Tombak Surya]] melampaui batas aman.',
+      draftNotes: `Di ruang takhta [[Ibu Kota Solis Prime]], jantung pemerintahan [[Kekaisaran Gondoria]], [[Empress Seraphina Valorian]] membuka gulungan peta perbatasan timur. Utusan dari [[Kerajaan Bawah Tanah Nidavellir]] baru saja mengancam akan menghentikan pasokan baja meteorit jika [[Astrolabe Api Surya]] tidak dikembalikan sebelum musim dingin berakhir.
 
-Seraphina tahu ia tidak bisa menyerahkan relik itu. Tanpa Astrolabe tersebut, teknik [[Keputusan Tombak Surya]] tidak akan cukup kuat menahan gelombang gerhana yang akan datang.`,
-      featuredEntityIds: ['char-seraphina', 'nat-gondoria', 'nat-nidavellir', 'skl-tombak-surya'],
+Seraphina tahu ia tidak bisa menyerahkan relik itu kepada bangsa [[Dvergr Besi-Bintang]]. Tanpa Astrolabe tersebut, teknik [[Keputusan Tombak Surya]] tidak akan cukup kuat menahan gelombang gerhana yang akan datang.`,
+      featuredEntityIds: [
+        'char-seraphina',
+        'nat-gondoria',
+        'reg-solis-prime',
+        'nat-nidavellir',
+        'skl-tombak-surya',
+      ],
       wordCountTarget: 4000,
       currentWordCount: 2150,
       scenes: [
@@ -1547,8 +1660,14 @@ Seraphina tahu ia tidak bisa menyerahkan relik itu. Tanpa Astrolabe tersebut, te
           id: 'sc-2a',
           title: 'Sidang Dewan Perang di Solis Prime',
           povCharacter: 'Empress Seraphina Valorian',
-          settingRegion: 'Kekaisaran Gondoria',
-          summary: 'Perdebatan sengit antara jenderal Gondoria dan delegasi penempa Dvergr.',
+          settingRegion: 'Ibu Kota Solis Prime',
+          timeOfDay: 'Siang Hari · Zenit Surya',
+          summary:
+            'Perdebatan sengit antara jenderal Gondoria dan delegasi penempa Dvergr di Aula Senat Surya.',
+          sceneGoalOrConflict:
+            'Mengulur waktu tuntutan [[Kerajaan Bawah Tanah Nidavellir]] selama 30 hari tanpa memicu perang dua front.',
+          sceneOutcome:
+            'Delegasi Dvergr memberikan tenggat waktu satu purnama; Seraphina mengerahkan agen bayangan ke utara.',
         },
       ],
     },
@@ -1558,9 +1677,26 @@ Seraphina tahu ia tidak bisa menyerahkan relik itu. Tanpa Astrolabe tersebut, te
       act: 'Babak I: Bayang-Bayang di Atas Kertas Perkamen',
       title: 'Kabut Pohon Memori',
       status: 'Rencana',
-      synopsis: 'Vaelen turun dari Puncak Wyvern menuju Rimba Bayang-Bayang untuk mencari Bunga Lentera Malam dan memeriksa retakan lempeng eter.',
-      draftNotes: `Perjalanan menembus [[Rimba Bayang-Bayang (Shadowwood)]] menguji batas fisik [[Archmage Vaelen Thorne]]. Karena kanopi pohon yang begitu rapat menutup cahaya langit, efisiensi [[Resonansi Eteris Astral]] berkurang drastis sesuai hukum konservasi cahaya. Ia harus mengandalkan cadangan kristal di tongkatnya saat berhadapan dengan patroli perbatasan.`,
-      featuredEntityIds: ['char-vaelen', 'reg-shadowwood', 'race-aelfir', 'enc-bunga-lentera'],
+      storyDateOrTime: 'Tahun 412 PG · Pekan Kedua Bulan Kedua Belas',
+      primaryPov: 'Archmage Vaelen Thorne',
+      primaryLocation: 'Rimba Bayang-Bayang (Shadowwood)',
+      synopsis:
+        'Vaelen turun dari Puncak Wyvern menuju Rimba Bayang-Bayang untuk mencari Bunga Lentera Malam dan memeriksa retakan lempeng eter.',
+      chapterGoal:
+        'Menemukan sarang tumbuh [[Bunga Lentera Malam]] dan bernegosiasi dengan tetua [[Sylvan Aelfir]] di bawah Pohon Memori Eldath.',
+      centralConflict:
+        'Kanopi hutan yang rapat melemahkan sihir [[Resonansi Eteris Astral]] milik Vaelen tepat ketika skuadron pemburu bayaran menyergap rombongannya.',
+      endingHookOrTwist:
+        'Pohon Memori Eldath memperlihatkan kilas balik masa lalu yang membuktikan bahwa [[Konvergensi Gerhana Merah]] disengaja oleh pendahulu takhta Gondoria.',
+      foreshadowingNotes:
+        'Penggunaan [[Langkah Kabut Sylvan]] oleh penjaga hutan memberi petunjuk hubungan darah lama keluarga Thorne dengan Aelfir.',
+      draftNotes: `Perjalanan menembus [[Rimba Bayang-Bayang (Shadowwood)]] menguji batas fisik [[Archmage Vaelen Thorne]]. Karena kanopi pohon yang begitu rapat menutup cahaya langit, efisiensi [[Resonansi Eteris Astral]] berkurang drastis sesuai hukum konservasi cahaya. Ia harus mengandalkan cadangan kristal di tongkatnya dan kelopak [[Bunga Lentera Malam]] saat berhadapan dengan patroli perbatasan [[Sylvan Aelfir]].`,
+      featuredEntityIds: [
+        'char-vaelen',
+        'reg-shadowwood',
+        'race-aelfir',
+        'enc-bunga-lentera',
+      ],
       wordCountTarget: 3800,
       currentWordCount: 640,
       scenes: [
@@ -1569,7 +1705,13 @@ Seraphina tahu ia tidak bisa menyerahkan relik itu. Tanpa Astrolabe tersebut, te
           title: 'Gerbang Kabut Perak',
           povCharacter: 'Archmage Vaelen Thorne',
           settingRegion: 'Rimba Bayang-Bayang (Shadowwood)',
-          summary: 'Pertemuan dengan penjaga perbatasan Sylvan Aelfir dan negosiasi izin masuk.',
+          timeOfDay: 'Senja Berkabut',
+          summary:
+            'Pertemuan menegangkan dengan penjaga perbatasan Sylvan Aelfir dan negosiasi izin masuk menuju Pohon Memori.',
+          sceneGoalOrConflict:
+            'Meyakinkan komandan pemanah [[Sylvan Aelfir]] bahwa Vaelen bukan lagi utusan [[Kekaisaran Gondoria]].',
+          sceneOutcome:
+            'Vaelen diizinkan masuk setelah menunjukkan lencana [[Ordo Cakrawala Perak]] dan menyerahkan tongkat senjatanya sementara.',
         },
       ],
     },

@@ -116,6 +116,57 @@ export default function App() {
               }),
               ...missingStarterTimeline,
             ];
+            const existingRelIds = new Set(
+              (parsed.relationships || []).map((r) => r.id)
+            );
+            const missingStarterRels =
+              STARTER_WORLD_PROJECT.relationships.filter(
+                (r) => !existingRelIds.has(r.id)
+              );
+            const enrichedRelationships = [
+              ...(parsed.relationships || []).map((r) => {
+                const starterMatch = STARTER_WORLD_PROJECT.relationships.find(
+                  (sr) => sr.id === r.id
+                );
+                return starterMatch ? { ...starterMatch, ...r } : r;
+              }),
+              ...missingStarterRels,
+            ];
+            const existingPosIds = new Set(
+              (parsed.nodePositions || []).map((p) => p.entityId)
+            );
+            const missingStarterPos =
+              STARTER_WORLD_PROJECT.nodePositions.filter(
+                (p) => !existingPosIds.has(p.entityId)
+              );
+            const existingChapterIds = new Set(
+              (parsed.chapters || []).map((c) => c.id)
+            );
+            const missingStarterChapters =
+              STARTER_WORLD_PROJECT.chapters.filter(
+                (c) => !existingChapterIds.has(c.id)
+              );
+            const enrichedChapters = [
+              ...(parsed.chapters || []).map((c) => {
+                const starterCh = STARTER_WORLD_PROJECT.chapters.find(
+                  (sc) => sc.id === c.id
+                );
+                if (!starterCh) return c;
+                return {
+                  ...starterCh,
+                  ...c,
+                  scenes: (c.scenes || []).map((scItem) => {
+                    const starterScene = starterCh.scenes.find(
+                      (ss) => ss.id === scItem.id
+                    );
+                    return starterScene
+                      ? { ...starterScene, ...scItem }
+                      : scItem;
+                  }),
+                };
+              }),
+              ...missingStarterChapters,
+            ];
             return {
               ...parsed,
               entities:
@@ -123,6 +174,12 @@ export default function App() {
                   ? [...parsed.entities, ...missingStarterEntities]
                   : parsed.entities,
               timeline: enrichedTimeline,
+              relationships: enrichedRelationships,
+              nodePositions: [
+                ...(parsed.nodePositions || []),
+                ...missingStarterPos,
+              ],
+              chapters: enrichedChapters,
             };
           }
           return parsed;

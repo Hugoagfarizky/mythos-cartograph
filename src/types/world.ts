@@ -233,6 +233,11 @@ export interface RelationshipEdge {
   type: RelationType;
   label: string;
   notes: string;
+  visibilityStatus?: string;
+  tensionOrLoyalty?: string;
+  directionality?: 'bidirectional' | 'directed';
+  originHistory?: string;
+  storyEvolution?: string;
 }
 
 export interface GraphNodePosition {
@@ -262,7 +267,10 @@ export interface ChapterScene {
   title: string;
   povCharacter: string;
   settingRegion: string;
+  timeOfDay?: string;
   summary: string;
+  sceneGoalOrConflict?: string;
+  sceneOutcome?: string;
 }
 
 export interface ChapterOutline {
@@ -271,7 +279,14 @@ export interface ChapterOutline {
   act: string;
   title: string;
   status: 'Rencana' | 'Sedang Ditulis' | 'Revisi' | 'Selesai';
+  storyDateOrTime?: string;
+  primaryPov?: string;
+  primaryLocation?: string;
   synopsis: string;
+  chapterGoal?: string;
+  centralConflict?: string;
+  endingHookOrTwist?: string;
+  foreshadowingNotes?: string;
   draftNotes: string;
   featuredEntityIds: string[];
   wordCountTarget: number;

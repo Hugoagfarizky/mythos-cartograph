@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana peningkatan komprehensif untuk tab Artefak & Biota (encyclopedia) yang mencakup filter Sub-Kategori & Kelangkaan di direktori kiri, Pemilih Hibrida Pemilik/Pencipta/Habitat, Dossier Pusaka (Syarat Aktivasi, Kutukan/Efek Samping & Cara Menghancurkan), Dossier Bestiari & Herbalisme (Perilaku Monster, Bagian Tubuh Berharga & Khasiat Alkimia), serta Daftar Otomatis Karakter, Kelompok, dan Wilayah terkait beserta tombol 1-klik tautan cepat.",
-  "updatedAt":  "2026-11-09T08:05:00.200775223Z",
+  "summary":  "Rencana implementasi penyempurnaan tab Alur Bab (ChapterOutlinerView) dengan Anatomi Struktur Naratif Bab (Tujuan Bab, Konflik Utama, Cliffhanger Akhir, Foreshadowing Rahasia, Waktu Cerita, POV & Lokasi Utama, Bar Progres Kata), Pengelola Urutan Adegan Interaktif (Pilih Hibrida POV & Lokasi dari World Bible, Tujuan/Konflik/Hasil Adegan, Mode Edit & Urutkan Naik/Turun Bab/Adegan), Filter Babak/Status di Direktori Kiri, serta Deteksi Otomatis Entitas [[Kurung Ganda]] & Bilah Sisipkan Cepat World Bible.",
+  "updatedAt":  "2026-11-09T09:21:50.658612796Z",
   "requestFeedback":  true,
   "userFacing":  true
 }
