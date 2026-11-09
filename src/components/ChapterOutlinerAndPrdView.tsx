@@ -31,7 +31,12 @@ import {
   LoreEntity,
   WorldProject,
 } from '../types/world';
-import { CATEGORY_META, WikiTextRenderer } from './WikiTextRenderer';
+import {
+  CATEGORY_META,
+  FantasySectionDivider,
+  OrnateCornerFiligree,
+  WikiTextRenderer,
+} from './WikiTextRenderer';
 
 interface ChapterOutlinerViewProps {
   chapters: ChapterOutline[];
@@ -619,16 +624,16 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                       setShowSceneForm(false);
                       setEditingSceneId(null);
                     }}
-                    className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                    className={`arcana-card w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer space-y-2 ${
                       isSelected
-                        ? 'bg-[#EFE7D6] border-[#9E2A2B] shadow-2xs'
-                        : 'bg-[#F6F1E6] border-[#D8CBB3] hover:bg-[#EFE7D6]/60'
+                        ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-xs'
+                        : 'bg-[#F6F1E6] border-[#B5832A]/45 hover:bg-[#EFE7D6]/60'
                     }`}
                   >
                     <div className="flex items-center justify-between gap-2 text-[11px] text-[#695A47]">
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="font-mono-tabular font-bold text-[#9E2A2B]">
-                          Bab {ch.chapterNumber}
+                        <span className="font-epic font-bold text-[#9E2A2B]">
+                          ❖ Bab {ch.chapterNumber}
                         </span>
                         <span>·</span>
                         <span
@@ -723,15 +728,16 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
         {/* ================================================================= */}
         {/* RIGHT CHAPTER DETAIL, DRAMATURGY DOSSIER & SCENE STUDIO (8 COLS)  */}
         {/* ================================================================= */}
-        <div className="lg:col-span-8 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6">
+        <div className="relative overflow-hidden lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs">
+          <OrnateCornerFiligree className="text-[#B5832A]/50" />
           {activeChapter ? (
             <div className="space-y-6">
               {/* Chapter Header & Action Toolbar */}
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-4">
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47] font-medium">
-                    <span className="font-semibold text-[#9E2A2B]">
-                      {activeChapter.act}
+                    <span className="font-epic font-bold text-[#9E2A2B]">
+                      ❖ {activeChapter.act}
                     </span>
                     <span>·</span>
                     <span className="font-semibold text-[#231C14]">
@@ -746,7 +752,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                       </>
                     )}
                   </div>
-                  <h3 className="font-display text-3xl font-bold text-[#231C14]">
+                  <h3 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14]">
                     Bab {activeChapter.chapterNumber}: {activeChapter.title}
                   </h3>
                 </div>
@@ -1435,19 +1441,15 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     </div>
                   )}
 
-                  {/* Full Chapter Manuscript Prose with Interactive [[Cross-Links]] */}
-                  <div>
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#695A47] mb-2">
-                      <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
-                      <span>
-                        Kutipan Naskah Manuskrip & Catatan Lore Terhubung
-                      </span>
-                    </div>
-                    <div className="p-5 rounded-xl bg-[#F6F1E6]/70 border border-[#D8CBB3]">
+                  {/* Full Chapter Manuscript Prose with Interactive [[Cross-Links]] & Illuminated Drop Cap */}
+                  <div className="space-y-3 pt-2">
+                    <FantasySectionDivider title="Kutipan Naskah Manuskrip & Catatan Lore Terhubung" />
+                    <div className="p-5 sm:p-6 rounded-xl bg-[#F6F1E6]/75 border border-[#B5832A]/45">
                       <WikiTextRenderer
                         text={activeChapter.draftNotes}
                         entities={entities}
                         onSelectEntity={onSelectEntity}
+                        dropCap={true}
                       />
                     </div>
                   </div>

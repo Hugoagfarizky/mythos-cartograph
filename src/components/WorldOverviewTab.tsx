@@ -27,7 +27,12 @@ import {
   ScratchpadNote,
   WorldProject,
 } from '../types/world';
-import { CATEGORY_META, WikiTextRenderer } from './WikiTextRenderer';
+import {
+  CATEGORY_META,
+  FantasySectionDivider,
+  OrnateCornerFiligree,
+  WikiTextRenderer,
+} from './WikiTextRenderer';
 
 interface WorldOverviewTabProps {
   project: WorldProject;
@@ -210,14 +215,15 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* ===================================================================== */}
       {/* 1. HERO FRONTISPIECE & ANCIENT EPIGRAPH BANNER (Clean Book Mode)      */}
       {/* ===================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-2xl p-6 space-y-6">
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/55 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+        <OrnateCornerFiligree />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Left Column: Literary Book Frontispiece */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
-                <span className="font-semibold text-[#9E2A2B]">
-                  {project.genre}
+                <span className="font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  ❖ {project.genre}
                 </span>
                 <span aria-hidden="true">·</span>
                 <span>{project.calendarSystem}</span>
@@ -225,7 +231,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 <span>Arsiparis: {project.authorName}</span>
               </div>
 
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.12]">
+              <h1 className="font-cartography text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.14]">
                 {project.worldName}
               </h1>
 
@@ -233,14 +239,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 {project.tagline}
               </p>
 
-              {/* Epigraph / Ancient Prophecy Quote Block (All-around subtle border, no border-l-4) */}
+              {/* Epigraph / Ancient Prophecy Quote Block */}
               {epigraphQuote && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#B5832A]/45 space-y-1.5">
                   <p className="text-sm italic text-[#231C14] leading-relaxed">
                     “{epigraphQuote}”
                   </p>
                   {epigraphSource && (
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                    <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
                       — {epigraphSource}
                     </div>
                   )}
@@ -769,16 +775,19 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
         </div>
       </div>
 
+      <FantasySectionDivider title="Kronik Konflik & Kosmologi Semesta" />
+
       {/* ===================================================================== */}
       {/* 4. SINOPSIS & KONFLIK PUSAT + 5. PILAR KOSMOLOGI & HUKUM DUNIA        */}
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Sinopsis Utama, Konflik Pusat & Tema Cerita */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 flex flex-col justify-between space-y-4">
+        <div className="relative overflow-hidden lg:col-span-6 bg-[#FBF8F1] border border-[#B5832A]/45 rounded-xl p-6 flex flex-col justify-between space-y-4">
+          <OrnateCornerFiligree className="text-[#B5832A]/45" />
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
               <div>
-                <div className="text-xs font-semibold text-[#9E2A2B]">
+                <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
                   Jantung Narasi & Ketegangan Utama
                 </div>
                 <h2 className="font-display text-2xl font-bold text-[#231C14]">
@@ -793,6 +802,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 text={centralConflict}
                 entities={project.entities}
                 onSelectEntity={onSelectEntity}
+                dropCap={true}
               />
             </div>
           </div>
@@ -808,10 +818,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
         </div>
 
         {/* Pilar Kosmologi: Mitos Penciptaan & Hukum Dunia */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-4">
+        <div className="relative overflow-hidden lg:col-span-6 bg-[#FBF8F1] border border-[#B5832A]/45 rounded-xl p-6 space-y-4">
+          <OrnateCornerFiligree className="text-[#B5832A]/45" />
           <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#264653]">
+              <div className="font-epic text-xs font-semibold text-[#264653]">
                 Asal-Usul Semesta & Aturan Fundamental
               </div>
               <h2 className="font-display text-2xl font-bold text-[#231C14]">
@@ -823,18 +834,19 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
 
           <div className="space-y-3">
             <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-              <div className="text-xs font-semibold text-[#9E2A2B]">
+              <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
                 I. Mitos Penciptaan & Sejarah Awal Kosmos
               </div>
               <WikiTextRenderer
                 text={cosmologyCreationMyth}
                 entities={project.entities}
                 onSelectEntity={onSelectEntity}
+                dropCap={true}
               />
             </div>
 
             <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-              <div className="text-xs font-semibold text-[#264653]">
+              <div className="font-epic text-xs font-semibold text-[#264653]">
                 II. Hukum Alam, Benda Langit & Batas Sihir
               </div>
               <WikiTextRenderer
@@ -846,6 +858,8 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
           </div>
         </div>
       </div>
+
+      <FantasySectionDivider title="Kartografi Wilayah & Dramatis Personae" />
 
       {/* ===================================================================== */}
       {/* 6. PRATINJAU MINI PETA DUNIA + 7. SOROTAN TOKOH & KONFLIK KELOMPOK    */}
@@ -979,35 +993,38 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
             </button>
           </div>
 
-          {/* Featured Character Cards */}
+          {/* Featured Character Cards (Tarot / Arcana Folio Style) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {characters.slice(0, 4).map((char) => (
+            {characters.slice(0, 4).map((char, idx) => (
               <button
                 key={char.id}
                 type="button"
                 onClick={() => onSelectEntity(char.id)}
-                className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-start gap-3 cursor-pointer"
+                className="arcana-card text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#B5832A]/45 transition-all flex items-start gap-3 cursor-pointer"
               >
                 {char.imageUrl ? (
                   <img
                     src={char.imageUrl}
                     alt={char.title}
                     referrerPolicy="no-referrer"
-                    className="w-14 h-14 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                    className="w-14 h-16 rounded-lg object-cover border border-[#B5832A] shrink-0"
                   />
                 ) : (
-                  <div className="w-14 h-14 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                  <div className="w-14 h-16 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/60 flex items-center justify-center shrink-0">
                     <Users className="w-5 h-5 text-[#9E2A2B]" />
                   </div>
                 )}
-                <div className="min-w-0">
-                  <div className="text-[11px] font-semibold text-[#9E2A2B] truncate">
-                    {char.attributes.role || 'Tokoh Kunci'}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-1 text-[10px] font-epic uppercase tracking-wider text-[#B5832A]">
+                    <span className="truncate text-[#9E2A2B] font-bold">
+                      {char.attributes.role || 'Tokoh Kunci'}
+                    </span>
+                    <span className="shrink-0">❖ 0{idx + 1}</span>
                   </div>
-                  <div className="font-display text-base font-bold text-[#231C14] truncate">
+                  <div className="font-display text-base font-bold text-[#231C14] truncate mt-0.5">
                     {char.title}
                   </div>
-                  <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                  <div className="text-[11px] italic text-[#695A47] truncate mt-0.5">
                     {char.attributes.powerTier || char.subtitle}
                   </div>
                 </div>

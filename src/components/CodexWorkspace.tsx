@@ -40,7 +40,9 @@ import {
 } from '../types/world';
 import {
   CATEGORY_META,
+  FantasySectionDivider,
   findBacklinksForEntity,
+  OrnateCornerFiligree,
   WikiTextRenderer,
 } from './WikiTextRenderer';
 
@@ -1540,17 +1542,21 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
   return (
     <div className="space-y-5">
-      {/* Dedicated Section Header Bar */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
+      {/* Dedicated Section Header Bar with Ornate Manuscript Filigree */}
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4 shadow-xs">
+        <OrnateCornerFiligree />
         <div>
           <div
-            className="text-xs font-semibold"
+            className="font-epic text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
             style={{ color: sectionMeta.accentColor }}
           >
-            Modul World Bible · {sectionEntities.length} {sectionMeta.singular}{' '}
-            Tercatat
+            <span>❖ Arcana {sectionMeta.romanNumeral} · {sectionMeta.arcanaTitle}</span>
+            <span>·</span>
+            <span>
+              {sectionEntities.length} {sectionMeta.singular} Tercatat
+            </span>
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+          <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] mt-0.5">
             {sectionMeta.label}
           </h2>
           <p className="text-xs sm:text-sm text-[#695A47] mt-0.5">
@@ -1864,7 +1870,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </button>
               </div>
             ) : (
-              filteredEntities.map((item) => {
+              filteredEntities.map((item, idx) => {
                 const isSelected = activeEntity?.id === item.id && !isEditing;
                 const itemAttrs = getEnrichedAttributes(item);
                 return (
@@ -1875,34 +1881,43 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       setIsEditing(false);
                       onSelectEntity(item.id);
                     }}
-                    className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
+                    className={`arcana-card w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#EFE7D6] border-[#9E2A2B] shadow-2xs'
-                        : 'bg-[#F6F1E6]/75 border-[#D8CBB3] hover:bg-[#EFE7D6]/60'
+                        ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-xs'
+                        : 'bg-[#F6F1E6]/85 border-[#B5832A]/45 hover:bg-[#EFE7D6]/70'
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      {category === 'character' && (
+                      {category === 'character' ? (
                         <>
                           {item.imageUrl ? (
                             <img
                               src={item.imageUrl}
                               alt={item.title}
                               referrerPolicy="no-referrer"
-                              className="w-12 h-12 rounded-lg object-cover border border-[#D8CBB3] shrink-0 mt-0.5"
+                              className="w-12 h-14 rounded-lg object-cover border border-[#B5832A] shrink-0 mt-0.5"
                             />
                           ) : (
-                            <div className="w-12 h-12 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0 mt-0.5">
+                            <div className="w-12 h-14 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/60 flex items-center justify-center shrink-0 mt-0.5">
                               <User className="w-5 h-5 text-[#9E2A2B]" />
                             </div>
                           )}
                         </>
+                      ) : (
+                        <div className="w-9 h-11 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/50 flex flex-col items-center justify-center shrink-0 mt-0.5 text-[#9E2A2B]">
+                          <span className="font-epic text-[9px] text-[#B5832A] leading-none">
+                            {sectionMeta.romanNumeral}
+                          </span>
+                          <span className="font-mono-tabular text-[11px] font-bold leading-tight">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                        </div>
                       )}
 
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between text-[11px] text-[#695A47] mb-0.5">
                           <span
-                            className="font-semibold truncate"
+                            className="font-epic font-semibold truncate"
                             style={{ color: sectionMeta.accentColor }}
                           >
                             {category === 'character'
@@ -2069,7 +2084,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         {/* ================================================================= */}
         {/* RIGHT DETAIL / EDITOR COLUMN                                      */}
         {/* ================================================================= */}
-        <div className="lg:col-span-8 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6">
+        <div className="relative overflow-hidden lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs">
+          <OrnateCornerFiligree className="text-[#B5832A]/50" />
           {isEditing && draftEntity ? (
             <form onSubmit={handleSaveDraft} className="space-y-5">
               <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-4">
@@ -8532,17 +8548,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 )}
 
-              {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] */}
-              <div className="pt-4 border-t border-[#D8CBB3]">
-                <div className="flex items-center gap-2 text-xs font-semibold text-[#695A47] mb-3">
-                  <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
-                  <span>Arsip Sejarah & Catatan Manuskrip Dunia</span>
-                </div>
-                <div className="p-5 rounded-xl bg-[#F6F1E6]/60 border border-[#D8CBB3]">
+              {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] & Illuminated Drop Cap */}
+              <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                <FantasySectionDivider title="Arsip Sejarah & Catatan Manuskrip Dunia" />
+                <div className="p-5 sm:p-6 rounded-xl bg-[#F6F1E6]/75 border border-[#B5832A]/45">
                   <WikiTextRenderer
                     text={activeEntity.content}
                     entities={entities}
                     onSelectEntity={jumpToEntity}
+                    dropCap={true}
                   />
                 </div>
               </div>

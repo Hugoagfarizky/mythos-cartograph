@@ -1,10 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Castle,
   CheckCircle2,
+  Compass,
+  Crown,
+  Feather,
   FileDown,
+  Flame,
   FolderKanban,
+  Gem,
+  Hourglass,
   Loader2,
+  Map,
+  Moon,
+  Mountain,
+  Network,
+  ScrollText,
   Search,
+  Shield,
+  Sun,
+  Users,
+  Wand2,
   X,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
@@ -38,6 +54,7 @@ import {
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
 const WORLDS_LIBRARY_KEY = 'mythos_cartograph_worlds_library_v1';
 const SNAPSHOTS_KEY = 'mythos_cartograph_snapshots_v1';
+const THEME_STORAGE_KEY = 'mythos_cartograph_theme_v1';
 
 export type WorkspaceTab =
   | 'overview'
@@ -71,24 +88,58 @@ function isLoreCategoryTab(tab: WorkspaceTab): tab is LoreCategory {
   return LORE_CATEGORY_TABS.includes(tab as LoreCategory);
 }
 
-const SECTION_TABS: Array<{
+interface SectionTabMeta {
   id: WorkspaceTab;
   label: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const SECTION_TABS: SectionTabMeta[] = [
+  { id: 'overview', label: 'Overview', icon: Compass },
+  { id: 'map', label: 'Map Dunia', icon: Map },
+  { id: 'character', label: 'Character', icon: Crown },
+  { id: 'race', label: 'Ras', icon: Users },
+  { id: 'faction', label: 'Kelompok', icon: Shield },
+  { id: 'power_system', label: 'Power System', icon: Flame },
+  { id: 'skill', label: 'Skill', icon: Wand2 },
+  { id: 'nation', label: 'Negara', icon: Castle },
+  { id: 'region', label: 'Wilayah', icon: Mountain },
+  { id: 'history', label: 'Sejarah', icon: ScrollText },
+  { id: 'timeline', label: 'Timeline', icon: Hourglass },
+  { id: 'encyclopedia', label: 'Artefak & Biota', icon: Gem },
+  { id: 'graph', label: 'Peta Relasi', icon: Network },
+  { id: 'outliner', label: 'Alur Bab', icon: Feather },
+];
+
+const FANTASY_PILLARS: Array<{
+  roman: string;
+  title: string;
+  tabs: SectionTabMeta[];
 }> = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'map', label: 'Map Dunia' },
-  { id: 'character', label: 'Character' },
-  { id: 'race', label: 'Ras' },
-  { id: 'faction', label: 'Kelompok' },
-  { id: 'power_system', label: 'Power System' },
-  { id: 'skill', label: 'Skill' },
-  { id: 'nation', label: 'Negara' },
-  { id: 'region', label: 'Wilayah' },
-  { id: 'history', label: 'Sejarah' },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'encyclopedia', label: 'Artefak & Biota' },
-  { id: 'graph', label: 'Peta Relasi' },
-  { id: 'outliner', label: 'Alur Bab' },
+  {
+    roman: 'I',
+    title: 'Kosmos & Atlas',
+    tabs: SECTION_TABS.filter((t) => ['overview', 'map'].includes(t.id)),
+  },
+  {
+    roman: 'II',
+    title: 'Penghuni & Arcana',
+    tabs: SECTION_TABS.filter((t) =>
+      ['character', 'race', 'faction', 'power_system', 'skill'].includes(t.id)
+    ),
+  },
+  {
+    roman: 'III',
+    title: 'Geopolitik & Kronik',
+    tabs: SECTION_TABS.filter((t) =>
+      ['nation', 'region', 'history', 'timeline', 'encyclopedia'].includes(t.id)
+    ),
+  },
+  {
+    roman: 'IV',
+    title: 'Takdir & Naskah',
+    tabs: SECTION_TABS.filter((t) => ['graph', 'outliner'].includes(t.id)),
+  },
 ];
 
 interface BrainstormIdea {
@@ -243,6 +294,30 @@ export default function App() {
   const [omniSearchOpen, setOmniSearchOpen] = useState<boolean>(false);
   const [projectManagerOpen, setProjectManagerOpen] = useState<boolean>(false);
   const [exportStudioOpen, setExportStudioOpen] = useState<boolean>(false);
+  const [themeMode, setThemeMode] = useState<'parchment' | 'grimoire-dark'>(
+    () => {
+      try {
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        if (savedTheme === 'grimoire-dark') return 'grimoire-dark';
+      } catch {
+        // ignore
+      }
+      return 'parchment';
+    }
+  );
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, themeMode);
+      if (themeMode === 'grimoire-dark') {
+        document.documentElement.setAttribute('data-theme', 'grimoire-dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+      }
+    } catch {
+      // ignore
+    }
+  }, [themeMode]);
 
   // AI Lore Audit Modal State
   const [auditModalOpen, setAuditModalOpen] = useState<boolean>(false);
@@ -781,34 +856,66 @@ export default function App() {
     SECTION_TABS.find((t) => t.id === activeTab)?.label || 'Overview';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F1E6] text-[#231C14]">
+    <div
+      data-theme={themeMode === 'grimoire-dark' ? 'grimoire-dark' : undefined}
+      className="min-h-screen flex flex-col bg-[#F6F1E6] text-[#231C14] transition-colors duration-200"
+    >
       {/* Top Bar: Brand & Active Breadcrumb on Left, Global Productivity Actions on Right */}
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b border-[#D8CBB3] print:hidden">
-        <div className="flex items-center gap-4 min-w-0">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b-2 border-[#B5832A]/45 print:hidden">
+        <div className="flex items-center gap-3.5 min-w-0">
           <a
             href="#top"
             onClick={(e) => {
               e.preventDefault();
               handleSwitchTab('overview');
             }}
-            className="font-cartography text-xl font-bold tracking-tight text-[#231C14] whitespace-nowrap shrink-0"
+            className="flex items-center gap-2 font-cartography text-xl font-bold tracking-wider text-[#231C14] whitespace-nowrap shrink-0"
           >
-            MythosCartograph
+            <span className="text-[#B5832A] text-base" aria-hidden="true">
+              ❖
+            </span>
+            <span>MythosCartograph</span>
           </a>
 
           <div className="hidden lg:flex items-center gap-2 text-xs text-[#695A47] truncate">
-            <span className="text-[#D8CBB3]" aria-hidden="true">
-              |
+            <span className="text-[#B5832A]/60" aria-hidden="true">
+              ✦
             </span>
-            <span className="font-semibold text-[#231C14] truncate">
+            <span className="font-epic font-semibold text-[#231C14] truncate">
               {project.worldName}
             </span>
             <span aria-hidden="true">/</span>
-            <span className="text-[#9E2A2B] font-semibold">{activeTabLabel}</span>
+            <span className="font-epic text-[#9E2A2B] font-bold">
+              {activeTabLabel}
+            </span>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          {/* 0. Dual Theme Switcher: Perkamen Siang vs Grimoire Malam Lilin */}
+          <button
+            type="button"
+            onClick={() =>
+              setThemeMode((prev) =>
+                prev === 'parchment' ? 'grimoire-dark' : 'parchment'
+              )
+            }
+            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#B5832A]/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            title="Ubah Suasana Meja Penulis: Perkamen Siang atau Grimoire Malam Lilin"
+          >
+            {themeMode === 'parchment' ? (
+              <>
+                <Moon className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                <span>Grimoire Malam</span>
+              </>
+            ) : (
+              <>
+                <Sun className="w-3.5 h-3.5 text-[#B5832A]" />
+                <span>Perkamen Siang</span>
+              </>
+            )}
+          </button>
+
           {/* 1. Omni-Search Ctrl+K Trigger */}
           <button
             type="button"
@@ -852,39 +959,68 @@ export default function App() {
           exportStudioOpen ? 'print:hidden' : ''
         }`}
       >
-        {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible */}
+        {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible — Dikelompokkan dalam 4 Pilar Semesta Fantasi */}
         <nav
           aria-label="Navigasi Bagian World Bible"
-          className="bg-[#EFE7D6] border border-[#D8CBB3] rounded-xl p-2"
+          className="bg-[#EFE7D6] border-2 border-[#B5832A]/45 rounded-2xl p-3 shadow-xs"
         >
-          <div className="flex flex-wrap items-center gap-1.5">
-            {SECTION_TABS.map((tab) => {
-              const isActive = activeTab === tab.id;
-              const count = getTabCount(tab.id);
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
+            {FANTASY_PILLARS.map((pillar) => {
+              const colSpan =
+                pillar.roman === 'I' || pillar.roman === 'IV'
+                  ? 'xl:col-span-2'
+                  : 'xl:col-span-4';
               return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => handleSwitchTab(tab.id)}
-                  className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                    isActive
-                      ? 'bg-[#9E2A2B] text-white shadow-xs'
-                      : 'bg-[#FBF8F1]/85 text-[#231C14] hover:bg-[#FBF8F1] border border-[#D8CBB3]/70'
-                  }`}
+                <div
+                  key={pillar.roman}
+                  className={`${colSpan} bg-[#FBF8F1]/60 border border-[#D8CBB3] rounded-xl px-3 py-2 flex flex-col justify-between gap-2`}
                 >
-                  <span>{tab.label}</span>
-                  {count !== null && (
-                    <span
-                      className={`font-mono-tabular text-[11px] px-1.5 py-0.2 rounded ${
-                        isActive
-                          ? 'bg-black/20 text-white'
-                          : 'bg-[#EFE7D6] text-[#695A47]'
-                      }`}
-                    >
-                      {count}
+                  <div className="flex items-center justify-between gap-1 border-b border-[#D8CBB3]/70 pb-1">
+                    <span className="font-epic text-[10px] font-bold uppercase tracking-[0.14em] text-[#B5832A]">
+                      Pilar {pillar.roman} · {pillar.title}
                     </span>
-                  )}
-                </button>
+                    <span className="text-[10px] text-[#9E2A2B]" aria-hidden="true">
+                      ❖
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {pillar.tabs.map((tab) => {
+                      const isActive = activeTab === tab.id;
+                      const count = getTabCount(tab.id);
+                      const IconComponent = tab.icon;
+                      return (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => handleSwitchTab(tab.id)}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
+                            isActive
+                              ? 'bg-[#9E2A2B] text-white shadow-xs ring-1 ring-[#B5832A]'
+                              : 'bg-[#FBF8F1] text-[#231C14] hover:border-[#B5832A] border border-[#D8CBB3]/80'
+                          }`}
+                        >
+                          <IconComponent
+                            className={`w-3.5 h-3.5 shrink-0 ${
+                              isActive ? 'text-[#FBF8F1]' : 'text-[#B5832A]'
+                            }`}
+                          />
+                          <span>{tab.label}</span>
+                          {count !== null && (
+                            <span
+                              className={`font-mono-tabular text-[10px] px-1.5 py-0.2 rounded ${
+                                isActive
+                                  ? 'bg-black/25 text-white'
+                                  : 'bg-[#EFE7D6] text-[#695A47]'
+                              }`}
+                            >
+                              {count}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               );
             })}
           </div>

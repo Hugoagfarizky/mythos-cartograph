@@ -16,27 +16,148 @@
 
   body {
     font-family: 'Lora', Georgia, Cambria, serif;
-    background-color: #F6F1E6;
-    color: #231C14;
-    line-height: 1.65;
+    background-color: var(--bg-parchment);
+    color: var(--ink-primary);
+    line-height: 1.68;
     letter-spacing: 0.005em;
+    background-image:
+      radial-gradient(ellipse at top, rgba(181, 131, 42, 0.07), transparent 70%),
+      radial-gradient(ellipse at bottom, rgba(158, 42, 43, 0.04), transparent 70%);
   }
 
   h1, h2, h3, .font-display {
-    font-family: 'Fraunces', Georgia, serif;
-    letter-spacing: -0.015em;
+    font-family: 'Cinzel', 'Fraunces', Georgia, serif;
+    letter-spacing: 0.01em;
     text-wrap: balance;
   }
 
   .font-cartography {
-    font-family: 'Fraunces', Georgia, serif;
-    letter-spacing: 0.04em;
+    font-family: 'Cinzel Decorative', 'Cinzel', 'Fraunces', Georgia, serif;
+    letter-spacing: 0.045em;
+  }
+
+  .font-epic {
+    font-family: 'Cinzel', 'Fraunces', Georgia, serif;
+    letter-spacing: 0.03em;
   }
 
   .font-mono-tabular {
     font-family: 'JetBrains Mono', monospace;
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Illuminated Manuscript Drop Cap for First Paragraph of Lore & Chapters */
+.fantasy-dropcap > p:first-of-type::first-letter {
+  font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
+  float: left;
+  font-size: 3.1rem;
+  line-height: 0.86;
+  padding: 0.22rem 0.55rem 0.18rem 0.5rem;
+  margin-right: 0.65rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
+  font-weight: 700;
+  color: #9E2A2B;
+  background: linear-gradient(145deg, rgba(181, 131, 42, 0.16), rgba(158, 42, 43, 0.08));
+  border: 1px solid rgba(181, 131, 42, 0.55);
+  border-radius: 0.5rem;
+  box-shadow: inset 0 0 0 2px rgba(251, 248, 241, 0.6);
+}
+
+/* Tarot / Bestiary Arcana Card Frame */
+.arcana-card {
+  position: relative;
+  box-shadow:
+    inset 0 0 0 1px rgba(181, 131, 42, 0.24),
+    0 2px 10px -3px rgba(35, 28, 20, 0.08);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.arcana-card:hover {
+  box-shadow:
+    inset 0 0 0 1px rgba(181, 131, 42, 0.5),
+    0 6px 18px -4px rgba(35, 28, 20, 0.14);
+}
+
+/* ============================================================================
+   MODE GRIMOIRE MALAM LILIN (Candlelight Obsidian Grimoire Theme)
+   ============================================================================ */
+[data-theme="grimoire-dark"] {
+  --bg-parchment: #15110D;
+  --bg-vellum: #1E1813;
+  --bg-aged: #282019;
+  --border-sepia: #433527;
+  --ink-primary: #EFE6D5;
+  --ink-secondary: #B5A38B;
+}
+
+[data-theme="grimoire-dark"] body,
+[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\] {
+  background-color: #15110D !important;
+  color: #EFE6D5 !important;
+}
+
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\],
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/95,
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/90,
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/85,
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/80 {
+  background-color: #1E1813 !important;
+  color: #EFE6D5 !important;
+}
+
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\],
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/80,
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/70,
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/60,
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/50,
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/40 {
+  background-color: #282019 !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#231C14\],
+[data-theme="grimoire-dark"] .text-\[\#231C14\]\/90,
+[data-theme="grimoire-dark"] .text-\[\#231C14\]\/85 {
+  color: #EFE6D5 !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#695A47\] {
+  color: #B5A38B !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#9E2A2B\] {
+  color: #E06D53 !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#B5832A\] {
+  color: #E5B254 !important;
+}
+
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\],
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/80,
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/70,
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/60 {
+  border-color: #433527 !important;
+}
+
+[data-theme="grimoire-dark"] .divide-\[\#D8CBB3\]\/60 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #433527 !important;
+}
+
+[data-theme="grimoire-dark"] input,
+[data-theme="grimoire-dark"] textarea,
+[data-theme="grimoire-dark"] select {
+  background-color: #18130F !important;
+  color: #EFE6D5 !important;
+  border-color: #4A3A2A !important;
+}
+
+[data-theme="grimoire-dark"] .fantasy-dropcap > p:first-of-type::first-letter {
+  color: #E5B254;
+  background: linear-gradient(145deg, rgba(229, 178, 84, 0.2), rgba(158, 42, 43, 0.18));
+  border-color: rgba(229, 178, 84, 0.55);
+  box-shadow: inset 0 0 0 2px rgba(30, 24, 19, 0.8);
 }
 
 /* Custom parchment scrollbars */
@@ -46,14 +167,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #EFE7D6;
+  background: var(--bg-aged);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C7B698;
+  background: #B5832A;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9E8B6B;
+  background: #9E2A2B;
 }
+
