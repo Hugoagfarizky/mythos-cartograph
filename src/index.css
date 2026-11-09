@@ -10,8 +10,10 @@
     --ink-secondary: #695A47;
     --accent-wax: #9E2A2B;
     --accent-brass: #B5832A;
+    --accent-amber: #8F5B14;
     --accent-cartography: #264653;
     --accent-forest: #2D5A43;
+    --accent-mystic: #5A3E7A;
   }
 
   body {
@@ -82,82 +84,196 @@
 
 /* ============================================================================
    MODE GRIMOIRE MALAM LILIN (Candlelight Obsidian Grimoire Theme)
+   High-Contrast WCAG AA/AAA Overrides for All Surfaces, Accents & Controls
    ============================================================================ */
 [data-theme="grimoire-dark"] {
-  --bg-parchment: #15110D;
-  --bg-vellum: #1E1813;
-  --bg-aged: #282019;
-  --border-sepia: #433527;
-  --ink-primary: #EFE6D5;
-  --ink-secondary: #B5A38B;
+  --bg-parchment: #14100C;
+  --bg-vellum: #1D1712;
+  --bg-aged: #271F18;
+  --border-sepia: #4A3928;
+  --ink-primary: #F5EFE4;
+  --ink-secondary: #CFC0AA;
+  --accent-wax: #F47C65;
+  --accent-brass: #F0C36D;
+  --accent-amber: #F2B658;
+  --accent-cartography: #6EC3D4;
+  --accent-forest: #6FD19D;
+  --accent-mystic: #C4A1FF;
 }
 
+/* 1. Primary Parchment & Recessed Surfaces */
 [data-theme="grimoire-dark"] body,
-[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\] {
-  background-color: #15110D !important;
-  color: #EFE6D5 !important;
+[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\],
+[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/85,
+[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/80,
+[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/75 {
+  background-color: #14100C !important;
+  color: #F5EFE4 !important;
 }
 
+/* 2. Elevated Vellum Sheets, Modals & Cards */
 [data-theme="grimoire-dark"] .bg-\[\#FBF8F1\],
 [data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/95,
 [data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/90,
 [data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/85,
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/80 {
-  background-color: #1E1813 !important;
-  color: #EFE6D5 !important;
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/80,
+[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/60,
+[data-theme="grimoire-dark"] .bg-\[\#F5ECD9\]\/95,
+[data-theme="grimoire-dark"] .bg-\[\#F5ECD9\]\/75 {
+  background-color: #1D1712 !important;
+  color: #F5EFE4 !important;
 }
 
+/* 3. Aged Vellum Sub-Cards, Pills & Secondary Panels */
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\],
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/90,
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/80,
+[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/75,
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/70,
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/60,
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/50,
 [data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/40 {
-  background-color: #282019 !important;
+  background-color: #271F18 !important;
+  color: #F5EFE4 !important;
 }
 
+/* 4. Subtle Tinted Accent Backgrounds in Dark Mode */
+[data-theme="grimoire-dark"] .bg-\[\#9E2A2B\]\/10 {
+  background-color: rgba(244, 124, 101, 0.14) !important;
+}
+[data-theme="grimoire-dark"] .bg-\[\#2D5A43\]\/10 {
+  background-color: rgba(111, 209, 157, 0.14) !important;
+}
+[data-theme="grimoire-dark"] .bg-\[\#264653\]\/10 {
+  background-color: rgba(110, 195, 212, 0.14) !important;
+}
+[data-theme="grimoire-dark"] .bg-\[\#8F5B14\]\/10 {
+  background-color: rgba(242, 182, 88, 0.14) !important;
+}
+[data-theme="grimoire-dark"] .bg-\[\#5A3E7A\]\/10 {
+  background-color: rgba(196, 161, 255, 0.14) !important;
+}
+
+/* 5. Dark Ink Action Buttons (#231C14) -> Burnished Bronze with Gold Trim in Dark Mode */
+[data-theme="grimoire-dark"] .bg-\[\#231C14\],
+[data-theme="grimoire-dark"] .bg-\[\#231C14\]\/85 {
+  background-color: #382A1E !important;
+  color: #FFF8EC !important;
+  border-color: #8C6830 !important;
+}
+
+/* 6. Hover Background States (Prevent turning bright white/cream on hover) */
+[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]\/70:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]\/60:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#F6F1E6\]:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#FBF8F1\]:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#D8CBB3\]:hover {
+  background-color: #33271D !important;
+  color: #FFF8EC !important;
+}
+
+[data-theme="grimoire-dark"] .hover\:bg-\[\#3A2E21\]:hover,
+[data-theme="grimoire-dark"] .hover\:bg-\[\#3B2E1E\]:hover {
+  background-color: #4A3726 !important;
+  color: #FFF8EC !important;
+}
+
+/* 7. High-Contrast Primary & Secondary Typography */
 [data-theme="grimoire-dark"] .text-\[\#231C14\],
 [data-theme="grimoire-dark"] .text-\[\#231C14\]\/90,
-[data-theme="grimoire-dark"] .text-\[\#231C14\]\/85 {
-  color: #EFE6D5 !important;
+[data-theme="grimoire-dark"] .text-\[\#231C14\]\/85,
+[data-theme="grimoire-dark"] .text-\[\#FBF8F1\] {
+  color: #F5EFE4 !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#695A47\] {
-  color: #B5A38B !important;
+[data-theme="grimoire-dark"] .hover\:text-\[\#231C14\]:hover {
+  color: #FFF8EC !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#9E2A2B\] {
-  color: #E06D53 !important;
+[data-theme="grimoire-dark"] .text-\[\#695A47\],
+[data-theme="grimoire-dark"] .text-\[\#695A47\]\/60,
+[data-theme="grimoire-dark"] .text-\[\#5A4632\],
+[data-theme="grimoire-dark"] .text-\[\#D8CBB3\],
+[data-theme="grimoire-dark"] .text-\[\#E6D5B8\] {
+  color: #CFC0AA !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#B5832A\] {
-  color: #E5B254 !important;
+/* 8. Luminous Fantasy Accent Text Colors (Fixing Dark Jewel Tones on Dark Background) */
+[data-theme="grimoire-dark"] .text-\[\#9E2A2B\],
+[data-theme="grimoire-dark"] .text-\[\#8B1E1E\],
+[data-theme="grimoire-dark"] .hover\:text-\[\#9E2A2B\]:hover {
+  color: #F47C65 !important;
 }
 
+[data-theme="grimoire-dark"] .text-\[\#B5832A\],
+[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/65,
+[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/60,
+[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/50,
+[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/45 {
+  color: #F0C36D !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#7A3E1D\],
+[data-theme="grimoire-dark"] .text-\[\#8F5B14\] {
+  color: #F2B658 !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#264653\] {
+  color: #6EC3D4 !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#2D5A43\],
+[data-theme="grimoire-dark"] .text-\[\#3D5A45\] {
+  color: #6FD19D !important;
+}
+
+[data-theme="grimoire-dark"] .text-\[\#5A3E7A\] {
+  color: #C4A1FF !important;
+}
+
+/* 9. Borders & Dividers in Grimoire Dark Mode */
 [data-theme="grimoire-dark"] .border-\[\#D8CBB3\],
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/85,
 [data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/80,
 [data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/70,
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/60 {
-  border-color: #433527 !important;
+[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/60,
+[data-theme="grimoire-dark"] .border-\[\#3B2E1E\],
+[data-theme="grimoire-dark"] .border-\[\#3B2E1E\]\/60,
+[data-theme="grimoire-dark"] .border-\[\#2B1E12\],
+[data-theme="grimoire-dark"] .border-\[\#8B7355\] {
+  border-color: #4A3928 !important;
 }
 
 [data-theme="grimoire-dark"] .divide-\[\#D8CBB3\]\/60 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #433527 !important;
+  border-color: #4A3928 !important;
 }
 
+/* 10. Inputs, Textareas, Selects, Options & Placeholders */
 [data-theme="grimoire-dark"] input,
 [data-theme="grimoire-dark"] textarea,
 [data-theme="grimoire-dark"] select {
-  background-color: #18130F !important;
-  color: #EFE6D5 !important;
-  border-color: #4A3A2A !important;
+  background-color: #16110D !important;
+  color: #F5EFE4 !important;
+  border-color: #54402C !important;
+}
+
+[data-theme="grimoire-dark"] select option {
+  background-color: #1D1712 !important;
+  color: #F5EFE4 !important;
+}
+
+[data-theme="grimoire-dark"] input::placeholder,
+[data-theme="grimoire-dark"] textarea::placeholder {
+  color: #9E8D77 !important;
+  opacity: 1 !important;
 }
 
 [data-theme="grimoire-dark"] .fantasy-dropcap > p:first-of-type::first-letter {
-  color: #E5B254;
-  background: linear-gradient(145deg, rgba(229, 178, 84, 0.2), rgba(158, 42, 43, 0.18));
-  border-color: rgba(229, 178, 84, 0.55);
-  box-shadow: inset 0 0 0 2px rgba(30, 24, 19, 0.8);
+  color: #F0C36D;
+  background: linear-gradient(145deg, rgba(240, 195, 109, 0.22), rgba(244, 124, 101, 0.16));
+  border-color: rgba(240, 195, 109, 0.6);
+  box-shadow: inset 0 0 0 2px rgba(29, 23, 18, 0.85);
 }
 
 /* Custom parchment scrollbars */
@@ -178,4 +294,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #9E2A2B;
 }
-

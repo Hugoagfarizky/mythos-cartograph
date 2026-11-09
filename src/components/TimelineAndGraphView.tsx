@@ -1413,13 +1413,13 @@ const RELATION_STYLE: Record<
   RelationType,
   { label: string; color: string; dash?: string }
 > = {
-  ally: { label: 'Sekutu / Pakta', color: '#2D5A43' },
-  rival: { label: 'Rival / Konflik', color: '#9E2A2B', dash: '6 4' },
-  family: { label: 'Ikatan Darah', color: '#B5832A' },
-  mentor: { label: 'Guru & Murid', color: '#264653' },
-  vassal: { label: 'Bawahan / Upeti', color: '#8F5B14' },
-  member: { label: 'Anggota / Penguasa', color: '#3B2E1E' },
-  betrayed: { label: 'Pengkhianatan', color: '#7A1C1C', dash: '3 3' },
+  ally: { label: 'Sekutu / Pakta', color: 'var(--accent-forest)' },
+  rival: { label: 'Rival / Konflik', color: 'var(--accent-wax)', dash: '6 4' },
+  family: { label: 'Ikatan Darah', color: 'var(--accent-brass)' },
+  mentor: { label: 'Guru & Murid', color: 'var(--accent-cartography)' },
+  vassal: { label: 'Bawahan / Upeti', color: 'var(--accent-amber)' },
+  member: { label: 'Anggota / Penguasa', color: 'var(--ink-secondary)' },
+  betrayed: { label: 'Pengkhianatan', color: 'var(--accent-wax)', dash: '3 3' },
 };
 
 const VISIBILITY_PRESETS = [
@@ -2494,7 +2494,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                           width={156}
                           height={26}
                           rx={6}
-                          fill={isSelected ? '#EFE7D6' : '#FBF8F1'}
+                          fill={isSelected ? 'var(--bg-aged)' : 'var(--bg-vellum)'}
                           stroke={style.color}
                           strokeWidth={isSelected ? 2 : 1.2}
                         />
@@ -2502,7 +2502,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                           x={midX}
                           y={midY + 3}
                           textAnchor="middle"
-                          fill="#231C14"
+                          fill="var(--ink-primary)"
                           fontSize="10"
                           fontWeight="700"
                         >

@@ -18,7 +18,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Dramatis Personae',
     romanNumeral: 'I',
     description: 'Tokoh protagonis, antagonis, penguasa, dan figur penting dalam cerita.',
-    accentColor: '#9E2A2B',
+    accentColor: 'var(--accent-wax)',
   },
   race: {
     label: 'Ras & Bangsa',
@@ -26,7 +26,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Origines & Silsilah',
     romanNumeral: 'II',
     description: 'Spesies cerdas, garis keturunan kuno, ciri biologis, dan budaya bawaan.',
-    accentColor: '#2D5A43',
+    accentColor: 'var(--accent-forest)',
   },
   faction: {
     label: 'Kelompok & Faksi',
@@ -34,7 +34,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Ordo & Konklaf',
     romanNumeral: 'III',
     description: 'Ordo sihir, serikat dagang, klan militer, dan organisasi rahasia.',
-    accentColor: '#B5832A',
+    accentColor: 'var(--accent-brass)',
   },
   power_system: {
     label: 'Power System',
@@ -42,7 +42,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Hukum Arcana',
     romanNumeral: 'IV',
     description: 'Hukum sihir/energi, sumber kekuatan, hirarki tingkatan, dan batasan mutlak.',
-    accentColor: '#264653',
+    accentColor: 'var(--accent-cartography)',
   },
   skill: {
     label: 'Skill & Teknik',
@@ -50,7 +50,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Grimoire Rapalan',
     romanNumeral: 'V',
     description: 'Jurus, rapalan mantra, kemampuan khusus, biaya aktivasi, dan batas pakai.',
-    accentColor: '#264653',
+    accentColor: 'var(--accent-cartography)',
   },
   nation: {
     label: 'Negara & Kerajaan',
@@ -58,7 +58,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Kedaulatan Mahkota',
     romanNumeral: 'VI',
     description: 'Kekaisaran, persemakmuran, sistem pemerintahan, ibu kota, dan diplomasi.',
-    accentColor: '#9E2A2B',
+    accentColor: 'var(--accent-wax)',
   },
   region: {
     label: 'Wilayah & Geografi',
@@ -66,7 +66,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Terra Incognita',
     romanNumeral: 'VII',
     description: 'Bioma alam, pegunungan, hutan terlarang, sumber daya, dan bahaya wilayah.',
-    accentColor: '#2D5A43',
+    accentColor: 'var(--accent-forest)',
   },
   history: {
     label: 'Sejarah & Peristiwa',
@@ -74,7 +74,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Annales & Kronik',
     romanNumeral: 'VIII',
     description: 'Perang besar, bencana masa lalu, perjanjian kuno, dan titik balik era.',
-    accentColor: '#695A47',
+    accentColor: 'var(--ink-secondary)',
   },
   encyclopedia: {
     label: 'Artefak, Flora & Fauna',
@@ -82,7 +82,7 @@ export const CATEGORY_META: Record<
     arcanaTitle: 'Relikui & Bestiary',
     romanNumeral: 'IX',
     description: 'Relik pusaka, senjata legendaris, tanaman alkimia, dan makhluk mitologi.',
-    accentColor: '#B5832A',
+    accentColor: 'var(--accent-brass)',
   },
 };
 
