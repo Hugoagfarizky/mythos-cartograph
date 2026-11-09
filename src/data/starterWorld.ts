@@ -1004,22 +1004,45 @@ Anak panah, tombak pengepungan, hingga semburan api dari [[Legiun Surya Cinnabar
       updatedAt: '2026-11-08',
     },
 
-    // 9. ENCYCLOPEDIA (Artifacts, Flora, Fauna)
+    // 9. ENCYCLOPEDIA (Artifacts, Flora, Fauna & Cultural Codex)
     {
       id: 'enc-astrolabe-surya',
       category: 'encyclopedia',
       title: 'Astrolabe Api Surya',
       subtitle: 'Relik Penyeimbang Iklim & Kunci Menara Suar Aethelia',
-      summary: 'Instrumen astronomi kuno dari kuningan dan rubi cinnabar yang mampu menyimpan energi matahari murni selama berabad-abad.',
+      summary:
+        'Instrumen astronomi kuno dari kuningan meteorit dan rubi cinnabar yang mampu menyimpan energi matahari murni selama berabad-abad.',
       imageUrl: '/src/assets/images/artifact_sunfire_astrolabe_1794157188936.jpg',
-      tags: ['Artefak Mitos', 'Pemicu Konflik Utama', 'Kriya Dvergr'],
+      tags: ['Artefak & Pusaka', 'Pemicu Konflik Utama', 'Kriya Dvergr'],
       attributes: {
         subCategory: 'Artefak & Pusaka',
-        rarity: 'Satu-satunya di Dunia (Unique Relic)',
-        habitatOrOrigin: 'Ditempa di [[Kerajaan Bawah Tanah Nidavellir]] pada Tahun 2 AE',
-        magicalProperties: 'Menghapus batasan malam hari pada [[Resonansi Eteris Astral]] dan menstabilkan garis patahan lempeng benua.',
+        rarity: 'Artefak Tunggal (1 di Dunia)',
+        habitatOrOrigin: 'Kerajaan Bawah Tanah Nidavellir',
+        currentHolder: 'Archmage Vaelen Thorne',
+        creatorOrOrigin: 'Dvergr Besi-Bintang',
+        linkedPowerSystem: 'Resonansi Eteris Astral',
+        magicalProperties:
+          'Menghapus batasan malam hari pada [[Resonansi Eteris Astral]], memancarkan kubah panas di puncak salju, dan menstabilkan garis patahan lempeng benua.',
+        attunementRequirement:
+          'Membutuhkan penyelarasan meridian praktisi Lingkar ke-5 ke atas atau kunci segel darah murni [[Dvergr Besi-Bintang]] untuk memutar cincin ketiganya.',
+        curseOrSideEffect:
+          'Retakan pada cincin ketiganya memancarkan kebocoran radiasi surya yang mempercepat *Kristalisasi Organ* dan telah membutakan mata kiri [[Archmage Vaelen Thorne]].',
+        destructionMethod:
+          'Hanya dapat dilebur kembali di Tungku Jantung Bintang [[Kerajaan Bawah Tanah Nidavellir]] atau dihantam secara simultan oleh [[Keputusan Tombak Surya]] dan [[Runtuhan Palu Bintang Nidavellir]].',
+        ownershipHistory: [
+          '1. Raja Penempa Thrain I dari Nidavellir (Tahun 340 Pra-Gerhana)',
+          '2. Dinasti Surya Kekaisaran Gondoria (Tahun 338 PG - 410 PG)',
+          '3. Archmage Vaelen Thorne di Puncak Wyvern (Tahun 410 PG - Sekarang)',
+        ],
+        harvestableMaterials: [
+          'Inti Rubi Surya Murni',
+          'Cincin Kuningan Besi-Bintang',
+          'Lensa Fokus Sidereal',
+        ],
+        alchemicalUses:
+          'Debu residu cincinnya dapat dicampur ke dalam tinta segel kekaisaran untuk membuat gulungan perjanjian tahan api.',
       },
-      content: `Astrolabe Api Surya adalah mahakarya gabungan antara penempa [[Dvergr Besi-Bintang]] dan penyihir perdana [[Kekaisaran Gondoria]]. Artefak ini terdiri dari tiga cincin kuningan berukir konstelasi kuno yang mengitari inti rubi surya.
+      content: `**Astrolabe Api Surya** adalah mahakarya gabungan antara penempa [[Dvergr Besi-Bintang]] dan penyihir perdana [[Kekaisaran Gondoria]]. Artefak ini terdiri dari tiga cincin kuningan berukir konstelasi kuno yang mengitari inti rubi surya.
 
 Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin terdalamnya. Jika Astrolabe ini dipaksa menembakkan meriam suar militer seperti yang direncanakan [[Empress Seraphina Valorian]], cincin tersebut akan hancur dan memicu gelombang kedua [[Konvergensi Gerhana Merah]].`,
       updatedAt: '2026-11-08',
@@ -1029,15 +1052,122 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       category: 'encyclopedia',
       title: 'Bunga Lentera Malam',
       subtitle: 'Flora Bioluminesensi Penawar Kristalisasi Eter',
-      summary: 'Tanaman langka yang hanya tumbuh di akar pohon purba [[Rimba Bayang-Bayang (Shadowwood)]] dan mampu memperlambat efek kutukan sihir.',
-      tags: ['Flora Langka', 'Herbal Alkimia', 'Shadowwood'],
+      summary:
+        'Tanaman langka bercahaya perak-kebiruan yang hanya tumbuh di akar pohon purba [[Rimba Bayang-Bayang (Shadowwood)]] dan mampu memperlambat efek kutukan sihir.',
+      tags: ['Flora & Herbal', 'Herbal Alkimia', 'Shadowwood'],
       attributes: {
         subCategory: 'Flora & Herbal',
-        rarity: 'Sangat Langka (Dijaga ketat oleh Sylvan Aelfir)',
-        habitatOrOrigin: 'Lembah terdalam [[Rimba Bayang-Bayang (Shadowwood)]]',
-        magicalProperties: 'Ekstrak kelopaknya melarutkan endapan kristal di pembuluh darah praktisi [[Resonansi Eteris Astral]].',
+        rarity: 'Sangat Langka / Legendaris',
+        habitatOrOrigin: 'Rimba Bayang-Bayang (Shadowwood)',
+        currentHolder: 'Sylvan Aelfir',
+        creatorOrOrigin: 'Pohon Memori Eldath',
+        linkedPowerSystem: 'Resonansi Eteris Astral',
+        magicalProperties:
+          'Ekstrak kelopaknya melarutkan endapan kristal di pembuluh darah praktisi [[Resonansi Eteris Astral]] serta memulihkan kelelahan saraf akibat paparan kabut ilusi.',
+        attunementRequirement:
+          'Harus dipetik menggunakan pisau tulang atau perak murni saat cahaya bulan kembar mencapai titik puncak; jika disentuh besi biasa, kelopaknya langsung layu menjadi abu.',
+        curseOrSideEffect:
+          'Konsumsi berlebih dalam keadaan mentah menyebabkan peminumnya mengalami mimpi halusinasi memori leluhur hutan selama tiga malam berturut-turut.',
+        destructionMethod:
+          'Sangat rentan terhadap panas api surya cinnabar dan polusi jelaga batu bara uap.',
+        ownershipHistory: [
+          '1. Dijaga secara turun-temurun oleh Tetua Hutan Sylvan Aelfir',
+          '2. Disuplai terbatas ke Ordo Cakrawala Perak melalui Pakta Penjaga Rimba',
+          '3. Diselundupkan di pasar gelap oleh Sindikat Gagak Senja',
+        ],
+        creatureBehavior:
+          'Kuncupnya menutup rapat menyerupai kepompong kayu sepanjang siang hari, lalu membuka enam kelopak kaca berpendar biru lembut tepat saat kabut malam turun di sekitar akar Pohon Memori.',
+        harvestableMaterials: [
+          'Kelopak Bioluminesensi Perak',
+          'Nektar Embun Bulan',
+          'Serabut Akar Memori',
+        ],
+        alchemicalUses:
+          'Bahan utama **Eliksir Embun Perak** (penawar Kristalisasi Organ), salep penyembuh luka bakar eter, dan dupa fokus meditasi bagi praktisi Jalur Lunar.',
       },
-      content: `Bunga Lentera Malam mekar hanya ketika cahaya bulan kembar menembus kabut [[Rimba Bayang-Bayang (Shadowwood)]]. Karena kemampuannya meredakan efek *Kristalisasi Organ*, bunga ini menjadi komoditas penyelundupan paling mahal di pasar gelap [[Kekaisaran Gondoria]].`,
+      content: `**Bunga Lentera Malam** mekar hanya ketika cahaya bulan kembar menembus kabut [[Rimba Bayang-Bayang (Shadowwood)]]. Karena kemampuannya meredakan efek *Kristalisasi Organ*, bunga ini menjadi komoditas penyelundupan paling mahal yang diperdagangkan oleh [[Sindikat Gagak Senja]] di pasar gelap [[Kekaisaran Gondoria]].`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'enc-wyvern-sayap-kaca',
+      category: 'encyclopedia',
+      title: 'Wyvern Sayap-Kaca Utara',
+      subtitle: 'Predator Puncak Pegunungan Beku & Pemangsa Kristal Eter',
+      summary:
+        'Reptil bersayap raksasa penghuni tebing es [[Puncak Wyvern]] yang membran sayapnya tersusun dari serat silika transparan pembias cahaya matahari.',
+      tags: ['Fauna & Monster', 'Predator Puncak', 'Puncak Wyvern'],
+      attributes: {
+        subCategory: 'Fauna & Monster',
+        rarity: 'Langka / Terbatas',
+        habitatOrOrigin: 'Puncak Wyvern',
+        currentHolder: 'Alam Liar Puncak Wyvern',
+        creatorOrOrigin: 'Mutasi Eter Pasca-Gerhana Merah',
+        linkedPowerSystem: 'Resonansi Eteris Astral',
+        magicalProperties:
+          'Membran sayap kristalnya mampu membiaskan berkas sihir Jalur Solar sehingga kebal terhadap serangan cahaya biasa, serta mengembuskan napas kabut beku yang membekukan baja dalam hitungan detik.',
+        attunementRequirement:
+          'Tidak dapat dijinakkan secara penuh; namun [[Ordo Cakrawala Perak]] memasang lonceng frekuensi ultrasonik di sekitar menara agar kawanan Wyvern tidak menyerang observatorium.',
+        curseOrSideEffect:
+          'Luka gigitan atau cakaran taring Wyvern meninggalkan serpihan kristal mikro yang menghambat aliran meridian korban hingga dicabut secara bedah alkimia.',
+        destructionMethod:
+          'Titik lemahnya terletak pada kantung resonansi di bawah rahang bawah yang akan pecah bila terkena gelombang kejut seismik atau proyektil besi-bintang berkecepatan tinggi.',
+        ownershipHistory: [
+          '1. Menguasai tebing utara Puncak Wyvern sejak abad pertama Era Abu',
+          '2. Diburu secara terbatas oleh pemburu gilda Valdoria dan Dvergr',
+        ],
+        creatureBehavior:
+          'Berburu secara soliter saat badai salju turun. Wyvern ini tertarik pada pancaran panas eter dari kompas astral, menara suar, atau praktisi sihir yang merapal mantra berskala besar di pegunungan.',
+        harvestableMaterials: [
+          'Membran Sayap Kaca-Eter',
+          'Inti Empedu Es Abadi',
+          'Taring Silika Kristal',
+          'Sisik Dada Penolak Cahaya',
+        ],
+        alchemicalUses:
+          'Membran sayapnya diolah menjadi lensa teleskop bintang di [[Puncak Wyvern]], sedangkan sisik dadanya ditempa menjadi perisai anti-surya bagi perwira [[Kerajaan Bawah Tanah Nidavellir]].',
+      },
+      content: `**Wyvern Sayap-Kaca Utara** adalah alasan utama mengapa [[Kekaisaran Gondoria]] tidak berani mengirim armada udara atau pasukan besar mendaki [[Puncak Wyvern]]. Saat terbang di antara awan salju, tubuh mereka nyaris tak kasatmata karena sayap transparan mereka memantulkan warna langit di sekitarnya.`,
+      updatedAt: '2026-11-08',
+    },
+    {
+      id: 'enc-aksara-bintang',
+      category: 'encyclopedia',
+      title: 'Aksara Bintang Aethel & Glif Khaz-Runa',
+      subtitle: 'Sistem Penulisan Geometris Kuno, Segel Perjanjian & Bahasa Liturgi Dunia',
+      summary:
+        'Dua rumpun aksara sakral yang menjadi fondasi seluruh dokumen diplomatik, segel sihir [[Resonansi Eteris Astral]], dan ukiran [[Tempaan Runik Besi-Bintang]].',
+      tags: ['Bahasa & Budaya', 'Aksara Kuno', 'Kosmologi'],
+      attributes: {
+        subCategory: 'Bahasa & Budaya',
+        rarity: 'Endemik / Musiman',
+        habitatOrOrigin: 'Kekaisaran Gondoria',
+        currentHolder: 'Ordo Cakrawala Perak',
+        creatorOrOrigin: 'Aethel-Born (Manusia Tinggi)',
+        linkedPowerSystem: 'Resonansi Eteris Astral',
+        magicalProperties:
+          'Setiap huruf dalam Aksara Bintang mewakili sudut inklinasi rasi bintang; jika ditulis menggunakan tinta perak atau diukir pada logam meteorit, kalimatnya mampu mengikat sumpah atau menyalurkan energi eter.',
+        attunementRequirement:
+          'Memerlukan penguasaan geometri astronomi dan pelafalan nada ganda untuk membaca naskah kuno Era Surya Emas tanpa memicu segel pelindung kertas.',
+        curseOrSideEffect:
+          'Kesalahan satu goresan sudut pada saat mengukir glif *Khaz-Runa* atau *Aethel* dapat menyebabkan gulungan perjanjian terbakar sendiri atau senjata runik meledak di tangan pemakainya.',
+        destructionMethod:
+          'Segel aksara pada dokumen perjanjian hanya dapat dibatalkan dengan meneteskan pelarut raksa-bintang di atas tanda tangan kedua belah pihak.',
+        ownershipHistory: [
+          '1. Aksara Bintang Aethel digunakan oleh istana Gondoria dan Ordo Cakrawala Perak',
+          '2. Glif Khaz-Runa dijaga oleh Gilda Empu Kerajaan Bawah Tanah Nidavellir',
+          '3. Dialek Sylva-Lir dilestarikan secara lisan oleh bangsa Sylvan Aelfir',
+        ],
+        creatureBehavior:
+          'Digunakan dalam penanggalan kalender Post-Gerhana (PG), kode sandi diplomatik [[Sindikat Gagak Senja]], serta prasasti kuno di dasar Teluk Naga.',
+        harvestableMaterials: [
+          'Kamus Etimologi Aethel-Sylva',
+          'Tabel Konversi Angka Bintang',
+          'Segel Lilin Cinnabar Kekaisaran',
+        ],
+        alchemicalUses:
+          'Digunakan oleh para sarjana, kartografer, dan diplomat dalam menyusun traktat antarnegara serta membaca peta peninggalan [[Konvergensi Gerhana Merah]].',
+      },
+      content: `Di benua Aethelia, bahasa bukan sekadar alat komunikasi melainkan kerangka hukum kekuatan. Para bangsawan [[Kekaisaran Gondoria]] dan sarjana [[Ordo Cakrawala Perak]] menulis menggunakan **Aksara Bintang Aethel**, sedangkan para empu [[Dvergr Besi-Bintang]] memahat **Glif Khaz-Runa** yang kaku dan bersudut tajam di atas baja.`,
       updatedAt: '2026-11-08',
     },
   ],

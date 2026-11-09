@@ -164,6 +164,23 @@ const HISTORY_EVENT_TYPE_FILTERS = [
   'Traktat, Pakta & Penemuan Agung',
 ];
 
+const ENCYCLOPEDIA_SUBCATEGORY_FILTERS = [
+  'Semua',
+  'Artefak & Pusaka',
+  'Flora & Herbal',
+  'Fauna & Monster',
+  'Bahasa & Budaya',
+];
+
+const ENCYCLOPEDIA_RARITY_OPTIONS = [
+  'Semua Kelangkaan',
+  'Artefak Tunggal (1 di Dunia)',
+  'Sangat Langka / Legendaris',
+  'Langka / Terbatas',
+  'Endemik / Musiman',
+  'Umum',
+];
+
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
@@ -233,12 +250,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [nationGovFilter, setNationGovFilter] = useState<string>('Semua');
   const [regionTypeFilter, setRegionTypeFilter] = useState<string>('Semua');
   const [historyTypeFilter, setHistoryTypeFilter] = useState<string>('Semua');
+  const [encSubCategoryFilter, setEncSubCategoryFilter] =
+    useState<string>('Semua');
+  const [encRarityFilter, setEncRarityFilter] =
+    useState<string>('Semua Kelangkaan');
 
   const [isEditing, setIsEditing] = useState(false);
   const [draftEntity, setDraftEntity] = useState<LoreEntity | null>(null);
   const [tagInput, setTagInput] = useState('');
 
-  // Custom array item inputs in editor (Character, Race, Faction, Power System, Skill, Nation, Region & History)
+  // Custom array item inputs in editor (Character, Race, Faction, Power System, Skill, Nation, Region, History & Encyclopedia)
   const [customSkillInput, setCustomSkillInput] = useState('');
   const [customArtifactInput, setCustomArtifactInput] = useState('');
   const [customSubRaceInput, setCustomSubRaceInput] = useState('');
@@ -254,11 +275,18 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   const [customEndemicInput, setCustomEndemicInput] = useState('');
   const [customBelligerentInput, setCustomBelligerentInput] = useState('');
   const [customKeyFigureInput, setCustomKeyFigureInput] = useState('');
+  const [customOwnershipInput, setCustomOwnershipInput] = useState('');
+  const [customHarvestMaterialInput, setCustomHarvestMaterialInput] =
+    useState('');
   const [timelineSyncMessage, setTimelineSyncMessage] = useState('');
 
-  // Quick-link state on Skill view mode
+  // Quick-link state on Skill & Encyclopedia view modes
   const [selectedQuickRaceId, setSelectedQuickRaceId] = useState('');
   const [selectedQuickCharId, setSelectedQuickCharId] = useState('');
+  const [selectedQuickHolderCharId, setSelectedQuickHolderCharId] =
+    useState('');
+  const [selectedQuickHabitatRegionId, setSelectedQuickHabitatRegionId] =
+    useState('');
 
   // Inline Relationship Creator state for Character Sheet
   const [showAddRelation, setShowAddRelation] = useState(false);
@@ -284,6 +312,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setNationGovFilter('Semua');
     setRegionTypeFilter('Semua');
     setHistoryTypeFilter('Semua');
+    setEncSubCategoryFilter('Semua');
+    setEncRarityFilter('Semua Kelangkaan');
     setTimelineSyncMessage('');
     setShowAddRelation(false);
   }, [category]);
@@ -400,6 +430,32 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       }
     }
 
+    if (category === 'encyclopedia') {
+      if (encSubCategoryFilter !== 'Semua') {
+        const subStr = `${attrs.subCategory || ''} ${e.subtitle || ''} ${e.tags.join(
+          ' '
+        )}`.toLowerCase();
+        const filterKeywords = encSubCategoryFilter
+          .split('&')
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+        if (!filterKeywords.some((kw) => subStr.includes(kw))) {
+          return false;
+        }
+      }
+      if (encRarityFilter !== 'Semua Kelangkaan') {
+        const rarStr = (attrs.rarity || '').toLowerCase();
+        const rarKeywords = encRarityFilter
+          .split('(')[0]
+          .split('/')
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+        if (!rarKeywords.some((kw) => rarStr.includes(kw))) {
+          return false;
+        }
+      }
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -441,6 +497,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       (attrs.belligerentsList || []).some((b) => b.toLowerCase().includes(q)) ||
       (attrs.keyHistoricalFigures || []).some((kf) =>
         kf.toLowerCase().includes(q)
+      ) ||
+      (attrs.subCategory || '').toLowerCase().includes(q) ||
+      (attrs.rarity || '').toLowerCase().includes(q) ||
+      (attrs.habitatOrOrigin || '').toLowerCase().includes(q) ||
+      (attrs.currentHolder || '').toLowerCase().includes(q) ||
+      (attrs.creatorOrOrigin || '').toLowerCase().includes(q) ||
+      (attrs.linkedPowerSystem || '').toLowerCase().includes(q) ||
+      (attrs.magicalProperties || '').toLowerCase().includes(q) ||
+      (attrs.ownershipHistory || []).some((oh) =>
+        oh.toLowerCase().includes(q)
+      ) ||
+      (attrs.harvestableMaterials || []).some((hm) =>
+        hm.toLowerCase().includes(q)
       )
     );
   });
@@ -517,6 +586,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         endemicFloraFauna: [...(enriched.endemicFloraFauna || [])],
         belligerentsList: [...(enriched.belligerentsList || [])],
         keyHistoricalFigures: [...(enriched.keyHistoricalFigures || [])],
+        ownershipHistory: [...(enriched.ownershipHistory || [])],
+        harvestableMaterials: [...(enriched.harvestableMaterials || [])],
       },
       tags: [...entity.tags],
     });
@@ -535,6 +606,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomEndemicInput('');
     setCustomBelligerentInput('');
     setCustomKeyFigureInput('');
+    setCustomOwnershipInput('');
+    setCustomHarvestMaterialInput('');
     setIsEditing(true);
   };
 
@@ -562,6 +635,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           ? 'Kawasan Geografis, Provinsi, atau Benteng'
           : category === 'history'
           ? 'Peristiwa Bersejarah, Perang Besar, atau Bencana Kosmik'
+          : category === 'encyclopedia'
+          ? 'Pusaka Kuno, Flora Alkimia, atau Monster Mitologi'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -647,6 +722,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               belligerentsList: [],
               keyHistoricalFigures: [],
             }
+          : category === 'encyclopedia'
+          ? {
+              subCategory: 'Artefak & Pusaka',
+              rarity: 'Sangat Langka / Legendaris',
+              habitatOrOrigin: regionEntities[0]?.title || '',
+              linkedPowerSystem: defaultPs?.title || '',
+              ownershipHistory: [],
+              harvestableMaterials: [],
+            }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
     };
@@ -666,6 +750,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setCustomEndemicInput('');
     setCustomBelligerentInput('');
     setCustomKeyFigureInput('');
+    setCustomOwnershipInput('');
+    setCustomHarvestMaterialInput('');
     setIsEditing(true);
   };
 
@@ -957,6 +1043,74 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
     setSelectedQuickCharId('');
   };
 
+  // 1-Click Link active Encyclopedia item (Artifact) to a Character's ownedArtifacts
+  const handleLinkEncyclopediaToCharacter = (
+    encEntity: LoreEntity,
+    charId: string
+  ) => {
+    const targetChar = entities.find((e) => e.id === charId);
+    if (!targetChar) return;
+    const cAttrs = getEnrichedAttributes(targetChar);
+    const nextCharArtifacts = Array.from(
+      new Set([...(cAttrs.ownedArtifacts || []), encEntity.title])
+    );
+    onSaveEntity({
+      ...targetChar,
+      attributes: {
+        ...cAttrs,
+        ownedArtifacts: nextCharArtifacts,
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    });
+
+    const eAttrs = getEnrichedAttributes(encEntity);
+    if (!eAttrs.currentHolder) {
+      onSaveEntity({
+        ...encEntity,
+        attributes: {
+          ...eAttrs,
+          currentHolder: targetChar.title,
+        },
+        updatedAt: new Date().toISOString().slice(0, 10),
+      });
+    }
+    setSelectedQuickHolderCharId('');
+  };
+
+  // 1-Click Link active Encyclopedia item (Flora/Fauna/Relic) to a Region's endemicFloraFauna
+  const handleLinkEncyclopediaToRegion = (
+    encEntity: LoreEntity,
+    regionId: string
+  ) => {
+    const targetReg = entities.find((e) => e.id === regionId);
+    if (!targetReg) return;
+    const rAttrs = getEnrichedAttributes(targetReg);
+    const nextEndemic = Array.from(
+      new Set([...(rAttrs.endemicFloraFauna || []), encEntity.title])
+    );
+    onSaveEntity({
+      ...targetReg,
+      attributes: {
+        ...rAttrs,
+        endemicFloraFauna: nextEndemic,
+      },
+      updatedAt: new Date().toISOString().slice(0, 10),
+    });
+
+    const eAttrs = getEnrichedAttributes(encEntity);
+    if (!eAttrs.habitatOrOrigin) {
+      onSaveEntity({
+        ...encEntity,
+        attributes: {
+          ...eAttrs,
+          habitatOrOrigin: targetReg.title,
+        },
+        updatedAt: new Date().toISOString().slice(0, 10),
+      });
+    }
+    setSelectedQuickHabitatRegionId('');
+  };
+
   const backlinks = activeEntity
     ? findBacklinksForEntity(activeEntity, entities, chapters)
     : { linkedEntities: [], linkedChapters: [] };
@@ -1228,6 +1382,88 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             tTitle === hTitle ||
             tTitle.includes(hTitle) ||
             hTitle.includes(tTitle)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Characters holding or linked to the active Encyclopedia entry
+  const holdersOfActiveEncyclopedia =
+    category === 'encyclopedia' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'character') return false;
+          const cAttrs = getEnrichedAttributes(e);
+          const encTitle = activeEntity.title.toLowerCase();
+          const holderAttr = (activeAttrs.currentHolder || '').toLowerCase();
+          const creatorAttr = (activeAttrs.creatorOrOrigin || '').toLowerCase();
+          const charTitle = e.title.toLowerCase();
+          const charArts = (cAttrs.ownedArtifacts || []).map((a) =>
+            a.toLowerCase()
+          );
+          return (
+            charArts.some(
+              (ca) => ca.includes(encTitle) || encTitle.includes(ca)
+            ) ||
+            (holderAttr &&
+              (holderAttr.includes(charTitle) ||
+                charTitle.includes(holderAttr))) ||
+            (creatorAttr &&
+              (creatorAttr.includes(charTitle) ||
+                charTitle.includes(creatorAttr))) ||
+            e.content.toLowerCase().includes(`[[${encTitle}]]`) ||
+            activeEntity.content.toLowerCase().includes(`[[${charTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Factions holding or utilizing the active Encyclopedia entry
+  const factionsOfActiveEncyclopedia =
+    category === 'encyclopedia' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'faction') return false;
+          const fAttrs = getEnrichedAttributes(e);
+          const encTitle = activeEntity.title.toLowerCase();
+          const holderAttr = (activeAttrs.currentHolder || '').toLowerCase();
+          const creatorAttr = (activeAttrs.creatorOrOrigin || '').toLowerCase();
+          const facTitle = e.title.toLowerCase();
+          const facArts = (fAttrs.factionArtifacts || []).map((a) =>
+            a.toLowerCase()
+          );
+          return (
+            facArts.some(
+              (fa) => fa.includes(encTitle) || encTitle.includes(fa)
+            ) ||
+            (holderAttr &&
+              (holderAttr.includes(facTitle) ||
+                facTitle.includes(holderAttr))) ||
+            (creatorAttr &&
+              (creatorAttr.includes(facTitle) ||
+                facTitle.includes(creatorAttr))) ||
+            e.content.toLowerCase().includes(`[[${encTitle}]]`) ||
+            activeEntity.content.toLowerCase().includes(`[[${facTitle}]]`)
+          );
+        })
+      : [];
+
+  // Automatic Roster of Regions that are habitats or origins of the active Encyclopedia entry
+  const regionsOfActiveEncyclopedia =
+    category === 'encyclopedia' && activeEntity
+      ? entities.filter((e) => {
+          if (e.category !== 'region') return false;
+          const rAttrs = getEnrichedAttributes(e);
+          const encTitle = activeEntity.title.toLowerCase();
+          const habAttr = (activeAttrs.habitatOrOrigin || '').toLowerCase();
+          const regTitle = e.title.toLowerCase();
+          const regEndemic = (rAttrs.endemicFloraFauna || []).map((f) =>
+            f.toLowerCase()
+          );
+          return (
+            regEndemic.some(
+              (re) => re.includes(encTitle) || encTitle.includes(re)
+            ) ||
+            (habAttr &&
+              (habAttr.includes(regTitle) || regTitle.includes(habAttr))) ||
+            e.content.toLowerCase().includes(`[[${encTitle}]]`) ||
+            activeEntity.content.toLowerCase().includes(`[[${regTitle}]]`)
           );
         })
       : [];
@@ -1564,6 +1800,47 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
+          {/* Encyclopedia-Specific Sub-Category & Rarity Filters */}
+          {category === 'encyclopedia' && (
+            <div className="space-y-2 pt-1">
+              <div className="text-[11px] font-semibold text-[#695A47]">
+                Filter Sub-Kategori Ensiklopedia:
+              </div>
+              <div className="flex flex-wrap items-center gap-1">
+                {ENCYCLOPEDIA_SUBCATEGORY_FILTERS.map((sc) => (
+                  <button
+                    key={sc}
+                    type="button"
+                    onClick={() => setEncSubCategoryFilter(sc)}
+                    className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
+                      encSubCategoryFilter === sc
+                        ? 'bg-[#3D5A45] text-white'
+                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    }`}
+                  >
+                    {sc}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center justify-between gap-2 text-xs">
+                <span className="text-[11px] text-[#695A47] font-medium">
+                  Kelangkaan:
+                </span>
+                <select
+                  value={encRarityFilter}
+                  onChange={(e) => setEncRarityFilter(e.target.value)}
+                  className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                >
+                  {ENCYCLOPEDIA_RARITY_OPTIONS.map((rar) => (
+                    <option key={rar} value={rar}>
+                      {rar}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
           <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
@@ -1677,6 +1954,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   itemAttrs.era ||
                                   'Era Kanon'
                                 }`
+                              : category === 'encyclopedia'
+                              ? `${
+                                  itemAttrs.subCategory || 'Artefak & Biota'
+                                } · ${itemAttrs.rarity || 'Langka'}`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -1760,6 +2041,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             itemAttrs.belligerentsList.length > 0
                               ? ` · ${itemAttrs.belligerentsList.length} Pihak Terlibat`
                               : ''}
+                          </div>
+                        )}
+
+                        {category === 'encyclopedia' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            {itemAttrs.currentHolder
+                              ? `Pemegang: ${itemAttrs.currentHolder}`
+                              : `Habitat: ${
+                                  itemAttrs.habitatOrOrigin || 'Kanon Dunia'
+                                }`}
                           </div>
                         )}
 
@@ -5795,58 +6086,658 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
-              {/* Other Categories Structured Fields */}
+              {/* ========================================================= */}
+              {/* ENCYCLOPEDIA-SPECIFIC RICH EDITOR (PUSAKA, FLORA & FAUNA) */}
+              {/* ========================================================= */}
               {category === 'encyclopedia' && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                  <div className="text-xs font-semibold text-[#9E2A2B]">
-                    Parameter Khusus {sectionMeta.label}
+                <div className="space-y-4">
+                  {/* Section 1: Klasifikasi Sub-Kategori, Kelangkaan, Pemegang, Pencipta & Habitat */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
+                      <Compass className="w-3.5 h-3.5" />
+                      <span>
+                        1. Klasifikasi Ensiklopedia, Pemilik Saat Ini, Pencipta & Habitat Asal
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Sub-Kategori Ensiklopedia
+                        </label>
+                        <select
+                          value={
+                            draftEntity.attributes.subCategory ||
+                            'Artefak & Pusaka'
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                subCategory: e.target
+                                  .value as LoreAttributes['subCategory'],
+                              },
+                            })
+                          }
+                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        >
+                          {ENCYCLOPEDIA_SUBCATEGORY_FILTERS.filter(
+                            (x) => x !== 'Semua'
+                          ).map((sc) => (
+                            <option key={sc} value={sc}>
+                              {sc}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Tingkat Kelangkaan
+                        </label>
+                        <div className="space-y-1">
+                          <select
+                            value=""
+                            onChange={(e) => {
+                              if (!e.target.value) return;
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  rarity: e.target.value,
+                                },
+                              });
+                            }}
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          >
+                            <option value="">
+                              -- Pilih Preset Kelangkaan --
+                            </option>
+                            {ENCYCLOPEDIA_RARITY_OPTIONS.filter(
+                              (x) => x !== 'Semua Kelangkaan'
+                            ).map((rar) => (
+                              <option key={rar} value={rar}>
+                                {rar}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            type="text"
+                            placeholder="Atau ketik kelangkaan kustom..."
+                            value={draftEntity.attributes.rarity || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  rarity: e.target.value,
+                                },
+                              })
+                            }
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Picker for Linked Power System */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Sistem Kekuatan Terkait (Pilih dari Power System / Ketik)
+                        </label>
+                        <div className="space-y-1">
+                          {powerSystemEntities.length > 0 && (
+                            <select
+                              value=""
+                              onChange={(e) => {
+                                if (!e.target.value) return;
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    linkedPowerSystem: e.target.value,
+                                  },
+                                });
+                              }}
+                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                            >
+                              <option value="">
+                                -- Pilih dari Tab Power System --
+                              </option>
+                              {powerSystemEntities.map((ps) => (
+                                <option key={ps.id} value={ps.title}>
+                                  {ps.title}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                          <input
+                            type="text"
+                            placeholder="Atau ketik sistem sihir / alkimia..."
+                            value={
+                              draftEntity.attributes.linkedPowerSystem || ''
+                            }
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  linkedPowerSystem: e.target.value,
+                                },
+                              })
+                            }
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      {/* Hybrid Picker for Current Holder / Owner */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Pemilik / Pemegang Saat Ini (Tokoh / Kelompok / Ketik)
+                        </label>
+                        <div className="space-y-1">
+                          {(characterEntities.length > 0 ||
+                            factionEntities.length > 0) && (
+                            <select
+                              value=""
+                              onChange={(e) => {
+                                if (!e.target.value) return;
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    currentHolder: e.target.value,
+                                  },
+                                });
+                              }}
+                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                            >
+                              <option value="">
+                                -- Pilih Tokoh / Kelompok --
+                              </option>
+                              {characterEntities.map((c) => (
+                                <option key={c.id} value={c.title}>
+                                  [Tokoh] {c.title}
+                                </option>
+                              ))}
+                              {factionEntities.map((f) => (
+                                <option key={f.id} value={f.title}>
+                                  [Kelompok] {f.title}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                          <input
+                            type="text"
+                            placeholder="Misal: Archmage Vaelen / Alam Liar..."
+                            value={draftEntity.attributes.currentHolder || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  currentHolder: e.target.value,
+                                },
+                              })
+                            }
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Picker for Creator / Biological Origin */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Pencipta / Asal-Usul Biologis (Ras / Tokoh / Kelompok)
+                        </label>
+                        <div className="space-y-1">
+                          {(raceEntities.length > 0 ||
+                            characterEntities.length > 0 ||
+                            factionEntities.length > 0) && (
+                            <select
+                              value=""
+                              onChange={(e) => {
+                                if (!e.target.value) return;
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    creatorOrOrigin: e.target.value,
+                                  },
+                                });
+                              }}
+                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                            >
+                              <option value="">
+                                -- Pilih Ras / Tokoh / Kelompok --
+                              </option>
+                              {raceEntities.map((r) => (
+                                <option key={r.id} value={r.title}>
+                                  [Ras] {r.title}
+                                </option>
+                              ))}
+                              {characterEntities.map((c) => (
+                                <option key={c.id} value={c.title}>
+                                  [Tokoh] {c.title}
+                                </option>
+                              ))}
+                              {factionEntities.map((f) => (
+                                <option key={f.id} value={f.title}>
+                                  [Kelompok] {f.title}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                          <input
+                            type="text"
+                            placeholder="Misal: Empu Kuno Kurcaci Besi-Abu..."
+                            value={draftEntity.attributes.creatorOrOrigin || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  creatorOrOrigin: e.target.value,
+                                },
+                              })
+                            }
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Hybrid Picker for Habitat / Region of Origin */}
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          Habitat Alami / Lokasi Asal (Pilih Wilayah / Negara)
+                        </label>
+                        <div className="space-y-1">
+                          {nationAndRegionEntities.length > 0 && (
+                            <select
+                              value=""
+                              onChange={(e) => {
+                                if (!e.target.value) return;
+                                setDraftEntity({
+                                  ...draftEntity,
+                                  attributes: {
+                                    ...draftEntity.attributes,
+                                    habitatOrOrigin: e.target.value,
+                                  },
+                                });
+                              }}
+                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                            >
+                              <option value="">
+                                -- Pilih Wilayah / Negara --
+                              </option>
+                              {nationAndRegionEntities.map((nr) => (
+                                <option key={nr.id} value={nr.title}>
+                                  [{CATEGORY_META[nr.category].singular}]{' '}
+                                  {nr.title}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                          <input
+                            type="text"
+                            placeholder="Misal: Hutan Kabut Perak / Puncak Aethelgard..."
+                            value={draftEntity.attributes.habitatOrOrigin || ''}
+                            onChange={(e) =>
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  habitatOrOrigin: e.target.value,
+                                },
+                              })
+                            }
+                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Khasiat Utama, Kekuatan Magis atau Kemampuan Spesifik
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Misal: Memetakan jalur astral, memurnikan kutukan eter, atau menyemburkan kristal es..."
+                        value={draftEntity.attributes.magicalProperties || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              magicalProperties: e.target.value,
+                            },
+                          })
+                        }
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <input
-                      type="text"
-                      placeholder="Tingkat Kelangkaan"
-                      value={draftEntity.attributes.rarity || ''}
-                      onChange={(e) =>
-                        setDraftEntity({
-                          ...draftEntity,
-                          attributes: {
-                            ...draftEntity.attributes,
-                            rarity: e.target.value,
-                          },
-                        })
-                      }
-                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Asal-Usul / Habitat"
-                      value={draftEntity.attributes.habitatOrOrigin || ''}
-                      onChange={(e) =>
-                        setDraftEntity({
-                          ...draftEntity,
-                          attributes: {
-                            ...draftEntity.attributes,
-                            habitatOrOrigin: e.target.value,
-                          },
-                        })
-                      }
-                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Khasiat / Efek Khusus"
-                      value={draftEntity.attributes.magicalProperties || ''}
-                      onChange={(e) =>
-                        setDraftEntity({
-                          ...draftEntity,
-                          attributes: {
-                            ...draftEntity.attributes,
-                            magicalProperties: e.target.value,
-                          },
-                        })
-                      }
-                      className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
-                    />
+
+                  {/* Section 2: Dossier Pusaka (Syarat Aktivasi, Kutukan/Efek Samping, Riwayat Kepemilikan & Cara Menghancurkan) */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>
+                        2. Dossier Pusaka & Artefak: Syarat Aktivasi, Kutukan, Sejarah Kepemilikan & Cara Menghancurkan
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                          Syarat Aktivasi / Ikatan Jiwa (Attunement)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={
+                            draftEntity.attributes.attunementRequirement || ''
+                          }
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                attunementRequirement: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Darah garis keturunan khusus, pembacaan aksara bintang, atau kondisi lingkungan..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Kutukan, Efek Samping & Risiko Penggunaan
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.curseOrSideEffect || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                curseOrSideEffect: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Menguras memori, membekukan darah, atau memancing halusinasi..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                          Kelemahan Mutlak / Cara Menghancurkan atau Menjinakkan
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.destructionMethod || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                destructionMethod: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Hanya dapat dilebur di tanur magma kuno atau dinetralkan dengan garam perak..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Ownership History Chip Builder */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2">
+                      <label className="block text-[11px] font-semibold text-[#8F5B14]">
+                        Rantai Sejarah Kepemilikan / Perpindahan Tangan Pusaka
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.ownershipHistory || []).map(
+                          (oh) => (
+                            <span
+                              key={oh}
+                              className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-semibold text-[#231C14] flex items-center gap-1.5"
+                            >
+                              <span>{oh}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      ownershipHistory: (
+                                        draftEntity.attributes
+                                          .ownershipHistory || []
+                                      ).filter((item) => item !== oh),
+                                    },
+                                  })
+                                }
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      {(characterEntities.length > 0 ||
+                        factionEntities.length > 0) && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[11px] text-[#695A47]">
+                            Tambah Cepat Tokoh/Kelompok Pemilik:
+                          </span>
+                          {[...characterEntities, ...factionEntities]
+                            .slice(0, 5)
+                            .map((ent) => {
+                              const already = (
+                                draftEntity.attributes.ownershipHistory || []
+                              ).includes(ent.title);
+                              return (
+                                <button
+                                  key={ent.id}
+                                  type="button"
+                                  onClick={() => {
+                                    const current =
+                                      draftEntity.attributes.ownershipHistory ||
+                                      [];
+                                    const next = already
+                                      ? current.filter((x) => x !== ent.title)
+                                      : [...current, ent.title];
+                                    setDraftEntity({
+                                      ...draftEntity,
+                                      attributes: {
+                                        ...draftEntity.attributes,
+                                        ownershipHistory: next,
+                                      },
+                                    });
+                                  }}
+                                  className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
+                                    already
+                                      ? 'bg-[#8F5B14] text-white border-[#8F5B14]'
+                                      : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                  }`}
+                                >
+                                  {already ? '✓ ' : '+ '}
+                                  {ent.title}
+                                </button>
+                              );
+                            })}
+                        </div>
+                      )}
+
+                      <div className="flex gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          value={customOwnershipInput}
+                          onChange={(e) =>
+                            setCustomOwnershipInput(e.target.value)
+                          }
+                          placeholder="Ketik urutan pemilik (misal: 1. Kaisar Aurelius I -> 2. Direbut Archmage Vaelen)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customOwnershipInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.ownershipHistory || [];
+                            if (!current.includes(val)) {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  ownershipHistory: [...current, val],
+                                },
+                              });
+                            }
+                            setCustomOwnershipInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#8F5B14] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Riwayat
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 3: Dossier Bestiari, Herbarium & Alkimia */}
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                    <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>
+                        3. Dossier Bestiari & Alkimia: Perilaku Monster, Bagian Tubuh Berharga & Khasiat Ramuan
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                          Perilaku Makhluk, Siklus Hidup & Pola Berburu (Fauna / Flora)
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={draftEntity.attributes.creatureBehavior || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                creatureBehavior: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Bagaimana makhluk ini berburu, musim mekarnya tanaman, atau tata bahasa aksara..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#3D5A45] mb-1">
+                          Kegunaan Alkimia, Kuliner, Tempaan Senjata & Nilai Ekonomi
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={draftEntity.attributes.alchemicalUses || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                alchemicalUses: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Resep ramuan yang dihasilkan, fungsi kerajinan zirah, atau nilai jual di pasar gelap..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Harvestable Materials Chip Builder */}
+                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2">
+                      <label className="block text-[11px] font-semibold text-[#3D5A45]">
+                        Bagian Tubuh Monster / Komponen Material & Hasil Panen Berharga
+                      </label>
+                      <div className="flex flex-wrap gap-1.5">
+                        {(draftEntity.attributes.harvestableMaterials || []).map(
+                          (hm) => (
+                            <span
+                              key={hm}
+                              className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#3D5A45]/40 text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5"
+                            >
+                              <span>{hm}</span>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setDraftEntity({
+                                    ...draftEntity,
+                                    attributes: {
+                                      ...draftEntity.attributes,
+                                      harvestableMaterials: (
+                                        draftEntity.attributes
+                                          .harvestableMaterials || []
+                                      ).filter((item) => item !== hm),
+                                    },
+                                  })
+                                }
+                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </span>
+                          )
+                        )}
+                      </div>
+
+                      <div className="flex gap-1.5 pt-1">
+                        <input
+                          type="text"
+                          value={customHarvestMaterialInput}
+                          onChange={(e) =>
+                            setCustomHarvestMaterialInput(e.target.value)
+                          }
+                          placeholder="Ketik komponen panen (misal: Sisik Sayap Kaca-Es / Kelopak Embun Perak / Inti Kristal)..."
+                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = customHarvestMaterialInput.trim();
+                            if (!val) return;
+                            const current =
+                              draftEntity.attributes.harvestableMaterials || [];
+                            if (!current.includes(val)) {
+                              setDraftEntity({
+                                ...draftEntity,
+                                attributes: {
+                                  ...draftEntity.attributes,
+                                  harvestableMaterials: [...current, val],
+                                },
+                              });
+                            }
+                            setCustomHarvestMaterialInput('');
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#3D5A45] text-white rounded cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tambah Komponen
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
@@ -6068,6 +6959,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* Encyclopedia Magical Properties & Arcane Effect Banner */}
+              {category === 'encyclopedia' && activeAttrs.magicalProperties && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#3D5A45]">
+                    <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <span>
+                      Khasiat Utama, Kekuatan Magis & Karakteristik Spesifik ·{' '}
+                      {activeAttrs.subCategory || 'Artefak & Biota'}
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#231C14] leading-relaxed">
+                    <WikiTextRenderer
+                      text={activeAttrs.magicalProperties}
+                      entities={entities}
+                      onSelectEntity={jumpToEntity}
+                    />
+                  </div>
+                </div>
+              )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -6181,6 +7092,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             'worldImpactLegacy',
                             'officialHistoryVersion',
                             'hiddenHistoricalTruth',
+                            'magicalProperties',
+                            'attunementRequirement',
+                            'curseOrSideEffect',
+                            'destructionMethod',
+                            'ownershipHistory',
+                            'creatureBehavior',
+                            'harvestableMaterials',
+                            'alchemicalUses',
                           ].includes(key)
                         ) {
                           return false;
@@ -6248,7 +7167,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           cooldownOrLimit: 'Batas Penggunaan / Efek Balik',
                           subCategory: 'Klasifikasi Ensiklopedia',
                           rarity: 'Tingkat Kelangkaan',
-                          habitatOrOrigin: 'Asal / Habitat',
+                          habitatOrOrigin: 'Habitat Alami / Lokasi Asal',
+                          currentHolder: 'Pemilik / Pemegang Saat Ini',
+                          creatorOrOrigin: 'Pencipta / Asal-Usul Biologis',
+                          linkedPowerSystem: 'Sistem Kekuatan Terkait',
                           magicalProperties: 'Khasiat / Efek Arcane',
                         };
 
@@ -6257,19 +7179,25 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             ? 'race'
                             : key === 'factionName'
                             ? 'faction'
-                            : key === 'leader' || key === 'ruler'
+                            : key === 'leader' ||
+                              key === 'ruler' ||
+                              key === 'currentHolder'
                             ? 'character'
+                            : key === 'creatorOrOrigin'
+                            ? 'race'
                             : key === 'parentNation'
                             ? 'nation'
                             : key === 'originNation' ||
                               key === 'homeland' ||
                               key === 'headquarters' ||
                               key === 'capitalCity' ||
-                              key === 'eventLocation'
+                              key === 'eventLocation' ||
+                              key === 'habitatOrOrigin'
                             ? 'region'
                             : key === 'catalystMedium'
                             ? 'encyclopedia'
-                            : key === 'parentPowerSystem'
+                            : key === 'parentPowerSystem' ||
+                              key === 'linkedPowerSystem'
                             ? 'power_system'
                             : undefined;
 
@@ -6763,6 +7691,75 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             )}
                           </div>
                         </div>
+                      </div>
+                    )}
+
+                  {/* Encyclopedia Ownership History & Harvestable Materials Interactive Cards */}
+                  {category === 'encyclopedia' &&
+                    ((activeAttrs.ownershipHistory &&
+                      activeAttrs.ownershipHistory.length > 0) ||
+                      (activeAttrs.harvestableMaterials &&
+                        activeAttrs.harvestableMaterials.length > 0)) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        {activeAttrs.ownershipHistory &&
+                          activeAttrs.ownershipHistory.length > 0 && (
+                            <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                              <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>
+                                  Rantai Sejarah Kepemilikan & Perpindahan Pusaka
+                                </span>
+                              </div>
+                              <div className="flex flex-wrap gap-1.5">
+                                {activeAttrs.ownershipHistory.map((oh) => {
+                                  const matchedOwner =
+                                    findMatchingEntityByName(oh);
+                                  return matchedOwner ? (
+                                    <button
+                                      key={oh}
+                                      type="button"
+                                      onClick={() =>
+                                        jumpToEntity(matchedOwner.id)
+                                      }
+                                      className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#8F5B14]/50 text-xs font-semibold text-[#8F5B14] flex items-center gap-1 cursor-pointer text-left"
+                                    >
+                                      <span>{oh}</span>
+                                      <ArrowUpRight className="w-3 h-3 shrink-0" />
+                                    </button>
+                                  ) : (
+                                    <span
+                                      key={oh}
+                                      className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                    >
+                                      {oh}
+                                    </span>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+
+                        {activeAttrs.harvestableMaterials &&
+                          activeAttrs.harvestableMaterials.length > 0 && (
+                            <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                              <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>
+                                  Bagian Tubuh Berharga & Komponen Material Panen
+                                </span>
+                              </div>
+                              <div className="flex flex-wrap gap-1.5">
+                                {activeAttrs.harvestableMaterials.map((hm) => (
+                                  <span
+                                    key={hm}
+                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#3D5A45]/45 text-xs font-semibold text-[#3D5A45]"
+                                  >
+                                    {hm}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                       </div>
                     )}
                 </div>
@@ -7406,6 +8403,129 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               onSelectEntity={jumpToEntity}
                             />
                           </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              {/* ============================================================= */}
+              {/* ENCYCLOPEDIA RELIC & BESTIARY / ALCHEMY DOSSIER               */}
+              {/* ============================================================= */}
+              {category === 'encyclopedia' &&
+                (activeAttrs.attunementRequirement ||
+                  activeAttrs.curseOrSideEffect ||
+                  activeAttrs.destructionMethod ||
+                  activeAttrs.creatureBehavior ||
+                  activeAttrs.alchemicalUses) && (
+                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-[#3D5A45]">
+                      <Compass className="w-4 h-4 text-[#B5832A]" />
+                      <span>
+                        Dossier Ensiklopedia: Syarat Aktivasi, Kutukan Pusaka, Ekologi Biota & Alkimia
+                      </span>
+                    </div>
+
+                    {/* Attunement Requirement vs Curse / Side Effects */}
+                    {(activeAttrs.attunementRequirement ||
+                      activeAttrs.curseOrSideEffect) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>
+                              Syarat Aktivasi, Ikatan Jiwa & Kondisi Panen (Attunement)
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.attunementRequirement ||
+                                'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                            <ShieldAlert className="w-3.5 h-3.5" />
+                            <span>
+                              Kutukan, Efek Samping & Bahaya Mematikan
+                            </span>
+                          </div>
+                          <div className="text-xs text-[#231C14] leading-relaxed">
+                            <WikiTextRenderer
+                              text={
+                                activeAttrs.curseOrSideEffect || 'Belum diisi.'
+                              }
+                              entities={entities}
+                              onSelectEntity={jumpToEntity}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Creature Behavior vs Alchemical & Crafting Uses */}
+                    {(activeAttrs.creatureBehavior ||
+                      activeAttrs.alchemicalUses) && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {activeAttrs.creatureBehavior && (
+                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                            <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
+                              <Globe className="w-3.5 h-3.5 text-[#3D5A45]" />
+                              <span>
+                                Perilaku Makhluk, Siklus Ekologi & Karakteristik
+                              </span>
+                            </div>
+                            <div className="text-xs text-[#231C14] leading-relaxed">
+                              <WikiTextRenderer
+                                text={activeAttrs.creatureBehavior}
+                                entities={entities}
+                                onSelectEntity={jumpToEntity}
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {activeAttrs.alchemicalUses && (
+                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                            <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
+                              <Flame className="w-3.5 h-3.5 text-[#B5832A]" />
+                              <span>
+                                Khasiat Alkimia, Tempaan Senjata & Nilai Ekonomi
+                              </span>
+                            </div>
+                            <div className="text-xs text-[#231C14] leading-relaxed">
+                              <WikiTextRenderer
+                                text={activeAttrs.alchemicalUses}
+                                entities={entities}
+                                onSelectEntity={jumpToEntity}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Destruction Method / Countermeasure */}
+                    {activeAttrs.destructionMethod && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                        <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                          <Swords className="w-3.5 h-3.5" />
+                          <span>
+                            Kelemahan Mutlak, Penangkal & Cara Menghancurkan / Menjinakkan
+                          </span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.destructionMethod}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
                         </div>
                       </div>
                     )}
@@ -8272,6 +9392,221 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       ))}
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* AUTOMATIC ROSTER OF HOLDERS, FACTIONS & HABITATS (ENCYCLOPEDIA) */}
+              {/* ============================================================= */}
+              {category === 'encyclopedia' && (
+                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                  {/* Characters Holding / Linked to This Encyclopedia Item */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                        <span>
+                          Tokoh Pemilik, Pencipta & Pengguna Terkait (
+                          {holdersOfActiveEncyclopedia.length})
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <select
+                          value={selectedQuickHolderCharId}
+                          onChange={(e) =>
+                            setSelectedQuickHolderCharId(e.target.value)
+                          }
+                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                        >
+                          <option value="">-- Pilih Tokoh --</option>
+                          {characterEntities.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              {c.title}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={!selectedQuickHolderCharId}
+                          onClick={() => {
+                            if (!selectedQuickHolderCharId) return;
+                            handleLinkEncyclopediaToCharacter(
+                              activeEntity,
+                              selectedQuickHolderCharId
+                            );
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg disabled:opacity-40 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Berikan ke Tokoh
+                        </button>
+                      </div>
+                    </div>
+
+                    {holdersOfActiveEncyclopedia.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada tokoh di tab <strong>Character</strong> yang
+                        tercatat menyimpan atau menggunakan entri ini. Pilih
+                        tokoh di atas dan klik{' '}
+                        <strong>+ Berikan ke Tokoh</strong> untuk menambahkannya
+                        ke inventaris pusaka tokoh.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {holdersOfActiveEncyclopedia.map((char) => {
+                          const cAttrs = getEnrichedAttributes(char);
+                          return (
+                            <button
+                              key={char.id}
+                              type="button"
+                              onClick={() => jumpToEntity(char.id)}
+                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                            >
+                              {char.imageUrl ? (
+                                <img
+                                  src={char.imageUrl}
+                                  alt={char.title}
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                />
+                              ) : (
+                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                </div>
+                              )}
+                              <div className="min-w-0 flex-1">
+                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                  <span className="truncate">{char.title}</span>
+                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                </div>
+                                <div className="text-[11px] text-[#695A47] truncate">
+                                  {cAttrs.role || 'Tokoh'} ·{' '}
+                                  {cAttrs.factionName || char.subtitle}
+                                </div>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Factions Holding or Utilizing This Encyclopedia Item */}
+                  {factionsOfActiveEncyclopedia.length > 0 && (
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                        <span>
+                          Kelompok & Organisasi Pemegang / Pengguna (
+                          {factionsOfActiveEncyclopedia.length})
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {factionsOfActiveEncyclopedia.map((fac) => {
+                          const fAttrs = getEnrichedAttributes(fac);
+                          return (
+                            <button
+                              key={fac.id}
+                              type="button"
+                              onClick={() => jumpToEntity(fac.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                                {fAttrs.factionType || 'Organisasi'} · Markas:{' '}
+                                {fAttrs.headquarters || 'Kanon'}
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{fac.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-1">
+                                {fac.subtitle}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Regions / Habitats Linked to This Encyclopedia Item */}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                        <MapPin className="w-4 h-4 text-[#3D5A45]" />
+                        <span>
+                          Wilayah Habitat Endemik & Lokasi Penyimpanan (
+                          {regionsOfActiveEncyclopedia.length})
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <select
+                          value={selectedQuickHabitatRegionId}
+                          onChange={(e) =>
+                            setSelectedQuickHabitatRegionId(e.target.value)
+                          }
+                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                        >
+                          <option value="">-- Pilih Wilayah --</option>
+                          {regionEntities.map((r) => (
+                            <option key={r.id} value={r.id}>
+                              {r.title}
+                            </option>
+                          ))}
+                        </select>
+                        <button
+                          type="button"
+                          disabled={!selectedQuickHabitatRegionId}
+                          onClick={() => {
+                            if (!selectedQuickHabitatRegionId) return;
+                            handleLinkEncyclopediaToRegion(
+                              activeEntity,
+                              selectedQuickHabitatRegionId
+                            );
+                          }}
+                          className="px-3 py-1 text-xs font-semibold bg-[#3D5A45] text-white rounded-lg disabled:opacity-40 cursor-pointer whitespace-nowrap shrink-0"
+                        >
+                          + Tanamkan ke Wilayah
+                        </button>
+                      </div>
+                    </div>
+
+                    {regionsOfActiveEncyclopedia.length === 0 ? (
+                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                        Belum ada wilayah di tab <strong>Wilayah</strong> yang
+                        tercatat sebagai habitat atau lokasi penyimpanan entri
+                        ini. Pilih wilayah di atas dan klik{' '}
+                        <strong>+ Tanamkan ke Wilayah</strong>.
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {regionsOfActiveEncyclopedia.map((reg) => {
+                          const rAttrs = getEnrichedAttributes(reg);
+                          return (
+                            <button
+                              key={reg.id}
+                              type="button"
+                              onClick={() => jumpToEntity(reg.id)}
+                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                            >
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#264653]">
+                                <span>
+                                  {rAttrs.regionType || 'Zona Geografis'}
+                                </span>
+                                <span>{rAttrs.parentNation || 'Otonom'}</span>
+                              </div>
+                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                                <span className="truncate">{reg.title}</span>
+                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                              </div>
+                              <p className="text-xs text-[#695A47] line-clamp-1">
+                                {reg.subtitle}
+                              </p>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 

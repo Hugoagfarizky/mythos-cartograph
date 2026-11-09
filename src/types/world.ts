@@ -138,11 +138,21 @@ export interface LoreAttributes {
   visualManifestation?: string;
   activationCost?: string;
   cooldownOrLimit?: string;
-  // Encyclopedia (Artifact, Flora, Fauna)
+  // Encyclopedia (Artifact, Flora, Fauna, Language & Culture)
   subCategory?: 'Artefak & Pusaka' | 'Flora & Herbal' | 'Fauna & Monster' | 'Bahasa & Budaya';
   rarity?: string;
   habitatOrOrigin?: string;
   magicalProperties?: string;
+  currentHolder?: string;
+  creatorOrOrigin?: string;
+  linkedPowerSystem?: string;
+  attunementRequirement?: string;
+  curseOrSideEffect?: string;
+  destructionMethod?: string;
+  ownershipHistory?: string[];
+  creatureBehavior?: string;
+  harvestableMaterials?: string[];
+  alchemicalUses?: string;
 }
 
 export interface LoreEntity {
