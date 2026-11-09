@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana perombakan UI/UX bertema Penulis Fantasi (Royal Parchment & Candlelight Grimoire): Ornamen sudut emas & pembatas manuskrip, font Cinzel & Illuminated Drop Cap, Mode Tema Ganda (Perkamen Siang & Grimoire Malam Lilin), Kartu Entitas bergaya Tarot/Bestiary, Pengelompokan 14 Tab dalam 4 Pilar Dunia dengan ikon fantasi, serta Kartu Pratinjau Cepat (Hover Tooltip) pada tautan [[Nama Entitas]].",
-  "updatedAt":  "2026-11-09T10:10:56.458915809Z",
+  "summary":  "Rencana implementasi 4 penyempurnaan UX & fitur penulis fantasi: Popover Pembuat Entitas Instan dari tautan [[...]] kosong (Redlink Creator), Mode Fokus Menulis (sembunyikan direktori kiri di Bab & Codex), Inspektur Kesehatan & Kelengkapan Lore (Orphan & Missing Link Detector), serta Tempa Nama & Gelar Fantasi (Fantasy Name Forge) di editor entitas.",
+  "updatedAt":  "2026-11-09T15:57:48.844018948Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

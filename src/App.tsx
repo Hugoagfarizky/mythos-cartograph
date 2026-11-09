@@ -18,6 +18,7 @@ import {
   ScrollText,
   Search,
   Shield,
+  ShieldCheck,
   Sun,
   Users,
   Wand2,
@@ -46,9 +47,11 @@ import {
 import { WorldOverviewTab } from './components/WorldOverviewTab';
 import {
   GlobalOmniSearchModal,
+  LoreHealthInspectorModal,
   MultiWorldProjectManagerModal,
   WorldExportStudioModal,
   WorldSnapshot,
+  computeWorldHealthMetrics,
 } from './components/GlobalProductivityModals';
 
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
@@ -294,6 +297,7 @@ export default function App() {
   const [omniSearchOpen, setOmniSearchOpen] = useState<boolean>(false);
   const [projectManagerOpen, setProjectManagerOpen] = useState<boolean>(false);
   const [exportStudioOpen, setExportStudioOpen] = useState<boolean>(false);
+  const [loreHealthOpen, setLoreHealthOpen] = useState<boolean>(false);
   const [themeMode, setThemeMode] = useState<'parchment' | 'grimoire-dark'>(
     () => {
       try {
@@ -735,6 +739,103 @@ export default function App() {
     );
   };
 
+  const handleQuickCreateEntity = (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => {
+    const cleanTitle = title.trim();
+    if (!cleanTitle) return;
+
+    const existing = project.entities.find(
+      (e) => e.title.toLowerCase() === cleanTitle.toLowerCase()
+    );
+    if (existing) {
+      if (openAfterCreate) {
+        handleNavigateToEntity(existing.id);
+      }
+      showToast(`Entri "${existing.title}" sudah terdaftar di World Bible.`);
+      return;
+    }
+
+    const newEntity: LoreEntity = {
+      id: `ent-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      category,
+      title: cleanTitle,
+      subtitle: `${CATEGORY_META[category].singular} di ${project.worldName}`,
+      summary: `${cleanTitle} adalah ${CATEGORY_META[
+        category
+      ].singular.toLowerCase()} yang tercatat dalam kronik ${project.worldName}.`,
+      content: `### Catatan Kanon & Latar Belakang\n**${cleanTitle}** merupakan bagian dari semesta **${project.worldName}**.\n\nTuliskan rincian sejarah, kemampuan, atau hubungannya dengan tokoh dan wilayah lain menggunakan sintaks \`[[Nama Entitas]]\`.`,
+      tags: [CATEGORY_META[category].singular, 'Tautan Cepat'],
+      attributes:
+        category === 'character'
+          ? { role: 'Tokoh Pendukung', status: 'Hidup' }
+          : category === 'region'
+          ? { climate: 'Sedang', dangerLevel: 'Menengah' }
+          : category === 'nation'
+          ? { government: 'Kerajaan / Kedaulatan' }
+          : {},
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+
+    setProject((prev) => ({
+      ...prev,
+      entities: [newEntity, ...prev.entities],
+      nodePositions: [
+        ...prev.nodePositions,
+        {
+          entityId: newEntity.id,
+          x: 240 + ((prev.entities.length * 97) % 460),
+          y: 160 + ((prev.entities.length * 73) % 300),
+        },
+      ],
+    }));
+
+    if (openAfterCreate) {
+      setSelectedEntityId(newEntity.id);
+      setActiveTab(category);
+    }
+
+    showToast(
+      `Entri "${newEntity.title}" berhasil dibuat otomatis di tab ${CATEGORY_META[category].singular}.`
+    );
+  };
+
+  const handleAutoPinLocationOnMap = (entity: LoreEntity) => {
+    const existingPin = project.mapData.stamps.find(
+      (s) =>
+        s.linkedEntityId === entity.id ||
+        s.label.toLowerCase() === entity.title.toLowerCase()
+    );
+    if (existingPin) {
+      showToast(`"${entity.title}" sudah memiliki pin di Peta Dunia.`);
+      return;
+    }
+
+    const count = project.mapData.stamps.length;
+    const newStamp: MapStamp = {
+      id: `stamp-${Date.now()}`,
+      label: entity.title,
+      type: entity.category === 'nation' ? 'capital' : 'castle',
+      x: 22 + ((count * 17) % 58),
+      y: 24 + ((count * 13) % 54),
+      linkedEntityId: entity.id,
+    };
+
+    setProject((prev) => ({
+      ...prev,
+      mapData: {
+        ...prev.mapData,
+        stamps: [...prev.mapData.stamps, newStamp],
+      },
+    }));
+
+    showToast(
+      `Pin lokasi "${entity.title}" (${newStamp.x}°B, ${newStamp.y}°U) berhasil ditambahkan ke Peta Dunia.`
+    );
+  };
+
   // Build world summary string for AI context
   const buildWorldContextSummary = () => {
     const entityLines = project.entities
@@ -854,6 +955,7 @@ export default function App() {
 
   const activeTabLabel =
     SECTION_TABS.find((t) => t.id === activeTab)?.label || 'Overview';
+  const healthMetrics = computeWorldHealthMetrics(project);
 
   return (
     <div
@@ -930,7 +1032,24 @@ export default function App() {
             </kbd>
           </button>
 
-          {/* 2. Multi-World Project & Snapshot Manager Trigger */}
+          {/* 2. Inspektur Kesehatan & Kelengkapan Lore Trigger */}
+          <button
+            type="button"
+            onClick={() => setLoreHealthOpen(true)}
+            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            title="Inspektur Kesehatan & Kelengkapan Lore (Deteksi Tautan Kosong, Entitas Yatim & Lokasi Tanpa Pin)"
+          >
+            <ShieldCheck
+              className={`w-3.5 h-3.5 ${
+                healthMetrics.uncreatedMentions.length > 0
+                  ? 'text-[#9E2A2B]'
+                  : 'text-[#2D5A43]'
+              }`}
+            />
+            <span>Kesehatan Lore ({healthMetrics.healthScore}%)</span>
+          </button>
+
+          {/* 3. Multi-World Project & Snapshot Manager Trigger */}
           <button
             type="button"
             onClick={() => setProjectManagerOpen(true)}
@@ -941,7 +1060,7 @@ export default function App() {
             <span>Proyek & Snapshot ({savedWorlds.length})</span>
           </button>
 
-          {/* 3. Studio Ekspor Markdown, Cetak PDF & JSON */}
+          {/* 4. Studio Ekspor Markdown, Cetak PDF & JSON */}
           <button
             type="button"
             onClick={() => setExportStudioOpen(true)}
@@ -1044,6 +1163,7 @@ export default function App() {
               showToast('Perubahan Overview & Kosmologi berhasil disimpan.');
             }}
             onSelectEntity={handleNavigateToEntity}
+            onQuickCreateEntity={handleQuickCreateEntity}
             onOpenMapTab={() => handleSwitchTab('map')}
             onOpenTimelineTab={() => handleSwitchTab('timeline')}
             onOpenGraphTab={() => handleSwitchTab('graph')}
@@ -1070,6 +1190,7 @@ export default function App() {
             selectedEntityId={selectedEntityId}
             onSelectEntity={setSelectedEntityId}
             onNavigateToEntity={handleNavigateToEntity}
+            onQuickCreateEntity={handleQuickCreateEntity}
             onSaveEntity={handleSaveEntity}
             onDeleteEntity={handleDeleteEntity}
             onUpdateRelationships={(nextRels) => {
@@ -1161,6 +1282,7 @@ export default function App() {
               setProject((prev) => ({ ...prev, chapters: nextChapters }))
             }
             onSelectEntity={handleNavigateToEntity}
+            onQuickCreateEntity={handleQuickCreateEntity}
             onRunAuditOnChapter={(ch) =>
               runLoreAudit(
                 `Bab ${ch.chapterNumber}: ${ch.title}`,
@@ -1476,6 +1598,18 @@ export default function App() {
         onExportJson={handleExportWorldJson}
         onTriggerImportJson={() => fileInputRef.current?.click()}
         onShowToast={showToast}
+      />
+
+      {/* Modal 6: Inspektur Kesehatan & Kelengkapan Lore */}
+      <LoreHealthInspectorModal
+        isOpen={loreHealthOpen}
+        onClose={() => setLoreHealthOpen(false)}
+        project={project}
+        onSelectEntity={handleNavigateToEntity}
+        onQuickCreateEntity={handleQuickCreateEntity}
+        onOpenGraphTab={() => handleSwitchTab('graph')}
+        onOpenOutlinerTab={() => handleSwitchTab('outliner')}
+        onAutoPinLocationOnMap={handleAutoPinLocationOnMap}
       />
     </div>
   );

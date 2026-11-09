@@ -14,6 +14,8 @@ import {
   Globe,
   Link2,
   MapPin,
+  Maximize2,
+  Minimize2,
   Plus,
   Search,
   ShieldAlert,
@@ -45,6 +47,11 @@ interface ChapterOutlinerViewProps {
   onSelectChapter: (id: string) => void;
   onUpdateChapters: (next: ChapterOutline[]) => void;
   onSelectEntity: (id: string) => void;
+  onQuickCreateEntity?: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
   onRunAuditOnChapter: (chapter: ChapterOutline) => void;
 }
 
@@ -68,9 +75,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
   onSelectChapter,
   onUpdateChapters,
   onSelectEntity,
+  onQuickCreateEntity,
   onRunAuditOnChapter,
 }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isFocusMode, setIsFocusMode] = useState<boolean>(false);
 
   // Left Directory Filter State
   const [chapterSearch, setChapterSearch] = useState<string>('');
@@ -457,14 +466,43 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={handleAddChapter}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-[#9E2A2B] text-white hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Tambah Bab Baru</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsFocusMode((prev) => !prev)}
+              className={`px-3 py-2 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                isFocusMode
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
+                  : 'bg-[#F6F1E6] text-[#231C14] border-[#B5832A]/60 hover:bg-[#EFE7D6]'
+              }`}
+              title={
+                isFocusMode
+                  ? 'Tampilkan kembali daftar direktori bab di kiri'
+                  : 'Sembunyikan daftar bab kiri untuk fokus membaca & menulis naskah'
+              }
+            >
+              {isFocusMode ? (
+                <>
+                  <Minimize2 className="w-3.5 h-3.5 text-[#B5832A]" />
+                  <span>Tampilkan Daftar Bab</span>
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                  <span>Mode Fokus Naskah</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleAddChapter}
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-[#9E2A2B] text-white hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Tambah Bab Baru</span>
+            </button>
+          </div>
         </div>
 
         {/* Summary Metrics & Overall Progress Bar */}
@@ -525,7 +563,8 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
       {/* =================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Chapter List with Search, Act Filter, Status Filter & Reorder */}
-        <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
+        {!isFocusMode && (
+          <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
           <div className="relative">
             <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
@@ -724,11 +763,18 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             )}
           </div>
         </div>
+        )}
 
         {/* ================================================================= */}
         {/* RIGHT CHAPTER DETAIL, DRAMATURGY DOSSIER & SCENE STUDIO (8 COLS)  */}
         {/* ================================================================= */}
-        <div className="relative overflow-hidden lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs">
+        <div
+          className={`relative overflow-hidden ${
+            isFocusMode
+              ? 'lg:col-span-12 max-w-5xl mx-auto w-full'
+              : 'lg:col-span-8'
+          } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs transition-all`}
+        >
           <OrnateCornerFiligree className="text-[#B5832A]/50" />
           {activeChapter ? (
             <div className="space-y-6">
@@ -1349,6 +1395,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         text={activeChapter.synopsis}
                         entities={entities}
                         onSelectEntity={onSelectEntity}
+                        onQuickCreateEntity={onQuickCreateEntity}
                       />
                     </div>
                   </div>
@@ -1379,6 +1426,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 text={activeChapter.chapterGoal}
                                 entities={entities}
                                 onSelectEntity={onSelectEntity}
+                                onQuickCreateEntity={onQuickCreateEntity}
                               />
                             </div>
                           </div>
@@ -1397,6 +1445,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 text={activeChapter.centralConflict}
                                 entities={entities}
                                 onSelectEntity={onSelectEntity}
+                                onQuickCreateEntity={onQuickCreateEntity}
                               />
                             </div>
                           </div>
@@ -1415,6 +1464,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 text={activeChapter.endingHookOrTwist}
                                 entities={entities}
                                 onSelectEntity={onSelectEntity}
+                                onQuickCreateEntity={onQuickCreateEntity}
                               />
                             </div>
                           </div>
@@ -1433,6 +1483,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 text={activeChapter.foreshadowingNotes}
                                 entities={entities}
                                 onSelectEntity={onSelectEntity}
+                                onQuickCreateEntity={onQuickCreateEntity}
                               />
                             </div>
                           </div>
@@ -1449,6 +1500,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         text={activeChapter.draftNotes}
                         entities={entities}
                         onSelectEntity={onSelectEntity}
+                        onQuickCreateEntity={onQuickCreateEntity}
                         dropCap={true}
                       />
                     </div>
@@ -1883,6 +1935,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             text={sc.summary}
                             entities={entities}
                             onSelectEntity={onSelectEntity}
+                            onQuickCreateEntity={onQuickCreateEntity}
                           />
                         </div>
 
@@ -1898,6 +1951,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                     text={sc.sceneGoalOrConflict}
                                     entities={entities}
                                     onSelectEntity={onSelectEntity}
+                                    onQuickCreateEntity={onQuickCreateEntity}
                                   />
                                 </div>
                               </div>
@@ -1913,6 +1967,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                     text={sc.sceneOutcome}
                                     entities={entities}
                                     onSelectEntity={onSelectEntity}
+                                    onQuickCreateEntity={onQuickCreateEntity}
                                   />
                                 </div>
                               </div>

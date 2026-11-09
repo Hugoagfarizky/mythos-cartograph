@@ -38,6 +38,11 @@ interface WorldOverviewTabProps {
   project: WorldProject;
   onUpdateProjectMeta: (patch: Partial<WorldProject>) => void;
   onSelectEntity: (entityId: string) => void;
+  onQuickCreateEntity?: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
   onOpenMapTab: () => void;
   onOpenTimelineTab: () => void;
   onOpenGraphTab: () => void;
@@ -64,6 +69,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
   project,
   onUpdateProjectMeta,
   onSelectEntity,
+  onQuickCreateEntity,
   onOpenMapTab,
   onOpenTimelineTab,
   onOpenGraphTab,
@@ -802,6 +808,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 text={centralConflict}
                 entities={project.entities}
                 onSelectEntity={onSelectEntity}
+                onQuickCreateEntity={onQuickCreateEntity}
                 dropCap={true}
               />
             </div>
@@ -841,6 +848,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 text={cosmologyCreationMyth}
                 entities={project.entities}
                 onSelectEntity={onSelectEntity}
+                onQuickCreateEntity={onQuickCreateEntity}
                 dropCap={true}
               />
             </div>
@@ -853,6 +861,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 text={cosmologyLaws}
                 entities={project.entities}
                 onSelectEntity={onSelectEntity}
+                onQuickCreateEntity={onQuickCreateEntity}
               />
             </div>
           </div>

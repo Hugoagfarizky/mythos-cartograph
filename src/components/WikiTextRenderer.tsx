@@ -109,6 +109,18 @@ const PREVIEW_ATTR_LABELS: Record<string, string> = {
   eraDate: 'Penanggalan',
 };
 
+const ALL_LORE_CATEGORIES: LoreCategory[] = [
+  'character',
+  'race',
+  'faction',
+  'power_system',
+  'skill',
+  'nation',
+  'region',
+  'history',
+  'encyclopedia',
+];
+
 export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
   className = 'text-[#B5832A]/65',
 }) => {
@@ -316,10 +328,128 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
   );
 };
 
+interface UncreatedWikiLinkPopoverProps {
+  refName: string;
+  onQuickCreateEntity?: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
+}
+
+const UncreatedWikiLinkPopover: React.FC<UncreatedWikiLinkPopoverProps> = ({
+  refName,
+  onQuickCreateEntity,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] =
+    useState<LoreCategory>('character');
+
+  if (!onQuickCreateEntity) {
+    return (
+      <span
+        className="inline font-medium text-[#B5832A] border-b border-dashed border-[#B5832A]"
+        title="Entitas belum dibuat di Codex"
+      >
+        {refName}
+      </span>
+    );
+  }
+
+  return (
+    <span className="relative inline-block">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="inline-flex items-center gap-1 font-semibold text-[#B5832A] hover:text-[#9E2A2B] border-b border-dashed border-[#B5832A] hover:border-[#9E2A2B] hover:bg-[#B5832A]/15 px-1 rounded transition-colors cursor-pointer"
+        title={`"${refName}" belum ada di Codex — Klik untuk membuat entitas baru`}
+      >
+        <span className="text-[11px] font-bold">+</span>
+        <span>{refName}</span>
+      </button>
+
+      {open && (
+        <span
+          role="dialog"
+          aria-label={`Buat entitas baru ${refName}`}
+          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 rounded-xl bg-[#FBF8F1] border-2 border-[#B5832A] shadow-2xl text-left block"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <span className="flex items-center justify-between gap-2 pb-1.5 mb-2 border-b border-[#D8CBB3] text-[10px] font-epic uppercase tracking-widest text-[#9E2A2B]">
+            <span>❖ Entitas Baru dari Tautan</span>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="text-[#695A47] hover:text-[#231C14] font-mono-tabular px-1 cursor-pointer"
+            >
+              ✕
+            </button>
+          </span>
+
+          <span className="font-display text-sm font-bold text-[#231C14] block mb-1">
+            “{refName}”
+          </span>
+          <span className="text-[11px] text-[#695A47] block mb-2.5 leading-snug">
+            Tautan ini belum memiliki halaman di World Bible. Pilih kategori untuk membuatnya secara instan:
+          </span>
+
+          <span className="block mb-3">
+            <label className="block text-[10px] font-epic uppercase tracking-wider text-[#695A47] mb-1">
+              Kategori World Bible
+            </label>
+            <select
+              value={selectedCategory}
+              onChange={(e) =>
+                setSelectedCategory(e.target.value as LoreCategory)
+              }
+              className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+            >
+              {ALL_LORE_CATEGORIES.map((cat) => (
+                <option key={cat} value={cat}>
+                  Arcana {CATEGORY_META[cat].romanNumeral} ·{' '}
+                  {CATEGORY_META[cat].label}
+                </option>
+              ))}
+            </select>
+          </span>
+
+          <span className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                onQuickCreateEntity(refName, selectedCategory, false);
+                setOpen(false);
+              }}
+              className="flex-1 px-2.5 py-1.5 text-[11px] font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] text-center whitespace-nowrap cursor-pointer"
+            >
+              + Buat Otomatis
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onQuickCreateEntity(refName, selectedCategory, true);
+                setOpen(false);
+              }}
+              className="px-2.5 py-1.5 text-[11px] font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] text-center whitespace-nowrap cursor-pointer"
+            >
+              Buat & Buka ↗
+            </button>
+          </span>
+        </span>
+      )}
+    </span>
+  );
+};
+
 interface WikiTextRendererProps {
   text: string;
   entities: LoreEntity[];
   onSelectEntity: (entityId: string) => void;
+  onQuickCreateEntity?: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
   dropCap?: boolean;
 }
 
@@ -327,6 +457,7 @@ export const WikiTextRenderer: React.FC<WikiTextRendererProps> = ({
   text,
   entities,
   onSelectEntity,
+  onQuickCreateEntity,
   dropCap = false,
 }) => {
   if (!text) return null;
@@ -357,13 +488,11 @@ export const WikiTextRenderer: React.FC<WikiTextRendererProps> = ({
         }
 
         return (
-          <span
+          <UncreatedWikiLinkPopover
             key={index}
-            className="inline font-medium text-[#B5832A] border-b border-dashed border-[#B5832A]"
-            title="Entitas belum dibuat di Codex"
-          >
-            {refName}
-          </span>
+            refName={refName}
+            onQuickCreateEntity={onQuickCreateEntity}
+          />
         );
       }
 

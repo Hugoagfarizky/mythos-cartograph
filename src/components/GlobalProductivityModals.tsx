@@ -1520,3 +1520,608 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
     </div>
   );
 };
+
+// ============================================================================
+// 4. INSPEKTUR KESEHATAN & KELENGKAPAN LORE (Lore Health & Orphan Inspector)
+// ============================================================================
+
+export interface UncreatedMentionItem {
+  name: string;
+  sources: string[];
+}
+
+export interface WorldHealthMetrics {
+  healthScore: number;
+  uncreatedMentions: UncreatedMentionItem[];
+  relationshipOrphans: LoreEntity[];
+  unfeaturedEntities: LoreEntity[];
+  unmappedLocations: LoreEntity[];
+}
+
+export function computeWorldHealthMetrics(
+  project: WorldProject
+): WorldHealthMetrics {
+  const entities = project.entities || [];
+  const relationships = project.relationships || [];
+  const chapters = project.chapters || [];
+  const stamps = project.mapData?.stamps || [];
+
+  const doesEntityExist = (rawName: string): boolean => {
+    const lower = rawName.trim().toLowerCase();
+    if (!lower) return true;
+    return entities.some(
+      (e) =>
+        e.title.toLowerCase() === lower ||
+        e.title.toLowerCase().includes(lower) ||
+        lower.includes(e.title.toLowerCase())
+    );
+  };
+
+  // 1. Scan for [[...]] mentions that don't have a matching entity yet
+  const mentionMap = new Map<string, { display: string; sources: Set<string> }>();
+  const scanTextForBrackets = (text: string | undefined, sourceLabel: string) => {
+    if (!text) return;
+    const regex = /\[\[([^\]]+)\]\]/g;
+    let match: RegExpExecArray | null;
+    while ((match = regex.exec(text)) !== null) {
+      const refName = match[1].trim();
+      if (!refName) continue;
+      if (!doesEntityExist(refName)) {
+        const key = refName.toLowerCase();
+        const existing = mentionMap.get(key);
+        if (existing) {
+          existing.sources.add(sourceLabel);
+        } else {
+          mentionMap.set(key, {
+            display: refName,
+            sources: new Set([sourceLabel]),
+          });
+        }
+      }
+    }
+  };
+
+  scanTextForBrackets(project.centralConflict, 'Overview: Konflik Pusat');
+  scanTextForBrackets(project.cosmologyCreationMyth, 'Overview: Mitos Penciptaan');
+  scanTextForBrackets(project.cosmologyLaws, 'Overview: Hukum Kosmik');
+
+  entities.forEach((ent) => {
+    const label = `${CATEGORY_META[ent.category].singular}: ${ent.title}`;
+    scanTextForBrackets(ent.summary, label);
+    scanTextForBrackets(ent.content, label);
+  });
+
+  chapters.forEach((ch) => {
+    const label = `Bab ${ch.chapterNumber}: ${ch.title}`;
+    scanTextForBrackets(ch.synopsis, label);
+    scanTextForBrackets(ch.draftNotes, label);
+    scanTextForBrackets(ch.chapterGoal, label);
+    scanTextForBrackets(ch.centralConflict, label);
+    scanTextForBrackets(ch.endingHookOrTwist, label);
+    scanTextForBrackets(ch.foreshadowingNotes, label);
+    (ch.scenes || []).forEach((sc) => {
+      scanTextForBrackets(sc.summary, `${label} (Adegan: ${sc.title})`);
+      scanTextForBrackets(
+        sc.sceneGoalOrConflict,
+        `${label} (Adegan: ${sc.title})`
+      );
+      scanTextForBrackets(sc.sceneOutcome, `${label} (Adegan: ${sc.title})`);
+    });
+  });
+
+  const uncreatedMentions: UncreatedMentionItem[] = Array.from(
+    mentionMap.values()
+  ).map((v) => ({
+    name: v.display,
+    sources: Array.from(v.sources),
+  }));
+
+  // 2. Relationship Orphans (Characters, Factions, Nations with 0 edges)
+  const connectedIds = new Set<string>();
+  relationships.forEach((r) => {
+    connectedIds.add(r.sourceId);
+    connectedIds.add(r.targetId);
+  });
+  const socialEntities = entities.filter((e) =>
+    ['character', 'faction', 'nation'].includes(e.category)
+  );
+  const relationshipOrphans = socialEntities.filter(
+    (e) => !connectedIds.has(e.id)
+  );
+
+  // 3. Unfeatured in Chapters (Entities never linked or mentioned in any chapter)
+  const allChaptersCorpus = chapters
+    .map(
+      (c) =>
+        `${c.synopsis} ${c.draftNotes} ${c.primaryPov || ''} ${
+          c.primaryLocation || ''
+        } ${c.chapterGoal || ''} ${c.centralConflict || ''} ${
+          c.endingHookOrTwist || ''
+        } ${(c.scenes || [])
+          .map((s) => `${s.title} ${s.povCharacter} ${s.settingRegion} ${s.summary}`)
+          .join(' ')}`
+    )
+    .join(' ')
+    .toLowerCase();
+
+  const featuredIdsSet = new Set<string>(
+    chapters.flatMap((c) => c.featuredEntityIds || [])
+  );
+
+  const unfeaturedEntities = entities.filter((e) => {
+    if (featuredIdsSet.has(e.id)) return false;
+    if (allChaptersCorpus.includes(e.title.toLowerCase())) return false;
+    return true;
+  });
+
+  // 4. Unmapped Locations (Regions & Nations without a map pin)
+  const geoEntities = entities.filter(
+    (e) => e.category === 'region' || e.category === 'nation'
+  );
+  const unmappedLocations = geoEntities.filter((loc) => {
+    const locLower = loc.title.toLowerCase();
+    return !stamps.some(
+      (st) =>
+        st.linkedEntityId === loc.id ||
+        st.label.toLowerCase().includes(locLower) ||
+        locLower.includes(st.label.toLowerCase())
+    );
+  });
+
+  // Calculate overall World Health Score (0..100)
+  const redlinkPenalty = Math.min(25, uncreatedMentions.length * 5);
+  const orphanRatio =
+    socialEntities.length > 0
+      ? relationshipOrphans.length / socialEntities.length
+      : 0;
+  const unfeaturedRatio =
+    entities.length > 0 ? unfeaturedEntities.length / entities.length : 0;
+  const unmappedRatio =
+    geoEntities.length > 0 ? unmappedLocations.length / geoEntities.length : 0;
+
+  const rawScore =
+    100 -
+    redlinkPenalty -
+    Math.round(orphanRatio * 25) -
+    Math.round(unfeaturedRatio * 25) -
+    Math.round(unmappedRatio * 25);
+
+  const healthScore = Math.max(15, Math.min(100, rawScore));
+
+  return {
+    healthScore,
+    uncreatedMentions,
+    relationshipOrphans,
+    unfeaturedEntities,
+    unmappedLocations,
+  };
+}
+
+interface LoreHealthInspectorModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  project: WorldProject;
+  onSelectEntity: (entityId: string) => void;
+  onOpenGraphTab: () => void;
+  onOpenOutlinerTab: () => void;
+  onQuickCreateEntity: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
+  onAutoPinLocationOnMap: (entity: LoreEntity) => void;
+}
+
+export const LoreHealthInspectorModal: React.FC<
+  LoreHealthInspectorModalProps
+> = ({
+  isOpen,
+  onClose,
+  project,
+  onSelectEntity,
+  onOpenGraphTab,
+  onOpenOutlinerTab,
+  onQuickCreateEntity,
+  onAutoPinLocationOnMap,
+}) => {
+  const [activeSubTab, setActiveSubTab] = useState<
+    'redlinks' | 'orphans' | 'unfeatured' | 'unmapped'
+  >('redlinks');
+  const [categorySelections, setCategorySelections] = useState<
+    Record<string, LoreCategory>
+  >({});
+
+  const metrics = useMemo(() => computeWorldHealthMetrics(project), [project]);
+
+  if (!isOpen) return null;
+
+  const getSelectedCategory = (name: string): LoreCategory =>
+    categorySelections[name] || 'character';
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-xs flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex items-start justify-between gap-4">
+          <div>
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex items-center gap-1.5">
+              <span>❖ Diagnostik Ketersambungan World Bible</span>
+            </div>
+            <h3 className="font-cartography text-2xl font-bold text-[#231C14]">
+              Inspektur Kesehatan & Kelengkapan Lore — {project.worldName}
+            </h3>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="px-3 py-1.5 rounded-xl bg-[#EFE7D6] border border-[#B5832A]/60 text-right">
+              <div className="text-[10px] font-epic uppercase tracking-wider text-[#695A47]">
+                Skor Kohesi Dunia
+              </div>
+              <div className="font-mono-tabular text-base font-bold text-[#9E2A2B]">
+                {metrics.healthScore}%
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* 4 Diagnostic Category Tabs */}
+        <div className="px-6 py-3 bg-[#EFE7D6]/80 border-b border-[#D8CBB3] flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('redlinks')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              activeSubTab === 'redlinks'
+                ? 'bg-[#9E2A2B] text-white'
+                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+            }`}
+          >
+            <span>Tautan [[...]] Kosong</span>
+            <span className="font-mono-tabular px-1.5 py-0.2 rounded bg-black/15 text-[11px]">
+              {metrics.uncreatedMentions.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('orphans')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              activeSubTab === 'orphans'
+                ? 'bg-[#9E2A2B] text-white'
+                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+            }`}
+          >
+            <span>Entitas Yatim Relasi</span>
+            <span className="font-mono-tabular px-1.5 py-0.2 rounded bg-black/15 text-[11px]">
+              {metrics.relationshipOrphans.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('unfeatured')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              activeSubTab === 'unfeatured'
+                ? 'bg-[#9E2A2B] text-white'
+                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+            }`}
+          >
+            <span>Belum Muncul di Alur Bab</span>
+            <span className="font-mono-tabular px-1.5 py-0.2 rounded bg-black/15 text-[11px]">
+              {metrics.unfeaturedEntities.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('unmapped')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              activeSubTab === 'unmapped'
+                ? 'bg-[#9E2A2B] text-white'
+                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+            }`}
+          >
+            <span>Lokasi Tanpa Pin Peta</span>
+            <span className="font-mono-tabular px-1.5 py-0.2 rounded bg-black/15 text-[11px]">
+              {metrics.unmappedLocations.length}
+            </span>
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+          {activeSubTab === 'redlinks' && (
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold text-[#231C14]">
+                    Deteksi Tautan Kurung Ganda `[[Nama Entitas]]` yang Belum Dibuat
+                  </div>
+                  <p className="text-xs text-[#695A47]">
+                    Daftar nama di bawah ini sudah Anda tulis di dalam naskah bab atau artikel lore dengan tanda `[[...]]`, namun belum memiliki halaman entitas di World Bible.
+                  </p>
+                </div>
+              </div>
+
+              {metrics.uncreatedMentions.length === 0 ? (
+                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                    ✓ Semua Tautan `[[...]]` Sudah Memiliki Halaman Kodeks!
+                  </div>
+                  <p className="text-xs text-[#695A47]">
+                    Tidak ada tautan kurung ganda yang menggantung di naskah maupun artikel lore Anda.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {metrics.uncreatedMentions.map((item) => {
+                    const cat = getSelectedCategory(item.name);
+                    return (
+                      <div
+                        key={item.name}
+                        className="p-4 rounded-xl bg-[#F6F1E6] border border-[#B5832A]/50 flex flex-wrap items-center justify-between gap-3"
+                      >
+                        <div className="space-y-1 min-w-0">
+                          <div className="font-display text-lg font-bold text-[#9E2A2B]">
+                            [[{item.name}]]
+                          </div>
+                          <div className="text-xs text-[#695A47]">
+                            Disebut pada:{' '}
+                            <span className="font-semibold text-[#231C14]">
+                              {item.sources.join(' · ')}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-2 shrink-0">
+                          <select
+                            value={cat}
+                            onChange={(e) =>
+                              setCategorySelections((prev) => ({
+                                ...prev,
+                                [item.name]: e.target.value as LoreCategory,
+                              }))
+                            }
+                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                          >
+                            {ORDERED_CATEGORIES.map((c) => (
+                              <option key={c} value={c}>
+                                {CATEGORY_META[c].singular}
+                              </option>
+                            ))}
+                          </select>
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              onQuickCreateEntity(item.name, cat, false)
+                            }
+                            className="px-3 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] whitespace-nowrap shrink-0 cursor-pointer"
+                          >
+                            + Buat Entitas
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onQuickCreateEntity(item.name, cat, true);
+                              onClose();
+                            }}
+                            className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] whitespace-nowrap shrink-0 cursor-pointer"
+                          >
+                            Buat & Buka ↗
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeSubTab === 'orphans' && (
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold text-[#231C14]">
+                    Karakter, Kelompok & Negara yang Belum Memiliki Ikatan di Peta Relasi
+                  </div>
+                  <p className="text-xs text-[#695A47]">
+                    Menghubungkan tokoh dan faksi di Peta Relasi akan memperkaya dinamika konflik politik maupun personal dalam cerita.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenGraphTab();
+                    onClose();
+                  }}
+                  className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  Buka Peta Relasi →
+                </button>
+              </div>
+
+              {metrics.relationshipOrphans.length === 0 ? (
+                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
+                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                    ✓ Seluruh Tokoh, Kelompok & Negara Sudah Terhubung di Peta Relasi!
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {metrics.relationshipOrphans.map((ent) => (
+                    <div
+                      key={ent.id}
+                      className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-[11px] font-epic font-semibold text-[#9E2A2B]">
+                          {CATEGORY_META[ent.category].singular}
+                        </div>
+                        <div className="font-display text-base font-bold text-[#231C14] truncate">
+                          {ent.title}
+                        </div>
+                        <div className="text-xs text-[#695A47] truncate">
+                          {ent.subtitle}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectEntity(ent.id);
+                          onClose();
+                        }}
+                        className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        Buka Profil ↗
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeSubTab === 'unfeatured' && (
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <div className="text-xs font-semibold text-[#231C14]">
+                    Entitas World Bible yang Belum Pernah Muncul di Alur Bab
+                  </div>
+                  <p className="text-xs text-[#695A47]">
+                    Entitas berikut sudah Anda rancang di World Bible tetapi belum disebut atau ditautkan pada bab cerita mana pun.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onOpenOutlinerTab();
+                    onClose();
+                  }}
+                  className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] whitespace-nowrap shrink-0 cursor-pointer"
+                >
+                  Buka Alur Bab →
+                </button>
+              </div>
+
+              {metrics.unfeaturedEntities.length === 0 ? (
+                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
+                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                    ✓ Seluruh Entitas World Bible Sudah Terintegrasi ke dalam Alur Bab!
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {metrics.unfeaturedEntities.map((ent) => (
+                    <div
+                      key={ent.id}
+                      className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-[11px] font-epic font-semibold text-[#B5832A]">
+                          {CATEGORY_META[ent.category].singular}
+                        </div>
+                        <div className="font-display text-base font-bold text-[#231C14] truncate">
+                          {ent.title}
+                        </div>
+                        <div className="text-xs text-[#695A47] truncate">
+                          {ent.summary}
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelectEntity(ent.id);
+                          onClose();
+                        }}
+                        className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        Lihat Entri ↗
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeSubTab === 'unmapped' && (
+            <div className="space-y-3">
+              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
+                <div className="text-xs font-semibold text-[#231C14]">
+                  Entitas Wilayah & Negara yang Belum Memiliki Pin di Peta Dunia
+                </div>
+                <p className="text-xs text-[#695A47]">
+                  Pasang pin lokasi dengan 1 klik agar Wilayah dan Negara ini langsung tampil di kanvas Map Dunia.
+                </p>
+              </div>
+
+              {metrics.unmappedLocations.length === 0 ? (
+                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
+                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                    ✓ Seluruh Wilayah & Negara Sudah Memiliki Pin di Peta Dunia!
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {metrics.unmappedLocations.map((loc) => (
+                    <div
+                      key={loc.id}
+                      className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-[11px] font-epic font-semibold text-[#2D5A43]">
+                          {CATEGORY_META[loc.category].singular}
+                        </div>
+                        <div className="font-display text-lg font-bold text-[#231C14]">
+                          {loc.title}
+                        </div>
+                        <div className="text-xs text-[#695A47]">
+                          {loc.summary}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          type="button"
+                          onClick={() => onAutoPinLocationOnMap(loc)}
+                          className="px-3 py-1.5 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                        >
+                          <MapPin className="w-3.5 h-3.5" />
+                          <span>+ Pasang Pin Otomatis di Peta</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onSelectEntity(loc.id);
+                            onClose();
+                          }}
+                          className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                        >
+                          Buka Profil ↗
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+

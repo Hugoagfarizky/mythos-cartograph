@@ -1,60 +1,54 @@
-# Rencana Penyempurnaan UI/UX Penulis Fantasi (*Royal Parchment & Candlelight Grimoire*)
+# Rencana Revisi UX & Fitur Produktivitas Penulis Fantasi Tahap Lanjut
 
-Pembaruan ini menyulap atmosfer visual dan pengalaman pengguna (**UI/UX**) **MythosCartograph** agar terasa seperti meja kerja kartografer dan kitab *Grimoire / Bestiary* abad pertengahan yang autentik, nyaman dipakai menulis berjam-jam, dan kaya akan detail estetika fantasi.
-
----
-
-## 1. Tipografi Epik (`Cinzel` & `Cinzel Decorative`) & *Illuminated Drop Cap*
-- **Integrasi Font Epik Fantasi**:
-  - Memuat font **Cinzel** dan **Cinzel Decorative** melalui Google Fonts di `index.html` untuk judul dunia, kepala bagian kodeks, lambang pilar navigasi, dan tajuk bab.
-- **Huruf Awal Paragraf Besar (*Illuminated Manuscript Drop Cap*)**:
-  - Menambahkan gaya `.fantasy-dropcap` pada artikel panjang World Bible dan draf naskah bab sehingga huruf pertama pada paragraf pembuka tampil besar dengan bingkai emas/merah lilin bergaya naskah kuno abad pertengahan.
+Pembaruan ini mengimplementasikan empat peningkatan alur kerja utama agar proses menulis naskah dan membangun dunia di **MythosCartograph** berjalan mulus tanpa hambatan kontekstual.
 
 ---
 
-## 2. Ornamen Sudut Filigri Emas, Pembatas Bab & Tekstur Perkamen
-- **Ornamen Sudut & Pembatas Bab (*Ornate Corner Filigree & Flourish Dividers*)**:
-  - Menambahkan ornamen sudut kuningan/emas bergaya manuskrip (*SVG corner filigree*) dan garis pembatas bab bertanda kompas bintang pada kartu utama Overview, lembar detail entitas Codex, serta lembar kerja Alur Bab.
-- **Tekstur Lembaran Perkamen Halus**:
-  - Menambahkan pola serat perkamen halus dan bayangan tepi halaman buku (*parchment vignette*) yang mempertegas kesan lembaran kulit/kertas tua tanpa mengganggu keterbacaan teks.
+## 1. Popover Pembuat Entitas Instan pada Tautan `[[Nama]]` yang Belum Ada (*Interactive Redlink Creator*)
+- **Mengubah Tautan `[[...]]` Kosong Menjadi Interaktif**:
+  - Di `WikiTextRenderer.tsx`, setiap sebutan `[[Nama Entitas]]` yang belum terdaftar di Codex kini tampil sebagai tombol interaktif bertanda **`+ [[Nama Entitas]]`**.
+- **Popover Pilih Kategori & Buat Otomatis**:
+  - Saat diklik atau disentuh, muncul kartu popover *Grimoire* tempat penulis dapat memilih kategori entitas (*Karakter*, *Ras*, *Kelompok*, *Power System*, *Skill*, *Negara*, *Wilayah*, *Sejarah*, atau *Artefak & Biota*).
+  - Tersedia dua tombol aksi cepat:
+    1. **`+ Buat Otomatis di Codex`**: Langsung membuat entitas baru tersebut di latar belakang (sehingga tautan `[[...]]` seketika berubah menjadi tautan aktif berpratinjau) tanpa meninggalkan bab atau artikel yang sedang dibaca/ditulis.
+    2. **`Buat & Buka Halaman`**: Membuat entitas sekaligus langsung melompat ke lembar profilnya.
 
 ---
 
-## 3. Mode Tema Ganda: *Perkamen Siang* vs *Grimoire Malam Lilin*
-- **Tombol Pengalih Suasana Meja Penulis di Bilah Atas**:
-  - **Mode Perkamen Siang (*Royal Parchment*)**: Palet kertas vellum hangat (`#F6F1E6`), tinta besi tua (`#231C14`), segel merah (`#9E2A2B`), dan sepuhan kuningan (`#B5832A`).
-  - **Mode Grimoire Malam Lilin (*Candlelight Obsidian Grimoire*)**: Palet ruang kerja malam bertema kulit buku hitam-cokelat tua (`#16120E` & `#1F1914`), teks krem gading hangat (`#EFE6D5`), dan pendaran cahaya lilin emas (`#D4A349`) yang sangat nyaman di mata saat menulis fantasi di malam hari.
-  - Pilihan tema disimpan otomatis di `localStorage`.
+## 2. Mode Fokus Menulis Layar Penuh (*Zen Manuscript Mode*)
+- **Sembunyikan / Tampilkan Kolom Direktori Kiri**:
+  - Pada tab **Alur Bab** (`ChapterOutlinerView`) dan **9 Tab Kategori Codex** (`CodexWorkspace`), ditambahkan tombol **`Mode Fokus Naskah (Layar Penuh)`** di pojok kanan atas lembar kerja.
+  - Saat aktif, kolom daftar direktori di sebelah kiri disembunyikan sementara dan lembar perkamen utama melebar penuh (`12 kolom`) dengan lebar baca ergonomis, memudahkan penulis menyunting draf bab panjang atau membaca ensiklopedia tanpa distraksi.
 
 ---
 
-## 4. Navigasi 14 Tab dalam 4 Pilar Semesta Fantasi
-- Mengorganisir ke-14 tab ke dalam **4 Pilar Dunia** yang dikelompokkan secara visual di bilah navigasi utama lengkap dengan ikon fantasi pada setiap tab:
-  1. **Pilar I — Kosmos & Atlas**: `Overview` (Kompas Kosmik), `Map Dunia` (Peta Kartografi)
-  2. **Pilar II — Penghuni & Kekuatan**: `Character` (Tokoh), `Ras` (Silsilah), `Kelompok` (Panji Faksi), `Power System` (Esensi Sihir), `Skill` (Jurus & Mantra)
-  3. **Pilar III — Geopolitik & Kronik**: `Negara` (Kerajaan), `Wilayah` (Bentang Alam), `Sejarah` (Arsip Kuno), `Timeline` (Jam Pasir Waktu), `Artefak & Biota` (Relik & Bestiary)
-  4. **Pilar IV — Takdir & Naskah**: `Peta Relasi` (Jaring Ikatan), `Alur Bab` (Pena Manuskrip)
+## 3. Inspektur Kesehatan & Kelengkapan Lore (*Lore Health & Orphan Inspector*)
+- **Tombol & Modal Diagnostik di Bilah Header Atas**:
+  - Menambahkan tombol **`Kesehatan Lore`** (lengkap dengan indikator skor persentase ketersambungan dunia) di bilah atas aplikasi.
+- **4 Pemindai Otomatis Semesta Cerita**:
+  1. **Tautan `[[...]]` Belum Dibuat (*Uncreated Wiki Mentions*)**: Memindai seluruh naskah bab, kosmologi, dan artikel entitas untuk mendata semua `[[Nama]]` yang belum memiliki halaman di Codex, lengkap dengan pemilih kategori dan tombol **`+ Buat Entitas 1-Klik`** langsung dari daftar.
+  2. **Entitas Yatim Relasi (*Relationship Orphans*)**: Mendeteksi Karakter, Kelompok, atau Negara yang belum memiliki satu pun ikatan di **Peta Relasi**.
+  3. **Entitas Belum Muncul di Alur Bab (*Unfeatured Entities*)**: Mendeteksi Karakter, Lokasi, atau Pusaka yang belum pernah ditautkan atau disebut di dalam **Alur Bab** mana pun.
+  4. **Wilayah & Negara Belum Dipetakan (*Unmapped Locations*)**: Mendeteksi entri Wilayah atau Negara yang belum tertaut ke pin lokasi di kanvas **Map Dunia**.
 
 ---
 
-## 5. Kartu Entitas Bergaya Kartu Tarot / Lembaran Bestiary Kuno
-- Memperbarui tampilan kartu di direktori kiri **CodexWorkspace** dan kartu sorotan di **WorldOverviewTab** dengan bingkai ganda tipis beraksen kuningan (`double-border arcana frame`), lencana segel kategori, potongan potret bergaya ilustrasi *bestiary*, dan penomoran arkana/indeks.
+## 4. Generator Nama Fantasi & Gelar Epik (*Fantasy Name & Epithet Forge*)
+- **Bilah Tempa Nama Kontekstual di Editor Entitas (`CodexWorkspace`)**:
+  - Saat penulis menambah atau mengedit entitas, tersedia panel ringkas **Tempa Nama & Gelar Fantasi (*Name Forge*)** tepat di atas kolom Nama & Subjudul.
+  - Menyediakan 5 nuansa bahasa/kultur fantasi:
+    - *Klasik Bangsawan & Ksatria (High Fantasy)*
+    - *Kekaisaran Surya & Kuno (Imperial / Latin)*
+    - *Rimba Sylvan & Peri (Elven / Nature)*
+    - *Besi Utara & Klan Gunung (Nordic / Dwarven)*
+    - *Bayangan & Arkanum Terlarang (Dark / Eldritch)*
+  - Menghasilkan kombinasi **Nama Entitas** dan **Gelar / Subjudul Epik** yang disesuaikan dengan kategori aktif (*Tokoh*, *Ras*, *Kelompok*, *Power System*, *Skill*, *Negara*, *Wilayah*, *Sejarah*, *Artefak & Biota*) dan dapat diterapkan ke formulir hanya dengan 1 klik.
 
 ---
 
-## 6. Kartu Pratinjau Cepat (*Hover Grimoire Card*) pada Tautan `[[Nama Entitas]]`
-- Memperbarui `WikiTextRenderer.tsx` sehingga ketika kursor penulis menyentuh (*hover*) tautan `[[Nama Entitas]]` di artikel lore mana pun atau di naskah bab:
-  - Muncul **Kartu Pratinjau Grimoire** mengambang (*floating popover card*) yang menampilkan:
-    - Potret / Ikon lambang kategori & nama entitas
-    - Subjudul / gelar kehormatan
-    - 3 atribut utama entitas (misalnya Peran, Status, Afiliasi, Negara Induk, atau Tingkat Bahaya)
-    - Ringkasan kanon singkat & petunjuk *"Klik untuk membuka halaman kodeks"*.
-
----
-
-## 7. Berkas yang Akan Diperbarui
-- `/index.html`: Menambahkan Google Fonts `Cinzel` dan `Cinzel Decorative`.
-- `/src/index.css`: Menambahkan aturan tipografi `.font-epic`, `.fantasy-dropcap`, tekstur perkamen, ornamen bingkai *arcana/bestiary*, serta variabel CSS otomatis untuk **Mode Grimoire Malam Lilin (`data-theme="grimoire-dark"`)**.
-- `/src/components/WikiTextRenderer.tsx`: Menambahkan **Kartu Pratinjau Cepat (*Hover Grimoire Card*)** pada setiap tautan `[[Nama Entitas]]` serta komponen ornamen pembatas manuskrip.
-- `/src/App.tsx`: Merombak bilah navigasi 14 tab menjadi **4 Pilar Dunia Fantasi** lengkap dengan ikon fantasi, ornamen header, dan tombol pengalih **Mode Perkamen Siang / Grimoire Malam Lilin**.
-- `/src/components/WorldOverviewTab.tsx`, `/src/components/CodexWorkspace.tsx`, & `/src/components/ChapterOutlinerAndPrdView.tsx`: Menerapkan kartu bergaya *Tarot / Bestiary Folio*, *Illuminated Drop Cap* pada artikel & naskah, serta ornamen sudut manuskrip emas.
+## 5. Cakupan Berkas yang Diperbarui
+- `/src/components/WikiTextRenderer.tsx`: Menambahkan prop opsional `onQuickCreateEntity` dan komponen popover interaktif **`UncreatedWikiLinkPopover`** untuk tautan `[[...]]` yang belum ada.
+- `/src/components/GlobalProductivityModals.tsx`: Menambahkan komponen **`LoreHealthInspectorModal`** (pemindai tautan kosong, entitas yatim, entitas belum masuk bab, dan lokasi belum dipetakan).
+- `/src/components/CodexWorkspace.tsx`: Menambahkan **Mode Fokus Menulis**, **Generator Nama Fantasi & Gelar Epik (*Fantasy Name Forge*)**, serta meneruskan `onQuickCreateEntity` ke seluruh `WikiTextRenderer`.
+- `/src/components/ChapterOutlinerAndPrdView.tsx` & `/src/components/WorldOverviewTab.tsx`: Menambahkan **Mode Fokus Menulis** pada Alur Bab dan meneruskan `onQuickCreateEntity` ke seluruh `WikiTextRenderer`.
+- `/src/App.tsx`: Menambahkan handler pembuatan entitas instan dari tautan `[[...]]` serta tombol **`Kesehatan Lore`** di bilah header atas.

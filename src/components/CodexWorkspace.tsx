@@ -65,6 +65,258 @@ interface CodexWorkspaceProps {
   onOpenChapter: (chapterId: string) => void;
   onRunAuditOnEntity: (entity: LoreEntity) => void;
   onOpenBrainstormModal: (category: LoreCategory) => void;
+  onQuickCreateEntity?: (
+    title: string,
+    category: LoreCategory,
+    openAfterCreate?: boolean
+  ) => void;
+}
+
+type FantasyCultureStyle =
+  | 'eldoria'
+  | 'solis'
+  | 'sylvan'
+  | 'nordic'
+  | 'shadow';
+
+const FANTASY_CULTURE_STYLES: Array<{
+  id: FantasyCultureStyle;
+  label: string;
+}> = [
+  { id: 'eldoria', label: 'Bangsawan & Ksatria (Eldoria)' },
+  { id: 'solis', label: 'Kekaisaran Surya (Solis)' },
+  { id: 'sylvan', label: 'Rimba Sylvan (Peri & Alam)' },
+  { id: 'nordic', label: 'Besi Utara (Klan & Gunung)' },
+  { id: 'shadow', label: 'Bayangan & Arkanum (Okultisme)' },
+];
+
+function getFantasyNameSuggestions(
+  category: LoreCategory,
+  style: FantasyCultureStyle,
+  seedOffset: number
+): Array<{ title: string; subtitle: string }> {
+  const pools: Record<
+    FantasyCultureStyle,
+    Record<LoreCategory, Array<{ title: string; subtitle: string }>>
+  > = {
+    eldoria: {
+      character: [
+        { title: 'Aldric Vane dari Menara Perak', subtitle: 'Komandan Ksatria Fajar Keempat' },
+        { title: 'Lady Seraphina Ashbourne', subtitle: 'Penjaga Arsip Mahkota & Diplomat Istana' },
+        { title: 'Cedric Valorian', subtitle: 'Pewaris Takhta yang Diasingkan ke Perbatasan' },
+        { title: 'Evelyn Cortland', subtitle: 'Ahli Kartografi & Pemburu Relik Kerajaan' },
+        { title: 'Garrick Sterling', subtitle: 'Kapten Penjaga Gerbang Benteng Batu Putih' },
+        { title: 'Lyra Pendelton', subtitle: 'Cendekiawan Muda Menara Observatorium' },
+      ],
+      race: [
+        { title: 'Kaum Valorian-Darah Murni', subtitle: 'Garis Keturunan Raja-Raja Pertama' },
+        { title: 'Bangsa Penenun Bintang (Aethel-Kin)', subtitle: 'Manusia Berusia Panjang dari Dataran Tinggi' },
+        { title: 'Keturunan Perisai Perak', subtitle: 'Bangsa Ksatria Penjaga Perbatasan Utara' },
+      ],
+      faction: [
+        { title: 'Ordo Pedang Fajar Putih', subtitle: 'Persaudaraan Ksatria Pelindung Takhta' },
+        { title: 'Serikat Kartografer & Pelayar Diraja', subtitle: 'Organisasi Penjelajah Samudra & Pembuat Peta' },
+        { title: 'Konklaf Menara Gading', subtitle: 'Majelis Penasihat Agung & Cendekiawan Istana' },
+      ],
+      power_system: [
+        { title: 'Sumpah Cahaya Kedaulatan (Regal Resonance)', subtitle: 'Sihir Berbasis Ikrar Ksatria & Garis Darah' },
+        { title: 'Seni Ukir Sigil Kuningan', subtitle: 'Disiplin Kriya Mantra pada Logam Mulia' },
+        { title: 'Harmoni Gema Langit', subtitle: 'Penyaluran Energi melalui Konstelasi Bintang' },
+      ],
+      skill: [
+        { title: 'Tebasan Sumpah Fajar (Dawnbreaker Vow)', subtitle: 'Teknik Pedang Cahaya Tingkat Tinggi' },
+        { title: 'Perisai Aegis Menara Perak', subtitle: 'Pertahanan Mutlak Pelindung Sekutu' },
+        { title: 'Langkah Kilat Ksatria Angin', subtitle: 'Manuver Serbuan Cepat Lintas Medan' },
+      ],
+      nation: [
+        { title: 'Kerajaan Agung Valoria', subtitle: 'Monarki Ksatria di Lembah Sungai Perak' },
+        { title: 'Persemakmuran Bebas Highgate', subtitle: 'Konfederasi Kota Dagang & Pelabuhan Utama' },
+        { title: 'Kadipaten Agung Ravenholm', subtitle: 'Benteng Pertahanan Bangsawan di Perbatasan' },
+      ],
+      region: [
+        { title: 'Lembah Mahkota Perak', subtitle: 'Jantung Pertanian & Kastil Bangsawan' },
+        { title: 'Tebing AnginMenderu (Galewatch Cliffs)', subtitle: 'Pesisir Berbatu Tempat Mercusuar Kuno Berdiri' },
+        { title: 'Dataran Tinggi Aethelgard', subtitle: 'Padang Rumput Berkabut Penuh Reruntuhan Kastil' },
+      ],
+      history: [
+        { title: 'Perang Tiga Mahkota Perak', subtitle: 'Sengketa Suksesi Terbesar di Benua Tengah' },
+        { title: 'Traktat Perdamaian Menara Putih', subtitle: 'Perjanjian Bersejarah Pengakhir Perang Saudara' },
+        { title: 'Pengepungan Benteng Highgate', subtitle: 'Pertahanan Heroik Selama Seratus Hari Musim Dingin' },
+      ],
+      encyclopedia: [
+        { title: 'Pedang Pusaka Dawnspire', subtitle: 'Bilah Perak Warisan Raja Pertama' },
+        { title: 'Kompas Bintang Astrolab', subtitle: 'Instrumen Navigasi Kuno Penunjuk Ruang Retak' },
+        { title: 'Bunga Lili Kaca (Glass-Lily)', subtitle: 'Tanaman Langka Penyembuh Luka Mana' },
+      ],
+    },
+    solis: {
+      character: [
+        { title: 'Aurelius Cassian Sol', subtitle: 'Legatus Agung Legiun Surya Ketiga' },
+        { title: 'Valeria Noctis', subtitle: 'Inkuisitor Segel Merah & Pengawas Hukum Sihir' },
+        { title: 'Marcellus Vane-Septimus', subtitle: 'Senator Agung & Arsitek Menara Helios' },
+        { title: 'Livia Oktavia', subtitle: 'Imam Tinggi Kuil Api Abadi' },
+      ],
+      race: [
+        { title: 'Kaum Solari (Putra-Putri Matahari)', subtitle: 'Bangsa dengan Mata Berpendar Emas' },
+        { title: 'Ras Ignis-Born', subtitle: 'Penghuni Gurun Kaca yang Tahan Panas Ekstrem' },
+      ],
+      faction: [
+        { title: 'Inkuisisi Segel Merah', subtitle: 'Badan Penegak Dekrit & Pemburu Bidah Sihir' },
+        { title: 'Senat Kubah Emas Solis', subtitle: 'Dewan Oligarki Penguasa Perdagangan Kekaisaran' },
+      ],
+      power_system: [
+        { title: 'Teurgi Kalor Surya (Solar Theurgy)', subtitle: 'Penyerapan Sinar Matahari Menjadi Api Suci' },
+        { title: 'Hukum Segel Imperium', subtitle: 'Sihir Kontrak Mengikat Berbasis Tinta Darah Emas' },
+      ],
+      skill: [
+        { title: 'Tombak Penghakiman Helios', subtitle: 'Proyektil Cahaya Pembakar Perisai Mana' },
+        { title: 'Dekrit Pembungkam Mantra', subtitle: 'Segel Area yang Mematikan Aliran Sihir Lawan' },
+      ],
+      nation: [
+        { title: 'Kekaisaran Suci Solis Invicta', subtitle: 'Teokrasi Militer di Bawah Tahta Matahari' },
+        { title: 'Provinsi Otonom Caelum', subtitle: 'Wilayah Koloni Kaya Tambang Kristal Surya' },
+      ],
+      region: [
+        { title: 'Gurun Kaca Heliodor', subtitle: 'Padang Pasir yang Meleleh Akibat Bencana Langit' },
+        { title: 'Kawah Matahari Jatuh', subtitle: 'Pusat Radiasi Mana Suci di Selatan Kekaisaran' },
+      ],
+      history: [
+        { title: 'Dekrit Pemurnian Abu Tahun 102', subtitle: 'Pelarangan Mutlak Sihir Bulan di Seluruh Imperium' },
+        { title: 'Penaklukan Semenanjung Emas', subtitle: 'Kampanye Ekspansi Legiun Surya ke Timur' },
+      ],
+      encyclopedia: [
+        { title: 'Lentera Api Tak Padam (Everflame Thurible)', subtitle: 'Relik Suci Pengusir Kabut Ilusi' },
+        { title: 'Singa Bersayap Heliodor (Sun-Griffin)', subtitle: 'Satwa Tunggangan Komandan Legiun Kekaisaran' },
+      ],
+    },
+    sylvan: {
+      character: [
+        { title: 'Elowen Sylvariel', subtitle: 'Penjaga Pohon Memori & Penutur Angin' },
+        { title: 'Theron Leafwalker', subtitle: 'Pemanah Bayangan dari Rimba Kabut Perak' },
+        { title: 'Lyrielle Moonwhisper', subtitle: 'Peramal Bintang & Penyembuh Hutan Kuno' },
+        { title: 'Caelen Bramblethorn', subtitle: 'Duta Perbatasan Bangsa Sylvan' },
+      ],
+      race: [
+        { title: 'Sylvan-Fae (Anak-Anak Kanopi Perak)', subtitle: 'Bangsa Abadi yang Terikat dengan Siklus Pohon Dunia' },
+        { title: 'Kaum Dryad Akar-Besi', subtitle: 'Penjaga Hutan Purba Berkulit Serat Kayu' },
+      ],
+      faction: [
+        { title: 'Lingkaran Druida Bulan Purnama', subtitle: 'Penjaga Keseimbangan Alam & Jalur Leyline' },
+        { title: 'Penjaga Kabut Veridian', subtitle: 'Pasukan Ranger Pelindung Hutan Terlarang' },
+      ],
+      power_system: [
+        { title: 'Tenunan Gema Alam (Sylvan Resonance)', subtitle: 'Sihir Harmoni Tanaman, Kabut, dan Cahaya Bulan' },
+        { title: 'Ikatan Roh Satwa Purba', subtitle: 'Penyatuan Panca Indra dengan Biota Hutan' },
+      ],
+      skill: [
+        { title: 'langkah Kabut Tanpa Jejak', subtitle: 'Teknik Menghilang di Antara Bayangan Pepohonan' },
+        { title: 'Jaring Akar Mengikat Bumi', subtitle: 'Manipulasi Tanaman untuk Melumpuhkan Pasukan' },
+      ],
+      nation: [
+        { title: 'Persemakmuran Rimba Aethelgard', subtitle: 'Alam Otonom di Bawah Naungan Pohon Memori' },
+        { title: 'Lembah Tersembunyi Loth-varia', subtitle: 'Suaka Kuno yang Tertutup Ilusi Abadi' },
+      ],
+      region: [
+        { title: 'Hutan Pohon Memori (Whispering Canopy)', subtitle: 'Rimba Raksasa dengan Daun Berpendar Biru' },
+        { title: 'Rawa Lentera Peri', subtitle: 'Lahan Basah Berkabut Penuh Tanaman Alkimia' },
+      ],
+      history: [
+        { title: 'Malam Gugurnya Seribu Daun Perak', subtitle: 'Tragedi Terbakarnya Hutan Perbatasan Barat' },
+        { title: 'Sumpah Akar & Baja', subtitle: 'Pakta Non-Agresi antara Kaum Sylvan dan Manusia' },
+      ],
+      encyclopedia: [
+        { title: 'Daun Embun Bintang (Star-Dew Herb)', subtitle: 'Herbal Alkimia Pemulih Ingatan yang Hilang' },
+        { title: 'Rusa Tanduk Kristal (Moon-Stag)', subtitle: 'Makhluk Suci Penunjuk Mata Air Murni' },
+      ],
+    },
+    nordic: {
+      character: [
+        { title: 'Torvald Ironbeard', subtitle: 'Empu Tempa Agung dari Dapur Api Bawah Gunung' },
+        { title: 'Freya Stormborn', subtitle: 'Jarl Pelayar Es & Penakluk Laut Utara' },
+        { title: 'Brynjar Stonefist', subtitle: 'Komandan Benteng Puncak Beku' },
+        { title: 'Astrid Frostweaver', subtitle: 'Penutur Rune Badai Salju' },
+      ],
+      race: [
+        { title: 'Kaum Khazad-Besi (Dwarven Forge-Kin)', subtitle: 'Bangsa Penambang & Pengukir Rune Bawah Tanah' },
+        { title: 'Bangsa Raksasa Salju (Frost-Jotun)', subtitle: 'Penghuni Puncak Gletser Abadi di Utara Jauh' },
+      ],
+      faction: [
+        { title: 'Serikat Empu Besi Hitam', subtitle: 'Monopoli Tempa Senjata & Mesin Perang' },
+        { title: 'Klan Kapak Badai Utara', subtitle: 'Perserikatan Pelayar & Pejuang Fjord' },
+      ],
+      power_system: [
+        { title: 'Pahatan Rune Baja & Es (Runecraft)', subtitle: 'Penyimpanan Mantra ke dalam Senjata & Batu' },
+        { title: 'Napas Bara Dapur Tempa', subtitle: 'Penguatan Tubuh Fisik Seeras Logam Mulia' },
+      ],
+      skill: [
+        { title: 'Hantaman Palu Guntur (Thunder-Anvil Strike)', subtitle: 'Serangan Gelombang Kejut Penghancur Benteng' },
+        { title: 'Kulit Baja Rune Kuno', subtitle: 'Pertahanan Tubuh Kebal Senjata Tajam' },
+      ],
+      nation: [
+        { title: 'Kerajaan Bawah Gunung Karak-Vorn', subtitle: 'Jaringan Kota Tambang & Benteng Batu Raksasa' },
+        { title: 'Konfederasi Fjord Skjoldheim', subtitle: 'Persatuan Klan-Klan Pesisir Es Utara' },
+      ],
+      region: [
+        { title: 'Pegunungan Puncak Gergaji Es', subtitle: 'Barisan Gunung Tertinggi yang Kaya Bijih Mithril' },
+        { title: 'Jurang Dapur Api Purba', subtitle: 'Kawah Vulkanik Bawah Tanah Tempat Relik Ditempa' },
+      ],
+      history: [
+        { title: 'Perang Musim Dingin Seribu Tahun', subtitle: 'Konflik Panjang Melawan Monster Bawah Tanah' },
+        { title: 'Penemuan Urat Bijih Bintang', subtitle: 'Era Keemasan Kriya Senjata Legendaris' },
+      ],
+      encyclopedia: [
+        { title: 'Palu Pusaka Earthshaker', subtitle: 'Senjata Tempa Kuno Pembelah Tebing Batu' },
+        { title: 'Naga Es Sayap Kristal (Frost-Wyrm)', subtitle: 'Predator Puncak yang Bersarang di Gletser Utara' },
+      ],
+    },
+    shadow: {
+      character: [
+        { title: 'Malakor Vex dari Lembah Abu', subtitle: 'Arsitek Sihir Terlarang & Pemimpin Kultus Gerhana' },
+        { title: 'Nyxia Veilwalker', subtitle: 'Pembunuh Bayangan Tanpa Wajah' },
+        { title: 'Dorian Nightshade', subtitle: 'Kolektor Artefak Terkutuk & Pedagang Rahasia' },
+        { title: 'Vespera Mourne', subtitle: 'Penjaga Kripta Raja-Raja Mati' },
+      ],
+      race: [
+        { title: 'Kaum Umbral (Penghuni Balik Bayangan)', subtitle: 'Entitas Humanoid yang Lahir dari Sisa Gerhana' },
+        { title: 'Bangsa Darah-Pucat (Nocturne-Kin)', subtitle: 'Bangsawan Abadi yang Hanya Bangkit Saat Malam' },
+      ],
+      faction: [
+        { title: 'Sindikat Bisikan Malam', subtitle: 'Jaringan Mata-Mata & Pembunuh Bayaran Lintas Kerajaan' },
+        { title: 'Ordo Gerhana Hitam', subtitle: 'Kultus Rahasia Pemburu Fragmen Dewa Jatuh' },
+      ],
+      power_system: [
+        { title: 'Pactum Umbra (Sihir Bayangan & Pengorbanan)', subtitle: 'Pertukaran Vitalitas dan Ingatan demi Kekuatan Mutlak' },
+        { title: 'Nekromansi Gema Abu', subtitle: 'Pemanggilan Memori & Bayangan Masa Lalu' },
+      ],
+      skill: [
+        { title: 'Rantai Penjerat Jiwa (Soulbind Chains)', subtitle: 'Teknik Kutukan Pengunci Pergerakan & Mana' },
+        { title: 'Tirai Malam Abadi', subtitle: 'Kubah Kegelapan yang Membutakan Panca Indra Lawan' },
+      ],
+      nation: [
+        { title: 'Kedaulatan Kelam Nocturnia', subtitle: 'Negeri Berkabut Abadi di Bawah Bulan Merah' },
+        { title: 'Kota Bawah Tanah Under-Hollow', subtitle: 'Pasar Gelap & Suaka Para Pelarian Politik' },
+      ],
+      region: [
+        { title: 'Lembah Abu Tak Bernyawa (Ashen Wastes)', subtitle: 'Tanah Tandus Bekas Ledakan Bencana Arcane' },
+        { title: 'Ngarai Bisikan Roh', subtitle: 'Jurang Dalam yang Dipenuhi Ilusi Suara Masa Lalu' },
+      ],
+      history: [
+        { title: 'Malam Pisau Berdarah di Istana', subtitle: 'Kudeta Senyap yang Menggulingkan Dinasti Lama' },
+        { title: 'Bencana Retaknya Gerbang Void', subtitle: 'Malapetaka yang Mencemari Wilayah Barat' },
+      ],
+      encyclopedia: [
+        { title: 'Cincin Kutukan Raja Abu', subtitle: 'Pusaka Berbahaya yang Melipatgandakan Sihir Pemakainya' },
+        { title: 'Serigala Kabut Hitam (Dread-Hound)', subtitle: 'Pemburu Malam yang Dapat Menembus Dinding Bayangan' },
+      ],
+    },
+  };
+
+  const list = pools[style][category] || pools.eldoria.character;
+  const rotated: Array<{ title: string; subtitle: string }> = [];
+  for (let i = 0; i < Math.min(4, list.length); i++) {
+    rotated.push(list[(i + seedOffset) % list.length]);
+  }
+  return rotated;
 }
 
 const CHARACTER_ROLE_FILTERS = [
@@ -239,8 +491,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   onOpenChapter,
   onRunAuditOnEntity,
   onOpenBrainstormModal,
+  onQuickCreateEntity,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [nameForgeOpen, setNameForgeOpen] = useState(false);
+  const [nameForgeStyle, setNameForgeStyle] =
+    useState<FantasyCultureStyle>('eldoria');
+  const [nameForgeSeed, setNameForgeSeed] = useState(0);
   const [roleFilter, setRoleFilter] = useState<string>('Semua');
   const [statusFilter, setStatusFilter] = useState<string>('Semua');
   const [raceClassFilter, setRaceClassFilter] = useState<string>('Semua');
@@ -1564,7 +1822,22 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => setIsFocusMode((prev) => !prev)}
+            className={`px-3.5 py-2 rounded-lg text-xs font-semibold border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              isFocusMode
+                ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
+                : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+            }`}
+            title="Sembunyikan atau tampilkan panel daftar direktori kiri agar fokus membaca/menulis"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-[#B5832A]" />
+            <span>
+              {isFocusMode ? 'Tampilkan Direktori Kiri' : 'Mode Fokus Naskah'}
+            </span>
+          </button>
           <button
             type="button"
             onClick={() => onOpenBrainstormModal(category)}
@@ -1584,11 +1857,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         </div>
       </div>
 
-      {/* Main Split: Section Entity List (Left 4 cols) + Full Sheet (Right 8 cols) */}
+      {/* Main Split: Section Entity List (Left 4 cols) + Full Sheet (Right 8 or 12 cols in Focus Mode) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* ================================================================= */}
         {/* LEFT DIRECTORY COLUMN                                             */}
         {/* ================================================================= */}
+        {!isFocusMode && (
         <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
           <div className="relative">
             <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
@@ -2080,15 +2354,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             )}
           </div>
         </div>
+        )}
 
         {/* ================================================================= */}
         {/* RIGHT DETAIL / EDITOR COLUMN                                      */}
         {/* ================================================================= */}
-        <div className="relative overflow-hidden lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs">
+        <div
+          className={`relative overflow-hidden ${
+            isFocusMode ? 'lg:col-span-12 max-w-5xl mx-auto w-full' : 'lg:col-span-8'
+          } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs`}
+        >
           <OrnateCornerFiligree className="text-[#B5832A]/50" />
           {isEditing && draftEntity ? (
             <form onSubmit={handleSaveDraft} className="space-y-5">
-              <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#D8CBB3] pb-4">
                 <div>
                   <span className="text-xs font-semibold text-[#9E2A2B]">
                     Penyuntingan {sectionMeta.label}
@@ -2097,7 +2376,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {draftEntity.title || `${sectionMeta.singular} Baru`}
                   </h3>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setNameForgeOpen((prev) => !prev)}
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg border flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+                      nameForgeOpen
+                        ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
+                        : 'bg-[#F6F1E6] text-[#231C14] border-[#B5832A]'
+                    }`}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <span>Tempa Nama & Gelar Fantasi</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => {
@@ -2118,6 +2409,82 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </button>
                 </div>
               </div>
+
+              {/* GENERATOR NAMA FANTASI & GELAR EPIK (FANTASY NAME FORGE) */}
+              {nameForgeOpen && (
+                <div className="p-4 rounded-xl bg-[#F6F1E6] border-2 border-[#B5832A]/60 space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                        ❖ Tempa Nama & Gelar Epik ({sectionMeta.singular})
+                      </div>
+                      <p className="text-[11px] text-[#695A47]">
+                        Pilih nuansa budaya/bahasa dunia, lalu klik salah satu saran untuk mengisi Nama dan Subjudul secara instan.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setNameForgeSeed((s) => s + 1)}
+                      className="px-2.5 py-1 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] border border-[#D8CBB3] rounded-lg cursor-pointer whitespace-nowrap shrink-0"
+                    >
+                      ↻ Putar Kombinasi Lain
+                    </button>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {FANTASY_CULTURE_STYLES.map((st) => (
+                      <button
+                        key={st.id}
+                        type="button"
+                        onClick={() => {
+                          setNameForgeStyle(st.id);
+                          setNameForgeSeed(0);
+                        }}
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                          nameForgeStyle === st.id
+                            ? 'bg-[#9E2A2B] text-white'
+                            : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                        }`}
+                      >
+                        {st.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {getFantasyNameSuggestions(
+                      category,
+                      nameForgeStyle,
+                      nameForgeSeed
+                    ).map((sug, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            title: sug.title,
+                            subtitle: sug.subtitle,
+                          })
+                        }
+                        className="p-2.5 rounded-lg bg-[#FBF8F1] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                      >
+                        <div className="min-w-0">
+                          <div className="font-display text-sm font-bold text-[#231C14] truncate">
+                            {sug.title}
+                          </div>
+                          <div className="text-[11px] italic text-[#695A47] truncate">
+                            {sug.subtitle}
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-semibold text-[#9E2A2B] shrink-0">
+                          Pakai →
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -8556,6 +8923,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     text={activeEntity.content}
                     entities={entities}
                     onSelectEntity={jumpToEntity}
+                    onQuickCreateEntity={onQuickCreateEntity}
                     dropCap={true}
                   />
                 </div>
