@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   CheckCircle2,
+  FileDown,
+  FolderKanban,
   Loader2,
+  Search,
   X,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
@@ -25,8 +28,16 @@ import {
   ChapterOutlinerView,
 } from './components/ChapterOutlinerAndPrdView';
 import { WorldOverviewTab } from './components/WorldOverviewTab';
+import {
+  GlobalOmniSearchModal,
+  MultiWorldProjectManagerModal,
+  WorldExportStudioModal,
+  WorldSnapshot,
+} from './components/GlobalProductivityModals';
 
 const STORAGE_KEY = 'mythos_cartograph_world_v1';
+const WORLDS_LIBRARY_KEY = 'mythos_cartograph_worlds_library_v1';
+const SNAPSHOTS_KEY = 'mythos_cartograph_snapshots_v1';
 
 export type WorkspaceTab =
   | 'overview'
@@ -191,6 +202,34 @@ export default function App() {
     return STARTER_WORLD_PROJECT;
   });
 
+  const [savedWorlds, setSavedWorlds] = useState<WorldProject[]>(() => {
+    try {
+      const raw = localStorage.getItem(WORLDS_LIBRARY_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as WorldProject[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load worlds library:', e);
+    }
+    return [STARTER_WORLD_PROJECT];
+  });
+
+  const [snapshots, setSnapshots] = useState<WorldSnapshot[]>(() => {
+    try {
+      const raw = localStorage.getItem(SNAPSHOTS_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as WorldSnapshot[];
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {
+      console.error('Failed to load snapshots:', e);
+    }
+    return [];
+  });
+
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('overview');
   const [selectedEntityId, setSelectedEntityId] = useState<string>(
     project.entities[0]?.id || ''
@@ -199,6 +238,11 @@ export default function App() {
     project.chapters[0]?.id || ''
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Global Productivity Modals State
+  const [omniSearchOpen, setOmniSearchOpen] = useState<boolean>(false);
+  const [projectManagerOpen, setProjectManagerOpen] = useState<boolean>(false);
+  const [exportStudioOpen, setExportStudioOpen] = useState<boolean>(false);
 
   // AI Lore Audit Modal State
   const [auditModalOpen, setAuditModalOpen] = useState<boolean>(false);
@@ -218,13 +262,42 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  // Sync active project to localStorage and into savedWorlds library
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+      setSavedWorlds((prev) => {
+        const exists = prev.some((w) => w.id === project.id);
+        const next = exists
+          ? prev.map((w) => (w.id === project.id ? project : w))
+          : [project, ...prev];
+        localStorage.setItem(WORLDS_LIBRARY_KEY, JSON.stringify(next));
+        return next;
+      });
     } catch (e) {
       console.error('Failed to save world to localStorage:', e);
     }
   }, [project]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SNAPSHOTS_KEY, JSON.stringify(snapshots));
+    } catch (e) {
+      console.error('Failed to save snapshots:', e);
+    }
+  }, [snapshots]);
+
+  // Global Keyboard Shortcut: Ctrl+K / Cmd+K for Omni-Search
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setOmniSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -287,17 +360,21 @@ export default function App() {
     }
   };
 
-  const handleExportWorldJson = () => {
-    const blob = new Blob([JSON.stringify(project, null, 2)], {
+  const handleExportSpecificWorldJson = (targetWorld: WorldProject) => {
+    const blob = new Blob([JSON.stringify(targetWorld, null, 2)], {
       type: 'application/json',
     });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${project.worldName.toLowerCase().replace(/\s+/g, '-')}-world-bible.json`;
+    link.download = `${targetWorld.worldName.toLowerCase().replace(/\s+/g, '-')}-world-bible.json`;
     link.click();
     URL.revokeObjectURL(url);
-    showToast('Berkas JSON World Bible berhasil diunduh.');
+    showToast(`Berkas JSON "${targetWorld.worldName}" berhasil diunduh.`);
+  };
+
+  const handleExportWorldJson = () => {
+    handleExportSpecificWorldJson(project);
   };
 
   const handleImportWorldJson = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,7 +387,10 @@ export default function App() {
         if (parsed && Array.isArray(parsed.entities) && parsed.mapData) {
           setProject(parsed);
           setSelectedEntityId(parsed.entities[0]?.id || '');
-          showToast(`Proyek "${parsed.worldName}" berhasil diimpor.`);
+          setSelectedChapterId(parsed.chapters?.[0]?.id || '');
+          showToast(
+            `Proyek "${parsed.worldName}" berhasil diimpor dan disimpan di Perpustakaan Dunia.`
+          );
         } else {
           showToast('Format berkas JSON tidak sesuai dengan skema World Bible.');
         }
@@ -325,10 +405,16 @@ export default function App() {
   const handleResetStarterWorld = () => {
     setProject(STARTER_WORLD_PROJECT);
     setSelectedEntityId(STARTER_WORLD_PROJECT.entities[0].id);
+    setSelectedChapterId(STARTER_WORLD_PROJECT.chapters[0].id);
     showToast('Dunia contoh "Kronik Benua Aethelia" telah dipulihkan.');
   };
 
-  const handleCreateBlankWorld = () => {
+  const createNewWorldObject = (meta?: {
+    worldName?: string;
+    genre?: string;
+    tagline?: string;
+    calendarSystem?: string;
+  }): WorldProject => {
     const cols = 36;
     const rows = 22;
     const blankCells: TerrainType[] = new Array(cols * rows).fill('sea');
@@ -348,24 +434,31 @@ export default function App() {
       updatedAt: new Date().toISOString().slice(0, 10),
     };
 
-    const blankWorld: WorldProject = {
+    const firstChapId = `chap-${Date.now()}`;
+    return {
       id: `world-${Date.now()}`,
-      worldName: 'Semesta Cerita Baru',
-      tagline: 'Tuliskan premis utama dunia fantasi atau fiksi Anda di sini',
-      genre: 'Fantasi / Fiksi',
-      calendarSystem: 'Tahun ke-1 Era Baru',
+      worldName: meta?.worldName || 'Semesta Cerita Baru',
+      tagline:
+        meta?.tagline ||
+        'Tuliskan premis utama dunia fantasi atau fiksi Anda di sini',
+      genre: meta?.genre || 'Fantasi / Fiksi',
+      calendarSystem: meta?.calendarSystem || 'Tahun ke-1 Era Baru',
       authorName: project.authorName || 'Penulis',
       heroBannerUrl: project.heroBannerUrl,
-      epigraphQuote: 'Tuliskan kutipan epigrafi atau ramalan pembuka dunia Anda di sini.',
+      epigraphQuote:
+        'Tuliskan kutipan epigrafi atau ramalan pembuka dunia Anda di sini.',
       epigraphSource: 'Kronik Kuno Bab I',
-      centralConflict: 'Tuliskan konflik utama yang menggerakkan cerita di dunia ini. Gunakan [[Tokoh Utama Pertama]] untuk menautkan entitas.',
+      centralConflict:
+        'Tuliskan konflik utama yang menggerakkan cerita di dunia ini. Gunakan [[Tokoh Utama Pertama]] untuk menautkan entitas.',
       storyThemes: 'Takdir, Kekuasaan, dan Pengorbanan',
-      cosmologyCreationMyth: 'Tuliskan mitos penciptaan semesta atau sejarah awal mula terbentuknya dunia Anda.',
-      cosmologyLaws: 'Tuliskan aturan fundamental alam semesta, batas sihir, atau hukum kosmik yang tidak dapat dilanggar.',
+      cosmologyCreationMyth:
+        'Tuliskan mitos penciptaan semesta atau sejarah awal mula terbentuknya dunia Anda.',
+      cosmologyLaws:
+        'Tuliskan aturan fundamental alam semesta, batas sihir, atau hukum kosmik yang tidak dapat dilanggar.',
       scratchpadNotes: [],
       entities: [starterEntity],
       mapData: {
-        mapTitle: 'Peta Dunia Baru',
+        mapTitle: `Peta ${meta?.worldName || 'Dunia Baru'}`,
         subtitle: 'Kanvas Kartografi Semesta',
         scaleLabel: '1 Grid = 50 Liga',
         gridCols: cols,
@@ -380,7 +473,7 @@ export default function App() {
       timeline: [],
       chapters: [
         {
-          id: `chap-${Date.now()}`,
+          id: firstChapId,
           chapterNumber: 1,
           act: 'Babak I',
           title: 'Awal Mula Perjalanan',
@@ -394,11 +487,100 @@ export default function App() {
         },
       ],
     };
+  };
 
+  const handleCreateBlankWorld = () => {
+    const blankWorld = createNewWorldObject();
     setProject(blankWorld);
-    setSelectedEntityId(starterEntity.id);
+    setSelectedEntityId(blankWorld.entities[0].id);
+    setSelectedChapterId(blankWorld.chapters[0].id);
     setActiveTab('overview');
-    showToast('Proyek World Bible kosong berhasil dibuat.');
+    showToast(
+      'Proyek World Bible baru berhasil dibuat (proyek lama tetap tersimpan di Manajer Proyek).'
+    );
+  };
+
+  const handleCreateCustomNewWorld = (meta: {
+    worldName: string;
+    genre: string;
+    tagline: string;
+    calendarSystem: string;
+  }) => {
+    const newWorld = createNewWorldObject(meta);
+    setProject(newWorld);
+    setSelectedEntityId(newWorld.entities[0].id);
+    setSelectedChapterId(newWorld.chapters[0].id);
+    setActiveTab('overview');
+    showToast(`Proyek dunia "${newWorld.worldName}" berhasil dibuat dan dibuka.`);
+  };
+
+  const handleSwitchWorld = (worldId: string) => {
+    const found = savedWorlds.find((w) => w.id === worldId);
+    if (!found) return;
+    setProject(found);
+    setSelectedEntityId(found.entities[0]?.id || '');
+    setSelectedChapterId(found.chapters[0]?.id || '');
+    showToast(`Beralih ke proyek "${found.worldName}".`);
+  };
+
+  const handleDuplicateWorld = (sourceWorld: WorldProject) => {
+    const cloned: WorldProject = {
+      ...JSON.parse(JSON.stringify(sourceWorld)),
+      id: `world-${Date.now()}`,
+      worldName: `${sourceWorld.worldName} (Salinan)`,
+    };
+    setSavedWorlds((prev) => {
+      const next = [cloned, ...prev];
+      localStorage.setItem(WORLDS_LIBRARY_KEY, JSON.stringify(next));
+      return next;
+    });
+    showToast(`Salinan proyek "${cloned.worldName}" berhasil ditambahkan.`);
+  };
+
+  const handleDeleteWorld = (worldId: string) => {
+    if (savedWorlds.length <= 1) return;
+    const target = savedWorlds.find((w) => w.id === worldId);
+    const remaining = savedWorlds.filter((w) => w.id !== worldId);
+    setSavedWorlds(remaining);
+    localStorage.setItem(WORLDS_LIBRARY_KEY, JSON.stringify(remaining));
+    if (project.id === worldId && remaining[0]) {
+      setProject(remaining[0]);
+      setSelectedEntityId(remaining[0].entities[0]?.id || '');
+      setSelectedChapterId(remaining[0].chapters[0]?.id || '');
+    }
+    if (target) {
+      showToast(`Proyek "${target.worldName}" telah dihapus dari daftar.`);
+    }
+  };
+
+  const handleCreateSnapshot = (label: string) => {
+    const snap: WorldSnapshot = {
+      id: `snap-${Date.now()}`,
+      worldId: project.id,
+      worldName: project.worldName,
+      label,
+      createdAt: `${new Date().toLocaleDateString('id-ID')} ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}`,
+      entityCount: project.entities.length,
+      chapterCount: project.chapters.length,
+      projectData: JSON.parse(JSON.stringify(project)),
+    };
+    setSnapshots((prev) => [snap, ...prev]);
+    showToast(`Snapshot "${label}" berhasil disimpan.`);
+  };
+
+  const handleRestoreSnapshot = (snap: WorldSnapshot) => {
+    const restored: WorldProject = JSON.parse(JSON.stringify(snap.projectData));
+    setProject(restored);
+    setSelectedEntityId(restored.entities[0]?.id || '');
+    setSelectedChapterId(restored.chapters[0]?.id || '');
+    showToast(
+      `Proyek berhasil dipulihkan ke snapshot "${snap.label}" (${snap.createdAt}).`
+    );
+  };
+
+  const handleDeleteSnapshot = (snapshotId: string) => {
+    setSnapshots((prev) => prev.filter((s) => s.id !== snapshotId));
+    showToast('Snapshot versi telah dihapus.');
   };
 
   const handlePromoteNoteToEntity = (note: ScratchpadNote) => {
@@ -600,40 +782,76 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F6F1E6] text-[#231C14]">
-      {/* Top Bar: Brand & Active Breadcrumb on Left, Project Export on Right (NO duplicate tab buttons here) */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-8 px-6 py-3.5 bg-[#FBF8F1]/95 backdrop-blur-xs border-b border-[#D8CBB3]">
-        <a
-          href="#top"
-          onClick={(e) => {
-            e.preventDefault();
-            handleSwitchTab('overview');
-          }}
-          className="font-cartography text-xl font-bold tracking-tight text-[#231C14] whitespace-nowrap shrink-0"
-        >
-          MythosCartograph
-        </a>
+      {/* Top Bar: Brand & Active Breadcrumb on Left, Global Productivity Actions on Right */}
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b border-[#D8CBB3] print:hidden">
+        <div className="flex items-center gap-4 min-w-0">
+          <a
+            href="#top"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSwitchTab('overview');
+            }}
+            className="font-cartography text-xl font-bold tracking-tight text-[#231C14] whitespace-nowrap shrink-0"
+          >
+            MythosCartograph
+          </a>
 
-        <div className="hidden md:flex items-center gap-2 text-xs text-[#695A47] truncate">
-          <span className="font-semibold text-[#231C14] truncate">
-            {project.worldName}
-          </span>
-          <span aria-hidden="true">/</span>
-          <span className="text-[#9E2A2B] font-semibold">{activeTabLabel}</span>
+          <div className="hidden lg:flex items-center gap-2 text-xs text-[#695A47] truncate">
+            <span className="text-[#D8CBB3]" aria-hidden="true">
+              |
+            </span>
+            <span className="font-semibold text-[#231C14] truncate">
+              {project.worldName}
+            </span>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#9E2A2B] font-semibold">{activeTabLabel}</span>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          {/* 1. Omni-Search Ctrl+K Trigger */}
           <button
             type="button"
-            onClick={handleExportWorldJson}
-            className="px-4 py-2 text-xs font-semibold text-white bg-[#9E2A2B] rounded-lg hover:bg-[#7E2021] transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            onClick={() => setOmniSearchOpen(true)}
+            className="px-3 py-1.5 text-xs bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            title="Pencarian Global Lintas Entitas, Bab, Timeline & Pin Peta (Ctrl+K)"
           >
-            Ekspor World JSON
+            <Search className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <span>Cari di Dunia...</span>
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono-tabular bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#695A47]">
+              Ctrl+K
+            </kbd>
+          </button>
+
+          {/* 2. Multi-World Project & Snapshot Manager Trigger */}
+          <button
+            type="button"
+            onClick={() => setProjectManagerOpen(true)}
+            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            title="Kelola Multi-Proyek Dunia & Slot Snapshot Versi"
+          >
+            <FolderKanban className="w-3.5 h-3.5 text-[#B5832A]" />
+            <span>Proyek & Snapshot ({savedWorlds.length})</span>
+          </button>
+
+          {/* 3. Studio Ekspor Markdown, Cetak PDF & JSON */}
+          <button
+            type="button"
+            onClick={() => setExportStudioOpen(true)}
+            className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#9E2A2B] rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+          >
+            <FileDown className="w-3.5 h-3.5" />
+            <span>Ekspor & Cetak Buku</span>
           </button>
         </div>
       </header>
 
       {/* Main Content Container (1440px baseline) */}
-      <main className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5 space-y-5">
+      <main
+        className={`flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5 space-y-5 ${
+          exportStudioOpen ? 'print:hidden' : ''
+        }`}
+      >
         {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible */}
         <nav
           aria-label="Navigasi Bagian World Bible"
@@ -819,18 +1037,27 @@ export default function App() {
       </main>
 
       {/* Quiet Editorial Footer */}
-      <footer className="border-t border-[#D8CBB3] bg-[#EFE7D6]/60 px-6 py-4 mt-12">
+      <footer className="border-t border-[#D8CBB3] bg-[#EFE7D6]/60 px-6 py-4 mt-12 print:hidden">
         <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-[#695A47]">
           <span>
             MythosCartograph — Studio World Bible, Peta Abad Pertengahan & Arsitektur Cerita
           </span>
-          <button
-            type="button"
-            onClick={handleExportWorldJson}
-            className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
-          >
-            Cadangkan World Bible (.JSON)
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              type="button"
+              onClick={() => setProjectManagerOpen(true)}
+              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
+            >
+              Manajer Proyek & Snapshot ({savedWorlds.length} Dunia)
+            </button>
+            <button
+              type="button"
+              onClick={() => setExportStudioOpen(true)}
+              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
+            >
+              Ekspor Buku (.MD / PDF / .JSON)
+            </button>
+          </div>
         </div>
       </footer>
 
@@ -1065,6 +1292,55 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Modal 3: Pencarian Global Kilat (Ctrl+K Omni-Search) */}
+      <GlobalOmniSearchModal
+        isOpen={omniSearchOpen}
+        onClose={() => setOmniSearchOpen(false)}
+        project={project}
+        onSelectEntity={handleNavigateToEntity}
+        onSelectChapter={(chId) => {
+          setSelectedChapterId(chId);
+          handleSwitchTab('outliner');
+        }}
+        onOpenTimelineEvent={() => handleSwitchTab('timeline')}
+        onOpenMapStamp={(stamp) => {
+          if (stamp.linkedEntityId) {
+            handleNavigateToEntity(stamp.linkedEntityId);
+          } else {
+            handleSwitchTab('map');
+          }
+        }}
+      />
+
+      {/* Modal 4: Manajer Multi-Proyek Dunia & Slot Snapshot Versi */}
+      <MultiWorldProjectManagerModal
+        isOpen={projectManagerOpen}
+        onClose={() => setProjectManagerOpen(false)}
+        activeProject={project}
+        savedWorlds={savedWorlds}
+        snapshots={snapshots}
+        onSwitchWorld={handleSwitchWorld}
+        onCreateNewWorld={handleCreateCustomNewWorld}
+        onDuplicateWorld={handleDuplicateWorld}
+        onDeleteWorld={handleDeleteWorld}
+        onRestoreStarterWorld={handleResetStarterWorld}
+        onTriggerImportJson={() => fileInputRef.current?.click()}
+        onExportWorld={handleExportSpecificWorldJson}
+        onCreateSnapshot={handleCreateSnapshot}
+        onRestoreSnapshot={handleRestoreSnapshot}
+        onDeleteSnapshot={handleDeleteSnapshot}
+      />
+
+      {/* Modal 5: Studio Ekspor Buku World Bible, Naskah Markdown & Cetak PDF */}
+      <WorldExportStudioModal
+        isOpen={exportStudioOpen}
+        onClose={() => setExportStudioOpen(false)}
+        project={project}
+        onExportJson={handleExportWorldJson}
+        onTriggerImportJson={() => fileInputRef.current?.click()}
+        onShowToast={showToast}
+      />
     </div>
   );
 }

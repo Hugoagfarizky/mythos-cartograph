@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana implementasi penyempurnaan tab Alur Bab (ChapterOutlinerView) dengan Anatomi Struktur Naratif Bab (Tujuan Bab, Konflik Utama, Cliffhanger Akhir, Foreshadowing Rahasia, Waktu Cerita, POV & Lokasi Utama, Bar Progres Kata), Pengelola Urutan Adegan Interaktif (Pilih Hibrida POV & Lokasi dari World Bible, Tujuan/Konflik/Hasil Adegan, Mode Edit & Urutkan Naik/Turun Bab/Adegan), Filter Babak/Status di Direktori Kiri, serta Deteksi Otomatis Entitas [[Kurung Ganda]] & Bilah Sisipkan Cepat World Bible.",
-  "updatedAt":  "2026-11-09T09:21:50.658612796Z",
+  "summary":  "Rencana implementasi peningkatan produktivitas global MythosCartograph: Pencarian Global Kilat (Ctrl+K / Omni-Search), Studio Ekspor Buku World Bible & Naskah Bab (Markdown & Mode Cetak/PDF), serta Manajer Multi-Proyek Dunia & Slot Snapshot Versi.",
+  "updatedAt":  "2026-11-09T09:56:57.548681962Z",
   "requestFeedback":  true,
   "userFacing":  true
 }
