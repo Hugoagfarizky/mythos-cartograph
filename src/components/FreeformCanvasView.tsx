@@ -56,140 +56,12 @@ const CANVAS_HEIGHT = 820;
 export const DEFAULT_NOTEBOOK_PAGES: NotebookPage[] = [
   {
     id: 'page-1',
-    title: '1. Catatan & Diagram Sistem Sihir',
+    title: '1. Halaman Catatan Baru',
     updatedAt: 'Hari ini',
     paperStyle: 'plain',
-    docContent: `### Catatan Riset: Hukum Resonansi & Gerhana Kedua
-Tuliskan catatan bebas, draf adegan, rumus sihir, atau daftar tugas cerita Anda di sini seperti di Google Docs / OneNote. Anda juga dapat langsung **mencoret-coret di atas kertas ini** atau menggambar di kanvas menggunakan toolbar Paint di atas!
-
-- Setiap rapalan [[Resonansi Eteris Astral]] membutuhkan pantulan cahaya langsung dari Matahari atau Bulan Kembar.
-- **Peringatan Konflik Bab Berikutnya:** [[Archmage Vaelen Thorne]] menyadari bahwa [[Astrolabe Api Surya]] telah disabotase dari dalam [[Solis Prime]].
-- Pertanyaan Plot yang Harus Dijawab:
-  - Siapa informan [[Empress Seraphina Valorian]] di dalam [[Ordo Cakrawala Perak]]?
-  - Bagaimana cara bangsa [[Dvergr Besi-Bintang]] menempa ulang cincin ketiga sebelum [[Konvergensi Gerhana Merah]] tiba?`,
-    textBlocks: [
-      {
-        id: 'tb-1',
-        title: 'Rumus Inti Astrolabe',
-        tagLabel: 'Catatan Pinggir OneNote',
-        content:
-          'Lingkar Dalam = Cahaya Surya\nLingkar Tengah = Bulan Kembar\nInti Retak = Memicu Kristalisasi!',
-        x: 680,
-        y: 55,
-        width: 260,
-        color: 'amber',
-      },
-      {
-        id: 'tb-2',
-        title: 'Ide Twist Babak III',
-        tagLabel: 'Kotak Teks Bebas',
-        content:
-          'Bagaimana jika [[Tombak Fajar Solis]] sebenarnya adalah kunci pembuka segel kota bawah laut?',
-        x: 680,
-        y: 350,
-        width: 260,
-        color: 'crimson',
-      },
-    ],
-    drawings: [
-      // Outer magic circle in brass gold
-      {
-        id: 'drw-1',
-        tool: 'circle',
-        color: '#D49B35',
-        width: 3,
-        opacity: 1,
-        filled: false,
-        start: { x: 220, y: 210 },
-        end: { x: 460, y: 450 },
-      },
-      // Inner magic circle in crimson
-      {
-        id: 'drw-2',
-        tool: 'circle',
-        color: '#C83E3B',
-        width: 2.5,
-        opacity: 1,
-        filled: false,
-        start: { x: 265, y: 255 },
-        end: { x: 415, y: 405 },
-      },
-      // Inscribed square in teal
-      {
-        id: 'drw-3',
-        tool: 'rect',
-        color: '#3B8EA5',
-        width: 2,
-        opacity: 1,
-        filled: false,
-        start: { x: 255, y: 245 },
-        end: { x: 425, y: 415 },
-      },
-      // Arrow pointing from circle to the side note
-      {
-        id: 'drw-4',
-        tool: 'arrow',
-        color: '#C83E3B',
-        width: 3,
-        opacity: 1,
-        start: { x: 465, y: 295 },
-        end: { x: 665, y: 135 },
-      },
-      // Highlighter mark under center
-      {
-        id: 'drw-5',
-        tool: 'highlighter',
-        color: '#F2C94C',
-        width: 22,
-        opacity: 0.35,
-        points: [
-          { x: 250, y: 490 },
-          { x: 435, y: 490 },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'page-2',
-    title: '2. Denah Pertempuran & Formasi',
-    updatedAt: 'Hari ini',
-    paperStyle: 'plain',
-    docContent: `### Sketsa Taktis: Pengepungan Gerbang Nidavellir
-Gunakan lembar kanvas ini untuk merancang posisi pasukan, denah ruangan kastil, atau alur pergerakan karakter selama adegan aksi.
-
-- **Sayap Utara:** Pasukan [[Kekaisaran Gondoria]] menahan jembatan gantung.
-- **Jalur Bawah Tanah:** [[Kaelen Vance]] menyusup lewat terowongan tambang tua menuju ruang takhta [[Kerajaan Bawah Tanah Nidavellir]].`,
-    textBlocks: [
-      {
-        id: 'tb-201',
-        title: 'Benteng Gerbang Besi',
-        tagLabel: 'Titik Pertahanan',
-        content: 'Dijaga oleh 3 Golem Perunggu & Meriam Rune.',
-        x: 420,
-        y: 120,
-        width: 240,
-        color: 'teal',
-      },
-    ],
-    drawings: [
-      {
-        id: 'drw-201',
-        tool: 'rect',
-        color: '#3B8EA5',
-        width: 3,
-        filled: false,
-        start: { x: 120, y: 110 },
-        end: { x: 350, y: 280 },
-      },
-      {
-        id: 'drw-202',
-        tool: 'arrow',
-        color: '#C83E3B',
-        width: 3.5,
-        start: { x: 140, y: 390 },
-        end: { x: 230, y: 290 },
-      },
-    ],
+    docContent: '',
+    textBlocks: [],
+    drawings: [],
   },
 ];
 
@@ -197,7 +69,7 @@ export const DEFAULT_STARTER_FREE_CANVAS: FreeCanvasData = {
   boardTitle: 'Buku Catatan & Studio Oret-Oret (Docs · OneNote · Paint)',
   activePageId: 'page-1',
   pages: DEFAULT_NOTEBOOK_PAGES,
-  cards: DEFAULT_NOTEBOOK_PAGES[0].textBlocks,
+  cards: [],
   links: [],
   strokes: [],
   zones: [],

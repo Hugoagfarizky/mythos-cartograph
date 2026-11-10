@@ -70,9 +70,9 @@ import {
   computeWorldHealthMetrics,
 } from './components/GlobalProductivityModals';
 
-const STORAGE_KEY = 'mythos_cartograph_world_v1';
-const WORLDS_LIBRARY_KEY = 'mythos_cartograph_worlds_library_v1';
-const SNAPSHOTS_KEY = 'mythos_cartograph_snapshots_v1';
+const STORAGE_KEY = 'mythos_cartograph_world_clean_v2';
+const WORLDS_LIBRARY_KEY = 'mythos_cartograph_worlds_library_clean_v2';
+const SNAPSHOTS_KEY = 'mythos_cartograph_snapshots_clean_v2';
 const THEME_STORAGE_KEY = 'mythos_cartograph_theme_v1';
 
 export type WorkspaceTab =
@@ -214,105 +214,18 @@ interface BrainstormIdea {
 export default function App() {
   const [project, setProject] = useState<WorldProject>(() => {
     try {
+      // Hapus cache cerita contoh lama bila masih ada
+      localStorage.removeItem('mythos_cartograph_world_v1');
+      localStorage.removeItem('mythos_cartograph_worlds_library_v1');
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved) as WorldProject;
-        if (parsed && Array.isArray(parsed.entities) && parsed.mapData) {
-          if (parsed.id === STARTER_WORLD_PROJECT.id) {
-            const existingIds = new Set(parsed.entities.map((e) => e.id));
-            const missingStarterEntities = STARTER_WORLD_PROJECT.entities.filter(
-              (e) => !existingIds.has(e.id)
-            );
-            const existingTimelineIds = new Set(
-              (parsed.timeline || []).map((t) => t.id)
-            );
-            const missingStarterTimeline =
-              STARTER_WORLD_PROJECT.timeline.filter(
-                (t) => !existingTimelineIds.has(t.id)
-              );
-            const enrichedTimeline = [
-              ...(parsed.timeline || []).map((t) => {
-                const starterMatch = STARTER_WORLD_PROJECT.timeline.find(
-                  (st) => st.id === t.id
-                );
-                return starterMatch ? { ...starterMatch, ...t } : t;
-              }),
-              ...missingStarterTimeline,
-            ];
-            const existingRelIds = new Set(
-              (parsed.relationships || []).map((r) => r.id)
-            );
-            const missingStarterRels =
-              STARTER_WORLD_PROJECT.relationships.filter(
-                (r) => !existingRelIds.has(r.id)
-              );
-            const enrichedRelationships = [
-              ...(parsed.relationships || []).map((r) => {
-                const starterMatch = STARTER_WORLD_PROJECT.relationships.find(
-                  (sr) => sr.id === r.id
-                );
-                return starterMatch ? { ...starterMatch, ...r } : r;
-              }),
-              ...missingStarterRels,
-            ];
-            const existingPosIds = new Set(
-              (parsed.nodePositions || []).map((p) => p.entityId)
-            );
-            const missingStarterPos =
-              STARTER_WORLD_PROJECT.nodePositions.filter(
-                (p) => !existingPosIds.has(p.entityId)
-              );
-            const existingChapterIds = new Set(
-              (parsed.chapters || []).map((c) => c.id)
-            );
-            const missingStarterChapters =
-              STARTER_WORLD_PROJECT.chapters.filter(
-                (c) => !existingChapterIds.has(c.id)
-              );
-            const enrichedChapters = [
-              ...(parsed.chapters || []).map((c) => {
-                const starterCh = STARTER_WORLD_PROJECT.chapters.find(
-                  (sc) => sc.id === c.id
-                );
-                if (!starterCh) return c;
-                return {
-                  ...starterCh,
-                  ...c,
-                  scenes: (c.scenes || []).map((scItem) => {
-                    const starterScene = starterCh.scenes.find(
-                      (ss) => ss.id === scItem.id
-                    );
-                    return starterScene
-                      ? { ...starterScene, ...scItem }
-                      : scItem;
-                  }),
-                };
-              }),
-              ...missingStarterChapters,
-            ];
-            return {
-              ...parsed,
-              entities:
-                missingStarterEntities.length > 0
-                  ? [...parsed.entities, ...missingStarterEntities]
-                  : parsed.entities,
-              timeline: enrichedTimeline,
-              relationships: enrichedRelationships,
-              nodePositions: [
-                ...(parsed.nodePositions || []),
-                ...missingStarterPos,
-              ],
-              chapters: enrichedChapters,
-              dynastyTrees:
-                parsed.dynastyTrees && parsed.dynastyTrees.length > 0
-                  ? parsed.dynastyTrees
-                  : STARTER_WORLD_PROJECT.dynastyTrees,
-              mysteryPlots:
-                parsed.mysteryPlots && parsed.mysteryPlots.length > 0
-                  ? parsed.mysteryPlots
-                  : STARTER_WORLD_PROJECT.mysteryPlots,
-            };
-          }
+        if (
+          parsed &&
+          parsed.id !== 'world-aethelia-01' &&
+          Array.isArray(parsed.entities) &&
+          parsed.mapData
+        ) {
           return parsed;
         }
       }
@@ -550,9 +463,9 @@ export default function App() {
 
   const handleResetStarterWorld = () => {
     setProject(STARTER_WORLD_PROJECT);
-    setSelectedEntityId(STARTER_WORLD_PROJECT.entities[0].id);
-    setSelectedChapterId(STARTER_WORLD_PROJECT.chapters[0].id);
-    showToast('Dunia contoh "Kronik Benua Aethelia" telah dipulihkan.');
+    setSelectedEntityId(STARTER_WORLD_PROJECT.entities[0]?.id || '');
+    setSelectedChapterId(STARTER_WORLD_PROJECT.chapters[0]?.id || '');
+    showToast('Proyek telah direset ke kanvas kosong bersih.');
   };
 
   const createNewWorldObject = (meta?: {
@@ -564,45 +477,25 @@ export default function App() {
     const cols = 36;
     const rows = 22;
     const blankCells: TerrainType[] = new Array(cols * rows).fill('sea');
-    const starterEntity: LoreEntity = {
-      id: `ent-${Date.now()}`,
-      category: 'character',
-      title: 'Tokoh Utama Pertama',
-      subtitle: 'Pengembara Dunia Baru',
-      summary: 'Tokoh sentral yang memulai perjalanan di semesta baru Anda.',
-      content:
-        'Mulai tuliskan latar belakang karakter, sejarah dunia, atau aturan kekuatan di sini.',
-      tags: ['Protagonis'],
-      attributes: {
-        role: 'Protagonis',
-        status: 'Hidup',
-      },
-      updatedAt: new Date().toISOString().slice(0, 10),
-    };
 
-    const firstChapId = `chap-${Date.now()}`;
     return {
       id: `world-${Date.now()}`,
       worldName: meta?.worldName || 'Semesta Cerita Baru',
       tagline:
         meta?.tagline ||
         'Tuliskan premis utama dunia fantasi atau fiksi Anda di sini',
-      genre: meta?.genre || 'Fantasi / Fiksi',
+      genre: meta?.genre || 'Fantasi',
       calendarSystem: meta?.calendarSystem || 'Tahun ke-1 Era Baru',
-      authorName: project.authorName || 'Penulis',
+      authorName: project.authorName || '',
       heroBannerUrl: project.heroBannerUrl,
-      epigraphQuote:
-        'Tuliskan kutipan epigrafi atau ramalan pembuka dunia Anda di sini.',
-      epigraphSource: 'Kronik Kuno Bab I',
-      centralConflict:
-        'Tuliskan konflik utama yang menggerakkan cerita di dunia ini. Gunakan [[Tokoh Utama Pertama]] untuk menautkan entitas.',
-      storyThemes: 'Takdir, Kekuasaan, dan Pengorbanan',
-      cosmologyCreationMyth:
-        'Tuliskan mitos penciptaan semesta atau sejarah awal mula terbentuknya dunia Anda.',
-      cosmologyLaws:
-        'Tuliskan aturan fundamental alam semesta, batas sihir, atau hukum kosmik yang tidak dapat dilanggar.',
+      epigraphQuote: '',
+      epigraphSource: '',
+      centralConflict: '',
+      storyThemes: '',
+      cosmologyCreationMyth: '',
+      cosmologyLaws: '',
       scratchpadNotes: [],
-      entities: [starterEntity],
+      entities: [],
       mapData: {
         mapTitle: `Peta ${meta?.worldName || 'Dunia Baru'}`,
         subtitle: 'Kanvas Kartografi Semesta',
@@ -613,36 +506,25 @@ export default function App() {
         stamps: [],
         regionLabels: [],
         rivers: [],
+        routes: [],
       },
       relationships: [],
-      nodePositions: [{ entityId: starterEntity.id, x: 450, y: 260 }],
+      nodePositions: [],
       timeline: [],
-      chapters: [
-        {
-          id: firstChapId,
-          chapterNumber: 1,
-          act: 'Babak I',
-          title: 'Awal Mula Perjalanan',
-          status: 'Rencana',
-          synopsis: 'Bab pembuka yang memperkenalkan dunia dan tokoh utama.',
-          draftNotes: 'Catatan adegan untuk [[Tokoh Utama Pertama]].',
-          featuredEntityIds: [starterEntity.id],
-          wordCountTarget: 3000,
-          currentWordCount: 0,
-          scenes: [],
-        },
-      ],
+      chapters: [],
+      dynastyTrees: [],
+      mysteryPlots: [],
     };
   };
 
   const handleCreateBlankWorld = () => {
     const blankWorld = createNewWorldObject();
     setProject(blankWorld);
-    setSelectedEntityId(blankWorld.entities[0].id);
-    setSelectedChapterId(blankWorld.chapters[0].id);
+    setSelectedEntityId('');
+    setSelectedChapterId('');
     setActiveTab('overview');
     showToast(
-      'Proyek World Bible baru berhasil dibuat (proyek lama tetap tersimpan di Manajer Proyek).'
+      'Proyek World Bible kosong baru berhasil dibuat.'
     );
   };
 
@@ -654,8 +536,8 @@ export default function App() {
   }) => {
     const newWorld = createNewWorldObject(meta);
     setProject(newWorld);
-    setSelectedEntityId(newWorld.entities[0].id);
-    setSelectedChapterId(newWorld.chapters[0].id);
+    setSelectedEntityId('');
+    setSelectedChapterId('');
     setActiveTab('overview');
     showToast(`Proyek dunia "${newWorld.worldName}" berhasil dibuat dan dibuka.`);
   };
