@@ -1170,6 +1170,222 @@ Dua tahun lalu, [[Archmage Vaelen Thorne]] menemukan retakan halus pada cincin t
       content: `Di benua Aethelia, bahasa bukan sekadar alat komunikasi melainkan kerangka hukum kekuatan. Para bangsawan [[Kekaisaran Gondoria]] dan sarjana [[Ordo Cakrawala Perak]] menulis menggunakan **Aksara Bintang Aethel**, sedangkan para empu [[Dvergr Besi-Bintang]] memahat **Glif Khaz-Runa** yang kaku dan bersudut tajam di atas baja.`,
       updatedAt: '2026-11-08',
     },
+
+    // 10. COSMIC ENTITIES (PILAR I — ENTITAS KOSMIK, DIBEDAKAN DARI DEWA-DEWI)
+    {
+      id: 'cos-aethel-vorn',
+      category: 'cosmic_entity',
+      title: 'Aethel-Vorn, Bintang Purba yang Terbelah',
+      subtitle: 'Wujud Primordial Pra-Semesta · Sumber Inti Besi, Akar Memori & Api Langit',
+      summary:
+        'Entitas astral raksasa dari luar ruang-waktu yang jatuh pada awal penciptaan, terbelah menjadi lempeng benua Aethelia dan melahirkan hukum [[Resonansi Eteris Astral]].',
+      tags: ['Primordial', 'Asal Semesta', 'Entitas Kosmik'],
+      attributes: {
+        cosmicScale: 'Primordial Pembentuk Realitas (Di Atas Dewa-Dewi)',
+        originPlane: 'Samudra Astral Luar Cakrawala (Pra-Penciptaan)',
+        cosmicLawControlled: 'Hukum Konservasi Cahaya & Resonansi Eteris Tiga Jalur (Solar, Lunar, Sidereal)',
+        manifestationOmen: 'Getaran frekuensi 7-Oktaf pada seluruh bijih besi-bintang dan menyalanya cincin [[Astrolabe Api Surya]] tanpa cahaya matahari.',
+        mortalAttitude: 'Tidur Abadi / Tidak Memiliki Kehendak Moral Manusia',
+        existentialThreatLevel: 'Skala Kiamat Kosmik (Jika Ketiga Pecahan Intinya Menyatu Paksa)',
+      },
+      content: `Berbeda dengan para dewa-dewi yang disembah di kuil, **Aethel-Vorn** bukanlah sosok berpribadi yang mendengarkan doa, melainkan wujud kosmik purba yang tubuhnya sendiri menjadi fondasi dunia.
+
+Menurut catatan tertua [[Ordo Cakrawala Perak]], ketika Aethel-Vorn jatuh menembus tirai dimensi:
+- **Jantung Logamnya** membeku menjadi barisan pegunungan [[Kerajaan Bawah Tanah Nidavellir]] yang ditambang oleh [[Dvergr Besi-Bintang]].
+- **Saraf Cahayanya** menjalar menjadi jaringan akar Pohon Memori di [[Rimba Bayang-Bayang (Shadowwood)]] tempat tinggal [[Sylvan Aelfir]].
+- **Napas Apinya** terlempar ke orbit langit menjadi Matahari dan Bulan Kembar.
+
+Para cendekiawan seperti [[Archmage Vaelen Thorne]] menyadari bahwa bencana [[Konvergensi Gerhana Merah]] sebenarnya adalah refleks kejang dari tubuh Aethel-Vorn yang terluka akibat penarikan eter berlebih.`,
+      updatedAt: '2026-11-10',
+    },
+    {
+      id: 'cos-nyx-vora',
+      category: 'cosmic_entity',
+      title: 'Nyx-Vora, Sang Penenun Kehampaan Gerhana',
+      subtitle: 'Anomali Dimensi Balik Langit · Pemangsa Gema Memori & Cahaya Bintang',
+      summary:
+        'Entitas kosmik nirwujud yang bersemayam di celah bayangan antara kedua bulan dan hanya dapat menyentuh dunia fana saat terjadi [[Konvergensi Gerhana Merah]].',
+      tags: ['Entitas Void', 'Gerhana Merah', 'Anomali Kosmik'],
+      attributes: {
+        cosmicScale: 'Entitas Luar Dimensi (Penghuni Retakan Ruang-Waktu)',
+        originPlane: 'Palung Kehampaan Antara Dua Bulan (Umbral Rift)',
+        cosmicLawControlled: 'Entropi Cahaya, Pembiasan Gravitasi & Penghapusan Memori Sejarah',
+        manifestationOmen: 'Munculnya cincin korona merah darah di sekeliling matahari dan membisunya seluruh kompas astral.',
+        mortalAttitude: 'Predator Pasif (Menyerap Energi Kosmik yang Bocor dari Dunia Fana)',
+        existentialThreatLevel: 'Ancaman Eksistensial Lintas Benua',
+      },
+      content: `**Nyx-Vora** tidak pernah menciptakan agama maupun kuil resmi, namun bisikan keberadaannya ditakuti oleh seluruh astronom di [[Puncak Wyvern]]. Ia adalah kehampaan sadar yang tertarik pada kebocoran energi [[Astrolabe Api Surya]].
+
+Ketika [[Konvergensi Gerhana Merah]] meletus pada Tahun 0 PG, celah dimensi di atas [[Reruntuhan Menara Gerhana]] terbuka selama tiga belas menit, memungkinkan sulur gravitasi Nyx-Vora menenggelamkan pesisir barat menjadi Teluk Naga.`,
+      updatedAt: '2026-11-10',
+    },
+
+    // 11. DEITIES & PANTHEON (PILAR I — DEWA-DEWI, DIBEDAKAN DARI ENTITAS KOSMIK)
+    {
+      id: 'dei-sol-aureon',
+      category: 'deity',
+      title: 'Sol-Aureon, Sang Hakim Mahkota Surya',
+      subtitle: 'Dewa Tertinggi Cahaya Siang, Sumpah Ksatria & Kedaulatan Hukum',
+      summary:
+        'Dewa utama yang dipuja di [[Kekaisaran Gondoria]] sebagai pelindung ketertiban peradaban, pengawas sumpah militer, dan pemberi berkah api suci bagi [[Legiun Surya Cinnabar]].',
+      tags: ['Pantheon Utama', 'Dewa Matahari', 'Gondoria'],
+      attributes: {
+        divineRank: 'Dewa Tertinggi Pantheon Surya (Sovereign Deity)',
+        divineDomains: 'Matahari Zenith, Keadilan Hukum, Sumpah Militer & Ketertiban Imperium',
+        sacredSymbol: 'Cakram Matahari Emas Bersayap Tombak Kembar di atas Marmer Putih',
+        mainTempleOrCult: 'Katedral Agung Sol-Aurea di [[Solis Prime]] (Sinode Gereja Cahaya)',
+        holyDayOrFestival: 'Hari Raya Titik Balik Surya (Zenith Musim Panas)',
+        divineBlessing: 'Memberikan ketahanan terhadap ilusi kabut malam serta memperkuat resonansi Jalur Solar pada senjata para ksatria.',
+        divineTabooOrCurse: 'Melanggar sumpah darah yang diucapkan di bawah sinar matahari akan memicu *Kebutaan Abu* pada mata pelanggarnya.',
+      },
+      content: `Berbeda dengan entitas kosmik seperti [[Aethel-Vorn, Bintang Purba yang Terbelah]] yang bersifat impersonal, **Sol-Aureon** diyakini oleh masyarakat [[Aethel-Born (Manusia Tinggi)]] sebagai sosok ilahi yang memiliki kesadaran, kehendak moral, dan ajaran hukum.
+
+Di [[Ibu Kota Solis Prime]], setiap kaisar dan maharani termasuk [[Empress Seraphina Valorian]] dinobatkan di bawah obelisk cermin Katedral Sol-Aurea sebagai mandat wakil Sol-Aureon di muka bumi.`,
+      updatedAt: '2026-11-10',
+    },
+    {
+      id: 'dei-sylva-lumina',
+      category: 'deity',
+      title: 'Sylva-Lumina, Dewi Bulan Kembar & Gema Memori',
+      subtitle: 'Penjaga Jiwa Leluhur, Embun Malam & Rahasia Kanopi Perak',
+      summary:
+        'Dewi pelindung bangsa [[Sylvan Aelfir]] di [[Persemakmuran Kanopi Eldath]] yang menuntun roh orang mati kembali ke dalam getah Pohon Memori.',
+      tags: ['Dewi Bulan', 'Sylvan Aelfir', 'Pelindung Hutan'],
+      attributes: {
+        divineRank: 'Dewi Pelindung Alam & Siklus Jiwa',
+        divineDomains: 'Bulan Kembar, Ingatan Leluhur, Penyembuhan Alkimia & Kabut Pelindung',
+        sacredSymbol: 'Dua Bulan Sabit Perak Mengapit Pohon Lumin-Oak Berbunga',
+        mainTempleOrCult: 'Altar Akar Pohon Memori Eldath di [[Rimba Bayang-Bayang (Shadowwood)]]',
+        holyDayOrFestival: 'Malam Konjungsi Purnama Perak (Ritus Penenunan Memori)',
+        divineBlessing: 'Menenangkan luka meridian jiwa dan membuka penglihatan jejak masa lalu melalui kelopak [[Bunga Lentera Malam]].',
+        divineTabooOrCurse: 'Membakar pohon suci atau mencuri kristal memori leluhur akan membuat pelaku tersesat selamanya di dalam kabut hutan.',
+      },
+      content: `Bagi bangsa [[Sylvan Aelfir]] seperti [[Kaelen dari Kabut Perak]], **Sylva-Lumina** adalah ibu rohani yang merawat ingatan dunia agar tidak hilang ditelan waktu. Ia tidak dipuja di dalam gedung batu, melainkan di bawah langit malam yang menembus celah kanopi [[Rimba Bayang-Bayang (Shadowwood)]].`,
+      updatedAt: '2026-11-10',
+    },
+    {
+      id: 'dei-khaz-moradin',
+      category: 'deity',
+      title: 'Khaz-Moradin, Sang Penempa Bintang Jatuh',
+      subtitle: 'Dewa Dapur Api Purba, Kriya Logam & Sumpah Ingot Perak',
+      summary:
+        'Sosok ilahi yang dihormati bangsa [[Dvergr Besi-Bintang]] di [[Kerajaan Bawah Tanah Nidavellir]] sebagai guru pertama yang mengajarkan cara memahat rune pada bijih meteorit.',
+      tags: ['Dewa Tempa', 'Dvergr', 'Nidavellir'],
+      attributes: {
+        divineRank: 'Dewa Kriya & Patron Bangsa Bawah Tanah',
+        divineDomains: 'Metalurgi, Mesin Roda Gigi, Bara Geotermal & Kejujuran Kontrak',
+        sacredSymbol: 'Palu Perak Berukir Glif Khaz-Runa di atas Landasan Bara',
+        mainTempleOrCult: 'Tungku Agung Kubah Pertama di [[Kerajaan Bawah Tanah Nidavellir]]',
+        holyDayOrFestival: 'Malam Pemadaman & Penyalaan Kembali Tungku Abadi (Setiap Pergantian Tahun)',
+        divineBlessing: 'Ketajaman insting saat menempa mahakarya pusaka dan ketahanan fisik terhadap panas ekstrem.',
+        divineTabooOrCurse: 'Memalsukan takaran logam mulia atau mengkhianati kontrak bersegel ingot dipercaya akan membuat tangan sang penempa gemetar selamanya.',
+      },
+      content: `Para empu [[Serikat Kriya Besi-Bintang]] meyakini bahwa setiap percikan api di bengkel [[Kerajaan Bawah Tanah Nidavellir]] adalah napas **Khaz-Moradin**. Doa kepadanya tidak diucapkan dengan kata-kata, melainkan dengan bunyi dentuman palu yang presisi di atas landasan baja.`,
+      updatedAt: '2026-11-10',
+    },
+
+    // 12. BESTIARY & MONSTERS (PILAR II — BESTIARY MONSTER & MAKHLUK MITOLOGI)
+    {
+      id: 'bst-leviathan-abu',
+      category: 'bestiary',
+      title: 'Leviathan Palung Abu Teluk Naga',
+      subtitle: 'Naga Laut Bercangkang Kaca-Merah · Penjaga Kawah Bawah Laut Aethelgard',
+      summary:
+        'Monster kolosal bermutasi eter yang mendiami dasar Teluk Naga tepat di atas reruntuhan ibu kota lama yang tenggelam saat [[Konvergensi Gerhana Merah]].',
+      tags: ['Monster Bencana', 'Naga Laut', 'Teluk Naga'],
+      attributes: {
+        creatureClass: 'Naga Laut Kolosal / Leviathan Bermutasi Eter',
+        dangerRating: 'Kelas Bencana Kontinental (Rank S+ · Pemusnah Armada)',
+        naturalHabitat: 'Reruntuhan Menara Gerhana',
+        attackAbilities:
+          'Menciptakan pusaran air gravitasi yang menelan kapal perang, menyemburkan uap air mendidih bercampur pasir kaca merah, serta memancarkan denyut gelombang kejut pemecah lambung baja.',
+        anatomicalWeakness:
+          'Celah insang ketiganya yang tersangkut pecahan pilar menara kuno tidak terlindung cangkang kaca; serangan petir atau tombak besi-bintang tepat saat ia menarik napas dalam akan melumpuhkan saraf motoriknya.',
+        monsterDrops: [
+          'Inti Mutiara Gerhana (Katalis Sihir Tingkat Sovereign)',
+          'Sisik Kaca-Merah Tahan Meriam',
+          'Darah Leviathan Penghantar Panas Abadi',
+          'Tulang Rusuk Raksasa (Bahan Lunas Kapal Perang)',
+        ],
+      },
+      content: `Sebelum Tahun 0 PG, makhluk ini hanyalah ular laut dalam biasa di Samudra Barat. Namun ketika [[Konvergensi Gerhana Merah]] meruntuhkan ibu kota Aethelgard ke dasar laut, radiasi [[Astrolabe Api Surya]] menyatu dengan tubuhnya dan mengubahnya menjadi **Leviathan Palung Abu**.
+
+Setiap kali cincin Astrolabe bergetar di [[Puncak Wyvern]], naga laut ini bangkit ke permukaan Teluk Naga, memaksa armada [[Kekaisaran Gondoria]] dan [[Republik Maritim Valdoria]] menghentikan pelayaran malam.`,
+      updatedAt: '2026-11-10',
+    },
+    {
+      id: 'bst-mist-stalker',
+      category: 'bestiary',
+      title: 'Serigala Kabut Pemangsa Memori (Mist-Stalker)',
+      subtitle: 'Predator Ilusi Rimba Shadowwood · Makhluk Mitologi Berbulu Serat Perak',
+      summary:
+        'Kawanan pemburu gaib di jantung [[Rimba Bayang-Bayang (Shadowwood)]] yang tidak memakan daging, melainkan menghisap ingatan dan orientasi arah mangsanya.',
+      tags: ['Makhluk Mitologi', 'Shadowwood', 'Predator Ilusi'],
+      attributes: {
+        creatureClass: 'Binatang Mitologi Sylvan / Roh Hutan Buas',
+        dangerRating: 'Sangat Berbahaya (Rank A · Mematikan bagi Pendatang Tanpa Pemandu)',
+        naturalHabitat: 'Rimba Bayang-Bayang (Shadowwood)',
+        attackAbilities:
+          'Tubuhnya dapat berubah menjadi kepulan kabut perak untuk menembus zirah, lolongannya meniru suara orang tercinta dari masa lalu korban, dan gigitannya menghapus ingatan jangka pendek.',
+        anatomicalWeakness:
+          'Sangat menghindari cahaya api murni dari Jalur Solar serta aroma bakaran kelopak [[Bunga Lentera Malam]] yang memadatkan wujud kabut mereka menjadi fisik biasa.',
+        monsterDrops: [
+          'Taring Embun Beku',
+          'Bulu Serat Perak (Bahan Jubah Siluman Ranger)',
+          'Kelenjar Suara Gema (Komponen Ramuan Pengingat)',
+        ],
+      },
+      content: `Para prajurit [[Legiun Surya Cinnabar]] yang nekat menerobos perbatasan [[Rimba Bayang-Bayang (Shadowwood)]] sering kali kembali ke barak dalam keadaan hidup tanpa luka fisik sedikit pun—tetapi mereka lupa nama mereka sendiri dan alasan mereka memegang pedang. Itulah jejak perburuan **Serigala Kabut Pemangsa Memori**.`,
+      updatedAt: '2026-11-10',
+    },
+
+    // 13. CULTURE & RELIGION (PILAR III — AGAMA, ADAT BUDAYA & TRADISI BANGSA)
+    {
+      id: 'cul-sinode-surya',
+      category: 'culture_religion',
+      title: 'Liturgi Surya Abadi & Adat Militer Gondoria',
+      subtitle: 'Agama Negara, Kode Etik Bangsawan & Festival Zenith di Kekaisaran Gondoria',
+      summary:
+        'Sistem kepercayaan resmi dan tatanan adat masyarakat [[Kekaisaran Gondoria]] yang memuja [[Sol-Aureon, Sang Hakim Mahkota Surya]] serta menjunjung tinggi kehormatan disiplin militer.',
+      tags: ['Agama Negara', 'Budaya Gondoria', 'Festival Surya'],
+      attributes: {
+        traditionType: 'Agama Institusional Negara & Tatanan Adat Kekaisaran',
+        practicingPeoples: 'Kekaisaran Gondoria',
+        coreBeliefsOrEthics:
+          'Cahaya adalah lambang keteraturan dan kejujuran; bayangan malam adalah sumber kekacauan. Setiap warga negara wajib menyumbangkan keahliannya—melalui pedang, pena, atau bajak sawah—demi menjaga perisai kemanusiaan.',
+        sacredRitualsAndFestivals:
+          '1. *Festival Zenith Surya*: Perayaan 7 hari di [[Solis Prime]] saat matahari berada di titik tertinggi, dimeriahkan turnamen tombak [[Legiun Surya Cinnabar]].\n2. *Ritus Sumpah Cermin*: Upacara penobatan pejabat dan ksatria di bawah pantulan lensa Katedral Sol-Aurea.',
+        socialTaboos:
+          'Memadamkan api lentera utama rumah tangga secara sengaja di malam gerhana dianggap membawa sial besar; merapal sihir Jalur Lunar tanpa izin resmi negara dipandang sebagai tindakan subversif.',
+        attireAndCuisine:
+          'Busana: Jubah linen putih bertepi sulaman emas dan merah cinnabar dengan bros matahari kuningan. Kuliner khas: Roti gandum panggang batu surya, daging rusa panggang rempah lada merah, dan anggur hangat Lembah Solis.',
+      },
+      content: `Kehidupan sehari-hari di [[Kekaisaran Gondoria]] diatur oleh dentang lonceng jam matahari dari menara-menara [[Solis Prime]]. Sejak masa pemerintahan [[Empress Seraphina Valorian]], tradisi keagamaan **Liturgi Surya Abadi** berpadu erat dengan budaya meritokrasi militer.`,
+      updatedAt: '2026-11-10',
+    },
+    {
+      id: 'cul-ritus-memori-eldath',
+      category: 'culture_religion',
+      title: 'Tradisi Penenunan Memori & Adat Kanopi Aelfir',
+      subtitle: 'Siklus Kehidupan, Pemakaman Kristal Getah & Hukum Ekologis Bangsa Sylvan Aelfir',
+      summary:
+        'Adat istiadat sakral bangsa [[Sylvan Aelfir]] di [[Persemakmuran Kanopi Eldath]] yang menyatukan spiritualitas [[Sylva-Lumina, Dewi Bulan Kembar & Gema Memori]] dengan kelestarian hutan purba.',
+      tags: ['Adat Sylvan', 'Ritus Memori', 'Budaya Aelfir'],
+      attributes: {
+        traditionType: 'Kepercayaan Alam Leluhur & Hukum Adat Persemakmuran',
+        practicingPeoples: 'Persemakmuran Kanopi Eldath',
+        coreBeliefsOrEthics:
+          'Tidak ada kehidupan yang benar-benar mati selama ingatannya masih mengalir di dalam akar Pohon Memori. Hutan bukanlah sumber daya yang dimiliki, melainkan keluarga tua yang harus dijaga.',
+        sacredRitualsAndFestivals:
+          '1. *Ritus Pengembalian Embun (Pemakaman Aelfir)*: Mengalirkan ekstrak memori mendiang ke dalam getah kristal pohon *Lumin-Oak*.\n2. *Malam Seribu Lentera Biru*: Festival musim gugur saat kelopak [[Bunga Lentera Malam]] mekar serentak.',
+        socialTaboos:
+          'Menebang pohon hidup tanpa izin Majelis Tetua, membawa api terbuka berskala besar ke bawah kanopi, serta membocorkan lokasi Pohon Memori kepada pihak asing.',
+        attireAndCuisine:
+          'Busana: Mantel serat daun tahan air berwarna hijau lumut dan perak bulan tanpa gesper besi berat. Kuliner khas: Sup jamur bioluminesensi, madu bunga hutan, dan teh embun perak.',
+      },
+      content: `Bagi bangsa [[Sylvan Aelfir]], sejarah tidak disimpan di ruang perpustakaan berdebu, melainkan dirayakan melalui **Tradisi Penenunan Memori**. Saat seorang pemuda Aelfir seperti [[Kaelen dari Kabut Perak]] mencapai usia dewasa, ia bermeditasi selama tiga malam di akar Pohon Memori untuk mendengarkan pengalaman hidup para leluhurnya.`,
+      updatedAt: '2026-11-10',
+    },
   ],
 
   mapData: {
@@ -1712,6 +1928,218 @@ Seraphina tahu ia tidak bisa menyerahkan relik itu kepada bangsa [[Dvergr Besi-B
             'Meyakinkan komandan pemanah [[Sylvan Aelfir]] bahwa Vaelen bukan lagi utusan [[Kekaisaran Gondoria]].',
           sceneOutcome:
             'Vaelen diizinkan masuk setelah menunjukkan lencana [[Ordo Cakrawala Perak]] dan menyerahkan tongkat senjatanya sementara.',
+        },
+      ],
+    },
+  ],
+
+  dynastyTrees: [
+    {
+      id: 'dyn-valorian',
+      houseName: 'Wangsa Diraja Valorian dari Solis Prime',
+      motto: 'Di Bawah Satu Matahari, Tak Ada Bayangan',
+      coatOfArms: 'Matahari Emas Bersayap Tombak Kembar di atas Beludru Merah Cinnabar',
+      originNation: 'Kekaisaran Gondoria',
+      ancestralSeat: 'Solis Prime',
+      overview:
+        'Dinasti penguasa [[Kekaisaran Gondoria]] yang naik takhta pasca runtuhnya dinasti lama pada tragedi [[Konvergensi Gerhana Merah]]. Mewarisi bakat darah Jalur Solar tingkat tinggi.',
+      members: [
+        {
+          id: 'mem-val-1',
+          name: 'Kaisar Aurelius I Valorian',
+          titleOrRole: 'Pendiri Dinasti Baru & Pemersatu Pesisir Barat',
+          generation: 1,
+          birthDeathYears: '15 PG – 89 PG',
+          status: 'Gugur',
+          successionStatus: 'Pendiri Wangsa',
+          parentIds: [],
+          spouseName: 'Permaisuri Lyanna dari Lembah Perak',
+          bloodlineTrait: 'Afinitas Meridian Surya Murni (Solar Sovereign)',
+          notes:
+            'Memindahkan ibu kota dari reruntuhan Aethelgard yang tenggelam ke [[Solis Prime]] dan menandatangani pakta awal dengan [[Ordo Cakrawala Perak]].',
+        },
+        {
+          id: 'mem-val-2',
+          name: 'Kaisar Cassian III Valorian',
+          titleOrRole: 'Ayahanda Seraphina · Kaisar Pelindung Perbatasan',
+          generation: 2,
+          birthDeathYears: '342 PG – 398 PG',
+          status: 'Gugur',
+          successionStatus: 'Penguasa Takhta',
+          parentIds: ['mem-val-1'],
+          spouseName: 'Permaisuri Helena Sol-Vane',
+          bloodlineTrait: 'Penguasa Teknik Keputusan Tombak Surya',
+          notes:
+            'Gugur akibat pengkhianatan berdarah di perbatasan timur yang meninggalkan trauma mendalam pada putrinya, [[Empress Seraphina Valorian]].',
+        },
+        {
+          id: 'mem-val-3',
+          name: 'Adipati Agung Valerius Valorian',
+          titleOrRole: 'Paman Seraphina · Pemimpin Fraksi Senat Konservatif',
+          generation: 2,
+          birthDeathYears: '348 PG – Sekarang',
+          status: 'Hidup',
+          successionStatus: 'Cabang Kadet',
+          parentIds: ['mem-val-1'],
+          spouseName: 'Lady Octavia dari Valdoria',
+          bloodlineTrait: 'Ahli Strategi Maritim & Diplomasi Senat',
+          notes:
+            'Secara terbuka mendukung keponakannya di Senat [[Solis Prime]], namun diam-diam menyiapkan garis suksesi alternatif bila kebijakan militer Seraphina gagal.',
+        },
+        {
+          id: 'mem-val-4',
+          name: 'Empress Seraphina Valorian',
+          titleOrRole: 'Maharani Mahkota Surya & Panglima Legiun Cinnabar',
+          generation: 3,
+          birthDeathYears: '373 PG – Sekarang (39 Tahun)',
+          status: 'Hidup',
+          successionStatus: 'Penguasa Takhta',
+          parentIds: ['mem-val-2'],
+          spouseName: 'Belum Menikah (Menolak Pernikahan Politik Senat)',
+          bloodlineTrait: 'Lingkar ke-6 Solar Valkyrie · Pengguna Keputusan Tombak Surya',
+          notes:
+            'Penguasa saat ini dari [[Kekaisaran Gondoria]]. Mantan murid [[Archmage Vaelen Thorne]] yang bertekad merebut [[Astrolabe Api Surya]].',
+          linkedCharacterId: 'char-seraphina',
+        },
+        {
+          id: 'mem-val-5',
+          name: 'Pangeran Julian Valorian',
+          titleOrRole: 'Adik Kandung Seraphina · Duta Besar yang Menghilang',
+          generation: 3,
+          birthDeathYears: '380 PG – Menghilang 409 PG',
+          status: 'Menghilang',
+          successionStatus: 'Pewaris Utama',
+          parentIds: ['mem-val-2'],
+          bloodlineTrait: 'Bakat Langka Resonansi Ganda (Solar & Lunar)',
+          notes:
+            'Menghilang secara misterius saat memimpin misi diplomatik rahasia ke [[Rimba Bayang-Bayang (Shadowwood)]] tiga tahun lalu.',
+        },
+      ],
+    },
+    {
+      id: 'dyn-ironstar',
+      houseName: 'Klan Empu Agung Ironstar dari Nidavellir',
+      motto: 'Tak Ada Mahkota Tanpa Besi Kami',
+      coatOfArms: 'Palu Meteorit Perak di Tengah Cincin Roda Gigi Kuningan',
+      originNation: 'Kerajaan Bawah Tanah Nidavellir',
+      ancestralSeat: 'Kubah Kazad-Vahl',
+      overview:
+        'Garis keturunan empu penempa tertinggi bangsa [[Dvergr Besi-Bintang]] yang merancang dan menjaga kunci rahasia [[Astrolabe Api Surya]].',
+      members: [
+        {
+          id: 'mem-iron-1',
+          name: 'Empu Leluhur Borin I Ironstar',
+          titleOrRole: 'Arsitek Utama Astrolabe Api Surya',
+          generation: 1,
+          birthDeathYears: '490 Pra-Gerhana – 210 Pra-Gerhana',
+          status: 'Gugur',
+          successionStatus: 'Pendiri Wangsa',
+          parentIds: [],
+          bloodlineTrait: 'Pendengaran Frekuensi Logam Bintang',
+          notes:
+            'Menempa cincin ketiga [[Astrolabe Api Surya]] dan menanamkan kunci pengaman darah Dvergr pada Tahun 340 Pra-Gerhana.',
+        },
+        {
+          id: 'mem-iron-2',
+          name: 'High Artificer Thrain Ironstar',
+          titleOrRole: 'Ketua Dewan Tujuh Palu & Pimpinan Serikat Kriya Besi-Bintang',
+          generation: 2,
+          birthDeathYears: '195 PG – Sekarang',
+          status: 'Hidup',
+          successionStatus: 'Penguasa Takhta',
+          parentIds: ['mem-iron-1'],
+          spouseName: 'Empu Lensa Brenna Brassgear',
+          bloodlineTrait: 'Penguasa Teknik Runtuhan Palu Bintang Nidavellir',
+          notes:
+            'Mengeluarkan ultimatum embargo baja terhadap [[Kekaisaran Gondoria]] demi menarik kembali Astrolabe sebelum tungku utama kubah membeku.',
+        },
+        {
+          id: 'mem-iron-3',
+          name: 'Durin Ironstar Muda',
+          titleOrRole: 'Insinyur Optik & Utusan Rahasia ke Puncak Wyvern',
+          generation: 3,
+          birthDeathYears: '350 PG – Sekarang',
+          status: 'Hidup',
+          successionStatus: 'Pewaris Utama',
+          parentIds: ['mem-iron-2'],
+          bloodlineTrait: 'Ahli Kalibrasi Lensa & Segel Glif Khaz-Runa',
+          notes:
+            'Diam-diam menjalin komunikasi dengan [[Archmage Vaelen Thorne]] untuk memperbaiki retakan cincin Astrolabe tanpa perang terbuka.',
+        },
+      ],
+    },
+  ],
+
+  mysteryPlots: [
+    {
+      id: 'mys-nubuat-eldath',
+      title: 'Nubuat Bait Keempat Pohon Memori Eldath',
+      category: 'Nubuat Kuno',
+      status: 'Petunjuk Ditanam',
+      prophecyVerseOrQuestion:
+        '“Ketika cincin ketiga Astrolabe berhenti berputar, bayang-bayang pohon perak akan menelan mahkota emas, dan laut barat akan kembali menagih kota yang tenggelam.”',
+      publicInterpretation:
+        'Senat [[Kekaisaran Gondoria]] menafsirkan bait ini sebagai ancaman invasi militer bangsa [[Sylvan Aelfir]] dari [[Rimba Bayang-Bayang (Shadowwood)]] untuk menghancurkan takhta [[Solis Prime]].',
+      trueCanonicalAnswer:
+        '“Bayang-bayang pohon perak” bukanlah pasukan perang Aelfir, melainkan jaringan akar Pohon Memori yang harus diperluas hingga ke bawah fondasi Solis Prime untuk menahan patahan benua agar tidak runtuh ke Teluk Naga.',
+      originEntityName: 'Sylva-Lumina, Dewi Bulan Kembar & Gema Memori',
+      payoffChapterId: 'chap-3',
+      clues: [
+        {
+          id: 'clue-1',
+          clueText:
+            'Jarum Astrolabe Api Surya di meja Vaelen bergetar pada frekuensi 7-Oktaf dan menunjuk lurus ke jantung Rimba Shadowwood di malam tanpa bulan.',
+          linkedChapterId: 'chap-1',
+          isRedHerring: false,
+          revealedStatus: 'Ditanam di Bab',
+        },
+        {
+          id: 'clue-2',
+          clueText:
+            'Klaim intelijen Senat Gondoria bahwa bangsa Sylvan Aelfir sedang mengumpulkan pasukan penyerbu di perbatasan barat (sebenarnya mereka sedang mengungsi dari kebocoran eter).',
+          linkedChapterId: 'chap-2',
+          isRedHerring: true,
+          revealedStatus: 'Ditanam di Bab',
+        },
+        {
+          id: 'clue-3',
+          clueText:
+            'Rekaman gema memori di akar Pohon Eldath memperlihatkan bahwa fondasi marmer Solis Prime dibangun tepat di atas simpul akar purba yang terputus.',
+          linkedChapterId: 'chap-3',
+          isRedHerring: false,
+          revealedStatus: 'Tersembunyi',
+        },
+      ],
+    },
+    {
+      id: 'mys-sabotase-gerhana',
+      title: 'Dalang Sejati Bencana Konvergensi Gerhana Merah (Tahun 0 PG)',
+      category: 'Misteri Utama',
+      status: 'Terungkap Sebagian',
+      prophecyVerseOrQuestion:
+        'Siapa yang sebenarnya membuka kunci pengaman cincin ketiga Astrolabe Api Surya pada Malam Tanpa Bayangan hingga menenggelamkan ibu kota lama Aethelgard?',
+      publicInterpretation:
+        'Buku sejarah resmi [[Kekaisaran Gondoria]] mencatat bahwa penyusup [[Sylvan Aelfir]] dan pembelot [[Ordo Cakrawala Perak]] menyabotase menara suar utama.',
+      trueCanonicalAnswer:
+        'Kanselir Agung Gondoria saat itu bekerja sama dengan leluhur [[Sindikat Gagak Senja]] untuk memaksa cincin ketiga Astrolabe melampaui batas demi menciptakan senjata pemusnah massal, namun kehilangan kendali saat [[Nyx-Vora, Sang Penenun Kehampaan Gerhana]] merespons dari balik bulan.',
+      originEntityName: 'Astrolabe Api Surya',
+      payoffChapterId: 'chap-3',
+      clues: [
+        {
+          id: 'clue-2a',
+          clueText:
+            'Lencana operasi hitam Sindikat Gagak Senja ditemukan di balik jubah kurir yang gugur di Puncak Wyvern, menggunakan kode sandi istana lama.',
+          linkedChapterId: 'chap-1',
+          isRedHerring: false,
+          revealedStatus: 'Ditanam di Bab',
+        },
+        {
+          id: 'clue-2b',
+          clueText:
+            'Kilas balik visual dari getah Pohon Memori Eldath menunjukkan tanda tangan Kanselir Agung pada perintah pembukaan segel Tahun 0 PG.',
+          linkedChapterId: 'chap-3',
+          isRedHerring: false,
+          revealedStatus: 'Tersembunyi',
         },
       ],
     },

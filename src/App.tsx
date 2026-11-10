@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  BookOpen,
   Castle,
   CheckCircle2,
   Compass,
   Crown,
+  Eye,
   Feather,
   FileDown,
   Flame,
   FolderKanban,
   Gem,
+  GitBranch,
   Hourglass,
   Loader2,
   Map,
@@ -20,7 +23,9 @@ import {
   Search,
   Shield,
   ShieldCheck,
+  Sparkles,
   Sun,
+  Swords,
   Users,
   Wand2,
   X,
@@ -52,6 +57,10 @@ import {
   FreeformCanvasView,
 } from './components/FreeformCanvasView';
 import {
+  DynastyTreeStudioView,
+  ProphecyAndMysteryTrackerView,
+} from './components/DynastyAndProphecyView';
+import {
   GlobalOmniSearchModal,
   LoreHealthInspectorModal,
   MultiWorldProjectManagerModal,
@@ -67,26 +76,36 @@ const THEME_STORAGE_KEY = 'mythos_cartograph_theme_v1';
 
 export type WorkspaceTab =
   | 'overview'
+  | 'cosmic_entity'
+  | 'deity'
   | 'map'
   | 'character'
   | 'race'
+  | 'bestiary'
   | 'faction'
   | 'power_system'
   | 'skill'
   | 'nation'
+  | 'culture_religion'
   | 'region'
   | 'history'
   | 'timeline'
   | 'encyclopedia'
   | 'graph'
+  | 'family_tree'
+  | 'prophecy_tracker'
   | 'outliner'
   | 'free_canvas';
 
 const LORE_CATEGORY_TABS: LoreCategory[] = [
+  'cosmic_entity',
+  'deity',
   'character',
   'race',
+  'bestiary',
   'faction',
   'nation',
+  'culture_religion',
   'region',
   'power_system',
   'skill',
@@ -106,18 +125,24 @@ interface SectionTabMeta {
 
 const SECTION_TABS: SectionTabMeta[] = [
   { id: 'overview', label: 'Overview', icon: Compass },
+  { id: 'cosmic_entity', label: 'Entitas Kosmik', icon: Sparkles },
+  { id: 'deity', label: 'Dewa-Dewi', icon: Sun },
   { id: 'map', label: 'Map Dunia', icon: Map },
   { id: 'character', label: 'Character', icon: Crown },
   { id: 'race', label: 'Ras', icon: Users },
+  { id: 'bestiary', label: 'Bestiary Monster', icon: Swords },
   { id: 'faction', label: 'Kelompok', icon: Shield },
   { id: 'power_system', label: 'Power System', icon: Flame },
   { id: 'skill', label: 'Skill', icon: Wand2 },
   { id: 'nation', label: 'Negara', icon: Castle },
+  { id: 'culture_religion', label: 'Agama & Budaya', icon: BookOpen },
   { id: 'region', label: 'Wilayah', icon: Mountain },
   { id: 'history', label: 'Sejarah', icon: ScrollText },
   { id: 'timeline', label: 'Timeline', icon: Hourglass },
   { id: 'encyclopedia', label: 'Artefak & Biota', icon: Gem },
   { id: 'graph', label: 'Peta Relasi', icon: Network },
+  { id: 'family_tree', label: 'Silsilah Dinasti', icon: GitBranch },
+  { id: 'prophecy_tracker', label: 'Tracker Nubuat', icon: Eye },
   { id: 'outliner', label: 'Alur Bab', icon: Feather },
   { id: 'free_canvas', label: 'Kanvas Bebas', icon: PenTool },
 ];
@@ -130,27 +155,49 @@ const FANTASY_PILLARS: Array<{
   {
     roman: 'I',
     title: 'Kosmos & Atlas',
-    tabs: SECTION_TABS.filter((t) => ['overview', 'map'].includes(t.id)),
+    tabs: SECTION_TABS.filter((t) =>
+      ['overview', 'cosmic_entity', 'deity', 'map'].includes(t.id)
+    ),
   },
   {
     roman: 'II',
     title: 'Penghuni & Arcana',
     tabs: SECTION_TABS.filter((t) =>
-      ['character', 'race', 'faction', 'power_system', 'skill'].includes(t.id)
+      [
+        'character',
+        'race',
+        'bestiary',
+        'faction',
+        'power_system',
+        'skill',
+      ].includes(t.id)
     ),
   },
   {
     roman: 'III',
     title: 'Geopolitik & Kronik',
     tabs: SECTION_TABS.filter((t) =>
-      ['nation', 'region', 'history', 'timeline', 'encyclopedia'].includes(t.id)
+      [
+        'nation',
+        'culture_religion',
+        'region',
+        'history',
+        'timeline',
+        'encyclopedia',
+      ].includes(t.id)
     ),
   },
   {
     roman: 'IV',
     title: 'Takdir, Naskah & Kanvas',
     tabs: SECTION_TABS.filter((t) =>
-      ['graph', 'outliner', 'free_canvas'].includes(t.id)
+      [
+        'graph',
+        'family_tree',
+        'prophecy_tracker',
+        'outliner',
+        'free_canvas',
+      ].includes(t.id)
     ),
   },
 ];
@@ -255,6 +302,14 @@ export default function App() {
                 ...missingStarterPos,
               ],
               chapters: enrichedChapters,
+              dynastyTrees:
+                parsed.dynastyTrees && parsed.dynastyTrees.length > 0
+                  ? parsed.dynastyTrees
+                  : STARTER_WORLD_PROJECT.dynastyTrees,
+              mysteryPlots:
+                parsed.mysteryPlots && parsed.mysteryPlots.length > 0
+                  ? parsed.mysteryPlots
+                  : STARTER_WORLD_PROJECT.mysteryPlots,
             };
           }
           return parsed;
@@ -1007,6 +1062,20 @@ export default function App() {
     if (tabId === 'map') return project.mapData.stamps.length;
     if (tabId === 'timeline') return project.timeline.length;
     if (tabId === 'graph') return project.relationships.length;
+    if (tabId === 'family_tree') {
+      return (
+        project.dynastyTrees ||
+        STARTER_WORLD_PROJECT.dynastyTrees ||
+        []
+      ).length;
+    }
+    if (tabId === 'prophecy_tracker') {
+      return (
+        project.mysteryPlots ||
+        STARTER_WORLD_PROJECT.mysteryPlots ||
+        []
+      ).length;
+    }
     if (tabId === 'outliner') return project.chapters.length;
     if (tabId === 'free_canvas') {
       return (
@@ -1150,14 +1219,7 @@ export default function App() {
         >
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
             {FANTASY_PILLARS.map((pillar) => {
-              const colSpan =
-                pillar.roman === 'I'
-                  ? 'xl:col-span-2'
-                  : pillar.roman === 'IV'
-                  ? 'xl:col-span-3'
-                  : pillar.roman === 'II'
-                  ? 'xl:col-span-4'
-                  : 'xl:col-span-3';
+              const colSpan = 'xl:col-span-3';
               return (
                 <div
                   key={pillar.roman}
@@ -1338,6 +1400,43 @@ export default function App() {
               setProject((prev) => ({ ...prev, nodePositions: nextPos }))
             }
             onSelectEntity={handleNavigateToEntity}
+          />
+        )}
+
+        {activeTab === 'family_tree' && (
+          <DynastyTreeStudioView
+            dynastyTrees={
+              project.dynastyTrees || STARTER_WORLD_PROJECT.dynastyTrees || []
+            }
+            entities={project.entities}
+            onUpdateDynastyTrees={(nextTrees) => {
+              setProject((prev) => ({ ...prev, dynastyTrees: nextTrees }));
+              showToast('Pohon Silsilah & Dinasti berhasil diperbarui.');
+            }}
+            onSelectEntity={handleNavigateToEntity}
+            onQuickCreateEntity={handleQuickCreateEntity}
+          />
+        )}
+
+        {activeTab === 'prophecy_tracker' && (
+          <ProphecyAndMysteryTrackerView
+            mysteryPlots={
+              project.mysteryPlots || STARTER_WORLD_PROJECT.mysteryPlots || []
+            }
+            entities={project.entities}
+            chapters={project.chapters}
+            onUpdateMysteryPlots={(nextItems) => {
+              setProject((prev) => ({ ...prev, mysteryPlots: nextItems }));
+              showToast(
+                'Tracker Misteri, Nubuat & Foreshadowing berhasil diperbarui.'
+              );
+            }}
+            onSelectEntity={handleNavigateToEntity}
+            onQuickCreateEntity={handleQuickCreateEntity}
+            onOpenChapter={(chId) => {
+              setSelectedChapterId(chId);
+              handleSwitchTab('outliner');
+            }}
           />
         )}
 

@@ -7,7 +7,11 @@ export type LoreCategory =
   | 'history'
   | 'power_system'
   | 'skill'
-  | 'encyclopedia';
+  | 'encyclopedia'
+  | 'cosmic_entity'
+  | 'deity'
+  | 'bestiary'
+  | 'culture_religion';
 
 export type TerrainType =
   | 'sea'
@@ -153,6 +157,35 @@ export interface LoreAttributes {
   creatureBehavior?: string;
   harvestableMaterials?: string[];
   alchemicalUses?: string;
+  // Cosmic Entity specific (Pilar I - Entitas Kosmik)
+  cosmicScale?: string;
+  originPlane?: string;
+  cosmicLawControlled?: string;
+  manifestationOmen?: string;
+  mortalAttitude?: string;
+  existentialThreatLevel?: string;
+  // Deity specific (Pilar I - Dewa-Dewi & Pantheon)
+  divineRank?: string;
+  divineDomains?: string;
+  sacredSymbol?: string;
+  mainTempleOrCult?: string;
+  holyDayOrFestival?: string;
+  divineBlessing?: string;
+  divineTabooOrCurse?: string;
+  // Bestiary specific (Pilar II - Bestiary Monster & Makhluk Mitologi)
+  creatureClass?: string;
+  dangerRating?: string;
+  naturalHabitat?: string;
+  anatomicalWeakness?: string;
+  attackAbilities?: string;
+  monsterDrops?: string[];
+  // Culture & Religion specific (Pilar III - Agama, Adat & Budaya)
+  traditionType?: string;
+  practicingPeoples?: string;
+  coreBeliefsOrEthics?: string;
+  sacredRitualsAndFestivals?: string;
+  socialTaboos?: string;
+  attireAndCuisine?: string;
 }
 
 export interface LoreEntity {
@@ -408,6 +441,67 @@ export interface FreeCanvasData {
   zones: FreeCanvasZone[];
 }
 
+export interface DynastyMember {
+  id: string;
+  name: string;
+  titleOrRole: string;
+  generation: number;
+  birthDeathYears: string;
+  status: 'Hidup' | 'Gugur' | 'Menghilang' | 'Diasingkan';
+  successionStatus:
+    | 'Penguasa Takhta'
+    | 'Pewaris Utama'
+    | 'Pangeran / Putri'
+    | 'Cabang Kadet'
+    | 'Pendiri Wangsa'
+    | 'Pasangan / Konsort';
+  parentIds: string[];
+  spouseName?: string;
+  bloodlineTrait?: string;
+  notes: string;
+  linkedCharacterId?: string;
+}
+
+export interface DynastyTree {
+  id: string;
+  houseName: string;
+  motto: string;
+  coatOfArms: string;
+  originNation?: string;
+  ancestralSeat?: string;
+  overview: string;
+  members: DynastyMember[];
+}
+
+export interface ProphecyClue {
+  id: string;
+  clueText: string;
+  linkedChapterId?: string;
+  isRedHerring?: boolean;
+  revealedStatus: 'Tersembunyi' | 'Ditanam di Bab' | 'Terungkap';
+}
+
+export interface MysteryPlotItem {
+  id: string;
+  title: string;
+  category:
+    | 'Nubuat Kuno'
+    | 'Misteri Utama'
+    | 'Konspirasi Politik'
+    | 'Foreshadowing Karakter';
+  status:
+    | 'Belum Terungkap'
+    | 'Petunjuk Ditanam'
+    | 'Terungkap Sebagian'
+    | 'Terungkap Penuh';
+  prophecyVerseOrQuestion: string;
+  publicInterpretation: string;
+  trueCanonicalAnswer: string;
+  originEntityName?: string;
+  payoffChapterId?: string;
+  clues: ProphecyClue[];
+}
+
 export interface WorldProject {
   id: string;
   worldName: string;
@@ -431,5 +525,7 @@ export interface WorldProject {
   timeline: TimelineEvent[];
   chapters: ChapterOutline[];
   freeCanvas?: FreeCanvasData;
+  dynastyTrees?: DynastyTree[];
+  mysteryPlots?: MysteryPlotItem[];
 }
 

@@ -97,7 +97,7 @@ function getFantasyNameSuggestions(
 ): Array<{ title: string; subtitle: string }> {
   const pools: Record<
     FantasyCultureStyle,
-    Record<LoreCategory, Array<{ title: string; subtitle: string }>>
+    Partial<Record<LoreCategory, Array<{ title: string; subtitle: string }>>>
   > = {
     eldoria: {
       character: [
@@ -311,7 +311,40 @@ function getFantasyNameSuggestions(
     },
   };
 
-  const list = pools[style][category] || pools.eldoria.character;
+  const extraPools: Partial<
+    Record<LoreCategory, Array<{ title: string; subtitle: string }>>
+  > = {
+    cosmic_entity: [
+      { title: 'Aethel-Zorath, Sang Arsitek Cakrawala', subtitle: 'Entitas Primordial Pembentuk Ruang & Gravitasi' },
+      { title: 'Ouroboros Perak di Balik Bintang', subtitle: 'Naga Kosmik Penjaga Siklus Kelahiran Semesta' },
+      { title: 'Xyloth-Vane, Mata Kehampaan Abadi', subtitle: 'Anomali Luar Dimensi Pemangsa Cahaya Matahari' },
+      { title: 'Koir Enam Belas Bintang Mati', subtitle: 'Kesadaran Kolektif Astral dari Era Pra-Penciptaan' },
+    ],
+    deity: [
+      { title: 'Sol-Invictus, Dewa Sumpah & Mahkota Emas', subtitle: 'Penguasa Pantheon Cahaya & Pelindung Keadilan' },
+      { title: 'Lunaria Veil, Dewi Kabut & Rahasia Malam', subtitle: 'Penuntun Jiwa & Penjaga Sumpah Tersembunyi' },
+      { title: 'Ignis-Vorn, Dewa Tempaan & Bara Abadi', subtitle: 'Patron Para Empu, Ksatria & Mesin Perang' },
+      { title: 'Veridia Ibu Seribu Akar', subtitle: 'Dewi Kesuburan Panen, Hutan Purba & Alkimia' },
+    ],
+    bestiary: [
+      { title: 'Drakon Sayap-Besi dari Puncak Utara', subtitle: 'Predator Puncak Berzirah Sisik Logam Meteorit' },
+      { title: 'Behemoth Rawa Abu (Ashen Strider)', subtitle: 'Monster Kolosal Pemakan Residu Mana Kuno' },
+      { title: 'Chimera Mata-Tiga Lembah Kaca', subtitle: 'Makhluk Eksperimen Sihir Warisan Perang Era Lama' },
+      { title: 'Banshee Kabut Perak', subtitle: 'Roh Mitologi yang Tangisannya Membekukan Aliran Meridian' },
+    ],
+    culture_religion: [
+      { title: 'Ordo Liturgi Matahari Zenith & Festival Panen Emas', subtitle: 'Agama Negara & Tradisi Tahunan Kekaisaran' },
+      { title: 'Adat Sumpah Pedang & Kasta Ksatria Perbatasan', subtitle: 'Kode Kehormatan, Tata Busana & Hukum Duel Bangsawan' },
+      { title: 'Ritus Penenunan Memori & Pantangan Hutan Perak', subtitle: 'Tradisi Spiritual & Upacara Siklus Hidup Bangsa Hutan' },
+      { title: 'Hukum Kontrak Ingot & Jamuan Dapur Tempa', subtitle: 'Etika Dagang, Kuliner & Tradisi Klan Bawah Tanah' },
+    ],
+  };
+
+  const list =
+    pools[style][category] ||
+    extraPools[category] ||
+    pools.eldoria.character ||
+    [];
   const rotated: Array<{ title: string; subtitle: string }> = [];
   for (let i = 0; i < Math.min(4, list.length); i++) {
     rotated.push(list[(i + seedOffset) % list.length]);
@@ -770,7 +803,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
       ) ||
       (attrs.harvestableMaterials || []).some((hm) =>
         hm.toLowerCase().includes(q)
-      )
+      ) ||
+      (attrs.cosmicScale || '').toLowerCase().includes(q) ||
+      (attrs.originPlane || '').toLowerCase().includes(q) ||
+      (attrs.cosmicLawControlled || '').toLowerCase().includes(q) ||
+      (attrs.divineRank || '').toLowerCase().includes(q) ||
+      (attrs.divineDomains || '').toLowerCase().includes(q) ||
+      (attrs.sacredSymbol || '').toLowerCase().includes(q) ||
+      (attrs.mainTempleOrCult || '').toLowerCase().includes(q) ||
+      (attrs.creatureClass || '').toLowerCase().includes(q) ||
+      (attrs.dangerRating || '').toLowerCase().includes(q) ||
+      (attrs.naturalHabitat || '').toLowerCase().includes(q) ||
+      (attrs.monsterDrops || []).some((md) => md.toLowerCase().includes(q)) ||
+      (attrs.traditionType || '').toLowerCase().includes(q) ||
+      (attrs.practicingPeoples || '').toLowerCase().includes(q)
     );
   });
 
@@ -896,7 +942,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           : category === 'history'
           ? 'Peristiwa Bersejarah, Perang Besar, atau Bencana Kosmik'
           : category === 'encyclopedia'
-          ? 'Pusaka Kuno, Flora Alkimia, atau Monster Mitologi'
+          ? 'Pusaka Kuno, Flora Alkimia, atau Aksara Dunia'
+          : category === 'cosmic_entity'
+          ? 'Wujud Primordial Pra-Semesta · Penjaga Hukum Ruang-Waktu'
+          : category === 'deity'
+          ? 'Dewa / Dewi Pantheon · Penguasa Domain & Sumpah Fana'
+          : category === 'bestiary'
+          ? 'Monster Buas, Naga Purba, atau Makhluk Mitologi'
+          : category === 'culture_religion'
+          ? 'Agama Terorganisir, Ritus Adat, atau Tradisi Budaya Bangsa'
           : `Julukan atau Klasifikasi ${sectionMeta.singular}`,
       summary: `Ringkasan singkat mengenai peran ${sectionMeta.singular.toLowerCase()} ini di dalam dunia cerita.`,
       content: `Tuliskan sejarah, deskripsi mendalam, dan hubungannya dengan entitas lain menggunakan tanda kurung ganda seperti [[Archmage Vaelen Thorne]] atau [[Kekaisaran Gondoria]].`,
@@ -990,6 +1044,33 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               linkedPowerSystem: defaultPs?.title || '',
               ownershipHistory: [],
               harvestableMaterials: [],
+            }
+          : category === 'cosmic_entity'
+          ? {
+              cosmicScale: 'Primordial Pembentuk Realitas (Di Atas Dewa-Dewi)',
+              originPlane: 'Samudra Astral Luar Cakrawala',
+              cosmicLawControlled: 'Hukum Gravitasi, Cahaya & Siklus Eter',
+              mortalAttitude: 'Apatis / Di Luar Moral Manusia',
+              existentialThreatLevel: 'Skala Kosmik / Lintas Dimensi',
+            }
+          : category === 'deity'
+          ? {
+              divineRank: 'Dewa Utama Pantheon',
+              divineDomains: 'Cahaya, Sumpah & Keadilan',
+              sacredSymbol: 'Matahari Emas Bersayap',
+              mainTempleOrCult: nationEntities[0]?.title || 'Katedral Agung',
+            }
+          : category === 'bestiary'
+          ? {
+              creatureClass: 'Monster Sihir / Naga Purba',
+              dangerRating: 'Sangat Berbahaya (Rank A)',
+              naturalHabitat: regionEntities[0]?.title || '',
+              monsterDrops: [],
+            }
+          : category === 'culture_religion'
+          ? {
+              traditionType: 'Agama Institusional & Adat Bangsa',
+              practicingPeoples: nationEntities[0]?.title || '',
             }
           : {},
       updatedAt: new Date().toISOString().slice(0, 10),
@@ -2247,6 +2328,24 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ? `${
                                   itemAttrs.subCategory || 'Artefak & Biota'
                                 } · ${itemAttrs.rarity || 'Langka'}`
+                              : category === 'cosmic_entity'
+                              ? `${
+                                  itemAttrs.cosmicScale || 'Primordial Kosmik'
+                                }`
+                              : category === 'deity'
+                              ? `${
+                                  itemAttrs.divineRank || 'Dewa Pantheon'
+                                } · ${itemAttrs.divineDomains || 'Domain Ilahi'}`
+                              : category === 'bestiary'
+                              ? `${
+                                  itemAttrs.creatureClass || 'Monster Mitologi'
+                                } · ${itemAttrs.dangerRating || 'Berbahaya'}`
+                              : category === 'culture_religion'
+                              ? `${
+                                  itemAttrs.traditionType || 'Adat & Kepercayaan'
+                                } · ${
+                                  itemAttrs.practicingPeoples || 'Peradaban'
+                                }`
                               : item.subtitle || sectionMeta.singular}
                           </span>
                           <span className="font-mono-tabular shrink-0 ml-2 text-[10px]">
@@ -2340,6 +2439,30 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               : `Habitat: ${
                                   itemAttrs.habitatOrOrigin || 'Kanon Dunia'
                                 }`}
+                          </div>
+                        )}
+
+                        {category === 'cosmic_entity' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Dimensi: {itemAttrs.originPlane || 'Luar Ruang-Waktu'}
+                          </div>
+                        )}
+
+                        {category === 'deity' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Simbol: {itemAttrs.sacredSymbol || item.subtitle}
+                          </div>
+                        )}
+
+                        {category === 'bestiary' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Habitat: {itemAttrs.naturalHabitat || 'Alam Liar'}
+                          </div>
+                        )}
+
+                        {category === 'culture_religion' && (
+                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                            Penganut: {itemAttrs.practicingPeoples || 'Lintas Bangsa'}
                           </div>
                         )}
 
@@ -7125,6 +7248,514 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* ============================================================= */}
+              {/* COSMIC ENTITY EDITOR (PILAR I — ENTITAS KOSMIK)               */}
+              {/* ============================================================= */}
+              {category === 'cosmic_entity' && (
+                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
+                  <div className="text-xs font-bold text-[#264653] flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-[#B5832A]" />
+                    <span>
+                      Arsitektur Entitas Kosmik & Primordial (Di Atas Dewa-Dewi)
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Skala Eksistensi Kosmik
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.cosmicScale || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              cosmicScale: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Primordial Pembentuk Realitas / Titan Astral / Entitas Luar Dimensi..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Dimensi Asal / Alam Keberadaan
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.originPlane || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              originPlane: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Samudra Astral Luar Cakrawala / Palung Kehampaan..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Hukum Semesta / Realitas yang Dikendalikan
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.cosmicLawControlled || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              cosmicLawControlled: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Gravitasi Bintang, Entropi Cahaya, Siklus Waktu..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Sikap terhadap Makhluk Fana & Tingkat Ancaman Eksistensial
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.mortalAttitude || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              mortalAttitude: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Tidur Abadi / Apatis / Pemangsa Energi Kosmik..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Pertanda Kemunculan & Anomali Langit (Manifestation Omen)
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.manifestationOmen || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              manifestationOmen: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Fenomena gerhana, getaran bijih meteorit, atau perubahan warna langit saat entitas ini bergerak..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* DEITY & PANTHEON EDITOR (PILAR I — DEWA-DEWI)                 */}
+              {/* ============================================================= */}
+              {category === 'deity' && (
+                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
+                  <div className="text-xs font-bold text-[#8F5B14] flex items-center gap-1.5">
+                    <Crown className="w-4 h-4 text-[#B5832A]" />
+                    <span>
+                      Dossier Dewa-Dewi & Pantheon Ilahi (Sembahan Makhluk Fana)
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Peringkat Pantheon / Gelar Ilahi
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.divineRank || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              divineRank: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Dewa Tertinggi Pantheon / Dewi Pelindung Alam / Setengah-Dewa..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Domain Kekuasaan Ilahi
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.divineDomains || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              divineDomains: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Matahari Zenith, Sumpah Ksatria & Keadilan Hukum..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Simbol Suci & Relik Ilahi
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.sacredSymbol || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              sacredSymbol: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Cakram Matahari Emas Bersayap Tombak Kembar..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Kuil Utama, Ordo Pendeta & Hari Raya Suci
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.mainTempleOrCult || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              mainTempleOrCult: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Katedral Agung Sol-Aurea di Solis Prime..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        Berkat & Mukjizat bagi Pengikut Setia
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.divineBlessing || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              divineBlessing: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Karunia kekuatan atau perlindungan bagi mereka yang menjaga sumpah..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        Pantangan Ilahi & Kutukan Pelanggar Sumpah
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.divineTabooOrCurse || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              divineTabooOrCurse: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Hukuman atau kutukan ilahi bila melanggar pantangan suci..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* BESTIARY & MONSTER EDITOR (PILAR II — BESTIARY MONSTER)       */}
+              {/* ============================================================= */}
+              {category === 'bestiary' && (
+                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
+                  <div className="text-xs font-bold text-[#9E2A2B] flex items-center gap-1.5">
+                    <Swords className="w-4 h-4 text-[#9E2A2B]" />
+                    <span>
+                      Dossier Bestiary Monster, Habitat, Kelemahan & Material Buruan
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Klasifikasi Makhluk / Monster
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.creatureClass || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              creatureClass: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Naga Laut / Makhluk Mitologi / Konstruk..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Tingkat Bahaya (Danger Rating)
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.dangerRating || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              dangerRating: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Kelas Bencana (Rank S+) / Sangat Berbahaya..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Habitat Alami / Wilayah Sebaran
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.naturalHabitat || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              naturalHabitat: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Puncak Wyvern / Rimba Shadowwood / Teluk Naga..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                          Kemampuan Serangan, Racun & Anomali Sihir
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.attackAbilities || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                attackAbilities: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Semburan napas elemen, serangan ilusi memori, atau gelombang kejut..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          Kelemahan Anatomis & Cara Menaklukkan
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={draftEntity.attributes.anatomicalWeakness || ''}
+                          onChange={(e) =>
+                            setDraftEntity({
+                              ...draftEntity,
+                              attributes: {
+                                ...draftEntity.attributes,
+                                anatomicalWeakness: e.target.value,
+                              },
+                            })
+                          }
+                          placeholder="Titik lemah di balik sisik, elemen penangkal, atau frekuensi suara..."
+                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ============================================================= */}
+              {/* CULTURE & RELIGION EDITOR (PILAR III — AGAMA & BUDAYA)        */}
+              {/* ============================================================= */}
+              {category === 'culture_religion' && (
+                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
+                  <div className="text-xs font-bold text-[#2D5A43] flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-[#2D5A43]" />
+                    <span>
+                      Dossier Agama, Adat Istiadat, Ritus & Tradisi Budaya Bangsa
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Jenis Tradisi / Institusi Keagamaan
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.traditionType || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              traditionType: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Agama Negara / Hukum Adat Hutan / Kode Kasta Kriya..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        Bangsa / Negara Penganut Utama
+                      </label>
+                      <input
+                        type="text"
+                        value={draftEntity.attributes.practicingPeoples || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              practicingPeoples: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Kekaisaran Gondoria / Sylvan Aelfir / Dvergr..."
+                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        Nilai Filosofis, Etika & Ajaran Inti
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.coreBeliefsOrEthics || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              coreBeliefsOrEthics: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Prinsip moral utama, pandangan tentang hidup-mati, dan kehormatan..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        Ritus Kehidupan, Upacara & Festival Tahunan
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={
+                          draftEntity.attributes.sacredRitualsAndFestivals || ''
+                        }
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              sacredRitualsAndFestivals: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Upacara kedewasaan, pernikahan, pemakaman, atau festival musim..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        Pantangan Adat (Social Taboos) & Hukum Moral
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.socialTaboos || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              socialTaboos: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Hal-hal yang dilarang keras secara adat atau dianggap dosa besar..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-semibold text-[#B5832A] mb-1">
+                        Ciri Khas Busana, Arsitektur & Kuliner Tradisional
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={draftEntity.attributes.attireAndCuisine || ''}
+                        onChange={(e) =>
+                          setDraftEntity({
+                            ...draftEntity,
+                            attributes: {
+                              ...draftEntity.attributes,
+                              attireAndCuisine: e.target.value,
+                            },
+                          })
+                        }
+                        placeholder="Pakaian adat, hidangan jamuan khas, dan estetika bangunan..."
+                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Wiki Cross-link Helper Bar + Main Markdown/Lore Textarea */}
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
@@ -7362,6 +7993,184 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 </div>
               )}
 
+              {/* Cosmic Entity Omen & Cosmic Law Banner */}
+              {category === 'cosmic_entity' &&
+                (activeAttrs.manifestationOmen ||
+                  activeAttrs.cosmicLawControlled) && (
+                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#264653]">
+                      <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <span>
+                        Manifestasi Hukum Semesta & Pertanda Kemunculan Kosmik
+                      </span>
+                    </div>
+                    {activeAttrs.cosmicLawControlled && (
+                      <div className="text-xs text-[#231C14] leading-relaxed">
+                        <strong>Hukum Realitas yang Dikendalikan:</strong>{' '}
+                        {activeAttrs.cosmicLawControlled}
+                      </div>
+                    )}
+                    {activeAttrs.manifestationOmen && (
+                      <div className="text-xs text-[#695A47] leading-relaxed">
+                        <strong className="text-[#231C14]">
+                          Pertanda Langit / Anomali:
+                        </strong>{' '}
+                        <WikiTextRenderer
+                          text={activeAttrs.manifestationOmen}
+                          entities={entities}
+                          onSelectEntity={jumpToEntity}
+                        />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              {/* Deity Blessing & Taboo Banner */}
+              {category === 'deity' &&
+                (activeAttrs.divineBlessing ||
+                  activeAttrs.divineTabooOrCurse) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {activeAttrs.divineBlessing && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#2D5A43]">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Berkat Ilahi & Mukjizat Pengikut</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.divineBlessing}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {activeAttrs.divineTabooOrCurse && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                          <ShieldAlert className="w-3.5 h-3.5" />
+                          <span>Pantangan Suci & Kutukan Ilahi</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.divineTabooOrCurse}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              {/* Bestiary Attack vs Weakness Banner */}
+              {category === 'bestiary' &&
+                (activeAttrs.attackAbilities ||
+                  activeAttrs.anatomicalWeakness) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {activeAttrs.attackAbilities && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#231C14]">
+                          <Flame className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                          <span>Kemampuan Serangan & Anomali Monster</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.attackAbilities}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {activeAttrs.anatomicalWeakness && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                          <Swords className="w-3.5 h-3.5" />
+                          <span>Kelemahan Anatomis & Cara Menaklukkan</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.anatomicalWeakness}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+              {/* Culture & Religion Dossier Cards */}
+              {category === 'culture_religion' &&
+                (activeAttrs.coreBeliefsOrEthics ||
+                  activeAttrs.sacredRitualsAndFestivals ||
+                  activeAttrs.socialTaboos ||
+                  activeAttrs.attireAndCuisine) && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {activeAttrs.coreBeliefsOrEthics && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#231C14]">
+                          <BookOpen className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <span>Filosofi, Etika & Ajaran Inti</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.coreBeliefsOrEthics}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {activeAttrs.sacredRitualsAndFestivals && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#2D5A43]">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>Ritus Kehidupan & Festival Tahunan</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.sacredRitualsAndFestivals}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {activeAttrs.socialTaboos && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                          <ShieldAlert className="w-3.5 h-3.5" />
+                          <span>Pantangan Adat (Taboo) & Hukum Moral</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.socialTaboos}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    {activeAttrs.attireAndCuisine && (
+                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#B5832A]">
+                          <Crown className="w-3.5 h-3.5" />
+                          <span>Busana Adat, Arsitektur & Kuliner Khas</span>
+                        </div>
+                        <div className="text-xs text-[#231C14] leading-relaxed">
+                          <WikiTextRenderer
+                            text={activeAttrs.attireAndCuisine}
+                            entities={entities}
+                            onSelectEntity={jumpToEntity}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
               {/* Portrait + Summary + Structured Attributes Grid */}
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
@@ -7555,6 +8364,23 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           creatorOrOrigin: 'Pencipta / Asal-Usul Biologis',
                           linkedPowerSystem: 'Sistem Kekuatan Terkait',
                           magicalProperties: 'Khasiat / Efek Arcane',
+                          cosmicScale: 'Skala Eksistensi Kosmik',
+                          originPlane: 'Dimensi / Alam Asal',
+                          cosmicLawControlled: 'Hukum Semesta yang Dikendalikan',
+                          manifestationOmen: 'Pertanda Kemunculan',
+                          mortalAttitude: 'Sikap terhadap Dunia Fana',
+                          existentialThreatLevel: 'Tingkat Ancaman Eksistensial',
+                          divineRank: 'Peringkat Pantheon / Gelar Ilahi',
+                          divineDomains: 'Domain Kekuasaan Ilahi',
+                          sacredSymbol: 'Simbol Suci & Relik',
+                          mainTempleOrCult: 'Kuil Utama & Ordo Pemujaan',
+                          holyDayOrFestival: 'Hari Raya Suci',
+                          creatureClass: 'Klasifikasi Monster / Biota',
+                          dangerRating: 'Tingkat Bahaya (Danger Rating)',
+                          naturalHabitat: 'Habitat Alami & Wilayah Sebaran',
+                          monsterDrops: 'Material Buruan & Komponen Alkimia',
+                          traditionType: 'Jenis Tradisi / Institusi Agama',
+                          practicingPeoples: 'Bangsa / Negara Penganut',
                         };
 
                         const preferredCat: LoreCategory | undefined =

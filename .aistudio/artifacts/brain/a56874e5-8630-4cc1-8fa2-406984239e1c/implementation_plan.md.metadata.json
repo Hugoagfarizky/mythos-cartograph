@@ -1,6 +1,6 @@
 {
-  "summary":  "Rencana implementasi 4 penyempurnaan UX & fitur penulis fantasi: Popover Pembuat Entitas Instan dari tautan [[...]] kosong (Redlink Creator), Mode Fokus Menulis (sembunyikan direktori kiri di Bab & Codex), Inspektur Kesehatan & Kelengkapan Lore (Orphan & Missing Link Detector), serta Tempa Nama & Gelar Fantasi (Fantasy Name Forge) di editor entitas.",
-  "updatedAt":  "2026-11-09T15:57:48.844018948Z",
+  "summary":  "Rencana implementasi penambahan 6 section baru di keempat Pilar Fantasi MythosCartograph: Entitas Kosmik dan Dewa-Dewi (dibedakan secara terpisah) di Pilar I, Bestiary Monster & Makhluk Mitologi di Pilar II, Agama Adat & Budaya di Pilar III, serta Pohon Silsilah Dinasti Kerajaan dan Tracker Misteri Nubuat & Foreshadowing Plot di Pilar IV.",
+  "updatedAt":  "2026-11-10T10:35:29.262607613Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

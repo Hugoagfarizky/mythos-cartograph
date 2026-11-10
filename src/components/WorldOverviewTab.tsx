@@ -54,12 +54,16 @@ interface WorldOverviewTabProps {
 }
 
 const ALL_CATEGORIES: LoreCategory[] = [
+  'cosmic_entity',
+  'deity',
   'character',
   'race',
+  'bestiary',
   'faction',
   'power_system',
   'skill',
   'nation',
+  'culture_religion',
   'region',
   'history',
   'encyclopedia',
