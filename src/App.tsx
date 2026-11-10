@@ -1161,7 +1161,7 @@ export default function App() {
               return (
                 <div
                   key={pillar.roman}
-                  className={`${colSpan} bg-[#FBF8F1]/60 border border-[#D8CBB3] rounded-xl px-3 py-2 flex flex-col justify-between gap-2`}
+                  className={`${colSpan} bg-[#FBF8F1]/60 border border-[#D8CBB3] rounded-xl px-3 py-2 flex flex-col justify-start gap-2`}
                 >
                   <div className="flex items-center justify-between gap-1 border-b border-[#D8CBB3]/70 pb-1">
                     <span className="font-epic text-[10px] font-bold uppercase tracking-[0.14em] text-[#B5832A]">

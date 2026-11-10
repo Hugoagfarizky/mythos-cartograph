@@ -41,7 +41,6 @@ import {
   LoreCategory,
   LoreEntity,
   NotebookPage,
-  NotebookPaperStyle,
   PaintShape,
   PaintToolKind,
 } from '../types/world';
@@ -59,7 +58,7 @@ export const DEFAULT_NOTEBOOK_PAGES: NotebookPage[] = [
     id: 'page-1',
     title: '1. Catatan & Diagram Sistem Sihir',
     updatedAt: 'Hari ini',
-    paperStyle: 'ruled',
+    paperStyle: 'plain',
     docContent: `### Catatan Riset: Hukum Resonansi & Gerhana Kedua
 Tuliskan catatan bebas, draf adegan, rumus sihir, atau daftar tugas cerita Anda di sini seperti di Google Docs / OneNote. Anda juga dapat langsung **mencoret-coret di atas kertas ini** atau menggambar di kanvas menggunakan toolbar Paint di atas!
 
@@ -154,9 +153,9 @@ Tuliskan catatan bebas, draf adegan, rumus sihir, atau daftar tugas cerita Anda 
     id: 'page-2',
     title: '2. Denah Pertempuran & Formasi',
     updatedAt: 'Hari ini',
-    paperStyle: 'grid',
+    paperStyle: 'plain',
     docContent: `### Sketsa Taktis: Pengepungan Gerbang Nidavellir
-Gunakan lembar berkotak (*Grid*) ini untuk merancang posisi pasukan, denah ruangan kastil, atau alur pergerakan karakter selama adegan aksi.
+Gunakan lembar kanvas ini untuk merancang posisi pasukan, denah ruangan kastil, atau alur pergerakan karakter selama adegan aksi.
 
 - **Sayap Utara:** Pasukan [[Kekaisaran Gondoria]] menahan jembatan gantung.
 - **Jalur Bawah Tanah:** [[Kaelen Vance]] menyusup lewat terowongan tambang tua menuju ruang takhta [[Kerajaan Bawah Tanah Nidavellir]].`,
@@ -373,7 +372,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
       id: `page-${Date.now()}`,
       title: `${pages.length + 1}. Halaman Catatan & Sketsa Baru`,
       updatedAt: 'Baru saja',
-      paperStyle: 'ruled',
+      paperStyle: 'plain',
       docContent: `### Judul Catatan / Dokumen Baru\nMulai ketik catatan cerita, daftar ide, atau gunakan kanvas di samping untuk mencoret-coret sketsa bebas...`,
       textBlocks: [],
       drawings: [],
@@ -723,32 +722,6 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
     onPromoteCardToEntity(pseudoCard, promoteCategory);
   };
 
-  const getPaperBackgroundStyle = (
-    style: NotebookPaperStyle
-  ): React.CSSProperties => {
-    if (style === 'ruled') {
-      return {
-        backgroundImage:
-          'repeating-linear-gradient(to bottom, transparent, transparent 31px, rgba(181, 131, 42, 0.22) 32px)',
-      };
-    }
-    if (style === 'grid') {
-      return {
-        backgroundImage:
-          'linear-gradient(to right, rgba(181, 131, 42, 0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(181, 131, 42, 0.18) 1px, transparent 1px)',
-        backgroundSize: '28px 28px',
-      };
-    }
-    if (style === 'dots') {
-      return {
-        backgroundImage:
-          'radial-gradient(rgba(181, 131, 42, 0.35) 1.2px, transparent 1.2px)',
-        backgroundSize: '24px 24px',
-      };
-    }
-    return {};
-  };
-
   return (
     <div className="space-y-4">
       {/* =================================================================== */}
@@ -877,31 +850,15 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
             </button>
           </div>
 
-          {/* Page Title Edit, Paper Style & Promote to World Bible */}
+          {/* Page Title Edit & Delete Page */}
           <div className="flex flex-wrap items-center gap-2">
             <input
               type="text"
               value={activePage.title}
               onChange={(e) => updateActivePage({ title: e.target.value })}
-              className="px-2.5 py-1 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] w-48"
+              className="px-2.5 py-1 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] w-56"
               title="Ubah nama halaman buku catatan ini"
             />
-
-            <select
-              value={activePage.paperStyle}
-              onChange={(e) =>
-                updateActivePage({
-                  paperStyle: e.target.value as NotebookPaperStyle,
-                })
-              }
-              className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
-              title="Pilih motif kertas halaman"
-            >
-              <option value="ruled">Kertas Bergaris (Buku Tulis)</option>
-              <option value="grid">Kertas Kotak-Kotak (Grid Denah)</option>
-              <option value="dots">Kertas Titik-Titik (Dot Grid)</option>
-              <option value="plain">Kertas Perkamen Polos</option>
-            </select>
 
             {pages.length > 1 && (
               <button
@@ -1305,12 +1262,9 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               </button>
             </div>
 
-            {/* Document Paper Sheet */}
+            {/* Document Paper Sheet (Plain Clean Surface) */}
             {docPreviewMode ? (
-              <div
-                style={getPaperBackgroundStyle(activePage.paperStyle)}
-                className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] min-h-[460px] space-y-3"
-              >
+              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] min-h-[460px] space-y-3">
                 <WikiTextRenderer
                   text={activePage.docContent}
                   entities={entities}
@@ -1326,12 +1280,8 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 onChange={(e) =>
                   updateActivePage({ docContent: e.target.value })
                 }
-                style={{
-                  ...getPaperBackgroundStyle(activePage.paperStyle),
-                  lineHeight: '32px',
-                }}
                 placeholder="Ketik catatan cerita, dialog, aturan dunia, atau ide bebas di sini... Gunakan [[Nama Entitas]] untuk menautkan ke World Bible."
-                className={`w-full p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-sm text-[#231C14] focus:outline-none focus:border-[#9E2A2B] resize-y ${
+                className={`w-full p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-sm text-[#231C14] leading-relaxed focus:outline-none focus:border-[#9E2A2B] resize-y ${
                   isFullWidth ? 'min-h-[680px]' : 'min-h-[500px]'
                 }`}
               />
@@ -1440,7 +1390,6 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 width: '100%',
                 minWidth: '780px',
                 aspectRatio: `${CANVAS_WIDTH} / ${CANVAS_HEIGHT}`,
-                ...getPaperBackgroundStyle(activePage.paperStyle),
               }}
               className={`relative bg-[#F6F1E6] select-none overflow-hidden ${
                 activeTool === 'cursor'
