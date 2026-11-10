@@ -8,14 +8,20 @@ import { GoogleGenAI, Type } from '@google/genai';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      'User-Agent': 'aistudio-build',
+function getAiClient(): GoogleGenAI {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error('GEMINI_API_KEY belum dikonfigurasi pada environment server.');
+  }
+  return new GoogleGenAI({
+    apiKey,
+    httpOptions: {
+      headers: {
+        'User-Agent': 'aistudio-build',
+      },
     },
-  },
-});
+  });
+}
 
 async function startServer() {
   const app = express();
@@ -49,6 +55,7 @@ ${worldContext || 'Belum ada konteks tambahan.'}
 Analisis apakah ada potensi kontradiksi (plot hole), pelanggaran aturan Power System/Skill, ketidaksesuaian Timeline/Sejarah, atau inkonsistensi karakter/geografi. Berikan respons dalam Bahasa Indonesia yang jelas, tajam, dan konstruktif untuk penulis.
 `;
 
+      const ai = getAiClient();
       const response = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
         contents: prompt,
@@ -132,6 +139,7 @@ ${worldSummary || 'Dunia fantasi klasik dengan kerajaan, faksi sihir, dan artefa
 Buat 3 konsep entitas mendalam dalam Bahasa Indonesia lengkap dengan nama, ringkasan, detail lore (gunakan tanda [[Nama Entitas]] bila merujuk ke entitas yang sudah ada di ringkasan dunia), serta kaitannya dengan plot cerita.
 `;
 
+      const ai = getAiClient();
       const response = await ai.models.generateContent({
         model: 'gemini-3.8-flash',
         contents: prompt,
