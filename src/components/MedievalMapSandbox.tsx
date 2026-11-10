@@ -34,7 +34,7 @@ import {
   StampType,
   TerrainType,
 } from '../types/world';
-import { CATEGORY_META } from './WikiTextRenderer';
+import { CATEGORY_META, OrnateCornerFiligree } from './WikiTextRenderer';
 
 interface MedievalMapSandboxProps {
   mapData: MapSandboxData;
@@ -1437,19 +1437,20 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       {/* ===================================================================== */}
       {/* 1. TOP MAP STUDIO HEADER & MODE SELECTOR                              */}
       {/* ===================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 space-y-4 shadow-xs">
+        <OrnateCornerFiligree />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div className="flex-1 min-w-0 space-y-0.5 text-left">
             <div className="text-xs text-[#695A47] font-medium">
               Atlas Ilustrasi Buku Abad Pertengahan · {mapData.scaleLabel}
             </div>
-            <h2 className="font-cartography text-2xl font-bold text-[#231C14]">
+            <h2 className="font-cartography text-2xl font-bold text-[#231C14] leading-tight">
               {mapData.mapTitle}
             </h2>
           </div>
 
           {/* 6 Cartography Tool Modes */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-lg border border-[#D8CBB3]">
+          <div className="flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-lg border border-[#D8CBB3] shrink-0">
             <button
               type="button"
               onClick={() => setToolMode('inspect')}

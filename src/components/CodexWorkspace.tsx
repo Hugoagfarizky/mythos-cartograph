@@ -1882,28 +1882,28 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   return (
     <div className="space-y-5">
       {/* Dedicated Section Header Bar with Ornate Manuscript Filigree */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4 shadow-xs">
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
         <OrnateCornerFiligree />
-        <div>
+        <div className="relative z-10 flex-1 min-w-0 space-y-1 text-left">
           <div
-            className="font-epic text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
+            className="font-epic text-xs font-bold uppercase tracking-wider flex flex-wrap items-center gap-1.5"
             style={{ color: sectionMeta.accentColor }}
           >
             <span>❖ Arcana {sectionMeta.romanNumeral} · {sectionMeta.arcanaTitle}</span>
-            <span>·</span>
+            <span aria-hidden="true">·</span>
             <span>
               {sectionEntities.length} {sectionMeta.singular} Tercatat
             </span>
           </div>
-          <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] mt-0.5">
+          <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
             {sectionMeta.label}
           </h2>
-          <p className="text-xs sm:text-sm text-[#695A47] mt-0.5">
+          <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
             {sectionMeta.description}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="relative z-10 flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             type="button"
             onClick={() => setIsFocusMode((prev) => !prev)}

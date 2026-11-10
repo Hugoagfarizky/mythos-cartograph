@@ -602,8 +602,8 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
       <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
 
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div className="space-y-1">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div className="flex-1 min-w-0 space-y-1 text-left">
             <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
               <span className="font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
                 ❖ Studio Buku Catatan & Oret-Oret (Gabungan Docs · OneNote · Paint)
@@ -615,10 +615,10 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 OneNote
               </span>
             </div>
-            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14]">
+            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               Lembar Catatan Bebas, Dokumen Cerita & Kanvas Gambar
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] max-w-3xl">
+            <p className="text-xs sm:text-sm text-[#695A47] max-w-3xl leading-relaxed">
               Ketik draf catatan panjang seperti di <strong>Docs</strong>,
               taruh kotak teks bebas di titik mana pun seperti di{' '}
               <strong>OneNote</strong>, dan gambar sketsa/simbol/diagram secara
@@ -628,7 +628,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
           </div>
 
           {/* Layout Switcher (Split Docs+Paint vs Unified OneNote Sheet vs Full Paint) */}
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5 shrink-0">
             <button
               type="button"
               onClick={() => setLayoutMode('split')}

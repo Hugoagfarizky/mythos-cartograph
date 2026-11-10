@@ -40,7 +40,11 @@ import {
   RelationshipEdge,
   TimelineEvent,
 } from '../types/world';
-import { CATEGORY_META, WikiTextRenderer } from './WikiTextRenderer';
+import {
+  CATEGORY_META,
+  OrnateCornerFiligree,
+  WikiTextRenderer,
+} from './WikiTextRenderer';
 
 interface TimelineViewProps {
   timeline: TimelineEvent[];
@@ -529,8 +533,9 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {/* =================================================================== */}
       {/* TOP HEADER BAR & STATS                                              */}
       {/* =================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4">
-        <div className="space-y-1">
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
+        <OrnateCornerFiligree />
+        <div className="relative z-10 flex-1 min-w-0 space-y-1 text-left">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#7A3E1D]">
             <Calendar className="w-3.5 h-3.5 text-[#9E2A2B]" />
             <span>Sistem Kalender Dunia: {calendarSystem}</span>
@@ -540,15 +545,15 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
               {totalYearSpan} Tahun)
             </span>
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
             Pita Kronologi Dunia, Kalkulator Zaman & Sinkronisasi Sejarah
           </h2>
-          <p className="text-xs sm:text-sm text-[#695A47]">
+          <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
             Susun urutan tahun linier lintas era, hitung selisih usia tokoh antar peristiwa, dan hubungkan tonggak waktu langsung ke lembar Sejarah serta Alur Bab.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="relative z-10 flex flex-wrap items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => setShowCalculator((prev) => !prev)}
@@ -2019,24 +2024,25 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
       {/* =================================================================== */}
       {/* HEADER BAR & NETWORK TELEMETRY METRICS                              */}
       {/* =================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+        <OrnateCornerFiligree />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div className="flex-1 min-w-0 space-y-1 text-left">
             <div className="text-xs font-semibold text-[#9E2A2B]">
               Modul World Bible · {allGraphCandidateEntities.length} Node Entitas
               · {relationships.length} Ikatan Relasi Tercatat
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               Peta Relasi Politik, Silsilah & Intrik Dunia
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] mt-0.5">
+            <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
               Petakan aliansi terbuka, konspirasi di balik layar, silsilah
               darah, dan rantai komando antar karakter, kelompok, ras, maupun
               negara.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setShowDetectorPanel((p) => !p)}

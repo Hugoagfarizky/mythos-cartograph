@@ -170,12 +170,12 @@ export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
 }) => {
   return (
     <div
-      className={`pointer-events-none select-none ${className}`}
+      className={`absolute inset-0 pointer-events-none select-none !m-0 ${className}`}
       aria-hidden="true"
     >
       {/* Top-Left Illuminated Manuscript Corner */}
       <svg
-        className="w-7 h-7 absolute top-1.5 left-1.5"
+        className="w-5 h-5 absolute top-1.5 left-1.5"
         viewBox="0 0 36 36"
         fill="none"
       >
@@ -203,7 +203,7 @@ export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
 
       {/* Top-Right Illuminated Manuscript Corner */}
       <svg
-        className="w-7 h-7 absolute top-1.5 right-1.5"
+        className="w-5 h-5 absolute top-1.5 right-1.5"
         viewBox="0 0 36 36"
         fill="none"
       >
@@ -231,7 +231,7 @@ export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
 
       {/* Bottom-Left Illuminated Manuscript Corner */}
       <svg
-        className="w-7 h-7 absolute bottom-1.5 left-1.5"
+        className="w-5 h-5 absolute bottom-1.5 left-1.5"
         viewBox="0 0 36 36"
         fill="none"
       >
@@ -259,7 +259,7 @@ export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
 
       {/* Bottom-Right Illuminated Manuscript Corner */}
       <svg
-        className="w-7 h-7 absolute bottom-1.5 right-1.5"
+        className="w-5 h-5 absolute bottom-1.5 right-1.5"
         viewBox="0 0 36 36"
         fill="none"
       >
@@ -291,7 +291,7 @@ export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
 export const BrassBookCornerClasps: React.FC = () => {
   return (
     <div
-      className="pointer-events-none select-none text-[#D49B35]"
+      className="absolute inset-0 pointer-events-none select-none !m-0 text-[#D49B35]"
       aria-hidden="true"
     >
       {/* Top-Left Brass Clasp */}

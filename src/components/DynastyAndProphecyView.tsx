@@ -249,18 +249,18 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
       <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 shadow-xs space-y-4">
         <OrnateCornerFiligree className="text-[#B5832A]/50" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
-          <div>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
+          <div className="flex-1 min-w-0 space-y-1 text-left">
             <div className="text-xs font-epic font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
               <Crown className="w-3.5 h-3.5 text-[#B5832A]" />
               <span>Pilar IV · Studio Silsilah Keluarga & Dinasti Kerajaan</span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               Arsip Genealogi, Garis Darah & Suksesi Takhta
             </h2>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={handleOpenNewHouse}
@@ -1180,15 +1180,15 @@ export const ProphecyAndMysteryTrackerView: React.FC<
       <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 shadow-xs space-y-4">
         <OrnateCornerFiligree className="text-[#B5832A]/50" />
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
-          <div>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
+          <div className="flex-1 min-w-0 space-y-1 text-left">
             <div className="text-xs font-epic font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
               <span>
                 Pilar IV · Tracker Misteri, Nubuat Kuno & Foreshadowing Plot
               </span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               Arsitektur Benang Merah, Petunjuk Bab & Pengungkapan Kanon
             </h2>
           </div>
@@ -1196,7 +1196,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
           <button
             type="button"
             onClick={handleOpenNewMystery}
-            className="px-4 py-2 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 text-xs font-semibold bg-[#9E2A2B] text-white rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 cursor-pointer shrink-0 self-start lg:self-auto"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>+ Tambah Nubuat / Misteri Plot</span>

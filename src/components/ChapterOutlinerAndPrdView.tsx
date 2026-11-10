@@ -449,24 +449,25 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
       {/* =================================================================== */}
       {/* HEADER BAR & NOVEL MANUSCRIPT PROGRESS TELEMETRY                    */}
       {/* =================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <div>
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+        <OrnateCornerFiligree />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div className="flex-1 min-w-0 space-y-1 text-left">
             <div className="text-xs font-semibold text-[#9E2A2B]">
               Studio Manuskrip & Alur Novel · {chapters.length} Bab ·{' '}
               {totalScenesCount} Adegan Terjadwal
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               Alur Bab, Struktur Dramaturgi & Manuskrip Cerita
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] mt-0.5">
+            <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
               Rancang tujuan naratif tiap bab, susun urutan adegan (*scene
               beats*) dengan tokoh POV dan lokasi World Bible, serta pantau
               target kata novel Anda.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => setIsFocusMode((prev) => !prev)}
