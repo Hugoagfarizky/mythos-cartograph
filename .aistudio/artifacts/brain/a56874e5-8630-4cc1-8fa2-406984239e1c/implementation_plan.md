@@ -1,82 +1,79 @@
-# Sinkronisasi Studio Ekspor Buku (.MD & PDF) & Modal Panduan Arsitektur Cerita Interaktif
+# Transformasi Visual Hamparan Kitab Grimoire Abad Pertengahan (*Illuminated Medieval Tome*)
 
-Pembaruan ini menyempurnakan alur kerja penulis di **MythosCartograph** melalui dua fitur utama: (1) mengintegrasikan seluruh **6 section baru** (*Entitas Kosmik*, *Dewa-Dewi*, *Bestiary Monster*, *Agama & Budaya*, *Silsilah Dinasti*, dan *Tracker Nubuat*) beserta label atribut berbahasa Indonesia ke dalam **Studio Ekspor Buku Markdown (`.md`) & Cetak PDF**, serta (2) menghadirkan tombol **`Panduan Cerita`** di bilah atas aplikasi yang membuka **Modal Panduan & Checklist Interaktif 5 Tahap Menyusun Cerita**.
+Pembaruan ini menghadirkan atmosfer visual **Kitab Fantasi Abad Pertengahan (*Open Medieval Grimoire Tome*)** yang imersif ke seluruh ruang kerja **MythosCartograph**—lengkap dengan bingkai sampul jilid kulit, siku pengunci logam kuningan, efek tepi lembaran perkamen bertumpuk, bayangan lipatan jilid buku, ukiran sudut emas (*illuminated filigree*), pembatas bab sulur kompas, dan aksen segel lilin kerajaan—tanpa mengubah satu pun isi fitur maupun jenis huruf (*font*) yang sudah digunakan.
 
 ## User Review & Critical Decisions
 
 > [!IMPORTANT]
-> Rencana ini disusun berdasarkan dua keputusan yang telah Anda konfirmasi:
-> - **Keputusan 1 (Sinkronisasi Ekspor Buku .MD & PDF)**: Memasukkan data *Pohon Silsilah & Dinasti*, *Tracker Misteri, Nubuat & Foreshadowing*, catatan *Kanvas Bebas*, serta terjemahan label atribut *Entitas Kosmik*, *Dewa-Dewi*, *Bestiary Monster*, dan *Agama & Budaya* ke dalam hasil kompilasi Markdown (`.md`) dan lembar pratinjau cetak PDF.
-> - **Keputusan 2 (Tombol Panduan Cerita Interaktif di Bilah Atas)**: Menambahkan tombol **`Panduan Cerita`** di bilah atas (*Top Bar*) yang membuka modal interaktif berisi *Checklist Progres 5 Tahap Menyusun Cerita*, *Kamus 4 Pilar (21 Tab)* dengan tombol lompat langsung ke masing-masing tab, serta tombol unduh panduan `.md`.
+> Rencana ini mengimplementasikan seluruh pilihan visual yang telah Anda konfirmasi:
+> - **Gaya Bingkai Utama**: **Hamparan Kitab Grimoire Terbuka** dengan bingkai luar bertekstur sampul kulit tua (*tooled leather binding*), siku kuningan di keempat sudut, pita penanda buku merah kirmizi (*ribbon bookmark*), efek tumpukan lembaran kertas di tepi halaman, serta bayangan lipatan jilid buku (*book spine shadow*).
+> - **Ornamen Buku Fantasi Abad Pertengahan**:
+>   1. **Bingkai Ukiran Sudut Emas & Tekstur Perkamen Tua** (*Illuminated Celtic/Medieval Corner Filigree* & *Aged Vellum Vignette*).
+>   2. **Ornamen Pembatas Bab Sulur Kompas & Segel Lilin Kerajaan** (*Medieval Compass Rose & Flourish Dividers* + *Royal Wax Seal Badges*).
+>   3. **Efek Tepi Lembaran Kitab Bertumpuk & Bayangan Lipatan Jilid Buku** (*Stacked Parchment Page Edges & Book-Binding Crease*).
+> - **Konsistensi Font & Konten**: Mempertahankan 100% seluruh 21 tab di 4 Pilar, fungsi aplikasi, serta jenis huruf (`Cinzel Decorative`, `Cinzel`, `Lora`, dan `JetBrains Mono`) baik pada mode **Perkamen Siang** maupun **Grimoire Malam**.
 
 ---
 
 ## 1. Overview & Core Concept
 
-- **Apa yang Dilakukan Fitur Ini**:
-  1. **Studio Ekspor Buku Lengkap (`.MD` & PDF)**: Memastikan saat penulis mengekspor *World Bible* ke Markdown atau mencetaknya ke PDF, seluruh silsilah wangsa kerajaan per generasi, daftar nubuat/misteri (beserta petunjuk bab dan opsi menampilkan/menyembunyikan *spoiler* rahasia kanonik), serta atribut spesifik kategori baru tercetak rapi dengan nama label Bahasa Indonesia.
-  2. **Modal Panduan & Checklist Menyusun Cerita (`Panduan Cerita`)**: Memberikan peta jalan (*roadmap*) interaktif di dalam aplikasi agar penulis tahu persis langkah apa yang sudah selesai dan langkah apa yang harus dikerjakan berikutnya saat membangun dunia dan menulis bab.
-- **Target Pengguna**: Penulis novel fantasi, perancang *lore* RPG, dan kreator dunia fiksi yang membutuhkan panduan alur kerja terstruktur sekaligus hasil ekspor dokumen *World Bible* yang utuh.
-- **Nilai Utama**: Menghilangkan kebingungan saat memulai proyek dunia baru dan menjamin tidak ada data dari 21 tab yang tertinggal saat diekspor ke `.md` atau PDF.
+- **Apa yang Dilakukan Pembaruan Ini**: Mengubah tampilan kontainer aplikasi dari sekadar halaman web biasa menjadi seperti **Kitab World Bible Abad Pertengahan yang sedang dibuka di atas meja kayu kartografer**.
+- **Pengalaman Visual Utama**:
+  1. **Sampul Kulit & Siku Kuningan (*Leather Binding & Brass Clasps*)**: Area kerja utama dibingkai oleh sampul jilid kulit berukir tipis dengan pelindung sudut kuningan antik dan pita pembatas buku merah di bagian atas.
+  2. **Tepi Lembaran Kertas Bertumpuk (*Stacked Tome Pages*)**: Sisi kiri, kanan, dan bawah hamparan kitab menampilkan berlapis-lapis tepi lembaran kertas perkamen beserta bayangan halus lipatan jilid buku di bagian tengah/tepi dalam.
+  3. **Ukiran Sudut Emas & Pembatas Sulur Kompas (*Medieval Filigree & Dividers*)**: Memperkaya komponen `OrnateCornerFiligree` dengan detail sulur manuskrip abad pertengahan serta menambahkan pembatas bagian (*ornamental divider*) bergaya kompas bintang & segel lilin kerajaan.
 
 ---
 
 ## 2. User Experience & Visual Design
 
-- **Alur Pengguna Utama (Key User Flows)**:
-  1. **Membuka Panduan Cerita dari Bilah Atas**:
-     - Penulis mengeklik tombol **`Panduan Cerita`** di bilah navigasi atas.
-     - Modal terbuka dengan 3 sub-tab interaktif:
-       - **Tab 1: Checklist 5 Tahap Menyusun Cerita**: Menampilkan progres otomatis proyek aktif (misal: *Tahap 1: Premis & Peta Dunia*, *Tahap 2: Aturan Sihir & Bangsa*, *Tahap 3: Tokoh & Silsilah Dinasti*, *Tahap 4: Misteri Nubuat & Rangka Adegan*, *Tahap 5: Audit & Ekspor Buku*). Setiap langkah dilengkapi indikator status selesai/belum dan tombol **`Buka Tab →`** yang langsung mengarahkan penulis ke tab terkait.
-       - **Tab 2: Peta 4 Pilar & 21 Section**: Menjelaskan fungsi setiap tab di Pilar I–IV beserta tips penggunaannya dan tombol pintas untuk langsung membuka tab tersebut.
-       - **Tab 3: Tautan Pintar `[[...]]` & Tips Produktivitas**: Panduan visual cara memakai tautan kurung ganda `[[Nama Entitas]]`, *Generator Nama Fantasi*, *Mode Fokus Menulis*, *Kanvas Bebas*, serta tombol **`Unduh Buku Panduan (.MD)`**.
-  2. **Mengekspor & Mencetak Buku World Bible Utuh**:
-     - Penulis mengeklik tombol **`Ekspor & Cetak Buku`** di bilah atas.
-     - Pada tab **Buku World Bible (.MD)**, dokumen Markdown kini otomatis menyertakan bagian **Silsilah Keluarga & Dinasti Kerajaan** (kelompok generasi, gelar, orang tua, pasangan, status suksesi), **Tracker Misteri, Nubuat & Foreshadowing** (syair nubuat, tafsir umum, kebenaran kanonik, dan rantai petunjuk bab), serta **Halaman Catatan Kanvas Bebas**.
-     - Pada tab **Lembar Cetak / Simpan PDF**, tersedia kotak centang tambahan untuk menyertakan/menyembunyikan **Silsilah Dinasti** dan **Tracker Nubuat & Misteri** di lembar cetak buku.
-
-- **Identitas Visual & Tema**:
-  - **Aesthetic Direction**: *Illuminated Cartographer's Grimoire* — selaras dengan tema ganda **Perkamen Siang** (`#F6F1E6` / `#FBF8F1`) dan **Grimoire Malam** (`#15110D` / `#1E1812`) tanpa masalah kontras.
-  - **Typography & Hierarchy**: Menggunakan `Cinzel` untuk judul pilar/bab, `Cormorant Garamond` untuk kutipan dan subjudul buku cetak, `Plus Jakarta Sans` untuk teks panduan dan checklist, serta `JetBrains Mono` (`tabular-nums`) untuk indikator persentase dan hitungan item.
+- **Identitas Visual & Detail Ornamen**:
+  - **Tekstur Perkamen Tua (*Aged Vellum Grain & Vignette*)**: Permukaan kertas memiliki gradasi tepi perkamen hangat (*radial vignette*) dan serat kertas halus yang tetap nyaman dibaca dalam waktu lama.
+  - **4 Kotak Pilar Bergaya Pelat Indeks Kitab Kerajaan**: Keempat kotak Pilar (*Pilar I–IV*) di bagian atas kitab dihiasi ornamen sudut emas, garis pembatas sulur, dan tombol tab aktif yang menyerupai pita/segel lilin merah kirmizi (`#9E2A2B`) berbingkai emas (`#B5832A`).
+  - **Kompatibilitas Penuh 2 Mode Tema**:
+    - **Perkamen Siang**: Sampul kulit cokelat mahoni tua (`#2C1E14`), lembaran perkamen gading hangat (`#FBF8F1` & `#F6F1E6`), tinta sepia gelap (`#231C14`), dan emas kuningan (`#B5832A`).
+    - **Grimoire Malam**: Sampul kulit obsidian gelap (`#0E0A07`), lembaran perkamen malam (`#1D1712` & `#14100C`), teks gading terang (`#F5EFE4`), dan ukiran emas bercahaya (`#F0C36D`).
 
 ---
 
 ## 3. Key Product Decisions & Trade-Offs
 
-- **Keputusan 1: Checklist Progres Otomatis Berbasis Data Proyek Aktif**
-  - *Pendekatan yang Dipilih*: Menghitung status penyelesaian 5 Tahap Menyusun Cerita secara langsung dari isi proyek dunia yang sedang dibuka (apakah premis sudah diisi, apakah ada *Power System*, apakah sudah ada *Character* dan *Silsilah Dinasti*, apakah ada *Tracker Nubuat*, dan apakah *Alur Bab* sudah memiliki adegan/draf).
-  - *Alasan*: Penulis tidak perlu mencentang manual satu per satu; aplikasi secara cerdas mendeteksi bagian mana dari dunia cerita yang masih kosong dan memberikan tombol lompat 1-klik ke tab tersebut.
-- **Keputusan 2: Label Atribut Berbahasa Indonesia di Ekspor Markdown & PDF**
-  - *Pendekatan yang Dipilih*: Memetakan seluruh kunci atribut teknis (termasuk 20+ atribut baru dari *Entitas Kosmik*, *Dewa-Dewi*, *Bestiary Monster*, dan *Agama & Budaya*) ke label Bahasa Indonesia yang rapi saat menghasilkan teks `.md` dan kartu cetak PDF.
-  - *Alasan*: Menghasilkan dokumen `.md` dan cetakan PDF yang langsung layak baca layaknya buku ensiklopedia resmi, bukan kumpulan nama variabel kode.
+- **Keputusan 1: Efek Kitab Terbuka Berbasis CSS & SVG Murni Tanpa Mengurangi Lebar Area Kerja**
+  - *Pendekatan yang Dipilih*: Membangun efek jilid kulit, tumpukan lembaran kertas (`box-shadow` berlapis), siku kuningan SVG, dan bayangan lipatan jilid buku secara presisi di sekeliling kontainer `1440px` tanpa menyempitkan ruang baca/tulis di dalam 21 tab.
+  - *Alasan*: Memberikan nuansa buku fantasi abad pertengahan yang kental sekaligus menjaga kenyamanan mengetik naskah, menggambar peta, dan memakai Kanvas Bebas.
+- **Keputusan 2: Mempertahankan Seluruh Font & Struktur Fitur**
+  - *Pendekatan yang Dipilih*: Tidak mengubah keluarga *font* (`Cinzel Decorative`, `Cinzel`, `Lora`, `JetBrains Mono`) maupun alur kerja 21 tab yang sudah ada.
+  - *Alasan*: Sesuai permintaan eksplisit Anda agar hanya atmosfer visual buku abad pertengahannya yang diperkuat sementara isi dan *font* tetap dipertahankan.
 
 ---
 
 ## 4. Technical Architecture & Data Strategy *(Technical Reference)*
 
-- **Architecture & Component Diagram**:
+- **Architecture & Visual Framing Diagram**:
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                          App Shell & Top Bar                            │
-│  [Cari (Ctrl+K)] [Panduan Cerita] [Kesehatan Lore] [Proyek] [Ekspor]    │
-└───────────────┬─────────────────────────────────────────┬───────────────┘
-                │                                         │
-                ▼                                         ▼
-┌───────────────────────────────────────┐ ┌───────────────────────────────────────┐
-│       StoryArchitectGuideModal        │ │        WorldExportStudioModal         │
-│ ───────────────────────────────────── │ │ ───────────────────────────────────── │
-│ • Tab 1: Checklist 5 Tahap Cerita     │ │ • buildWorldBibleMarkdown(project)    │
-│   (Auto-evaluasi progres WorldProject │ │   ├─ Kosmologi & 13 Kategori Entitas  │
-│    + Tombol Lompat ke Tab Terkait)    │ │   │  (Label Atribut Bahasa Indonesia) │
-│ • Tab 2: Direktori 4 Pilar & 21 Tab   │ │   ├─ Pohon Silsilah & Dinasti         │
-│ • Tab 3: Sintaks [[...]] & Tips       │ │   ├─ Tracker Misteri & Nubuat         │
-│ • Aksi: Unduh Panduan Lengkap (.MD)   │ │   ├─ Pita Kronologi & Peta Relasi     │
-│                                       │ │   └─ Catatan Dokumen Kanvas Bebas     │
-│                                       │ │ • Lembar Cetak PDF (Checkbox Silsilah │
-│                                       │ │   & Tracker Nubuat terintegrasi)      │
-└───────────────────────────────────────┘ └───────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│        Meja Kerja Kartografer (Latar Tekstur Kayu Gelap / Perkamen Tua)     │
+│  ╔═══════════════════════════════════════════════════════════════════════╗  │
+│  ║ [Siku Kuningan]    Bilah Kepala Kitab & Segel Lilin   [Siku Kuningan] ║  │
+│  ╠═══════════════════════════════════════════════════════════════════════╣  │
+│  ║ ┌───────────────────────────────────────────────────────────────────┐ ║  │
+│  ║ │  ║  [Pita Buku]   Hamparan Lembaran Kitab Terbuka              ║  │ ║  │
+│  ║ │  ║  ┌───────────────────────────────────────────────────────┐  ║  │ ║  │
+│  ║ │  ║  │  Pelat Indeks 4 Pilar Semesta (Ornamen Sudut Emas)    │  ║  │ ║  │
+│  ║ │  ║  └───────────────────────────────────────────────────────┘  ║  │ ║  │
+│  ║ │  ║               ─── ❖ Pembatas Sulur Kompas ❖ ───            ║  │ ║  │
+│  ║ │  ║  ┌───────────────────┬───────────────────────────────────┐  ║  │ ║  │
+│  ║ │  ║  │ Lembar Kiri       │  Lembar Kanan (Bayangan Jilid &   │  ║  │ ║  │
+│  ║ │  ║  │ (Direktori Kodeks │  Ukiran Sudut Manuskrip Kuno)     │  ║  │ ║  │
+│  ║ │  ║  │  & Segel Kategori)│                                   │  ║  │ ║  │
+│  ║ │  ║  └───────────────────┴───────────────────────────────────┘  ║  │ ║  │
+│  ║ └──╨─────────────────────────────────────────────────────────────╨──┘ ║  │
+│  ║    ╰── Efek Tumpukan Lembaran Kertas Perkamen (Stacked Pages) ──╯     ║  │
+│  ╚═══════════════════════════════════════════════════════════════════════╝  │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Interactive Component & State Mapping**:
-  - `StoryArchitectGuideModal`: Menerima `project`, `onClose`, dan `onNavigateToTab(tabId: WorkspaceTab)` sehingga saat penulis mengeklik tombol aksi pada tahap checklist atau direktori 21 tab, modal otomatis tertutup dan mengaktifkan tab yang dituju.
-  - `WorldExportStudioModal`: Menambahkan *state* filter cetak `printIncludeDynasties` dan `printIncludeProphecies`, memperbarui fungsi kompilasi `buildWorldBibleMarkdown` dengan kamus label atribut Bahasa Indonesia (`ATTRIBUTE_LABELS_ID`), serta merender seksi cetak **Silsilah Dinasti** dan **Tracker Nubuat** di lembar pratinjau PDF.
+- **Interactive Component & Styling Mapping**:
+  - **Sistem CSS Kitab Abad Pertengahan (`index.css`)**: Menambahkan kelas `.medieval-tome-cover` (sampul kulit tua dengan jahitan benang emas), `.medieval-tome-pages` (efek tumpukan lembaran kertas bertingkat di sisi kiri, kanan, dan bawah beserta bayangan lipatan tengah/tepi), `.medieval-parchment-panel` (tekstur vignette perkamen tua), dan `.wax-seal-btn` (tombol beraksen segel lilin kerajaan).
+  - **Komponen Ornamen SVG (`WikiTextRenderer.tsx`)**: Memperkaya `OrnateCornerFiligree` dengan lekuk ukiran manuskrip abad pertengahan yang lebih detail, serta menyediakan komponen `MedievalFlourishDivider` (pembatas sulur kompas & pedang/bintang) dan `BrassBookClasp` (siku logam kuningan di sudut jilid kitab).
+  - **Pembungkus Kitab Terbuka (`App.tsx` & Workspace)**: Menerapkan bingkai hamparan kitab grimoire terbuka, pita pembatas buku merah kirmizi, dan pembatas sulur kompas di antara navigasi 4 Pilar dan lembaran kerja aktif.
