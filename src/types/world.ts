@@ -364,8 +364,44 @@ export interface FreeCanvasZone {
   color: FreeCanvasCardColor;
 }
 
+export type PaintToolKind =
+  | 'pen'
+  | 'brush'
+  | 'highlighter'
+  | 'eraser'
+  | 'line'
+  | 'arrow'
+  | 'rect'
+  | 'circle';
+
+export interface PaintShape {
+  id: string;
+  tool: PaintToolKind;
+  color: string;
+  width: number;
+  opacity?: number;
+  filled?: boolean;
+  points?: Array<{ x: number; y: number }>;
+  start?: { x: number; y: number };
+  end?: { x: number; y: number };
+}
+
+export type NotebookPaperStyle = 'ruled' | 'grid' | 'dots' | 'plain';
+
+export interface NotebookPage {
+  id: string;
+  title: string;
+  updatedAt: string;
+  paperStyle: NotebookPaperStyle;
+  docContent: string;
+  textBlocks: FreeCanvasCard[];
+  drawings: PaintShape[];
+}
+
 export interface FreeCanvasData {
   boardTitle: string;
+  activePageId?: string;
+  pages?: NotebookPage[];
   cards: FreeCanvasCard[];
   links: FreeCanvasLink[];
   strokes: FreeCanvasStroke[];

@@ -1009,7 +1009,11 @@ export default function App() {
     if (tabId === 'graph') return project.relationships.length;
     if (tabId === 'outliner') return project.chapters.length;
     if (tabId === 'free_canvas') {
-      return (project.freeCanvas || DEFAULT_STARTER_FREE_CANVAS).cards.length;
+      return (
+        project.freeCanvas?.pages ||
+        DEFAULT_STARTER_FREE_CANVAS.pages ||
+        []
+      ).length;
     }
     return null;
   };
