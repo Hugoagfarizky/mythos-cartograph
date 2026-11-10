@@ -1437,99 +1437,29 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       {/* ===================================================================== */}
       {/* 1. TOP MAP STUDIO HEADER & MODE SELECTOR                              */}
       {/* ===================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 space-y-4 shadow-xs">
+      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
+
+        {/* Row 1: Map Title & Subtitle on Left + Map Actions on Right */}
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex-1 min-w-0 space-y-0.5 text-left">
-            <div className="text-xs text-[#695A47] font-medium">
-              Atlas Ilustrasi Buku Abad Pertengahan · {mapData.scaleLabel}
+          <div className="flex-1 min-w-0 space-y-1 text-left">
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex flex-wrap items-center gap-1.5">
+              <span>❖ Atlas Ilustrasi Buku Abad Pertengahan</span>
+              <span aria-hidden="true">·</span>
+              <span className="text-[#695A47]">{mapData.scaleLabel}</span>
             </div>
-            <h2 className="font-cartography text-2xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
               {mapData.mapTitle}
             </h2>
-          </div>
-
-          {/* 6 Cartography Tool Modes */}
-          <div className="flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-lg border border-[#D8CBB3] shrink-0">
-            <button
-              type="button"
-              onClick={() => setToolMode('inspect')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'inspect'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <Eye className="w-3.5 h-3.5" />
-              Jelajah & Geser
-            </button>
-            <button
-              type="button"
-              onClick={() => setToolMode('terrain')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'terrain'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <Paintbrush className="w-3.5 h-3.5" />
-              Lukis Daratan
-            </button>
-            <button
-              type="button"
-              onClick={() => setToolMode('stamp')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'stamp'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <MapPin className="w-3.5 h-3.5" />
-              Kastil & Kota
-            </button>
-            <button
-              type="button"
-              onClick={() => setToolMode('label')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'label'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <TypeIcon className="w-3.5 h-3.5" />
-              Kaligrafi Wilayah
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setDraftPoints([]);
-                setToolMode('river_route');
-              }}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'river_route'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <Route className="w-3.5 h-3.5" />
-              Sungai & Rute Jalan
-            </button>
-            <button
-              type="button"
-              onClick={() => setToolMode('measure')}
-              className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                toolMode === 'measure'
-                  ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
-              }`}
-            >
-              <Ruler className="w-3.5 h-3.5" />
-              Ukur Jarak & Hari Tempuh
-            </button>
+            {mapData.subtitle && (
+              <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed">
+                {mapData.subtitle}
+              </p>
+            )}
           </div>
 
           {/* Map Settings, Random Continent & Full PNG Download */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -1540,7 +1470,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 });
                 setIsEditingMapMeta((prev) => !prev);
               }}
-              className={`px-3 py-1.5 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              className={`px-3.5 py-2 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 isEditingMapMeta
                   ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
                   : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
@@ -1552,7 +1482,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             <button
               type="button"
               onClick={handleGenerateRandomArchipelago}
-              className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3.5 py-2 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title="Buat bentuk benua baru secara prosedural"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -1561,12 +1491,91 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             <button
               type="button"
               onClick={handleExportMapPng}
-              className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3.5 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
               Unduh Peta PNG
             </button>
           </div>
+        </div>
+
+        {/* Row 2: 6 Cartography Tool Modes */}
+        <div className="relative z-10 flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-xl border border-[#D8CBB3]">
+          <button
+            type="button"
+            onClick={() => setToolMode('inspect')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'inspect'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Jelajah & Geser
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('terrain')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'terrain'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <Paintbrush className="w-3.5 h-3.5" />
+            Lukis Daratan
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('stamp')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'stamp'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            Kastil & Kota
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('label')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'label'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <TypeIcon className="w-3.5 h-3.5" />
+            Kaligrafi Wilayah
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setDraftPoints([]);
+              setToolMode('river_route');
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'river_route'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <Route className="w-3.5 h-3.5" />
+            Sungai & Rute Jalan
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('measure')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'measure'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+            }`}
+          >
+            <Ruler className="w-3.5 h-3.5" />
+            Ukur Jarak & Hari Tempuh
+          </button>
         </div>
 
         {/* Layer Visibility Toggles Bar */}
