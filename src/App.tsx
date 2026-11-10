@@ -64,6 +64,7 @@ import {
   GlobalOmniSearchModal,
   LoreHealthInspectorModal,
   MultiWorldProjectManagerModal,
+  StoryArchitectGuideModal,
   WorldExportStudioModal,
   WorldSnapshot,
   computeWorldHealthMetrics,
@@ -363,6 +364,7 @@ export default function App() {
   const [projectManagerOpen, setProjectManagerOpen] = useState<boolean>(false);
   const [exportStudioOpen, setExportStudioOpen] = useState<boolean>(false);
   const [loreHealthOpen, setLoreHealthOpen] = useState<boolean>(false);
+  const [storyGuideOpen, setStoryGuideOpen] = useState<boolean>(false);
   const [themeMode, setThemeMode] = useState<'parchment' | 'grimoire-dark'>(
     () => {
       try {
@@ -1166,6 +1168,17 @@ export default function App() {
             </kbd>
           </button>
 
+          {/* 1b. Tombol Panduan Cerita & Checklist Interaktif */}
+          <button
+            type="button"
+            onClick={() => setStoryGuideOpen(true)}
+            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#B5832A]/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            title="Panduan Cara Menyusun Cerita, Kamus 21 Section & Checklist Progres"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <span>Panduan Cerita</span>
+          </button>
+
           {/* 2. Inspektur Kesehatan & Kelengkapan Lore Trigger */}
           <button
             type="button"
@@ -1796,6 +1809,15 @@ export default function App() {
         onOpenGraphTab={() => handleSwitchTab('graph')}
         onOpenOutlinerTab={() => handleSwitchTab('outliner')}
         onAutoPinLocationOnMap={handleAutoPinLocationOnMap}
+      />
+
+      {/* Modal 7: Panduan Arsitektur Cerita & Checklist 4 Tahap */}
+      <StoryArchitectGuideModal
+        isOpen={storyGuideOpen}
+        onClose={() => setStoryGuideOpen(false)}
+        project={project}
+        onNavigateToTab={(tabId) => handleSwitchTab(tabId as WorkspaceTab)}
+        onShowToast={showToast}
       />
     </div>
   );

@@ -5,12 +5,16 @@ import {
   BookOpen,
   Calendar,
   Check,
+  CheckCircle2,
+  Compass,
   Copy,
   Download,
+  Eye,
   FileDown,
   FileJson,
   FileText,
   FolderKanban,
+  GitBranch,
   History,
   MapPin,
   Plus,
@@ -827,7 +831,91 @@ const ORDERED_CATEGORIES: LoreCategory[] = [
   'encyclopedia',
 ];
 
-export function buildWorldBibleMarkdown(project: WorldProject): string {
+const ATTRIBUTE_LABELS_ID: Record<string, string> = {
+  // Character
+  role: 'Peran Naratif',
+  ageAndStatus: 'Usia & Status Hidup',
+  race: 'Ras / Garis Darah',
+  faction: 'Afiliasi / Kelompok',
+  homeland: 'Tempat Asal',
+  powerLevel: 'Tingkat Kekuatan & Skill Utama',
+  coreMotivation: 'Motivasi Batin & Tujuan',
+  secretOrFlaw: 'Rahasia Tersembunyi / Kelemahan',
+  physicalAppearance: 'Ciri Fisik & Penampilan',
+  // Cosmic Entity
+  cosmicScaleAndExistence: 'Skala Kosmik & Eksistensi',
+  primordialOrigin: 'Asal-Usul Primordial / Dimensi',
+  cosmicLawsAndManifestation: 'Hukum Alam & Manifestasi Kosmos',
+  realityInfluence: 'Pengaruh terhadap Realitas & Takdir',
+  // Deity
+  pantheonAndThrone: 'Jajaran Pantheon & Takhta Ilahi',
+  divineDomains: 'Domain Ilahi',
+  sacredSymbolsAndRelics: 'Simbol Suci & Relik Ilahi',
+  majorTemplesAndCults: 'Kuil Utama & Ordo Pemujaan',
+  blessingsAndCurses: 'Berkah & Kutukan Ilahi',
+  // Bestiary
+  dangerTier: 'Tingkat Bahaya (Tier)',
+  creatureClass: 'Klasifikasi Makhluk',
+  naturalHabitat: 'Habitat Alami & Wilayah Sebaran',
+  attackPatternsAndAbilities: 'Pola Serangan & Kemampuan',
+  anatomicalWeaknesses: 'Kelemahan Anatomi / Elemen',
+  harvestableMaterialsAndLoot: 'Material Buruan & Alkimia (Loot/Drop)',
+  // Culture & Religion
+  practicingPeoples: 'Bangsa / Ras Penganut',
+  coreTenetsAndPhilosophy: 'Ajaran Inti & Filosofi Hidup',
+  sacredRitualsAndFestivals: 'Ritual Suci & Festival Tahunan',
+  socialTaboos: 'Tabu & Pantangan Sosial',
+  traditionalAttireAndCuisine: 'Busana Adat, Arsitektur & Kuliner',
+  // Race
+  lifespan: 'Rentang Usia Rata-Rata',
+  traits: 'Ciri Fisik & Biologis',
+  homelandRegion: 'Habitat Utama',
+  innateAbilities: 'Bakat Bawaan / Kemampuan Alami',
+  cultureAndTradition: 'Struktur Sosial & Tradisi',
+  // Faction
+  factionType: 'Jenis Kelompok / Ordo',
+  leader: 'Pemimpin Tertinggi',
+  headquarters: 'Markas Utama',
+  ideology: 'Ideologi, Sumpah & Doktrin',
+  influenceAndResources: 'Sumber Pengaruh & Kekuatan',
+  // Nation
+  government: 'Bentuk Pemerintahan',
+  capital: 'Ibu Kota',
+  ruler: 'Penguasa / Kepala Negara',
+  economyAndExports: 'Ekonomi & Komoditas Utama',
+  militaryStrength: 'Kekuatan Militer & Pertahanan',
+  // Region
+  parentNation: 'Negara Induk / Kedaulatan',
+  climateAndGeography: 'Iklim & Bentang Alam',
+  dangerLevel: 'Tingkat Bahaya Wilayah',
+  landmarksAndRuins: 'Landmark & Reruntuhan Penting',
+  naturalResources: 'Sumber Daya Alam & Magis',
+  // Power System
+  energySource: 'Sumber Energi',
+  activationRequirement: 'Syarat Penguasaan & Penggunaan',
+  costAndRisk: 'Harga, Risiko & Efek Samping',
+  limitations: 'Batas Mutlak (Hard Limit)',
+  // Skill
+  parentPowerSystem: 'Induk Power System',
+  skillTier: 'Tingkat Kesulitan / Tier',
+  manaOrStaminaCost: 'Biaya Energi / Stamina',
+  cooldownOrCastTime: 'Waktu Rapal / Jeda',
+  primaryEffect: 'Efek Utama & Daya Hancur',
+  // History
+  eraDate: 'Tahun & Era Kejadian',
+  belligerents: 'Pihak / Tokoh yang Terlibat',
+  locationOfEvent: 'Lokasi Peristiwa',
+  casualtiesAndOutcome: 'Dampak & Hasil Akhir',
+  // Encyclopedia
+  subCategory: 'Sub-Kategori Ensiklopedia',
+  rarityAndOrigin: 'Kelangkaan & Asal-Usul',
+  usageAndEffects: 'Kegunaan, Khasiat & Efek',
+};
+
+export function buildWorldBibleMarkdown(
+  project: WorldProject,
+  includeCanonicalSpoilers = true
+): string {
   const lines: string[] = [];
   lines.push(`# ${project.worldName}`);
   lines.push(`> *${project.tagline}*`);
@@ -848,7 +936,7 @@ export function buildWorldBibleMarkdown(project: WorldProject): string {
     lines.push('');
   }
 
-  lines.push(`## Kosmologi & Premis Utama`);
+  lines.push(`## I. Kosmologi & Premis Utama`);
   if (project.storyThemes) {
     lines.push(`**Tema Sentral**: ${project.storyThemes}`);
     lines.push('');
@@ -870,7 +958,9 @@ export function buildWorldBibleMarkdown(project: WorldProject): string {
   }
 
   lines.push(`---`);
-  lines.push(`## Ensiklopedia Entitas World Bible (${project.entities.length} Entri)`);
+  lines.push(
+    `## II. Ensiklopedia Entitas World Bible (${project.entities.length} Entri)`
+  );
   lines.push('');
 
   ORDERED_CATEGORIES.forEach((cat) => {
@@ -895,7 +985,8 @@ export function buildWorldBibleMarkdown(project: WorldProject): string {
       if (attrEntries.length > 0) {
         lines.push(`**Atribut & Spesifikasi**:`);
         attrEntries.forEach(([k, v]) => {
-          lines.push(`- \`${k}\`: ${v}`);
+          const readableLabel = ATTRIBUTE_LABELS_ID[k] || k;
+          lines.push(`- **${readableLabel}**: ${v}`);
         });
         lines.push('');
       }
@@ -909,15 +1000,143 @@ export function buildWorldBibleMarkdown(project: WorldProject): string {
     });
   });
 
+  // III. Pohon Silsilah & Dinasti Kerajaan
+  const dynasties = project.dynastyTrees || [];
+  if (dynasties.length > 0) {
+    lines.push(
+      `## III. Pohon Silsilah Keluarga & Dinasti Kerajaan (${dynasties.length} Wangsa/Klan)`
+    );
+    lines.push('');
+    dynasties.forEach((tree) => {
+      lines.push(`### ${tree.houseName}`);
+      if (tree.motto || tree.coatOfArms) {
+        lines.push(
+          `> *Semboyan*: "${tree.motto}"${tree.coatOfArms ? ` · *Lambang*: ${tree.coatOfArms}` : ''}`
+        );
+      }
+      lines.push(
+        `- **Kursi Kekuasaan / Tanah Leluhur**: ${tree.ancestralSeat || '-'} | **Asal Bangsa/Faksi**: ${tree.originNation || '-'}`
+      );
+      if (tree.overview) {
+        lines.push('');
+        lines.push(tree.overview);
+      }
+      lines.push('');
+
+      const generations = Array.from(
+        new Set((tree.members || []).map((m) => m.generation))
+      ).sort((a, b) => a - b);
+
+      generations.forEach((gen) => {
+        lines.push(`#### Generasi ${gen}`);
+        const genMembers = (tree.members || []).filter(
+          (m) => m.generation === gen
+        );
+        genMembers.forEach((member) => {
+          const parentNames = (member.parentIds || [])
+            .map(
+              (pid) =>
+                tree.members.find((m) => m.id === pid)?.name || pid
+            )
+            .join(', ');
+
+          lines.push(
+            `- **${member.name}** (*${member.titleOrRole}*) — [${member.successionStatus} · ${member.status} · ${member.birthDeathYears}]`
+          );
+          if (parentNames) {
+            lines.push(`  - *Orang Tua*: ${parentNames}`);
+          }
+          if (member.spouseName) {
+            lines.push(`  - *Pasangan*: ${member.spouseName}`);
+          }
+          if (member.bloodlineTrait) {
+            lines.push(`  - *Ciri Garis Darah*: ${member.bloodlineTrait}`);
+          }
+          if (member.notes) {
+            lines.push(`  - *Catatan*: ${member.notes}`);
+          }
+        });
+        lines.push('');
+      });
+      lines.push(`---`);
+      lines.push('');
+    });
+  }
+
+  // IV. Tracker Misteri, Nubuat & Foreshadowing
+  const mysteries = project.mysteryPlots || [];
+  if (mysteries.length > 0) {
+    lines.push(
+      `## IV. Tracker Misteri, Nubuat & Foreshadowing (${mysteries.length} Entri)`
+    );
+    lines.push('');
+    mysteries.forEach((item) => {
+      lines.push(`### ${item.title}`);
+      lines.push(
+        `- **Kategori**: ${item.category} | **Status Pengungkapan**: ${item.status} | **Asal/Sumber**: ${item.originEntityName || '-'}`
+      );
+      lines.push('');
+      if (item.prophecyVerseOrQuestion) {
+        lines.push(`**Syair Nubuat / Teka-Teki**:`);
+        lines.push(`> *${item.prophecyVerseOrQuestion}*`);
+        lines.push('');
+      }
+      lines.push(`**Tafsir Umum Masyarakat di Dunia**:`);
+      lines.push(item.publicInterpretation);
+      lines.push('');
+
+      if (includeCanonicalSpoilers && item.trueCanonicalAnswer) {
+        lines.push(`**Kebenaran Kanonik Rahasia Penulis (Spoiler)**:`);
+        lines.push(item.trueCanonicalAnswer);
+        lines.push('');
+      }
+
+      if (item.payoffChapterId) {
+        const payoffCh = project.chapters.find(
+          (c) => c.id === item.payoffChapterId
+        );
+        if (payoffCh) {
+          lines.push(
+            `- **Bab Pengungkapan Utama (Payoff)**: Bab ${payoffCh.chapterNumber}: ${payoffCh.title}`
+          );
+          lines.push('');
+        }
+      }
+
+      if (item.clues && item.clues.length > 0) {
+        lines.push(`**Rantai Petunjuk (Clues) & Pengecoh (Red Herrings)**:`);
+        item.clues.forEach((cl, idx) => {
+          const chMatch = cl.linkedChapterId
+            ? project.chapters.find((c) => c.id === cl.linkedChapterId)
+            : undefined;
+          const chLabel = chMatch
+            ? `Bab ${chMatch.chapterNumber}: ${chMatch.title}`
+            : 'Belum ditautkan ke bab';
+          lines.push(
+            `${idx + 1}. [${cl.revealedStatus}${cl.isRedHerring ? ' · RED HERRING / PENGECOH' : ''}] (${chLabel}) ${cl.clueText}`
+          );
+        });
+        lines.push('');
+      }
+      lines.push(`---`);
+      lines.push('');
+    });
+  }
+
+  // V. Pita Kronologi Sejarah
   if (project.timeline.length > 0) {
-    lines.push(`## Pita Kronologi Sejarah (${project.timeline.length} Peristiwa)`);
+    lines.push(
+      `## V. Pita Kronologi Sejarah (${project.timeline.length} Peristiwa)`
+    );
     lines.push('');
     const sortedTimeline = [...project.timeline].sort(
       (a, b) => a.year - b.year
     );
     sortedTimeline.forEach((ev) => {
       lines.push(`### [${ev.displayDate}] ${ev.title}`);
-      lines.push(`- **Era**: ${ev.era} | **Kategori**: ${ev.category || 'Umum'} | **Lokasi**: ${ev.regionName || '-'}`);
+      lines.push(
+        `- **Era**: ${ev.era} | **Kategori**: ${ev.category || 'Umum'} | **Lokasi**: ${ev.regionName || '-'}`
+      );
       lines.push('');
       lines.push(ev.summary);
       if (ev.consequenceImpact) {
@@ -928,17 +1147,47 @@ export function buildWorldBibleMarkdown(project: WorldProject): string {
     });
   }
 
+  // VI. Jaringan Peta Relasi
   if (project.relationships.length > 0) {
-    lines.push(`## Jaringan Peta Relasi (${project.relationships.length} Ikatan)`);
+    lines.push(
+      `## VI. Jaringan Peta Relasi (${project.relationships.length} Ikatan)`
+    );
     lines.push('');
     project.relationships.forEach((rel) => {
-      const src = project.entities.find((e) => e.id === rel.sourceId)?.title || rel.sourceId;
-      const tgt = project.entities.find((e) => e.id === rel.targetId)?.title || rel.targetId;
+      const src =
+        project.entities.find((e) => e.id === rel.sourceId)?.title ||
+        rel.sourceId;
+      const tgt =
+        project.entities.find((e) => e.id === rel.targetId)?.title ||
+        rel.targetId;
       lines.push(
         `- **${src}** → **${tgt}** (*${rel.label}* | ${rel.type}${rel.visibilityStatus ? ` · ${rel.visibilityStatus}` : ''}): ${rel.notes}`
       );
     });
     lines.push('');
+  }
+
+  // VII. Catatan Kanvas Bebas (bila ada)
+  const canvasPages = project.freeCanvas?.pages || [];
+  if (canvasPages.length > 0) {
+    lines.push(
+      `## VII. Catatan & Dokumen Kanvas Bebas (${canvasPages.length} Halaman)`
+    );
+    lines.push('');
+    canvasPages.forEach((pg) => {
+      lines.push(`### ${pg.title}`);
+      if (pg.docContent && pg.docContent.trim()) {
+        lines.push(pg.docContent.trim());
+        lines.push('');
+      }
+      if (pg.textBlocks && pg.textBlocks.length > 0) {
+        lines.push(`**Kartu Catatan di Halaman Ini**:`);
+        pg.textBlocks.forEach((card) => {
+          lines.push(`- **${card.title}**: ${card.content}`);
+        });
+        lines.push('');
+      }
+    });
   }
 
   return lines.join('\n');
@@ -1046,10 +1295,17 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
   // Print customization options
   const [printIncludeCosmology, setPrintIncludeCosmology] = useState(true);
   const [printIncludeEntities, setPrintIncludeEntities] = useState(true);
+  const [printIncludeDynasties, setPrintIncludeDynasties] = useState(true);
+  const [printIncludeProphecies, setPrintIncludeProphecies] = useState(true);
   const [printIncludeTimeline, setPrintIncludeTimeline] = useState(true);
   const [printIncludeChapters, setPrintIncludeChapters] = useState(true);
+  const [includeCanonicalSpoilers, setIncludeCanonicalSpoilers] =
+    useState(true);
 
-  const worldBibleMd = useMemo(() => buildWorldBibleMarkdown(project), [project]);
+  const worldBibleMd = useMemo(
+    () => buildWorldBibleMarkdown(project, includeCanonicalSpoilers),
+    [project, includeCanonicalSpoilers]
+  );
   const chaptersMd = useMemo(
     () => buildChaptersManuscriptMarkdown(project),
     [project]
@@ -1174,15 +1430,30 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
             exportTab === 'markdown_chapters') && (
             <div className="space-y-4">
               <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
-                <div>
+                <div className="space-y-1">
                   <div className="text-xs font-semibold text-[#231C14]">
                     {exportTab === 'markdown_bible'
-                      ? 'Kompilasi Ensiklopedia World Bible Lengkap (Format Markdown .md)'
+                      ? 'Kompilasi Ensiklopedia World Bible Lengkap (13 Kategori Entitas + Silsilah Dinasti + Tracker Nubuat + Kanvas)'
                       : 'Kompilasi Kerangka Bab, Urutan Adegan & Draf Naskah (Format Markdown .md)'}
                   </div>
                   <p className="text-xs text-[#695A47]">
                     Siap dibuka langsung di Obsidian, Notion, Scrivener, Google Docs, atau editor teks favorit Anda.
                   </p>
+                  {exportTab === 'markdown_bible' && (
+                    <label className="inline-flex items-center gap-2 pt-1 text-xs font-medium text-[#231C14] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={includeCanonicalSpoilers}
+                        onChange={(e) =>
+                          setIncludeCanonicalSpoilers(e.target.checked)
+                        }
+                        className="accent-[#9E2A2B]"
+                      />
+                      <span>
+                        Sertakan Kebenaran Kanonik Rahasia Penulis (Spoiler Tracker Nubuat)
+                      </span>
+                    </label>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <button
@@ -1261,7 +1532,31 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       onChange={(e) => setPrintIncludeEntities(e.target.checked)}
                       className="accent-[#9E2A2B]"
                     />
-                    <span>Ensiklopedia Entitas ({project.entities.length})</span>
+                    <span>Ensiklopedia 13 Kategori ({project.entities.length})</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={printIncludeDynasties}
+                      onChange={(e) => setPrintIncludeDynasties(e.target.checked)}
+                      className="accent-[#9E2A2B]"
+                    />
+                    <span>
+                      Silsilah Dinasti ({(project.dynastyTrees || []).length})
+                    </span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={printIncludeProphecies}
+                      onChange={(e) =>
+                        setPrintIncludeProphecies(e.target.checked)
+                      }
+                      className="accent-[#9E2A2B]"
+                    />
+                    <span>
+                      Tracker Nubuat & Misteri ({(project.mysteryPlots || []).length})
+                    </span>
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -1365,33 +1660,55 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                             {CATEGORY_META[cat].label} ({items.length})
                           </h3>
                           <div className="grid grid-cols-1 gap-3">
-                            {items.map((ent) => (
-                              <div
-                                key={ent.id}
-                                className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
-                              >
-                                <div>
-                                  <div className="font-display text-lg font-bold text-[#231C14]">
-                                    {ent.title}
+                            {items.map((ent) => {
+                              const attrEntries = Object.entries(
+                                ent.attributes || {}
+                              ).filter(
+                                ([, val]) =>
+                                  val !== undefined && String(val).trim() !== ''
+                              );
+                              return (
+                                <div
+                                  key={ent.id}
+                                  className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
+                                >
+                                  <div>
+                                    <div className="font-display text-lg font-bold text-[#231C14]">
+                                      {ent.title}
+                                    </div>
+                                    {ent.subtitle && (
+                                      <div className="text-xs italic text-[#695A47]">
+                                        {ent.subtitle}
+                                      </div>
+                                    )}
                                   </div>
-                                  {ent.subtitle && (
-                                    <div className="text-xs italic text-[#695A47]">
-                                      {ent.subtitle}
+                                  <p className="text-xs font-medium text-[#231C14]">
+                                    {ent.summary}
+                                  </p>
+                                  {attrEntries.length > 0 && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 pb-1 text-[11px] bg-[#F6F1E6]/60 p-2.5 rounded-lg border border-[#D8CBB3]/70">
+                                      {attrEntries.map(([k, v]) => (
+                                        <div key={k}>
+                                          <span className="font-bold text-[#695A47]">
+                                            {ATTRIBUTE_LABELS_ID[k] || k}:{' '}
+                                          </span>
+                                          <span className="text-[#231C14]">
+                                            {String(v)}
+                                          </span>
+                                        </div>
+                                      ))}
                                     </div>
                                   )}
+                                  <div className="text-xs text-[#231C14]/90 leading-relaxed">
+                                    <WikiTextRenderer
+                                      text={ent.content}
+                                      entities={project.entities}
+                                      onSelectEntity={() => {}}
+                                    />
+                                  </div>
                                 </div>
-                                <p className="text-xs font-medium text-[#231C14]">
-                                  {ent.summary}
-                                </p>
-                                <div className="text-xs text-[#231C14]/90 leading-relaxed">
-                                  <WikiTextRenderer
-                                    text={ent.content}
-                                    entities={project.entities}
-                                    onSelectEntity={() => {}}
-                                  />
-                                </div>
-                              </div>
-                            ))}
+                              );
+                            })}
                           </div>
                         </div>
                       );
@@ -1399,11 +1716,122 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                   </section>
                 )}
 
-                {/* Section 3: Timeline */}
+                {/* Section 3: Dynasty Trees */}
+                {printIncludeDynasties &&
+                  (project.dynastyTrees || []).length > 0 && (
+                    <section className="space-y-4">
+                      <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                        III. Pohon Silsilah Keluarga & Dinasti Kerajaan (
+                        {(project.dynastyTrees || []).length})
+                      </h2>
+                      <div className="space-y-4">
+                        {(project.dynastyTrees || []).map((tree) => (
+                          <div
+                            key={tree.id}
+                            className="p-4 rounded-xl border border-[#D8CBB3] space-y-2.5 break-inside-avoid"
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div>
+                                <h3 className="font-display text-xl font-bold text-[#231C14]">
+                                  {tree.houseName}
+                                </h3>
+                                <div className="text-xs italic text-[#9E2A2B]">
+                                  {tree.motto}
+                                  {tree.coatOfArms ? ` · ${tree.coatOfArms}` : ''}
+                                </div>
+                              </div>
+                              <div className="text-xs text-[#695A47]">
+                                Kursi Kekuasaan: {tree.ancestralSeat || '-'}
+                              </div>
+                            </div>
+                            <p className="text-xs text-[#231C14]">
+                              {tree.overview}
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                              {(tree.members || []).map((m) => (
+                                <div
+                                  key={m.id}
+                                  className="p-2.5 rounded-lg bg-[#F6F1E6]/70 border border-[#D8CBB3] text-xs space-y-0.5"
+                                >
+                                  <div className="font-bold text-[#231C14]">
+                                    Gen {m.generation} · {m.name}
+                                  </div>
+                                  <div className="text-[11px] text-[#9E2A2B] font-medium">
+                                    {m.titleOrRole} ({m.successionStatus} ·{' '}
+                                    {m.status})
+                                  </div>
+                                  <div className="text-[11px] text-[#695A47]">
+                                    {m.notes}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                {/* Section 4: Prophecy & Mystery Tracker */}
+                {printIncludeProphecies &&
+                  (project.mysteryPlots || []).length > 0 && (
+                    <section className="space-y-4">
+                      <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                        IV. Tracker Misteri, Nubuat & Foreshadowing (
+                        {(project.mysteryPlots || []).length})
+                      </h2>
+                      <div className="space-y-4">
+                        {(project.mysteryPlots || []).map((item) => (
+                          <div
+                            key={item.id}
+                            className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
+                          >
+                            <div className="flex items-center justify-between text-xs text-[#695A47]">
+                              <span className="font-bold text-[#9E2A2B]">
+                                {item.category} · Status: {item.status}
+                              </span>
+                              <span>Sumber: {item.originEntityName || '-'}</span>
+                            </div>
+                            <h3 className="font-display text-lg font-bold text-[#231C14]">
+                              {item.title}
+                            </h3>
+                            {item.prophecyVerseOrQuestion && (
+                              <blockquote className="p-3 rounded-lg bg-[#F6F1E6] italic text-xs text-[#231C14]">
+                                "{item.prophecyVerseOrQuestion}"
+                              </blockquote>
+                            )}
+                            <div className="text-xs space-y-1">
+                              <div>
+                                <span className="font-bold text-[#695A47]">
+                                  Tafsir Umum Masyarakat:{' '}
+                                </span>
+                                <span className="text-[#231C14]">
+                                  {item.publicInterpretation}
+                                </span>
+                              </div>
+                              {includeCanonicalSpoilers &&
+                                item.trueCanonicalAnswer && (
+                                  <div>
+                                    <span className="font-bold text-[#9E2A2B]">
+                                      Kebenaran Kanonik Rahasia:{' '}
+                                    </span>
+                                    <span className="text-[#231C14]">
+                                      {item.trueCanonicalAnswer}
+                                    </span>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                {/* Section 5: Timeline */}
                 {printIncludeTimeline && project.timeline.length > 0 && (
                   <section className="space-y-4">
                     <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
-                      III. Pita Kronologi Sejarah ({project.timeline.length})
+                      V. Pita Kronologi Sejarah ({project.timeline.length})
                     </h2>
                     <div className="space-y-2.5">
                       {[...project.timeline]
@@ -1426,11 +1854,11 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                   </section>
                 )}
 
-                {/* Section 4: Chapters */}
+                {/* Section 6: Chapters */}
                 {printIncludeChapters && project.chapters.length > 0 && (
                   <section className="space-y-4">
                     <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
-                      IV. Alur Bab & Draf Naskah ({project.chapters.length} Bab)
+                      VI. Alur Bab & Draf Naskah ({project.chapters.length} Bab)
                     </h2>
                     <div className="space-y-4">
                       {[...project.chapters]
@@ -2128,4 +2556,662 @@ export const LoreHealthInspectorModal: React.FC<
     </div>
   );
 };
+
+// ============================================================================
+// 5. MODAL PANDUAN ARSITEKTUR CERITA & CHECKLIST 5 TAHAP (Story Architect Guide)
+// ============================================================================
+
+interface StoryArchitectGuideModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  project: WorldProject;
+  onNavigateToTab: (tabId: string) => void;
+  onShowToast: (msg: string) => void;
+}
+
+export const StoryArchitectGuideModal: React.FC<
+  StoryArchitectGuideModalProps
+> = ({ isOpen, onClose, project, onNavigateToTab, onShowToast }) => {
+  const [guideTab, setGuideTab] = useState<'checklist' | 'pillars' | 'tips'>(
+    'checklist'
+  );
+
+  const stageChecklist = useMemo(() => {
+    const countCat = (cat: LoreCategory) =>
+      project.entities.filter((e) => e.category === cat).length;
+
+    const hasPremise =
+      Boolean(project.worldName && project.tagline) &&
+      Boolean(project.centralConflict || project.cosmologyCreationMyth);
+    const cosmicCount = countCat('cosmic_entity') + countCat('deity');
+    const mapStampCount = project.mapData?.stamps?.length || 0;
+
+    const powerCount = countCat('power_system') + countCat('skill');
+    const nationCultureCount =
+      countCat('nation') + countCat('culture_religion') + countCat('region');
+    const creatureRaceCount =
+      countCat('race') + countCat('bestiary') + countCat('faction');
+
+    const charCount = countCat('character');
+    const dynastyCount = (project.dynastyTrees || []).length;
+    const relCount = (project.relationships || []).length;
+
+    const mysteryCount = (project.mysteryPlots || []).length;
+    const timelineCount =
+      (project.timeline || []).length + countCat('history');
+    const chapterCount = (project.chapters || []).length;
+
+    return [
+      {
+        stageNumber: 'Tahap 1',
+        title: 'Tetapkan Premis Dunia, Kosmologi & Peta Utama (Pilar I)',
+        description:
+          'Mulai dengan menetapkan konflik sentral semesta Anda di Overview, kekuatan primordial/dewa tertinggi, serta bentuk benua utama di Map Dunia.',
+        steps: [
+          {
+            label: 'Isi Premis, Konflik Sentral & Mitos Penciptaan di Overview',
+            done: hasPremise,
+            metric: hasPremise ? 'Sudah terisi' : 'Belum lengkap',
+            targetTab: 'overview',
+            buttonLabel: 'Buka Overview',
+          },
+          {
+            label: 'Rancang Entitas Kosmik & Pantheon Dewa-Dewi',
+            done: cosmicCount > 0,
+            metric: `${cosmicCount} entri`,
+            targetTab: 'cosmic_entity',
+            buttonLabel: 'Buka Entitas Kosmik',
+          },
+          {
+            label: 'Lukis Daratan & Pasang Pin Lokasi di Map Dunia',
+            done: mapStampCount > 0,
+            metric: `${mapStampCount} pin lokasi`,
+            targetTab: 'map',
+            buttonLabel: 'Buka Map Dunia',
+          },
+        ],
+      },
+      {
+        stageNumber: 'Tahap 2',
+        title: 'Bangun Aturan Sihir, Penghuni & Peradaban (Pilar II & III)',
+        description:
+          'Tetapkan batas mutlak (hard limit) sistem kekuatan agar tidak terjadi plot hole, lalu bangun kerajaan, adat budaya, ras, dan bestiary monster.',
+        steps: [
+          {
+            label: 'Tetapkan Aturan Power System & Daftar Skill/Mantra',
+            done: powerCount > 0,
+            metric: `${powerCount} entri`,
+            targetTab: 'power_system',
+            buttonLabel: 'Buka Power System',
+          },
+          {
+            label: 'Bangun Negara, Wilayah & Agama/Adat Budaya Bangsa',
+            done: nationCultureCount >= 2,
+            metric: `${nationCultureCount} entri`,
+            targetTab: 'nation',
+            buttonLabel: 'Buka Negara',
+          },
+          {
+            label: 'Tambahkan Ras Penghuni, Bestiary Monster & Kelompok/Faksi',
+            done: creatureRaceCount >= 2,
+            metric: `${creatureRaceCount} entri`,
+            targetTab: 'bestiary',
+            buttonLabel: 'Buka Bestiary',
+          },
+        ],
+      },
+      {
+        stageNumber: 'Tahap 3',
+        title: 'Ciptakan Tokoh, Silsilah Dinasti & Jaringan Relasi (Pilar II & IV)',
+        description:
+          'Hidupkan cerita dengan tokoh protagonis/antagonis yang memiliki motivasi kuat, susun garis darah wangsa kerajaan, dan petakan konflik antar tokoh.',
+        steps: [
+          {
+            label: 'Buat Profil Karakter Utama & Pendukung',
+            done: charCount >= 2,
+            metric: `${charCount} tokoh`,
+            targetTab: 'character',
+            buttonLabel: 'Buka Character',
+          },
+          {
+            label: 'Susun Pohon Silsilah Keluarga & Dinasti Kerajaan',
+            done: dynastyCount > 0,
+            metric: `${dynastyCount} wangsa/klan`,
+            targetTab: 'family_tree',
+            buttonLabel: 'Buka Silsilah Dinasti',
+          },
+          {
+            label: 'Hubungkan Sekutu & Musuh di Peta Relasi',
+            done: relCount >= 2,
+            metric: `${relCount} ikatan relasi`,
+            targetTab: 'graph',
+            buttonLabel: 'Buka Peta Relasi',
+          },
+        ],
+      },
+      {
+        stageNumber: 'Tahap 4',
+        title: 'Rancang Sejarah, Nubuat & Kerangka Alur Bab (Pilar III & IV)',
+        description:
+          'Tanamkan misteri/nubuat kuno beserta petunjuk bab (foreshadowing), susun urutan sejarah di Timeline, lalu mulai menulis adegan demi adegan di Alur Bab.',
+        steps: [
+          {
+            label: 'Catat Peristiwa Masa Lalu di Sejarah & Timeline',
+            done: timelineCount > 0,
+            metric: `${timelineCount} catatan waktu`,
+            targetTab: 'timeline',
+            buttonLabel: 'Buka Timeline',
+          },
+          {
+            label: 'Rancang Nubuat, Misteri & Petunjuk Foreshadowing',
+            done: mysteryCount > 0,
+            metric: `${mysteryCount} misteri/nubuat`,
+            targetTab: 'prophecy_tracker',
+            buttonLabel: 'Buka Tracker Nubuat',
+          },
+          {
+            label: 'Susun Adegan (Scene Beats) & Tulis Naskah di Alur Bab',
+            done: chapterCount > 0,
+            metric: `${chapterCount} bab`,
+            targetTab: 'outliner',
+            buttonLabel: 'Buka Alur Bab',
+          },
+        ],
+      },
+    ];
+  }, [project]);
+
+  const totalSteps = stageChecklist.reduce(
+    (acc, st) => acc + st.steps.length,
+    0
+  );
+  const completedSteps = stageChecklist.reduce(
+    (acc, st) => acc + st.steps.filter((s) => s.done).length,
+    0
+  );
+  const completionPct = Math.round((completedSteps / totalSteps) * 100);
+
+  if (!isOpen) return null;
+
+  const handleDownloadGuideMd = () => {
+    const guideLines = [
+      `# Panduan Menyusun Cerita Fantasi di MythosCartograph`,
+      `> Proyek Aktif: **${project.worldName}** (${completedSteps}/${totalSteps} Tahap Pondasi Terpenuhi — ${completionPct}%)`,
+      ``,
+      `## Urutan 4 Pilar Semesta Fantasi (21 Tab)`,
+      ``,
+      `### Pilar I · Kosmos & Atlas`,
+      `- **Overview**: Premis utama, konflik sentral, mitos penciptaan, kalender, dan catatan cepat.`,
+      `- **Entitas Kosmik**: Makhluk primordial, penguasa kehampaan (void), dan manifestasi hukum alam semesta.`,
+      `- **Dewa-Dewi**: Jajaran pantheon ilahi, domain, simbol suci, kuil pemujaan, berkah, dan kutukan.`,
+      `- **Map Dunia**: Lukis daratan/bioma dan tancapkan pin lokasi interaktif.`,
+      ``,
+      `### Pilar II · Penghuni & Arcana`,
+      `- **Character**: Profil tokoh, motivasi batin, rahasia, dan jaringan relasi.`,
+      `- **Ras**: Spesies berakal, rentang usia, ciri fisik, dan bakat bawaan.`,
+      `- **Bestiary Monster**: Monster & makhluk mitologi, tingkat bahaya (tier), pola serangan, kelemahan, dan material alkimia (loot/drop).`,
+      `- **Kelompok**: Faksi, ordo ksatria, serikat penyihir, dan dewan rahasia.`,
+      `- **Power System**: Sumber energi, syarat penggunaan, risiko, dan batas mutlak (hard limit).`,
+      `- **Skill**: Jurus, mantra, dan teknik khusus turunan Power System.`,
+      ``,
+      `### Pilar III · Geopolitik & Kronik`,
+      `- **Negara**: Kerajaan/kekaisaran, pemerintahan, ibu kota, militer, dan ekonomi.`,
+      `- **Agama & Budaya**: Iman, adat istiadat, festival tahunan, tabu sosial, busana, dan kuliner.`,
+      `- **Wilayah**: Bentang alam spesifik, tingkat bahaya, dan landmark.`,
+      `- **Sejarah & Timeline**: Arsip peristiwa besar masa lalu dan pita kronologi tahun demi tahun.`,
+      `- **Artefak & Biota**: Pusaka legendaris, senjata kutukan, flora, dan mineral magis.`,
+      ``,
+      `### Pilar IV · Takdir, Naskah & Kanvas`,
+      `- **Peta Relasi**: Graf visual ikatan sekutu, musuh, keluarga, dan pengkhianatan.`,
+      `- **Silsilah Dinasti**: Pohon keluarga kerajaan & klan per generasi (Gen 1, Gen 2, Gen 3) beserta status pewaris takhta.`,
+      `- **Tracker Nubuat**: Pelacak nubuat kuno, tafsir umum vs kebenaran kanonik rahasia penulis, dan rantai petunjuk bab (foreshadowing & red herring).`,
+      `- **Alur Bab**: Kerangka bab, adegan (Scene Beats), dan editor naskah dengan Mode Fokus Menulis.`,
+      `- **Kanvas Bebas**: Buku catatan multi-halaman gabungan Docs, OneNote (sticky cards), dan Paint (lukis sketsa bebas).`,
+      ``,
+      `## Cara Memakai Tautan Kurung Ganda [[Nama Entitas]]`,
+      `Ketik \`[[Nama Entitas]]\` di dalam teks lore atau naskah bab:`,
+      `1. Bila entitas sudah ada, teks berubah menjadi tautan emas interaktif lengkap dengan kartu pratinjau.`,
+      `2. Bila entitas belum ada, teks tampil sebagai tautan merah bergaris putus-putus. Klik tautan tersebut untuk memilih kategori dan langsung membuat entitasnya secara otomatis.`,
+    ];
+    const blob = new Blob([guideLines.join('\n')], {
+      type: 'text/markdown;charset=utf-8',
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `panduan-menyusun-cerita-mythoscartograph.md`;
+    link.click();
+    URL.revokeObjectURL(url);
+    onShowToast('Buku Panduan Menyusun Cerita (.MD) berhasil diunduh.');
+  };
+
+  const PILLAR_DIRECTORY = [
+    {
+      pilar: 'Pilar I · Kosmos & Atlas',
+      subtitle: 'Pondasi Makro Alam Semesta, Ketuhanan & Geografi',
+      items: [
+        {
+          id: 'overview',
+          name: 'Overview',
+          desc: 'Tulis logline cerita, konflik utama, mitos penciptaan, kalender, dan catatan kilat (Scratchpad).',
+        },
+        {
+          id: 'cosmic_entity',
+          name: 'Entitas Kosmik',
+          desc: 'Rancang makhluk primordial, penguasa void, dan entitas kosmik yang melampaui dewa biasa.',
+        },
+        {
+          id: 'deity',
+          name: 'Dewa-Dewi',
+          desc: 'Susun pantheon dewa-dewi yang disembah makhluk fana, simbol suci, kuil, serta berkah/kutukan.',
+        },
+        {
+          id: 'map',
+          name: 'Map Dunia',
+          desc: 'Lukis benua dan pasang pin lokasi yang langsung terhubung ke entitas Negara atau Wilayah.',
+        },
+      ],
+    },
+    {
+      pilar: 'Pilar II · Penghuni & Arcana',
+      subtitle: 'Tokoh Cerita, Makhluk Mitologi & Sistem Kekuatan',
+      items: [
+        {
+          id: 'character',
+          name: 'Character',
+          desc: 'Bangun tokoh protagonis, antagonis, motivasi batin, rahasia, dan jaringan relasi langsung.',
+        },
+        {
+          id: 'race',
+          name: 'Ras',
+          desc: 'Dokumentasikan spesies berakal, rentang usia, ciri fisik, dan bakat alami.',
+        },
+        {
+          id: 'bestiary',
+          name: 'Bestiary Monster',
+          desc: 'Ensiklopedia monster & naga lengkap dengan tingkat bahaya, pola serangan, kelemahan, dan loot alkimia.',
+        },
+        {
+          id: 'faction',
+          name: 'Kelompok',
+          desc: 'Ordo ksatria, serikat penyihir, sindikat bayangan, beserta markas dan ideologinya.',
+        },
+        {
+          id: 'power_system',
+          name: 'Power System',
+          desc: 'Tetapkan sumber energi sihir, syarat penggunaan, risiko, dan batas mutlak (hard limit).',
+        },
+        {
+          id: 'skill',
+          name: 'Skill',
+          desc: 'Daftar jurus, mantra, dan teknik bertarung spesifik yang menginduk pada Power System.',
+        },
+      ],
+    },
+    {
+      pilar: 'Pilar III · Geopolitik & Kronik',
+      subtitle: 'Kerajaan, Tradisi Budaya, Sejarah & Pusaka',
+      items: [
+        {
+          id: 'nation',
+          name: 'Negara',
+          desc: 'Kerajaan atau kekaisaran, bentuk pemerintahan, ibu kota, komoditas ekonomi, dan militer.',
+        },
+        {
+          id: 'culture_religion',
+          name: 'Agama & Budaya',
+          desc: 'Sistem kepercayaan masyarakat, festival tahunan, pantangan/tabu sosial, busana adat, dan kuliner.',
+        },
+        {
+          id: 'region',
+          name: 'Wilayah',
+          desc: 'Lokasi geografis spesifik (lembah, hutan purba, reruntuhan) beserta iklim dan sumber dayanya.',
+        },
+        {
+          id: 'history',
+          name: 'Sejarah',
+          desc: 'Artikel mendalam tentang perang kuno, bencana, atau perjanjian bersejarah.',
+        },
+        {
+          id: 'timeline',
+          name: 'Timeline',
+          desc: 'Pita kronologi berurutan dari tahun paling kuno hingga era cerita saat ini.',
+        },
+        {
+          id: 'encyclopedia',
+          name: 'Artefak & Biota',
+          desc: 'Senjata pusaka legendaris, relik kutukan, tanaman obat langka, dan bijih logam magis.',
+        },
+      ],
+    },
+    {
+      pilar: 'Pilar IV · Takdir, Naskah & Kanvas',
+      subtitle: 'Silsilah Keluarga, Nubuat Plot, Penulisan Bab & Kanvas Coretan',
+      items: [
+        {
+          id: 'graph',
+          name: 'Peta Relasi',
+          desc: 'Kanvas graf visual untuk memetakan hubungan sekutu, musuh, keluarga, dan pengkhianatan.',
+        },
+        {
+          id: 'family_tree',
+          name: 'Silsilah Dinasti',
+          desc: 'Pohon silsilah wangsa kerajaan per generasi (Gen 1, Gen 2, dst.) beserta urutan pewaris takhta.',
+        },
+        {
+          id: 'prophecy_tracker',
+          name: 'Tracker Nubuat',
+          desc: 'Lacak nubuat kuno, tafsir umum vs kebenaran rahasia penulis, serta petunjuk foreshadowing per bab.',
+        },
+        {
+          id: 'outliner',
+          name: 'Alur Bab',
+          desc: 'Susun kerangka adegan (Scene Beats) dan tulis draf naskah bab dengan Mode Fokus Menulis.',
+        },
+        {
+          id: 'free_canvas',
+          name: 'Kanvas Bebas',
+          desc: 'Ruang kerja gabungan Docs, OneNote (kartu tempel), dan Paint (lukis sketsa bebas) di atas kanvas polos.',
+        },
+      ],
+    },
+  ];
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/55 backdrop-blur-xs flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex items-center gap-1.5">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Panduan Arsitek Semesta & Alur Penulisan Cerita</span>
+            </div>
+            <h3 className="font-cartography text-2xl font-bold text-[#231C14]">
+              Cara Menyusun Dunia & Naskah Cerita di MythosCartograph
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={handleDownloadGuideMd}
+              className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] border border-[#B5832A]/60 text-[#231C14] rounded-lg hover:bg-[#D8CBB3] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <span>Unduh Panduan (.MD)</span>
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Sub-Tabs */}
+        <div className="px-6 py-3 bg-[#EFE7D6]/80 border-b border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setGuideTab('checklist')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                guideTab === 'checklist'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+              }`}
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              <span>1. Checklist 4 Tahap Menyusun Cerita</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuideTab('pillars')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                guideTab === 'pillars'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+              }`}
+            >
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>2. Kamus 4 Pilar & 21 Section</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setGuideTab('tips')}
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                guideTab === 'tips'
+                  ? 'bg-[#9E2A2B] text-white'
+                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>3. Cara Pakai [[Tautan]] & Fitur Pintar</span>
+            </button>
+          </div>
+
+          <div className="text-xs font-mono-tabular text-[#695A47]">
+            Progres Pondasi "{project.worldName}":{' '}
+            <span className="font-bold text-[#9E2A2B]">
+              {completedSteps}/{totalSteps} ({completionPct}%)
+            </span>
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-5">
+          {guideTab === 'checklist' && (
+            <div className="space-y-4">
+              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+                <div className="space-y-0.5">
+                  <div className="text-xs font-semibold text-[#231C14]">
+                    Peta Jalan Interaktif Membangun Semesta & Menulis Bab
+                  </div>
+                  <p className="text-xs text-[#695A47]">
+                    Daftar di bawah ini memeriksa kelengkapan proyek{' '}
+                    <span className="font-semibold text-[#231C14]">
+                      {project.worldName}
+                    </span>{' '}
+                    secara otomatis. Klik tombol di sebelah kanan tiap langkah untuk langsung menuju ke ruang kerja terkait.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {stageChecklist.map((stage) => (
+                  <div
+                    key={stage.stageNumber}
+                    className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                  >
+                    <div>
+                      <div className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                        {stage.stageNumber}
+                      </div>
+                      <h4 className="font-display text-xl font-bold text-[#231C14]">
+                        {stage.title}
+                      </h4>
+                      <p className="text-xs text-[#695A47] mt-0.5">
+                        {stage.description}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2 pt-1">
+                      {stage.steps.map((st, idx) => (
+                        <div
+                          key={idx}
+                          className="p-3 rounded-xl bg-[#FBF8F1] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span
+                              className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${
+                                st.done
+                                  ? 'bg-[#2D5A43] text-white'
+                                  : 'bg-[#EFE7D6] text-[#695A47] border border-[#D8CBB3]'
+                              }`}
+                            >
+                              {st.done ? '✓' : idx + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <div className="text-xs font-semibold text-[#231C14]">
+                                {st.label}
+                              </div>
+                              <div className="text-[11px] font-mono-tabular text-[#695A47]">
+                                Status saat ini: {st.metric}
+                              </div>
+                            </div>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onNavigateToTab(st.targetTab);
+                              onClose();
+                            }}
+                            className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3B2E1E] rounded-lg flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                          >
+                            <span>{st.buttonLabel}</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-[#B5832A]" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {guideTab === 'pillars' && (
+            <div className="space-y-5">
+              {PILLAR_DIRECTORY.map((group) => (
+                <div
+                  key={group.pilar}
+                  className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                >
+                  <div className="border-b border-[#D8CBB3] pb-2">
+                    <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                      {group.pilar}
+                    </div>
+                    <div className="text-xs text-[#695A47]">
+                      {group.subtitle}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {group.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-3.5 rounded-xl bg-[#FBF8F1] border border-[#D8CBB3] flex flex-col justify-between gap-2.5"
+                      >
+                        <div className="space-y-1">
+                          <div className="font-display text-base font-bold text-[#231C14]">
+                            {item.name}
+                          </div>
+                          <p className="text-xs text-[#695A47] leading-relaxed">
+                            {item.desc}
+                          </p>
+                        </div>
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onNavigateToTab(item.id);
+                              onClose();
+                            }}
+                            className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+                          >
+                            <span>Buka Tab {item.name}</span>
+                            <ArrowRight className="w-3 h-3 text-[#9E2A2B]" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {guideTab === 'tips' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  1. Sistem Tautan Kurung Ganda [[Nama Entitas]]
+                </div>
+                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                  Hubungkan Lore & Bab Secara Otomatis
+                </h4>
+                <p className="text-xs text-[#695A47] leading-relaxed">
+                  Ketik nama tokoh, kerajaan, dewa, monster, atau pusaka di dalam kurung siku ganda seperti{' '}
+                  <code className="px-1.5 py-0.5 rounded bg-[#EFE7D6] text-[#9E2A2B] font-mono">
+                    [[Kaelen Vance]]
+                  </code>{' '}
+                  di kolom ringkasan, isi lore, maupun catatan bab.
+                </p>
+                <p className="text-xs text-[#231C14] leading-relaxed">
+                  • Jika entitas sudah ada: Teks menjadi tautan emas yang menampilkan kartu pratinjau saat disentuh kursor.
+                  <br />• Jika entitas belum ada: Teks tampil merah bergaris putus-putus. Klik tautan tersebut untuk memilih kategori dan membuatnya otomatis!
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  2. Silsilah Dinasti & Tracker Nubuat
+                </div>
+                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                  Kelola Politik Kerajaan & Plot Twist
+                </h4>
+                <p className="text-xs text-[#695A47] leading-relaxed">
+                  Di Pilar IV, gunakan <strong>Silsilah Dinasti</strong> untuk memetakan pohon keluarga bangsawan per generasi (Gen 1, Gen 2, dst.) yang terhubung langsung ke profil Character.
+                </p>
+                <p className="text-xs text-[#231C14] leading-relaxed">
+                  Gunakan <strong>Tracker Nubuat</strong> untuk memisahkan <em>Tafsir Umum Masyarakat</em> vs <em>Kebenaran Kanonik Rahasia Penulis</em>, serta mencatat di bab mana petunjuk (Clue) dan pengecoh (Red Herring) disebar.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  3. Kanvas Bebas (Docs + OneNote + Paint)
+                </div>
+                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                  Ruang Brainstorming & Sketsa Polos
+                </h4>
+                <p className="text-xs text-[#695A47] leading-relaxed">
+                  Buka tab <strong>Kanvas Bebas</strong> saat Anda ingin mencatat ide liar tanpa format kaku. Anda bisa mengetik dokumen panjang, menempelkan kartu catatan di titik mana pun, dan menggambar sketsa dengan kuas.
+                </p>
+                <p className="text-xs text-[#231C14] leading-relaxed">
+                  Setiap kartu catatan di Kanvas Bebas memiliki tombol <strong>Promosikan ke World Bible</strong> untuk mengubah ide kasar menjadi entitas resmi.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  4. Inspektur Kesehatan Lore & Ekspor Buku
+                </div>
+                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                  Audit Kohesi Dunia & Cetak ke .MD / PDF
+                </h4>
+                <p className="text-xs text-[#695A47] leading-relaxed">
+                  Klik <strong>Kesehatan Lore (%)</strong> di bilah atas untuk mendeteksi tautan <code>[[...]]</code> yang belum dibuat, tokoh yatim yang belum memiliki relasi, atau wilayah yang belum dipin di peta.
+                </p>
+                <p className="text-xs text-[#231C14] leading-relaxed">
+                  Klik <strong>Ekspor & Cetak Buku</strong> untuk mengunduh seluruh 13 kategori entitas, silsilah dinasti, tracker nubuat, dan naskah bab ke file <strong>.MD (Markdown)</strong> atau <strong>PDF</strong>.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 
