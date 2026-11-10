@@ -166,86 +166,252 @@ const ALL_LORE_CATEGORIES: LoreCategory[] = [
 ];
 
 export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
-  className = 'text-[#B5832A]/65',
+  className = 'text-[#B5832A]/75',
 }) => {
   return (
-    <div className={`pointer-events-none select-none ${className}`} aria-hidden="true">
-      {/* Top-Left Corner */}
+    <div
+      className={`pointer-events-none select-none ${className}`}
+      aria-hidden="true"
+    >
+      {/* Top-Left Illuminated Manuscript Corner */}
       <svg
-        className="w-6 h-6 absolute top-2 left-2"
-        viewBox="0 0 32 32"
+        className="w-7 h-7 absolute top-1.5 left-1.5"
+        viewBox="0 0 36 36"
         fill="none"
       >
         <path
-          d="M2 22V6C2 3.79086 3.79086 2 6 2H22"
+          d="M2 28V6C2 3.79086 3.79086 2 6 2H28"
           stroke="currentColor"
           strokeWidth="1.6"
         />
         <path
-          d="M6 14V6H14"
+          d="M6 20V6H20"
           stroke="currentColor"
-          strokeWidth="1.2"
-          strokeOpacity="0.75"
+          strokeWidth="1.15"
+          strokeOpacity="0.8"
         />
-        <circle cx="6" cy="6" r="2" fill="currentColor" />
+        <path
+          d="M6 12C9.5 12 12 9.5 12 6"
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeOpacity="0.7"
+        />
+        <polygon points="6,3.2 8.8,6 6,8.8 3.2,6" fill="currentColor" />
+        <circle cx="15" cy="6" r="1.3" fill="currentColor" />
+        <circle cx="6" cy="15" r="1.3" fill="currentColor" />
       </svg>
-      {/* Top-Right Corner */}
+
+      {/* Top-Right Illuminated Manuscript Corner */}
       <svg
-        className="w-6 h-6 absolute top-2 right-2"
-        viewBox="0 0 32 32"
+        className="w-7 h-7 absolute top-1.5 right-1.5"
+        viewBox="0 0 36 36"
         fill="none"
       >
         <path
-          d="M30 22V6C30 3.79086 28.2091 2 26 2H10"
+          d="M34 28V6C34 3.79086 32.2091 2 30 2H8"
           stroke="currentColor"
           strokeWidth="1.6"
         />
         <path
-          d="M26 14V6H18"
+          d="M30 20V6H16"
           stroke="currentColor"
-          strokeWidth="1.2"
-          strokeOpacity="0.75"
+          strokeWidth="1.15"
+          strokeOpacity="0.8"
         />
-        <circle cx="26" cy="6" r="2" fill="currentColor" />
+        <path
+          d="M30 12C26.5 12 24 9.5 24 6"
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeOpacity="0.7"
+        />
+        <polygon points="30,3.2 32.8,6 30,8.8 27.2,6" fill="currentColor" />
+        <circle cx="21" cy="6" r="1.3" fill="currentColor" />
+        <circle cx="30" cy="15" r="1.3" fill="currentColor" />
       </svg>
-      {/* Bottom-Left Corner */}
+
+      {/* Bottom-Left Illuminated Manuscript Corner */}
       <svg
-        className="w-6 h-6 absolute bottom-2 left-2"
-        viewBox="0 0 32 32"
+        className="w-7 h-7 absolute bottom-1.5 left-1.5"
+        viewBox="0 0 36 36"
         fill="none"
       >
         <path
-          d="M2 10V26C2 28.2091 3.79086 30 6 30H22"
+          d="M2 8V30C2 32.2091 3.79086 34 6 34H28"
           stroke="currentColor"
           strokeWidth="1.6"
         />
         <path
-          d="M6 18V26H14"
+          d="M6 16V30H20"
           stroke="currentColor"
-          strokeWidth="1.2"
-          strokeOpacity="0.75"
+          strokeWidth="1.15"
+          strokeOpacity="0.8"
         />
-        <circle cx="6" cy="26" r="2" fill="currentColor" />
+        <path
+          d="M6 24C9.5 24 12 26.5 12 30"
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeOpacity="0.7"
+        />
+        <polygon points="6,27.2 8.8,30 6,32.8 3.2,30" fill="currentColor" />
+        <circle cx="15" cy="30" r="1.3" fill="currentColor" />
+        <circle cx="6" cy="21" r="1.3" fill="currentColor" />
       </svg>
-      {/* Bottom-Right Corner */}
+
+      {/* Bottom-Right Illuminated Manuscript Corner */}
       <svg
-        className="w-6 h-6 absolute bottom-2 right-2"
-        viewBox="0 0 32 32"
+        className="w-7 h-7 absolute bottom-1.5 right-1.5"
+        viewBox="0 0 36 36"
         fill="none"
       >
         <path
-          d="M30 10V26C30 28.2091 28.2091 30 26 30H10"
+          d="M34 8V30C34 32.2091 32.2091 34 30 34H8"
           stroke="currentColor"
           strokeWidth="1.6"
         />
         <path
-          d="M26 18V26H18"
+          d="M30 16V30H16"
           stroke="currentColor"
-          strokeWidth="1.2"
-          strokeOpacity="0.75"
+          strokeWidth="1.15"
+          strokeOpacity="0.8"
         />
-        <circle cx="26" cy="26" r="2" fill="currentColor" />
+        <path
+          d="M30 24C26.5 24 24 26.5 24 30"
+          stroke="currentColor"
+          strokeWidth="1.1"
+          strokeOpacity="0.7"
+        />
+        <polygon points="30,27.2 32.8,30 30,32.8 27.2,30" fill="currentColor" />
+        <circle cx="21" cy="30" r="1.3" fill="currentColor" />
+        <circle cx="30" cy="21" r="1.3" fill="currentColor" />
       </svg>
+    </div>
+  );
+};
+
+export const BrassBookCornerClasps: React.FC = () => {
+  return (
+    <div
+      className="pointer-events-none select-none text-[#D49B35]"
+      aria-hidden="true"
+    >
+      {/* Top-Left Brass Clasp */}
+      <svg
+        className="w-8 h-8 absolute top-0 left-0 z-10 drop-shadow-xs"
+        viewBox="0 0 40 40"
+        fill="none"
+      >
+        <path
+          d="M2 34V10C2 5.58172 5.58172 2 10 2H34L26 10H12C10.8954 10 10 10.8954 10 12V26L2 34Z"
+          fill="currentColor"
+          fillOpacity="0.24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+        <circle cx="7" cy="7" r="2" fill="currentColor" />
+        <circle cx="19" cy="6" r="1.4" fill="currentColor" />
+        <circle cx="6" cy="19" r="1.4" fill="currentColor" />
+      </svg>
+      {/* Top-Right Brass Clasp */}
+      <svg
+        className="w-8 h-8 absolute top-0 right-0 z-10 drop-shadow-xs"
+        viewBox="0 0 40 40"
+        fill="none"
+      >
+        <path
+          d="M38 34V10C38 5.58172 34.4183 2 30 2H6L14 10H28C29.1046 10 30 10.8954 30 12V26L38 34Z"
+          fill="currentColor"
+          fillOpacity="0.24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+        <circle cx="33" cy="7" r="2" fill="currentColor" />
+        <circle cx="21" cy="6" r="1.4" fill="currentColor" />
+        <circle cx="34" cy="19" r="1.4" fill="currentColor" />
+      </svg>
+      {/* Bottom-Left Brass Clasp */}
+      <svg
+        className="w-8 h-8 absolute bottom-0 left-0 z-10 drop-shadow-xs"
+        viewBox="0 0 40 40"
+        fill="none"
+      >
+        <path
+          d="M2 6V30C2 34.4183 5.58172 38 10 38H34L26 30H12C10.8954 30 10 29.1046 10 28V14L2 6Z"
+          fill="currentColor"
+          fillOpacity="0.24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+        <circle cx="7" cy="33" r="2" fill="currentColor" />
+        <circle cx="19" cy="34" r="1.4" fill="currentColor" />
+        <circle cx="6" cy="21" r="1.4" fill="currentColor" />
+      </svg>
+      {/* Bottom-Right Brass Clasp */}
+      <svg
+        className="w-8 h-8 absolute bottom-0 right-0 z-10 drop-shadow-xs"
+        viewBox="0 0 40 40"
+        fill="none"
+      >
+        <path
+          d="M38 6V30C38 34.4183 34.4183 38 30 38H6L14 30H28C29.1046 30 30 29.1046 30 28V14L38 6Z"
+          fill="currentColor"
+          fillOpacity="0.24"
+          stroke="currentColor"
+          strokeWidth="1.8"
+        />
+        <circle cx="33" cy="33" r="2" fill="currentColor" />
+        <circle cx="21" cy="34" r="1.4" fill="currentColor" />
+        <circle cx="34" cy="21" r="1.4" fill="currentColor" />
+      </svg>
+    </div>
+  );
+};
+
+export const MedievalCompassDivider: React.FC<{
+  label?: string;
+  className?: string;
+}> = ({ label, className = '' }) => {
+  return (
+    <div
+      className={`flex items-center justify-center gap-3 py-1 select-none ${className}`}
+      aria-hidden={!label}
+    >
+      <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#B5832A]/60 to-[#9E2A2B]/65" />
+      <div className="flex items-center gap-2 text-[#B5832A]">
+        <span className="text-[10px] text-[#9E2A2B]">◆</span>
+        <svg className="w-4 h-4 text-[#B5832A]" viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 1L14.2 9.8L23 12L14.2 14.2L12 23L9.8 14.2L1 12L9.8 9.8L12 1Z"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            fill="currentColor"
+            fillOpacity="0.2"
+          />
+          <circle cx="12" cy="12" r="2" fill="#9E2A2B" />
+        </svg>
+        {label && (
+          <span className="font-epic text-[11px] font-bold uppercase tracking-[0.18em] text-[#9E2A2B] px-1">
+            {label}
+          </span>
+        )}
+        {label && (
+          <svg
+            className="w-4 h-4 text-[#B5832A]"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M12 1L14.2 9.8L23 12L14.2 14.2L12 23L9.8 14.2L1 12L9.8 9.8L12 1Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              fill="currentColor"
+              fillOpacity="0.2"
+            />
+            <circle cx="12" cy="12" r="2" fill="#9E2A2B" />
+          </svg>
+        )}
+        <span className="text-[10px] text-[#9E2A2B]">◆</span>
+      </div>
+      <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#B5832A]/60 to-[#9E2A2B]/65" />
     </div>
   );
 };

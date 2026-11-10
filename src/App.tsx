@@ -41,7 +41,12 @@ import {
   TerrainType,
   WorldProject,
 } from './types/world';
-import { CATEGORY_META } from './components/WikiTextRenderer';
+import {
+  BrassBookCornerClasps,
+  CATEGORY_META,
+  MedievalCompassDivider,
+  OrnateCornerFiligree,
+} from './components/WikiTextRenderer';
 import { CodexWorkspace } from './components/CodexWorkspace';
 import { MedievalMapSandbox } from './components/MedievalMapSandbox';
 import {
@@ -978,10 +983,10 @@ export default function App() {
   return (
     <div
       data-theme={themeMode === 'grimoire-dark' ? 'grimoire-dark' : undefined}
-      className="min-h-screen flex flex-col bg-[#F6F1E6] text-[#231C14] transition-colors duration-200"
+      className="min-h-screen flex flex-col medieval-desk-bg bg-[#F6F1E6] text-[#231C14] transition-colors duration-200"
     >
       {/* Top Bar: Brand & Active Breadcrumb on Left, Global Productivity Actions on Right */}
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b-2 border-[#B5832A]/45 print:hidden">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b-2 border-[#B5832A]/60 shadow-sm print:hidden">
         <div className="flex items-center gap-3.5 min-w-0">
           <a
             href="#top"
@@ -1093,7 +1098,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setExportStudioOpen(true)}
-            className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#9E2A2B] rounded-lg hover:bg-[#7E2021] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3.5 py-1.5 text-xs font-semibold text-white wax-seal-btn rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer"
           >
             <FileDown className="w-3.5 h-3.5" />
             <span>Ekspor & Cetak Buku</span>
@@ -1101,84 +1106,138 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Content Container (1440px baseline) */}
+      {/* Main Content Container (1440px baseline) — Bingkai Hamparan Kitab Grimoire Terbuka */}
       <main
-        className={`flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5 space-y-5 ${
+        className={`flex-1 max-w-[1460px] w-full mx-auto px-3 sm:px-6 py-6 ${
           exportStudioOpen ? 'print:hidden' : ''
         }`}
       >
-        {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible — Dikelompokkan dalam 4 Pilar Semesta Fantasi */}
-        <nav
-          aria-label="Navigasi Bagian World Bible"
-          className="bg-[#EFE7D6] border-2 border-[#B5832A]/45 rounded-2xl p-3 shadow-xs"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
-            {FANTASY_PILLARS.map((pillar) => {
-              const colSpan = 'xl:col-span-3';
-              return (
-                <div
-                  key={pillar.roman}
-                  className={`${colSpan} bg-[#FBF8F1]/60 border border-[#D8CBB3] rounded-xl px-3 py-2 flex flex-col justify-start gap-2`}
-                >
-                  <div className="flex items-center justify-between gap-1 border-b border-[#D8CBB3]/70 pb-1">
-                    <span className="font-epic text-[10px] font-bold uppercase tracking-[0.14em] text-[#B5832A]">
-                      Pilar {pillar.roman} · {pillar.title}
-                    </span>
-                    <span className="text-[10px] text-[#9E2A2B]" aria-hidden="true">
-                      ❖
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {pillar.tabs.map((tab) => {
-                      const isActive = activeTab === tab.id;
-                      const count = getTabCount(tab.id);
-                      const IconComponent = tab.icon;
-                      return (
-                        <button
-                          key={tab.id}
-                          type="button"
-                          onClick={() => handleSwitchTab(tab.id)}
-                          className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
-                            isActive
-                              ? 'bg-[#9E2A2B] text-white shadow-xs ring-1 ring-[#B5832A]'
-                              : 'bg-[#FBF8F1] text-[#231C14] hover:border-[#B5832A] border border-[#D8CBB3]/80'
-                          }`}
+        <div className="medieval-tome-binding">
+          {/* Plat Sudut Kuningan Ukir Abad Pertengahan pada Sampul Kulit Kitab */}
+          <BrassBookCornerClasps />
+
+          {/* Pita Pembatas Buku Sutra Merah Kerajaan (Royal Silk Bookmark Ribbon) */}
+          <div
+            aria-hidden="true"
+            className="hidden sm:block pointer-events-none absolute -top-2 right-12 z-20 w-7 h-12 bg-gradient-to-b from-[#7E1F20] via-[#9E2A2B] to-[#641516] shadow-md border-x border-[#D4AF37]/60 print:hidden"
+            style={{
+              clipPath: 'polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%)',
+            }}
+          />
+
+          {/* Hamparan Lembaran Kertas Perkamen Tua dengan Efek Tumpukan Halaman & Bayangan Jilid */}
+          <div className="medieval-tome-sheet p-4 sm:p-6 lg:p-7 space-y-5">
+            <OrnateCornerFiligree />
+
+            {/* Kepala Halaman Folio Kitab (Medieval Running Folio Header) */}
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#B5832A]/40 text-[11px] text-[#695A47] print:hidden">
+              <div className="flex items-center gap-2">
+                <span className="text-[#9E2A2B]" aria-hidden="true">
+                  ⚜
+                </span>
+                <span className="font-epic uppercase tracking-[0.18em] font-semibold">
+                  Codex Illuminatus · {project.worldName || 'Semesta Baru'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 font-epic tracking-[0.14em] uppercase">
+                <span className="text-[#B5832A]">Lembar Aktif:</span>
+                <span className="font-bold text-[#9E2A2B]">
+                  {activeTabLabel}
+                </span>
+                <span className="text-[#B5832A]" aria-hidden="true">
+                  ✦
+                </span>
+              </div>
+            </div>
+
+            {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible — Dikelompokkan dalam 4 Pilar Semesta Fantasi */}
+            <nav
+              aria-label="Navigasi Bagian World Bible"
+              className="relative z-10 medieval-folio-frame bg-[#EFE7D6]/90 rounded-2xl p-3.5 shadow-xs"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
+                {FANTASY_PILLARS.map((pillar) => {
+                  const colSpan = 'xl:col-span-3';
+                  return (
+                    <div
+                      key={pillar.roman}
+                      className={`${colSpan} relative bg-[#FBF8F1]/80 border border-[#B5832A]/40 rounded-xl px-3 py-2.5 flex flex-col justify-start gap-2 shadow-2xs`}
+                    >
+                      <div className="flex items-center justify-between gap-1 border-b border-[#B5832A]/35 pb-1.5">
+                        <span className="font-epic text-[10px] font-bold uppercase tracking-[0.15em] text-[#B5832A] flex items-center gap-1">
+                          <span className="text-[#9E2A2B]" aria-hidden="true">
+                            §
+                          </span>
+                          <span>
+                            Pilar {pillar.roman} · {pillar.title}
+                          </span>
+                        </span>
+                        <span
+                          className="text-[11px] text-[#9E2A2B]"
+                          aria-hidden="true"
                         >
-                          <IconComponent
-                            className={`w-3.5 h-3.5 shrink-0 ${
-                              isActive ? 'text-[#FBF8F1]' : 'text-[#B5832A]'
-                            }`}
-                          />
-                          <span>{tab.label}</span>
-                          {count !== null && (
-                            <span
-                              className={`font-mono-tabular text-[10px] px-1.5 py-0.2 rounded ${
+                          ❖
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {pillar.tabs.map((tab) => {
+                          const isActive = activeTab === tab.id;
+                          const count = getTabCount(tab.id);
+                          const IconComponent = tab.icon;
+                          return (
+                            <button
+                              key={tab.id}
+                              type="button"
+                              onClick={() => handleSwitchTab(tab.id)}
+                              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                                 isActive
-                                  ? 'bg-black/25 text-white'
-                                  : 'bg-[#EFE7D6] text-[#695A47]'
+                                  ? 'wax-seal-btn text-white'
+                                  : 'bg-[#FBF8F1] text-[#231C14] hover:border-[#B5832A] border border-[#D8CBB3]/90'
                               }`}
                             >
-                              {count}
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </nav>
+                              <IconComponent
+                                className={`w-3.5 h-3.5 shrink-0 ${
+                                  isActive ? 'text-[#FBF8F1]' : 'text-[#B5832A]'
+                                }`}
+                              />
+                              <span>{tab.label}</span>
+                              {count !== null && (
+                                <span
+                                  className={`font-mono-tabular text-[10px] px-1.5 py-0.2 rounded ${
+                                    isActive
+                                      ? 'bg-black/25 text-white'
+                                      : 'bg-[#EFE7D6] text-[#695A47]'
+                                  }`}
+                                >
+                                  {count}
+                                </span>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </nav>
 
-        {/* Hidden file input for JSON import */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".json"
-          onChange={handleImportWorldJson}
-          className="hidden"
-        />
+            {/* Ornamen Pembatas Bab Sulur Kompas Abad Pertengahan */}
+            <MedievalCompassDivider
+              label={`Folio · ${activeTabLabel}`}
+              className="my-1"
+            />
+
+            {/* Hidden file input for JSON import */}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              onChange={handleImportWorldJson}
+              className="hidden"
+            />
+
+            <div className="relative z-10">
 
         {/* TAB 1: OVERVIEW (BERANDA DUNIA) */}
         {activeTab === 'overview' && (
@@ -1373,10 +1432,23 @@ export default function App() {
             onPromoteCardToEntity={handlePromoteCanvasCardToEntity}
           />
         )}
+            </div>
+
+            {/* Kolofon Kaki Halaman Kitab (Medieval Colophon Footer inside Tome) */}
+            <div className="relative z-10 pt-4 border-t border-[#B5832A]/35 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#695A47] font-epic tracking-wider print:hidden">
+              <span>
+                ✦ Ex Libris · {project.worldName || 'Kitab Semesta Fantasi'} ✦
+              </span>
+              <span>
+                {project.entities.length} Entitas Kodeks · {project.chapters.length} Bab Naskah · {project.timeline.length} Kronik Sejarah
+              </span>
+            </div>
+          </div>
+        </div>
       </main>
 
       {/* Quiet Editorial Footer */}
-      <footer className="border-t border-[#D8CBB3] bg-[#EFE7D6]/60 px-6 py-4 mt-12 print:hidden">
+      <footer className="border-t border-[#B5832A]/40 bg-[#EFE7D6]/80 px-6 py-4 mt-8 print:hidden">
         <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-[#695A47]">
           <span>
             MythosCartograph — Studio World Bible, Peta Abad Pertengahan & Arsitektur Cerita

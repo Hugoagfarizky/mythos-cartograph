@@ -53,33 +53,152 @@
 .fantasy-dropcap > p:first-of-type::first-letter {
   font-family: 'Cinzel Decorative', 'Cinzel', Georgia, serif;
   float: left;
-  font-size: 3.1rem;
-  line-height: 0.86;
-  padding: 0.22rem 0.55rem 0.18rem 0.5rem;
-  margin-right: 0.65rem;
+  font-size: 3.25rem;
+  line-height: 0.84;
+  padding: 0.25rem 0.6rem 0.2rem 0.55rem;
+  margin-right: 0.7rem;
   margin-top: 0.1rem;
   margin-bottom: 0.1rem;
   font-weight: 700;
   color: #9E2A2B;
-  background: linear-gradient(145deg, rgba(181, 131, 42, 0.16), rgba(158, 42, 43, 0.08));
-  border: 1px solid rgba(181, 131, 42, 0.55);
-  border-radius: 0.5rem;
-  box-shadow: inset 0 0 0 2px rgba(251, 248, 241, 0.6);
+  background: linear-gradient(145deg, rgba(181, 131, 42, 0.22), rgba(158, 42, 43, 0.12));
+  border: 1.5px solid rgba(181, 131, 42, 0.7);
+  border-radius: 0.45rem;
+  box-shadow:
+    inset 0 0 0 2px rgba(251, 248, 241, 0.7),
+    0 2px 6px rgba(35, 28, 20, 0.12);
 }
 
-/* Tarot / Bestiary Arcana Card Frame */
+/* ============================================================================
+   HAMPARAN KITAB GRIMOIRE ABAD PERTENGAHAN (Open Medieval Fantasy Tome System)
+   ============================================================================ */
+
+/* 1. Meja Kartografer & Latar Belakang Perkamen Tua */
+.medieval-desk-bg {
+  background-color: #EAE0CC;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(181, 131, 42, 0.16), transparent 65%),
+    radial-gradient(ellipse at 50% 100%, rgba(59, 46, 30, 0.18), transparent 70%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(105, 90, 71, 0.018) 0px,
+      rgba(105, 90, 71, 0.018) 2px,
+      transparent 2px,
+      transparent 8px
+    );
+}
+
+/* 2. Sampul Jilid Kulit Kitab Grimoire (Outer Leather Tome Cover) */
+.medieval-tome-binding {
+  position: relative;
+  background: linear-gradient(160deg, #352417 0%, #24170E 55%, #2E1F14 100%);
+  border: 2px solid #8C6223;
+  border-radius: 1.35rem;
+  padding: 0.75rem 0.85rem 1.05rem 0.85rem;
+  box-shadow:
+    inset 0 0 0 3px rgba(181, 131, 42, 0.28),
+    inset 0 2px 12px rgba(0, 0, 0, 0.65),
+    0 18px 40px -10px rgba(28, 19, 12, 0.42),
+    0 4px 12px rgba(28, 19, 12, 0.25);
+}
+
+/* Jahitan Benang Emas pada Sampul Kulit */
+.medieval-tome-binding::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px dashed rgba(212, 155, 53, 0.42);
+  border-radius: 1.05rem;
+  pointer-events: none;
+}
+
+/* 3. Hamparan Lembaran Kertas Kitab Terbuka & Efek Tumpukan Halaman (Stacked Parchment Pages) */
+.medieval-tome-sheet {
+  position: relative;
+  background-color: #F8F3E6;
+  background-image:
+    /* Bayangan halus lipatan tengah jilid kitab */
+    linear-gradient(
+      90deg,
+      rgba(59, 46, 30, 0.09) 0%,
+      rgba(181, 131, 42, 0.02) 4%,
+      transparent 14%,
+      transparent 48.5%,
+      rgba(59, 46, 30, 0.06) 50%,
+      transparent 51.5%,
+      transparent 86%,
+      rgba(181, 131, 42, 0.02) 96%,
+      rgba(59, 46, 30, 0.09) 100%
+    ),
+    /* Vinyet tepi kertas perkamen tua */
+    radial-gradient(ellipse at center, transparent 62%, rgba(168, 136, 86, 0.14) 100%);
+  border: 1.5px solid #C8B493;
+  border-radius: 0.9rem;
+  /* Efek Tepi Lembaran Kitab Bertumpuk di Kiri, Kanan, dan Bawah */
+  box-shadow:
+    inset 0 0 28px rgba(143, 91, 20, 0.08),
+    inset 0 0 0 1px rgba(181, 131, 42, 0.28),
+    /* Lembar ke-1 */
+    -3px 3px 0 -1px #EFE6D4,
+    3px 3px 0 -1px #EFE6D4,
+    0 3px 0 0 #C4AF8C,
+    /* Lembar ke-2 */
+    -6px 6px 0 -2px #E6DAC3,
+    6px 6px 0 -2px #E6DAC3,
+    0 6px 0 -1px #B39C78,
+    /* Lembar ke-3 */
+    -9px 9px 0 -3px #DDD0B6,
+    9px 9px 0 -3px #DDD0B6,
+    0 9px 0 -2px #9E8662,
+    0 14px 24px rgba(0, 0, 0, 0.45);
+}
+
+/* Garis Bingkai Dalam Manuskrip (Illuminated Inner Folio Rule) */
+.medieval-folio-frame {
+  position: relative;
+  border: 1px solid rgba(181, 131, 42, 0.38);
+  border-radius: 0.75rem;
+  box-shadow: inset 0 0 0 3px rgba(251, 248, 241, 0.55), inset 0 0 0 4px rgba(181, 131, 42, 0.18);
+}
+
+/* 4. Segel Lilin Kerajaan (Royal Crimson Wax Seal Button) */
+.wax-seal-btn {
+  background: linear-gradient(145deg, #B23233 0%, #8E2223 60%, #741A1B 100%);
+  color: #FFF8EC;
+  border: 1px solid #D49B35;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 235, 200, 0.35),
+    inset 0 -2px 4px rgba(45, 8, 8, 0.45),
+    0 2px 6px rgba(116, 26, 27, 0.32);
+}
+
+.wax-seal-btn:hover {
+  background: linear-gradient(145deg, #C03839 0%, #9E2A2B 60%, #801D1E 100%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 235, 200, 0.45),
+    0 4px 10px rgba(116, 26, 27, 0.4);
+}
+
+/* Tarot / Bestiary Arcana Card Frame (Enhanced Medieval Parchment) */
 .arcana-card {
   position: relative;
+  background-image: radial-gradient(
+    ellipse at center,
+    transparent 65%,
+    rgba(181, 131, 42, 0.06) 100%
+  );
   box-shadow:
-    inset 0 0 0 1px rgba(181, 131, 42, 0.24),
-    0 2px 10px -3px rgba(35, 28, 20, 0.08);
+    inset 0 0 0 1px rgba(181, 131, 42, 0.28),
+    inset 0 0 16px rgba(143, 91, 20, 0.04),
+    0 3px 10px -3px rgba(35, 28, 20, 0.1);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
 .arcana-card:hover {
   box-shadow:
-    inset 0 0 0 1px rgba(181, 131, 42, 0.5),
-    0 6px 18px -4px rgba(35, 28, 20, 0.14);
+    inset 0 0 0 1px rgba(181, 131, 42, 0.55),
+    inset 0 0 18px rgba(143, 91, 20, 0.07),
+    0 7px 20px -4px rgba(35, 28, 20, 0.16);
 }
 
 /* ============================================================================
@@ -99,6 +218,57 @@
   --accent-cartography: #6EC3D4;
   --accent-forest: #6FD19D;
   --accent-mystic: #C4A1FF;
+}
+
+[data-theme="grimoire-dark"] .medieval-desk-bg {
+  background-color: #0D0A07 !important;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(240, 195, 109, 0.09), transparent 65%),
+    radial-gradient(ellipse at 50% 100%, rgba(158, 42, 43, 0.08), transparent 70%) !important;
+}
+
+[data-theme="grimoire-dark"] .medieval-tome-binding {
+  background: linear-gradient(160deg, #1A120C 0%, #0F0A07 55%, #17100B 100%) !important;
+  border-color: #9A7132 !important;
+  box-shadow:
+    inset 0 0 0 3px rgba(240, 195, 109, 0.22),
+    inset 0 2px 14px rgba(0, 0, 0, 0.85),
+    0 20px 48px -10px rgba(0, 0, 0, 0.85) !important;
+}
+
+[data-theme="grimoire-dark"] .medieval-tome-sheet {
+  background-color: #17120E !important;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.42) 0%,
+      transparent 12%,
+      transparent 48.5%,
+      rgba(0, 0, 0, 0.32) 50%,
+      transparent 51.5%,
+      transparent 88%,
+      rgba(0, 0, 0, 0.42) 100%
+    ),
+    radial-gradient(ellipse at center, transparent 62%, rgba(0, 0, 0, 0.38) 100%) !important;
+  border-color: #5C452D !important;
+  box-shadow:
+    inset 0 0 32px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(240, 195, 109, 0.22),
+    -3px 3px 0 -1px #241C15,
+    3px 3px 0 -1px #241C15,
+    0 3px 0 0 #4A3928,
+    -6px 6px 0 -2px #1E1711,
+    6px 6px 0 -2px #1E1711,
+    0 6px 0 -1px #3D2E20,
+    -9px 9px 0 -3px #18120D,
+    9px 9px 0 -3px #18120D,
+    0 9px 0 -2px #2F2318,
+    0 16px 28px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="grimoire-dark"] .medieval-folio-frame {
+  border-color: rgba(240, 195, 109, 0.32) !important;
+  box-shadow: inset 0 0 0 3px rgba(23, 18, 14, 0.8), inset 0 0 0 4px rgba(240, 195, 109, 0.16) !important;
 }
 
 /* 1. Primary Parchment & Recessed Surfaces */
