@@ -316,6 +316,62 @@ export interface LoreAuditResult {
   creativeSuggestions: string[];
 }
 
+export type FreeCanvasCardColor =
+  | 'parchment'
+  | 'crimson'
+  | 'emerald'
+  | 'teal'
+  | 'amethyst'
+  | 'amber';
+
+export interface FreeCanvasCard {
+  id: string;
+  title: string;
+  tagLabel?: string;
+  content: string; // Supports [[Entity Name]] wiki links
+  x: number;
+  y: number;
+  width: number;
+  color: FreeCanvasCardColor;
+  linkedEntityId?: string;
+  linkedChapterId?: string;
+}
+
+export interface FreeCanvasLink {
+  id: string;
+  fromCardId: string;
+  toCardId: string;
+  label: string;
+  color: 'crimson' | 'gold' | 'teal' | 'emerald';
+  dashed?: boolean;
+}
+
+export interface FreeCanvasStroke {
+  id: string;
+  color: string;
+  width: number;
+  points: Array<{ x: number; y: number }>;
+}
+
+export interface FreeCanvasZone {
+  id: string;
+  title: string;
+  subtitle?: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: FreeCanvasCardColor;
+}
+
+export interface FreeCanvasData {
+  boardTitle: string;
+  cards: FreeCanvasCard[];
+  links: FreeCanvasLink[];
+  strokes: FreeCanvasStroke[];
+  zones: FreeCanvasZone[];
+}
+
 export interface WorldProject {
   id: string;
   worldName: string;
@@ -338,4 +394,6 @@ export interface WorldProject {
   nodePositions: GraphNodePosition[];
   timeline: TimelineEvent[];
   chapters: ChapterOutline[];
+  freeCanvas?: FreeCanvasData;
 }
+

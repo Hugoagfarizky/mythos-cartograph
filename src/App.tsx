@@ -15,6 +15,7 @@ import {
   Moon,
   Mountain,
   Network,
+  PenTool,
   ScrollText,
   Search,
   Shield,
@@ -26,6 +27,7 @@ import {
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from './data/starterWorld';
 import {
+  FreeCanvasCard,
   LoreAuditResult,
   LoreCategory,
   LoreEntity,
@@ -45,6 +47,10 @@ import {
   ChapterOutlinerView,
 } from './components/ChapterOutlinerAndPrdView';
 import { WorldOverviewTab } from './components/WorldOverviewTab';
+import {
+  DEFAULT_STARTER_FREE_CANVAS,
+  FreeformCanvasView,
+} from './components/FreeformCanvasView';
 import {
   GlobalOmniSearchModal,
   LoreHealthInspectorModal,
@@ -73,7 +79,8 @@ export type WorkspaceTab =
   | 'timeline'
   | 'encyclopedia'
   | 'graph'
-  | 'outliner';
+  | 'outliner'
+  | 'free_canvas';
 
 const LORE_CATEGORY_TABS: LoreCategory[] = [
   'character',
@@ -112,6 +119,7 @@ const SECTION_TABS: SectionTabMeta[] = [
   { id: 'encyclopedia', label: 'Artefak & Biota', icon: Gem },
   { id: 'graph', label: 'Peta Relasi', icon: Network },
   { id: 'outliner', label: 'Alur Bab', icon: Feather },
+  { id: 'free_canvas', label: 'Kanvas Bebas', icon: PenTool },
 ];
 
 const FANTASY_PILLARS: Array<{
@@ -140,8 +148,10 @@ const FANTASY_PILLARS: Array<{
   },
   {
     roman: 'IV',
-    title: 'Takdir & Naskah',
-    tabs: SECTION_TABS.filter((t) => ['graph', 'outliner'].includes(t.id)),
+    title: 'Takdir, Naskah & Kanvas',
+    tabs: SECTION_TABS.filter((t) =>
+      ['graph', 'outliner', 'free_canvas'].includes(t.id)
+    ),
   },
 ];
 
@@ -836,6 +846,54 @@ export default function App() {
     );
   };
 
+  const handlePromoteCanvasCardToEntity = (
+    card: FreeCanvasCard,
+    category: LoreCategory
+  ) => {
+    const newEntity: LoreEntity = {
+      id: `ent-${Date.now()}`,
+      category,
+      title: card.title.trim() || `Entitas ${CATEGORY_META[category].singular}`,
+      subtitle: card.tagLabel || `Diangkat dari Kanvas Bebas`,
+      summary: card.content.slice(0, 180),
+      content: `### Catatan Kanon dari Kanvas Bebas\n${card.content}\n\nTambahkan rincian atribut dan hubungkan dengan entitas lain menggunakan sintaks \`[[Nama Entitas]]\`.`,
+      tags: [CATEGORY_META[category].singular, 'Kanvas Bebas'],
+      attributes:
+        category === 'character'
+          ? { role: 'Tokoh Kunci', status: 'Hidup' }
+          : {},
+      updatedAt: new Date().toISOString().slice(0, 10),
+    };
+
+    setProject((prev) => {
+      const currentCanvas = prev.freeCanvas || DEFAULT_STARTER_FREE_CANVAS;
+      return {
+        ...prev,
+        entities: [newEntity, ...prev.entities],
+        nodePositions: [
+          ...prev.nodePositions,
+          {
+            entityId: newEntity.id,
+            x: 260 + ((prev.entities.length * 89) % 440),
+            y: 180 + ((prev.entities.length * 67) % 280),
+          },
+        ],
+        freeCanvas: {
+          ...currentCanvas,
+          cards: currentCanvas.cards.map((c) =>
+            c.id === card.id ? { ...c, linkedEntityId: newEntity.id } : c
+          ),
+        },
+      };
+    });
+
+    setSelectedEntityId(newEntity.id);
+    setActiveTab(category);
+    showToast(
+      `Kartu "${newEntity.title}" berhasil dijadikan entri di tab ${CATEGORY_META[category].singular}.`
+    );
+  };
+
   // Build world summary string for AI context
   const buildWorldContextSummary = () => {
     const entityLines = project.entities
@@ -950,6 +1008,9 @@ export default function App() {
     if (tabId === 'timeline') return project.timeline.length;
     if (tabId === 'graph') return project.relationships.length;
     if (tabId === 'outliner') return project.chapters.length;
+    if (tabId === 'free_canvas') {
+      return (project.freeCanvas || DEFAULT_STARTER_FREE_CANVAS).cards.length;
+    }
     return null;
   };
 
@@ -1086,9 +1147,13 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
             {FANTASY_PILLARS.map((pillar) => {
               const colSpan =
-                pillar.roman === 'I' || pillar.roman === 'IV'
+                pillar.roman === 'I'
                   ? 'xl:col-span-2'
-                  : 'xl:col-span-4';
+                  : pillar.roman === 'IV'
+                  ? 'xl:col-span-3'
+                  : pillar.roman === 'II'
+                  ? 'xl:col-span-4'
+                  : 'xl:col-span-3';
               return (
                 <div
                   key={pillar.roman}
@@ -1290,6 +1355,24 @@ export default function App() {
                 `Sinopsis: ${ch.synopsis}\n\nCatatan Naskah:\n${ch.draftNotes}`
               )
             }
+          />
+        )}
+
+        {activeTab === 'free_canvas' && (
+          <FreeformCanvasView
+            canvasData={project.freeCanvas}
+            entities={project.entities}
+            chapters={project.chapters}
+            onChangeCanvasData={(nextCanvas) =>
+              setProject((prev) => ({ ...prev, freeCanvas: nextCanvas }))
+            }
+            onSelectEntity={handleNavigateToEntity}
+            onOpenChapter={(chId) => {
+              setSelectedChapterId(chId);
+              handleSwitchTab('outliner');
+            }}
+            onQuickCreateEntity={handleQuickCreateEntity}
+            onPromoteCardToEntity={handlePromoteCanvasCardToEntity}
           />
         )}
       </main>
