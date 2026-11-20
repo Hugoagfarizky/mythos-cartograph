@@ -1,188 +1,189 @@
-# MythosCartograph — Panduan Lengkap Fitur & Cara Menyusun Cerita Fantasi
+# MythosCartograph — Complete Feature Guide & How to Build a Fantasy Story
 
-**MythosCartograph** adalah studio *World Bible*, Peta Fantasi Abad Pertengahan (*Medieval Map Sandbox*), dan Arsitektur Naskah Cerita yang dirancang khusus untuk penulis novel fantasi, perancang *lore* game/RPG, dan kreator semesta fiksi.
-
----
-
-## Daftar Isi
-1. [Arsitektur 4 Pilar Semesta Fantasi (21 Tab Utama)](#1-arsitektur-4-pilar-semesta-fantasi-21-tab-utama)
-2. [Fitur Produktivitas & Otomasi Penulis](#2-fitur-produktivitas--otomasi-penulis)
-3. [Alur Langkah-demi-Langkah Cara Menyusun Cerita dari Nol](#3-alur-langkah-demi-langkah-cara-menyusun-cerita-dari-nol)
-4. [Cara Menggunakan Sistem Tautan Kurung Ganda `[[Nama Entitas]]`](#4-cara-menggunakan-sistem-tautan-kurung-ganda-nama-entitas)
-5. [Cara Mengekspor World Bible & Naskah ke File `.md` / PDF / `.json`](#5-cara-mengekspor-world-bible--naskah-ke-file-md--pdf--json)
+**MythosCartograph** is a *World Bible*, Medieval Fantasy Map Sandbox, and Story Architecture studio designed specifically for fantasy novel writers, game/RPG lore designers, and fiction universe creators.
 
 ---
 
-## 1. Arsitektur 4 Pilar Semesta Fantasi (21 Tab Utama)
+## Table of contents
 
-Seluruh ruang kerja **MythosCartograph** dikelompokkan secara logis dari skala paling makro (Kosmos & Peta Dunia) hingga skala mikro (Silsilah, Nubuat, Bab Naskah, & Kanvas Coretan):
+1. [Architecture of the 4 Pillars of a Fantasy Universe (21 Main Tabs)](#1-architecture-of-the-4-pillars-of-a-fantasy-universe-21-main-tabs)
+2. [Writer Productivity & Automation Features](#2-writer-productivity--automation-features)
+3. [Step-by-Step Guide to Building a Story from Scratch](#3-step-by-step-guide-to-building-a-story-from-scratch)
+4. [How to Use the Double-Bracket Links `[[Entity Name]]`](#4-how-to-use-the-double-bracket-links-entity-name)
+5. [How to Export the World Bible & Manuscript to `.md` / PDF / `.json`](#5-how-to-export-the-world-bible--manuscript-to-md--pdf--json)
 
-### Pilar I · Kosmos & Atlas *(Pondasi Alam Semesta & Geografi)*
+---
+
+## 1. Architecture of the 4 Pillars of a Fantasy Universe (21 Main Tabs)
+
+The entire **MythosCartograph** workspace is organized logically from the most macro scale (Cosmos & World Map) down to the micro scale (Genealogy, Prophecy, Manuscript Chapters, & Scratchpad Canvas):
+
+### Pillar I · Cosmos & Atlas *(Foundation of the Universe & Geography)*
 1. **Overview (`Overview`)**:
-   - Beranda utama dunia Anda. Menyimpan **Nama Dunia**, **Logline / Premis Utama**, **Hukum Kosmologi & Mitos Penciptaan**, serta **Sistem Kalender & Era**.
-   - Dilengkapi **Papan Catatan Cepat (*Scratchpad*)** di mana ide mendadak bisa langsung diubah (*promote*) menjadi entitas resmi dengan 1 klik.
-2. **Entitas Kosmik (`Entitas Kosmik`)**:
-   - Direktori khusus untuk makhluk primordial, titan astral, entitas kehampaan (*void*), dan perwujudan hukum alam semesta (dibedakan dari Dewa-Dewi).
-   - Atribut khusus: *Skala Kosmik & Eksistensi*, *Asal-Usul Primordial*, *Hukum Alam & Manifestasi*, serta *Pengaruh terhadap Realitas*.
-3. **Dewa-Dewi (`Dewa-Dewi`)**:
-   - Direktori pantheon dewa dan dewi yang disembah oleh makhluk fana.
-   - Atribut khusus: *Jajaran Pantheon & Takhta*, *Domain Ilahi*, *Simbol Suci & Relik*, *Kuil Utama & Ordo Pemujaan*, serta *Berkah & Kutukan Ilahi*.
-4. **Map Dunia (`Map Dunia`)**:
-   - Studio kartografi interaktif bergaya perkamen abad pertengahan.
-   - **Mode Lukis Daratan & Bioma**: Lukis samudra, padang rumput, hutan purba, pegunungan, gurun, tundra es, rawa, dan tanah vulkanik dengan ukuran kuas yang bisa diatur.
-   - **Mode Stempel (*Stamp*) & Pin Lokasi**: Tempatkan ikon Ibu Kota, Benteng, Menara Sihir, Reruntuhan Kuno, Pelabuhan, dan Puncak Gunung.
-   - **Tautan Peta ↔ Lore**: Setiap pin di peta dapat dihubungkan langsung ke entitas Negara/Wilayah, atau membuat entitas baru langsung dari titik peta.
+   - Main dashboard of your world. Stores the **World Name**, **Logline / Main Premise**, **Cosmology Laws & Creation Myth**, and the **Calendar & Era System**.
+   - Includes a **Quick Scratchpad** where sudden ideas can be promoted into official entities with one click.
+2. **Cosmic Entities (`Entitas Kosmik`)**:
+   - Dedicated directory for primordial beings, astral titans, void entities, and manifestations of the laws of the universe (distinct from Gods).
+   - Special attributes: *Cosmic Scale & Existence*, *Primordial Origin*, *Natural Laws & Manifestation*, and *Influence on Reality*.
+3. **Gods & Goddesses (`Dewa-Dewi`)**:
+   - Directory of gods and goddesses worshipped by mortals.
+   - Special attributes: *Pantheon Rank & Throne*, *Divine Domain*, *Sacred Symbol & Relic*, *Main Temple & Order of Worship*, and *Divine Blessings & Curses*.
+4. **World Map (`Map Dunia`)**:
+   - Interactive cartography studio in a medieval parchment style.
+   - **Land & Biome Painting Mode**: paint oceans, grasslands, ancient forests, mountains, deserts, ice tundras, swamps, and volcanic soil with adjustable brush sizes.
+   - **Stamp & Location Pin Mode**: place icons for Capital Cities, Fortresses, Magic Towers, Ancient Ruins, Harbors, and Mountain Peaks.
+   - **Map ↔ Lore Linking**: every pin on the map can be linked directly to a Country/Region entity, or create a new entity straight from the map point.
 
 ---
 
-### Pilar II · Penghuni & Arcana *(Tokoh, Makhluk Hidup, & Sistem Kekuatan)*
+### Pillar II · Inhabitants & Arcana *(Characters, Creatures, & Power Systems)*
 5. **Character (`Character`)**:
-   - Profil mendalam tokoh protagonis, antagonis, mentor, dan figuran penting.
-   - Atribut khusus: *Peran Naratif*, *Ras/Garis Darah*, *Afiliasi/Faksi*, *Tempat Asal*, *Tingkat Kekuatan*, *Motivasi Batin*, dan *Rahasia Tersembunyi*.
-   - Terintegrasi langsung dengan **Jaringan Relasi Tokoh** di bagian bawah halaman profil.
-6. **Ras (`Ras`)**:
-   - Dokumentasi spesies berakal (Manusia, Elf, Kurcaci, ras orisinal).
-   - Atribut khusus: *Rentang Usia*, *Ciri Fisik*, *Habitat Utama*, dan *Bakat Bawaan*.
-7. **Bestiary Monster (`Bestiary Monster`)**:
-   - Ensiklopedia monster, naga purba, dan satwa mitologi.
-   - Atribut khusus: *Tingkat Bahaya (Tier)*, *Klasifikasi Makhluk*, *Habitat Alami*, *Pola Serangan & Kemampuan*, *Kelemahan Anatomi / Elemen*, dan *Material Buruan / Alkimia (Loot/Drop)*.
-8. **Kelompok (`Kelompok`)**:
-   - Ordo ksatria, serikat penyihir, sindikat kriminal, atau dewan rahasia.
-   - Atribut khusus: *Pemimpin*, *Markas Utama*, *Ideologi & Sumpah*, serta *Sumber Pengaruh*.
+   - In-depth profiles for protagonists, antagonists, mentors, and important side characters.
+   - Special attributes: *Narrative Role*, *Race/Bloodline*, *Affiliation/Faction*, *Place of Origin*, *Power Level*, *Inner Motivation*, and *Hidden Secret*.
+   - Directly integrated with the **Character Relationship Network** at the bottom of the profile page.
+6. **Race (`Ras`)**:
+   - Documentation of sapient species (Human, Elf, Dwarf, original races).
+   - Special attributes: *Age Range*, *Physical Traits*, *Main Habitat*, and *Innate Talents*.
+7. **Monster Bestiary (`Bestiary Monster`)**:
+   - Encyclopedia of monsters, ancient dragons, and mythological beasts.
+   - Special attributes: *Danger Tier*, *Creature Classification*, *Natural Habitat*, *Attack Patterns & Abilities*, *Anatomical / Elemental Weaknesses*, and *Hunting Materials / Alchemy (Loot/Drop)*.
+8. **Faction (`Kelompok`)**:
+   - Knight orders, mage guilds, criminal syndicates, or secret councils.
+   - Special attributes: *Leader*, *Main Headquarters*, *Ideology & Oath*, and *Source of Influence*.
 9. **Power System (`Power System`)**:
-   - Aturan sistem sihir, kultivasi, atau kekuatan supranatural di dunia Anda.
-   - Atribut khusus: *Sumber Energi*, *Syarat Penggunaan*, *Harga / Risiko / Efek Samping*, dan *Batas Mutlak (Hard Limit)* agar tidak terjadi *plot hole*.
+   - Rules of magic, cultivation, or supernatural power in your world.
+   - Special attributes: *Energy Source*, *Usage Conditions*, *Cost / Risk / Side Effects*, and *Absolute Limit (Hard Limit)* to prevent plot holes.
 10. **Skill (`Skill`)**:
-    - Daftar jurus, mantra, teknik pedang, atau kemampuan khusus yang menginduk pada *Power System*.
-    - Atribut khusus: *Induk Power System*, *Tier / Tingkat Kesulitan*, *Biaya Mana/Stamina*, dan *Efek Utama*.
+    - List of techniques, spells, sword arts, or special abilities that stem from the *Power System*.
+    - Special attributes: *Parent Power System*, *Tier / Difficulty Level*, *Mana/Stamina Cost*, and *Main Effect*.
 
 ---
 
-### Pilar III · Geopolitik & Kronik *(Peradaban, Budaya, & Sejarah)*
-11. **Negara (`Negara`)**:
-    - Kerajaan, kekaisaran, republik dagang, atau federasi.
-    - Atribut khusus: *Bentuk Pemerintahan*, *Ibu Kota*, *Kepala Negara*, *Ekonomi Utama*, dan *Kekuatan Militer*.
-12. **Agama & Budaya (`Agama & Budaya`)**:
-    - Sistem kepercayaan, adat istiadat, dan tradisi masyarakat.
-    - Atribut khusus: *Bangsa/Ras Penganut*, *Ajaran Inti & Filosofi*, *Ritual Suci & Festival Tahunan*, *Tabu & Pantangan Sosial*, serta *Busana Adat, Arsitektur & Kuliner*.
-13. **Wilayah (`Wilayah`)**:
-    - Lokasi spesifik seperti lembah terlarang, hutan berkabut, pulau terapung, atau distrik kota.
-    - Atribut khusus: *Negara Induk*, *Iklim & Geografi*, *Tingkat Bahaya*, dan *Sumber Daya Alam*.
-14. **Sejarah (`Sejarah`)**:
-    - Arsip naratif peristiwa besar masa lalu (perang kuno, bencana kosmik, perjanjian damai) yang bisa disinkronkan ke **Timeline**.
+### Pillar III · Geopolitics & Chronicle *(Civilizations, Culture, & History)*
+11. **Country (`Negara`)**:
+    - Kingdoms, empires, trade republics, or federations.
+    - Special attributes: *Government Form*, *Capital*, *Head of State*, *Main Economy*, and *Military Strength*.
+12. **Religion & Culture (`Agama & Budaya`)**:
+    - Belief systems, customs, and traditions of societies.
+    - Special attributes: *Worshipping Race*, *Core Teachings & Philosophy*, *Sacred Rituals & Annual Festivals*, *Taboos & Social Prohibitions*, plus *Traditional Clothing, Architecture & Cuisine*.
+13. **Region (`Wilayah`)**:
+    - Specific locations such as forbidden valleys, misty forests, floating islands, or city districts.
+    - Special attributes: *Parent Country*, *Climate & Geography*, *Danger Level*, and *Natural Resources*.
+14. **History (`Sejarah`)**:
+    - Narrative archive of major past events (ancient wars, cosmic disasters, peace treaties) that can be synced to the **Timeline**.
 15. **Timeline (`Timeline`)**:
-    - Pita kronologi visual berurutan dari tahun paling kuno hingga era cerita saat ini. Setiap peristiwa dapat menautkan lokasi peta, tokoh yang terlibat, dan bab cerita terkait.
-16. **Artefak & Biota (`Artefak & Biota`)**:
-    - Ensiklopedia benda pusaka legendaris, senjata kutukan, tanaman obat langka, dan bijih logam magis.
+    - Visual chronological ribbon from the oldest year to the current story era. Each event can link map locations, involved characters, and related story chapters.
+16. **Artifact & Biota (`Artefak & Biota`)**:
+    - Encyclopedia of legendary relics, cursed weapons, rare medicinal plants, and magical metal ores.
 
 ---
 
-### Pilar IV · Takdir, Naskah & Kanvas *(Arsitektur Plot, Silsilah, & Penulisan Bab)*
-17. **Peta Relasi (`Peta Relasi`)**:
-    - Kanvas graf interaktif untuk memetakan hubungan antar entitas (*Sekutu*, *Musuh Bebuyutan*, *Keluarga*, *Vassal*, *Pengkhianat*, dll.). Node dapat digeser bebas.
-18. **Silsilah Dinasti (`Silsilah Dinasti`)**:
-    - Studio pohon keluarga kerajaan dan klan bangsawan yang dikelompokkan berdasarkan **Generasi (Gen 1, Gen 2, Gen 3, dst.)**.
-    - Mencatat status hidup/gugur, status suksesi (*Penguasa Saat Ini*, *Pewaris Utama*, *Cabang Kadet*, dll.), hubungan *Orang Tua–Anak* dan *Pasangan*, serta terhubung langsung ke profil **Character**.
-19. **Tracker Nubuat (`Tracker Nubuat`)**:
-    - Pelacak khusus untuk **Nubuat Kuno**, **Misteri Cerita**, **Foreshadowing**, dan **Rahasia Plot**.
-    - Memisahkan **Tafsir Umum Masyarakat di Dunia** vs **Kebenaran Kanonik Rahasia Penulis**, dilengkapi daftar petunjuk (*Clue*) dan pengecoh (*Red Herring*) yang tertaut ke bab tempat petunjuk ditanam hingga bab pengungkapan (*Payoff Chapter*).
-20. **Alur Bab (`Alur Bab`)**:
-    - Ruang kerja penulisan naskah cerita (*Chapter Outliner & Manuscript Editor*).
-    - Setiap bab memiliki:
-      - Status progres (*Ide Awal*, *Outline*, *Sedang Ditulis*, *Revisi*, *Selesai*).
-      - **Tokoh POV (Sudut Pandang)**, **Lokasi Latar**, dan **Waktu Kronologis**.
-      - **Daftar Adegan (*Scene Beats*)**: Rincian adegan demi adegan (*Tujuan Adegan*, *Konflik*, dan *Hasil/Perubahan*).
-      - **Draf Naskah / Catatan Bab**: Mendukung tautan `[[Nama Entitas]]` dan **Mode Fokus Menulis**.
-21. **Kanvas Bebas (`Kanvas Bebas`)**:
-    - Studio multi-halaman gabungan **Google Docs + OneNote + Paint**.
-    - Anda dapat menulis dokumen panjang, menempelkan *Sticky Note* & kartu catatan di mana saja di atas kanvas polos, serta menggambar/mencoret sketsa bebas dengan kuas warna-warni. Kartu catatan dapat dipromosikan menjadi entitas World Bible kapan saja.
+### Pillar IV · Destiny, Manuscript & Canvas *(Plot Architecture, Genealogy, & Chapter Writing)*
+17. **Relationship Map (`Peta Relasi`)**:
+    - Interactive graph canvas for mapping relationships between entities (*Ally*, *Sworn Enemy*, *Family*, *Vassal*, *Traitor*, etc.). Nodes can be freely dragged.
+18. **Dynasty Genealogy (`Silsilah Dinasti`)**:
+    - Royal family tree and noble clan studio grouped by **Generation (Gen 1, Gen 2, Gen 3, etc.)**.
+    - Records life/death status, succession status (*Current Ruler*, *Main Heir*, *Cadet Branch*, etc.), *Parent-Child* and *Spouse* relationships, and links directly to the **Character** profile.
+19. **Prophecy Tracker (`Tracker Nubuat`)**:
+    - Dedicated tracker for **Ancient Prophecies**, **Story Mysteries**, **Foreshadowing**, and **Plot Secrets**.
+    - Separates **What the World's People Commonly Believe (General Interpretation)** vs **The Author's Secret Canonical Truth**, equipped with clue lists (*Clue*) and red herrings (*Red Herring*) linked from the chapter where the clue is planted to the payoff chapter.
+20. **Chapter Outline (`Alur Bab`)**:
+    - Story manuscript writing workspace (*Chapter Outliner & Manuscript Editor*).
+    - Each chapter has:
+      - Progress status (*Initial Idea*, *Outline*, *Being Written*, *Revision*, *Done*).
+      - **POV Character**, **Setting Location**, and **Chronological Time**.
+      - **Scene Beats List**: scene-by-scene breakdown (*Scene Goal*, *Conflict*, and *Outcome/Change*).
+      - **Manuscript Draft / Chapter Notes**: supports `[[Entity Name]]` links and **Focus Writing Mode**.
+21. **Free Canvas (`Kanvas Bebas`)**:
+    - Multi-page studio combining **Google Docs + OneNote + Paint**.
+    - You can write long documents, paste *Sticky Notes* & note cards anywhere on a blank canvas, and draw freehand sketches with colorful brushes. Note cards can be promoted into World Bible entities at any time.
 
 ---
 
-## 2. Fitur Produktivitas & Otomasi Penulis
+## 2. Writer Productivity & Automation Features
 
-Di bilah atas (*Top Bar*) dan di dalam editor, tersedia fitur pintar untuk mempercepat kerja penulis:
+Available in the top bar and inside the editor are smart features to speed up a writer's work:
 
-1. **Pencarian Kilat (`Ctrl+K` / Tombol `Cari (Ctrl+K)`)**:
-   - Lompat instan ke karakter, negara, peristiwa timeline, pin peta, atau bab cerita mana pun hanya dengan mengetik beberapa huruf.
-2. **Inspektur Kesehatan Lore (Tombol `Kesehatan Lore (%)`)**:
-   - Memindai seluruh dunia Anda secara otomatis untuk mendeteksi:
-     - **Tautan Merah (`[[...]]`) yang Belum Dibuat Entitasnya** (lengkap dengan tombol buat otomatis).
-     - **Entitas Yatim (*Orphan*)** yang belum memiliki relasi atau belum disebut di entitas lain.
-     - **Karakter yang Belum Muncul di Bab Mana Pun**.
-     - **Negara/Wilayah yang Belum Dipin di Peta Dunia**.
-3. **Generator Nama Fantasi & Gelar Epik (*Fantasy Name Forge*)**:
-   - Saat mengedit entitas apa pun, klik tombol **Generator Nama Fantasi** untuk menghasilkan nama dan julukan epik sesuai kategori dan budaya (*Aelfir/Sylvan*, *Nidavellir/Rune*, *Solis/Imperial*, *Kosmik/Void*, dll.).
-4. **Mode Fokus Menulis**:
-   - Sembunyikan panel direktori kiri di ruang kerja entitas maupun di Alur Bab agar Anda bisa menulis dengan layar lebar tanpa distraksi.
+1. **Quick Search (`Ctrl+K` / `Search (Ctrl+K)` button)**:
+   - Instantly jump to any character, country, timeline event, map pin, or story chapter just by typing a few letters.
+2. **Lore Health Inspector (`Lore Health (%)` button)**:
+   - Automatically scans your entire world to detect:
+     - **Uncreated `[[...]]` Red Links** (complete with an auto-create button).
+     - **Orphan Entities** that have no relationships or are not mentioned in any other entity.
+     - **Characters That Have Not Appeared in Any Chapter**.
+     - **Countries/Regions Not Pinned on the World Map**.
+3. **Fantasy Name & Epic Title Generator (*Fantasy Name Forge*)**:
+   - While editing any entity, click the **Fantasy Name Generator** button to generate epic names and titles by category and culture (*Aelfir/Sylvan*, *Nidavellir/Rune*, *Solis/Imperial*, *Cosmic/Void*, etc.).
+4. **Focus Writing Mode**:
+   - Hide the left directory panel in both the entity workspace and the Chapter Outline so you can write on a wide screen without distractions.
 5. **AI Lore Consistency Auditor & AI Worldbuilding Brainstorm**:
-   - **Audit Konsistensi**: Memeriksa apakah karakter, skill, atau bab yang baru Anda tulis bertabrakan dengan aturan *Power System* atau *Timeline* yang sudah ada.
-   - **Brainstorm Entitas**: Menghasilkan 3 ide entitas baru yang langsung nyambung dengan konflik dunia Anda.
-6. **Manajer Multi-Proyek Dunia & Snapshot Versi (Tombol `Proyek Dunia`)**:
-   - Kelola banyak dunia fantasi sekaligus di satu aplikasi, duplikasi dunia untuk cabang cerita *What-If*, dan simpan **Snapshot (Titik Simpan)** sebelum melakukan perombakan besar.
-7. **Tema Perkamen Siang & Grimoire Malam**:
-   - Beralih antara tampilan perkamen hangat untuk siang hari atau mode gelap beraksen emas (*Grimoire Malam*) untuk menulis di malam hari.
+   - **Consistency Audit**: Checks whether the character, skill, or chapter you just wrote conflicts with existing *Power System* or *Timeline* rules.
+   - **Entity Brainstorm**: Generates 3 new entity ideas that directly connect to your world's conflict.
+6. **Multi-World Project Manager & Version Snapshots (`World Project` button)**:
+   - Manage many fantasy worlds at once in a single app, duplicate a world for *What-If* story branches, and save **Snapshots (Save Points)** before major overhauls.
+7. **Parchment Day Theme & Grimoire Night Theme**:
+   - Switch between a warm parchment look for daytime or a dark gold-accented mode (*Grimoire Night*) for writing at night.
 
 ---
 
-## 3. Alur Langkah-demi-Langkah Cara Menyusun Cerita dari Nol
+## 3. Step-by-Step Guide to Building a Story from Scratch
 
-Jika Anda ingin membangun cerita baru dari awal, ikuti urutan terbaik (*best practice*) berikut:
+If you want to build a new story from scratch, follow this best-practice order:
 
-### Tahap 1: Buat Proyek Dunia Baru & Tetapkan Premis (Pilar I)
-1. Klik tombol **`Proyek Dunia`** di kanan atas, lalu buat dunia baru (atau gunakan tombol **Mulai Dunia Kosong Baru** di tab `Overview`).
-2. Di tab **`Overview`**, isi:
-   - **Nama Dunia** & **Premis / Logline Utama** (1–2 kalimat inti konflik dunia Anda).
-   - **Mitos Penciptaan & Hukum Kosmologi** serta **Nama Kalender**.
-3. Jika cerita Anda melibatkan kekuatan kosmik atau dewa, isi beberapa entitas kunci di **`Entitas Kosmik`** dan **`Dewa-Dewi`**.
-4. Buka **`Map Dunia`**, gambar bentuk benua utama Anda, lalu pasang pin untuk 2–3 ibu kota atau lokasi penting.
+### Stage 1: Create a New World Project & Set the Premise (Pillar I)
+1. Click the **`World Project`** button at the top right, then create a new world (or use the **Start New Empty World** button on the `Overview` tab).
+2. On the **`Overview`** tab, fill in:
+   - **World Name** & **Premise / Main Logline** (1–2 sentences capturing your world's core conflict).
+   - **Creation Myth & Cosmology Laws** and the **Calendar Name**.
+3. If your story involves cosmic powers or gods, fill in a few key entities under **`Cosmic Entities`** and **`Gods & Goddesses`**.
+4. Open **`World Map`**, draw the shape of your main continent, then place pins for 2–3 capitals or important locations.
 
-### Tahap 2: Bangun Kekuatan, Bangsa, & Konflik Politik (Pilar II & III)
-1. Buka **`Power System`** lebih dulu untuk menetapkan **aturan dan batas kekuatan** di dunia Anda (agar kekuatan karakter nanti terukur). Tambahkan beberapa jurus/mantra di **`Skill`**.
-2. Buka **`Negara`**, **`Wilayah`**, dan **`Agama & Budaya`** untuk membangun panggung peradaban tempat cerita berlangsung.
-3. Buka **`Ras`**, **`Bestiary Monster`**, dan **`Kelompok`** untuk mengisi penghuni dunia dan faksi-faksi yang saling berebut pengaruh.
-4. Catat 3–5 peristiwa masa lalu paling krusial di **`Sejarah`** dan **`Timeline`** sebagai latar belakang konflik saat cerita dimulai.
+### Stage 2: Build Powers, Nations & Political Conflict (Pillars II & III)
+1. Open **`Power System`** first to set the **rules and limits of power** in your world (so character power levels stay measurable later). Add a few techniques/spells under **`Skill`**.
+2. Open **`Country`**, **`Region`**, and **`Religion & Culture`** to build the stage of civilization where the story takes place.
+3. Open **`Race`**, **`Monster Bestiary`**, and **`Faction`** to populate the world's inhabitants and the factions vying for influence.
+4. Record the 3–5 most crucial past events in **`History`** and **`Timeline`** as the background conflict when the story begins.
 
-### Tahap 3: Ciptakan Tokoh, Silsilah, & Jaringan Relasi (Pilar II & IV)
-1. Buat tokoh utama (Protagonis), musuh utama (Antagonis), dan tokoh pendukung di tab **`Character`**.
-2. Jika cerita Anda bertema kerajaan, politik dinasti, atau garis keturunan kuno, susun silsilahnya di **`Silsilah Dinasti`**.
-3. Buka **`Peta Relasi`** untuk menghubungkan siapa bersekutu dengan siapa, siapa mengkhianati siapa, dan bagaimana faksi-faksi saling terkait.
+### Stage 3: Create Characters, Genealogy & Relationship Networks (Pillars II & IV)
+1. Create the main character (Protagonist), main villain (Antagonist), and supporting characters under the **`Character`** tab.
+2. If your story is about royalty, dynastic politics, or ancient bloodlines, build the family tree under **`Dynasty Genealogy`**.
+3. Open **`Relationship Map`** to connect who allies with whom, who betrays whom, and how the factions interlock.
 
-### Tahap 4: Rancang Misteri, Nubuat, & Rangka Bab (Pilar IV)
-1. Sebelum menulis bab, buka **`Tracker Nubuat`** untuk mencatat misteri besar atau nubuat di cerita Anda:
-   - Tulis apa yang dipercaya masyarakat umum (*Tafsir Umum*) vs apa rahasia sebenarnya (*Kebenaran Kanonik*).
-   - Rencanakan petunjuk (*Clue*) dan pengecoh (*Red Herring*) yang akan disebar di bab-bab awal.
-2. Gunakan **`Kanvas Bebas`** jika Anda ingin mencoret-coret diagram alur kasar atau menempelkan ide-ide liar terlebih dahulu.
-3. Buka **`Alur Bab`**:
-   - Buat daftar bab (Bab 1, Bab 2, dst.).
-   - Di setiap bab, pilih **Tokoh POV**, **Lokasi**, dan susun **Daftar Adegan (*Scene Beats*)** (Tujuan → Konflik → Hasil).
-   - Tulis draf naskah atau catatan adegan di editor bab.
+### Stage 4: Design Mysteries, Prophecies & Chapter Outline (Pillar IV)
+1. Before writing chapters, open **`Prophecy Tracker`** to record the big mysteries or prophecies in your story:
+   - Write what the common people believe (*General Interpretation*) vs the actual secret truth (*Canonical Truth*).
+   - Plan the clues (*Clue*) and red herrings (*Red Herring*) to be scattered in early chapters through to the payoff chapter.
+2. Use **`Free Canvas`** if you want to sketch rough flow diagrams or paste wild ideas first.
+3. Open **`Chapter Outline`**:
+   - Create the chapter list (Chapter 1, Chapter 2, etc.).
+   - In each chapter, pick the **POV Character**, **Setting**, and build the **Scene Beats List** (Goal → Conflict → Outcome).
+   - Write the manuscript draft or chapter notes in the chapter editor.
 
-### Tahap 5: Audit Konsistensi & Ekspor Buku
-1. Klik **`Kesehatan Lore (%)`** di kanan atas untuk mengecek apakah ada tautan `[[...]]` yang belum dibuat atau tokoh yang belum terpakai.
-2. Klik **`Audit Konsistensi AI`** pada bab atau entitas penting untuk memastikan tidak ada *plot hole*.
-3. Klik **`Ekspor & Cetak Buku`** untuk mengunduh seluruh *World Bible* dan naskah Anda dalam format **Markdown (`.md`)**, **JSON Cadangan (`.json`)**, atau **Cetak PDF**.
+### Stage 5: Consistency Audit & Book Export
+1. Click **`Lore Health (%)`** at the top right to check for uncreated `[[...]]` links or unused characters.
+2. Click **`AI Consistency Audit`** on key chapters or entities to make sure there are no plot holes.
+3. Click **`Export & Print Book`** to download the entire *World Bible* and manuscript as **Markdown (`.md`)**, **Backup JSON (`.json`)**, or **Print to PDF**.
 
 ---
 
-## 4. Cara Menggunakan Sistem Tautan Kurung Ganda `[[Nama Entitas]]`
+## 4. How to Use the Double-Bracket Links `[[Entity Name]]`
 
-Di semua kolom teks (ringkasan, isi lore, catatan bab, nubuat, hingga kartu di Kanvas Bebas), Anda dapat mengetik nama entitas di dalam kurung siku ganda, contohnya:
+In every text field (summaries, lore content, chapter notes, prophecies, even cards on the Free Canvas), you can type an entity name inside double brackets, for example:
 
 ```markdown
-Pada malam gerhana, [[Kaelen Vance]] membawa [[Pedang Surya Patah]] menuju gerbang [[Solis Prime]].
+On the night of the eclipse, [[Kaelen Vance]] carries [[Broken Sun Sword]] toward the gates of [[Solis Prime]].
 ```
 
-- **Jika entitas sudah ada**: Teks tersebut otomatis berubah menjadi **tautan emas interaktif**. Saat diarahkan kursor (*hover*), muncul kartu pratinjau (*tooltip*); saat diklik, Anda langsung berpindah ke halaman entitas tersebut, dan sistem otomatis mencatat **Backlink (Rujukan Balik)** di entitas tujuan.
-- **Jika entitas belum ada**: Teks tersebut akan tampil sebagai **tautan merah bergaris putus-putus (`+`)**. Cukup **klik tautan merah tersebut**, pilih kategorinya di *popover* yang muncul, dan entitas baru akan langsung dibuat secara otomatis!
+- **If the entity already exists**: the text automatically becomes an **interactive golden link**. Hovering shows a preview card (*tooltip*); clicking takes you straight to that entity's page, and the system automatically records a **Backlink (Reverse Reference)** on the target entity.
+- **If the entity does not exist yet**: the text appears as a **red dashed-underline link (`+`)**. Just **click the red link**, pick its category in the *popover* that appears, and the new entity is created automatically!
 
 ---
 
-## 5. Cara Mengekspor World Bible & Naskah ke File `.md` / PDF / `.json`
+## 5. How to Export the World Bible & Manuscript to `.md` / PDF / `.json`
 
-1. Klik tombol merah **`Ekspor & Cetak Buku`** di pojok kanan atas aplikasi.
-2. Pilih cakupan dokumen (*Seluruh World Bible + Bab Naskah*, *Hanya Ensiklopedia Lore*, atau *Hanya Naskah Bab*).
-3. Anda dapat:
-   - **Salin Markdown** ke *clipboard* atau **Unduh File `.md`** (siap dibuka di Obsidian, Notion, Google Docs, atau VS Code).
-   - **Cetak / Simpan sebagai PDF** dengan tata letak buku ensiklopedia.
-   - **Unduh Cadangan `.json`** untuk menyimpan seluruh data proyek (termasuk peta, silsilah, tracker nubuat, dan kanvas) di komputer Anda.
+1. Click the red **`Export & Print Book`** button in the top-right corner of the app.
+2. Choose the document scope (*Entire World Bible + Chapters*, *Lore Encyclopedia Only*, or *Chapter Manuscript Only*).
+3. You can:
+   - **Copy Markdown** to the *clipboard* or **Download `.md` file** (ready to open in Obsidian, Notion, Google Docs, or VS Code).
+   - **Print / Save as PDF** with encyclopedia book layout.
+   - **Download Backup `.json`** to save the entire project data (including maps, genealogy, prophecy tracker, and canvas) on your computer.
