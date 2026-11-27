@@ -1,8 +1,8 @@
 import { TerrainType, WorldProject } from '../types/world';
 import parchmentBanner from '../assets/images/parchment_cartography_banner_1794157187078.jpg';
 
-const GRID_COLS = 36;
-const GRID_ROWS = 22;
+const GRID_COLS = 72;
+const GRID_ROWS = 44;
 
 function createBlankTerrainGrid(): TerrainType[] {
   return new Array(GRID_COLS * GRID_ROWS).fill('sea');
@@ -27,8 +27,8 @@ export const STARTER_WORLD_PROJECT: WorldProject = {
   mapData: {
     mapTitle: 'Peta Dunia Baru',
     subtitle: 'Kanvas Kartografi Semesta',
-    scaleLabel: '1 Grid = 50 Liga',
-    leaguesPerCell: 50,
+    scaleLabel: '1 Grid = 25 Liga',
+    leaguesPerCell: 25,
     gridCols: GRID_COLS,
     gridRows: GRID_ROWS,
     cells: createBlankTerrainGrid(),

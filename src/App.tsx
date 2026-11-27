@@ -338,21 +338,35 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Sync active project to localStorage and into savedWorlds library
+  // Sync active project to localStorage and into savedWorlds library.
+  // Debounced so rapid edits (a map brush stroke, typing) don't serialise the
+  // whole world on every change; a pending save is flushed when the page hides.
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
-      setSavedWorlds((prev) => {
-        const exists = prev.some((w) => w.id === project.id);
-        const next = exists
-          ? prev.map((w) => (w.id === project.id ? project : w))
-          : [project, ...prev];
-        localStorage.setItem(WORLDS_LIBRARY_KEY, JSON.stringify(next));
-        return next;
-      });
-    } catch (e) {
-      console.error('Failed to save world to localStorage:', e);
-    }
+    const save = () => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+        setSavedWorlds((prev) => {
+          const exists = prev.some((w) => w.id === project.id);
+          const next = exists
+            ? prev.map((w) => (w.id === project.id ? project : w))
+            : [project, ...prev];
+          localStorage.setItem(WORLDS_LIBRARY_KEY, JSON.stringify(next));
+          return next;
+        });
+      } catch (e) {
+        console.error('Failed to save world to localStorage:', e);
+      }
+    };
+    const timer = window.setTimeout(save, 400);
+    const flush = () => {
+      window.clearTimeout(timer);
+      save();
+    };
+    window.addEventListener('pagehide', flush);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('pagehide', flush);
+    };
   }, [project]);
 
   useEffect(() => {
@@ -491,8 +505,8 @@ export default function App() {
     tagline?: string;
     calendarSystem?: string;
   }): WorldProject => {
-    const cols = 36;
-    const rows = 22;
+    const cols = 72;
+    const rows = 44;
     const blankCells: TerrainType[] = new Array(cols * rows).fill('sea');
 
     return {
@@ -516,7 +530,8 @@ export default function App() {
       mapData: {
         mapTitle: `Peta ${meta?.worldName || 'Dunia Baru'}`,
         subtitle: 'Kanvas Kartografi Semesta',
-        scaleLabel: '1 Grid = 50 Liga',
+        scaleLabel: '1 Grid = 25 Liga',
+        leaguesPerCell: 25,
         gridCols: cols,
         gridRows: rows,
         cells: blankCells,

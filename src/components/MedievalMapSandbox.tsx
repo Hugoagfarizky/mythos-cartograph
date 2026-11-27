@@ -35,6 +35,31 @@ import {
   TerrainType,
 } from '../types/world';
 import { CATEGORY_META, OrnateCornerFiligree } from './WikiTextRenderer';
+import {
+  buildTerrainModel,
+  drawTerrainBase,
+  drawTerrainIcons,
+  hasAnyLand,
+} from './map/terrainRenderer';
+import {
+  AUTO_RIVER_PREFIX,
+  generateWorld,
+  upgradeMapResolution,
+  WorldShape,
+} from './map/terrainGenerator';
+
+// The map is drawn in a 1152×704 logical space on a 2× backing canvas so
+// strokes stay crisp when zoomed or exported.
+const MAP_LOGICAL_W = 1152;
+const MAP_LOGICAL_H = 704;
+const MAP_PIXEL_SCALE = 2;
+
+const BRUSH_SIZES: Array<{ radius: number; label: string }> = [
+  { radius: 0.5, label: 'Halus' },
+  { radius: 1.5, label: 'Kecil' },
+  { radius: 3, label: 'Sedang' },
+  { radius: 5.5, label: 'Besar' },
+];
 
 interface MedievalMapSandboxProps {
   mapData: MapSandboxData;
@@ -303,10 +328,24 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const brushCursorRef = useRef<HTMLDivElement | null>(null);
+  const eraseStrokeRef = useRef<boolean>(false);
+  const terrainCacheRef = useRef<{
+    cells: TerrainType[] | null;
+    model: ReturnType<typeof buildTerrainModel> | null;
+    base: HTMLCanvasElement | null;
+    icons: HTMLCanvasElement | null;
+  }>({ cells: null, model: null, base: null, icons: null });
+
+  // Older saves used a coarse 36×22 grid: resample them once to the finer grid.
+  useEffect(() => {
+    const upgraded = upgradeMapResolution(mapData);
+    if (upgraded) onChangeMapData(upgraded);
+  }, [mapData, onChangeMapData]);
 
   const [toolMode, setToolMode] = useState<MapToolMode>('inspect');
   const [selectedTerrain, setSelectedTerrain] = useState<TerrainType>('plains');
-  const [brushSize, setBrushSize] = useState<1 | 2 | 3>(1);
+  const [brushSize, setBrushSize] = useState<number>(BRUSH_SIZES[1].radius);
 
   // Stamp creation state
   const [selectedStampType, setSelectedStampType] =
@@ -425,251 +464,44 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const width = canvas.width;
-    const height = canvas.height;
-    const { gridCols, gridRows, cells, rivers } = mapData;
-    const cellW = width / gridCols;
-    const cellH = height / gridRows;
-
-    const getCell = (c: number, r: number): TerrainType => {
-      if (c < 0 || c >= gridCols || r < 0 || r >= gridRows) return 'sea';
-      return cells[r * gridCols + c] || 'sea';
-    };
-
-    const isLand = (c: number, r: number): boolean => {
-      const t = getCell(c, r);
-      return t !== 'sea' && t !== 'shallows';
-    };
+    const width = MAP_LOGICAL_W;
+    const height = MAP_LOGICAL_H;
+    const { cells, rivers } = mapData;
+    ctx.setTransform(MAP_PIXEL_SCALE, 0, 0, MAP_PIXEL_SCALE, 0, 0);
 
     // =========================================================================
-    // 1. AGED VELLUM PARCHMENT SEA BASE & VIGNETTE
+    // 1–2. SEA, SHALLOWS, WATERCOLOUR LAND, INKED COAST & OFFSHORE RIPPLES
+    // Rebuilt only when the terrain cells change.
     // =========================================================================
-    const seaGrad = ctx.createRadialGradient(
-      width * 0.5,
-      height * 0.5,
-      width * 0.1,
-      width * 0.5,
-      height * 0.5,
-      width * 0.72
-    );
-    seaGrad.addColorStop(0, '#E4D6B8');
-    seaGrad.addColorStop(0.7, '#D8C6A2');
-    seaGrad.addColorStop(1, '#C2AC83');
-    ctx.fillStyle = seaGrad;
-    ctx.fillRect(0, 0, width, height);
-
-    // Subtle aged paper fibers & foxing spots
-    for (let i = 0; i < 240; i++) {
-      const rx = pseudoRand(i * 13 + 1) * width;
-      const ry = pseudoRand(i * 29 + 7) * height;
-      const rad = 1 + pseudoRand(i * 41) * 3.5;
-      ctx.fillStyle =
-        i % 3 === 0
-          ? 'rgba(120, 88, 50, 0.05)'
-          : 'rgba(255, 248, 231, 0.08)';
-      ctx.beginPath();
-      ctx.arc(rx, ry, rad, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    // Fine engraved horizontal sea wave groups in deep ocean
-    ctx.strokeStyle = 'rgba(89, 69, 45, 0.22)';
-    ctx.lineWidth = 1;
-    for (let r = 1; r < gridRows - 1; r++) {
-      for (let c = 1; c < gridCols - 1; c++) {
-        if (
-          !isLand(c, r) &&
-          getCell(c, r) === 'sea' &&
-          (c * 7 + r * 3) % 5 === 0
-        ) {
-          const sx = (c + 0.2) * cellW;
-          const sy = (r + 0.5) * cellH;
-          ctx.beginPath();
-          ctx.moveTo(sx - 10, sy);
-          ctx.quadraticCurveTo(sx - 5, sy - 2.5, sx, sy);
-          ctx.quadraticCurveTo(sx + 5, sy + 2.5, sx + 10, sy);
-          ctx.moveTo(sx - 6, sy + 4);
-          ctx.quadraticCurveTo(sx, sy + 2, sx + 6, sy + 4);
-          ctx.stroke();
-        }
+    const cache = terrainCacheRef.current;
+    if (cache.cells !== cells || !cache.base) {
+      const model = buildTerrainModel(mapData, width, height);
+      const base = document.createElement('canvas');
+      base.width = width * MAP_PIXEL_SCALE;
+      base.height = height * MAP_PIXEL_SCALE;
+      const bctx = base.getContext('2d');
+      if (bctx) {
+        bctx.setTransform(MAP_PIXEL_SCALE, 0, 0, MAP_PIXEL_SCALE, 0, 0);
+        drawTerrainBase(bctx, width, height, model);
       }
+      cache.cells = cells;
+      cache.model = model;
+      cache.base = base;
+      cache.icons = null;
     }
-
-    // =========================================================================
-    // 2. SMOOTH ORGANIC LANDMASS & CONCENTRIC MEDIEVAL COASTAL RIPPLES
-    // =========================================================================
-    const drawOrganicLandMask = (expandPx: number) => {
-      ctx.beginPath();
-      for (let r = 0; r < gridRows; r++) {
-        for (let c = 0; c < gridCols; c++) {
-          if (!isLand(c, r)) continue;
-          const cx = (c + 0.5) * cellW;
-          const cy = (r + 0.5) * cellH;
-          const baseRx = cellW * 0.66 + expandPx;
-          const baseRy = cellH * 0.66 + expandPx;
-
-          const jx1 = (pseudoRand(c * 19 + r * 37) - 0.5) * cellW * 0.24;
-          const jy1 = (pseudoRand(c * 43 + r * 11) - 0.5) * cellH * 0.24;
-          ctx.moveTo(cx + jx1 + baseRx, cy + jy1);
-          ctx.ellipse(cx + jx1, cy + jy1, baseRx, baseRy, 0, 0, Math.PI * 2);
-
-          if (isLand(c + 1, r)) {
-            ctx.moveTo(cx + cellW * 0.5 + baseRx * 0.85, cy);
-            ctx.ellipse(
-              cx + cellW * 0.5,
-              cy,
-              baseRx * 0.85,
-              baseRy * 0.85,
-              0,
-              0,
-              Math.PI * 2
-            );
-          }
-          if (isLand(c, r + 1)) {
-            ctx.moveTo(cx + baseRx * 0.85, cy + cellH * 0.5);
-            ctx.ellipse(
-              cx,
-              cy + cellH * 0.5,
-              baseRx * 0.85,
-              baseRy * 0.85,
-              0,
-              0,
-              Math.PI * 2
-            );
-          }
-        }
+    if (!cache.icons && cache.model) {
+      const icons = document.createElement('canvas');
+      icons.width = width * MAP_PIXEL_SCALE;
+      icons.height = height * MAP_PIXEL_SCALE;
+      const ictx = icons.getContext('2d');
+      if (ictx) {
+        ictx.setTransform(MAP_PIXEL_SCALE, 0, 0, MAP_PIXEL_SCALE, 0, 0);
+        drawTerrainIcons(ictx, width, height, cache.model);
       }
-    };
-
-    const rippleRings = [
-      { expand: 11, color: 'rgba(104, 82, 54, 0.14)', width: 1.2 },
-      { expand: 6.5, color: 'rgba(82, 62, 38, 0.25)', width: 1.5 },
-      { expand: 2.8, color: 'rgba(59, 43, 25, 0.42)', width: 2.0 },
-    ];
-    for (const ring of rippleRings) {
-      ctx.save();
-      drawOrganicLandMask(ring.expand);
-      ctx.fillStyle = ring.color;
-      ctx.fill();
-      ctx.restore();
+      cache.icons = icons;
     }
-
-    ctx.save();
-    drawOrganicLandMask(0);
-    const landGrad = ctx.createRadialGradient(
-      width * 0.48,
-      height * 0.48,
-      40,
-      width * 0.5,
-      height * 0.5,
-      width * 0.55
-    );
-    landGrad.addColorStop(0, '#F5ECD9');
-    landGrad.addColorStop(0.75, '#EDE0C5');
-    landGrad.addColorStop(1, '#E2D0AF');
-    ctx.fillStyle = landGrad;
-    ctx.fill();
-
-    ctx.clip();
-    for (let r = 0; r < gridRows; r++) {
-      for (let c = 0; c < gridCols; c++) {
-        const t = getCell(c, r);
-        if (t === 'plains' || t === 'sea' || t === 'shallows') continue;
-        const cx = (c + 0.5) * cellW;
-        const cy = (r + 0.5) * cellH;
-        const washGrad = ctx.createRadialGradient(
-          cx,
-          cy,
-          2,
-          cx,
-          cy,
-          cellW * 1.15
-        );
-        if (t === 'forest') {
-          washGrad.addColorStop(0, 'rgba(116, 136, 98, 0.34)');
-          washGrad.addColorStop(1, 'rgba(116, 136, 98, 0)');
-        } else if (t === 'mountain') {
-          washGrad.addColorStop(0, 'rgba(166, 135, 96, 0.32)');
-          washGrad.addColorStop(1, 'rgba(166, 135, 96, 0)');
-        } else if (t === 'desert') {
-          washGrad.addColorStop(0, 'rgba(218, 174, 102, 0.38)');
-          washGrad.addColorStop(1, 'rgba(218, 174, 102, 0)');
-        } else if (t === 'swamp') {
-          washGrad.addColorStop(0, 'rgba(118, 128, 104, 0.35)');
-          washGrad.addColorStop(1, 'rgba(118, 128, 104, 0)');
-        } else if (t === 'tundra') {
-          washGrad.addColorStop(0, 'rgba(255, 252, 245, 0.65)');
-          washGrad.addColorStop(1, 'rgba(255, 252, 245, 0)');
-        }
-        ctx.fillStyle = washGrad;
-        ctx.beginPath();
-        ctx.arc(cx, cy, cellW * 1.15, 0, Math.PI * 2);
-        ctx.fill();
-      }
-    }
-    ctx.restore();
-
-    // Hand-Inked Organic Coastline Contour
-    ctx.save();
-    ctx.strokeStyle = '#2B1E12';
-    ctx.lineWidth = 2.2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    for (let r = 0; r < gridRows; r++) {
-      for (let c = 0; c < gridCols; c++) {
-        if (!isLand(c, r)) continue;
-        const x = c * cellW;
-        const y = r * cellH;
-        const seed = c * 31 + r * 17;
-        const wob = (pseudoRand(seed) - 0.5) * 4;
-
-        if (!isLand(c, r - 1)) {
-          ctx.beginPath();
-          ctx.moveTo(x - 2, y + wob);
-          ctx.quadraticCurveTo(
-            x + cellW * 0.5,
-            y - 4 - wob,
-            x + cellW + 2,
-            y - wob
-          );
-          ctx.stroke();
-        }
-        if (!isLand(c, r + 1)) {
-          ctx.beginPath();
-          ctx.moveTo(x - 2, y + cellH - wob);
-          ctx.quadraticCurveTo(
-            x + cellW * 0.5,
-            y + cellH + 4 + wob,
-            x + cellW + 2,
-            y + cellH + wob
-          );
-          ctx.stroke();
-        }
-        if (!isLand(c - 1, r)) {
-          ctx.beginPath();
-          ctx.moveTo(x + wob, y - 2);
-          ctx.quadraticCurveTo(
-            x - 4 - wob,
-            y + cellH * 0.5,
-            x - wob,
-            y + cellH + 2
-          );
-          ctx.stroke();
-        }
-        if (!isLand(c + 1, r)) {
-          ctx.beginPath();
-          ctx.moveTo(x + cellW - wob, y - 2);
-          ctx.quadraticCurveTo(
-            x + cellW + 4 + wob,
-            y + cellH * 0.5,
-            x + cellW + wob,
-            y + cellH + 2
-          );
-          ctx.stroke();
-        }
-      }
-    }
-    ctx.restore();
+    ctx.clearRect(0, 0, width, height);
+    if (cache.base) ctx.drawImage(cache.base, 0, 0, width, height);
 
     // =========================================================================
     // 3. WINDING CALLIGRAPHIC RIVERS LAYER
@@ -704,139 +536,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     }
 
     // =========================================================================
-    // 4. TOLKIEN-STYLE HAND-DRAWN MOUNTAINS, WOODLANDS, DUNES & MARSHES
+    // 4. HAND-DRAWN MOUNTAINS, HILLS, FORESTS, DUNES, MARSHES & SNOW
     // =========================================================================
-    for (let r = 0; r < gridRows; r++) {
-      for (let c = 0; c < gridCols; c++) {
-        const terrain = getCell(c, r);
-        const cx = (c + 0.5) * cellW;
-        const cy = (r + 0.5) * cellH;
-        const seed = c * 53 + r * 97;
-        const ox = (pseudoRand(seed) - 0.5) * 6;
-        const oy = (pseudoRand(seed + 1) - 0.5) * 5;
-
-        if (terrain === 'mountain') {
-          const drawPeak = (px: number, py: number, w: number, h: number) => {
-            ctx.fillStyle = '#EFE3CA';
-            ctx.beginPath();
-            ctx.moveTo(px - w, py + h * 0.55);
-            ctx.lineTo(px, py - h * 0.65);
-            ctx.lineTo(px + w, py + h * 0.55);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(74, 52, 31, 0.34)';
-            ctx.beginPath();
-            ctx.moveTo(px, py - h * 0.65);
-            ctx.lineTo(px + w, py + h * 0.55);
-            ctx.lineTo(px + w * 0.08, py + h * 0.55);
-            ctx.quadraticCurveTo(px - w * 0.08, py, px, py - h * 0.65);
-            ctx.fill();
-
-            ctx.strokeStyle = '#3B2818';
-            ctx.lineWidth = 1.1;
-            for (let k = 1; k <= 3; k++) {
-              const t = k / 4;
-              const hx = px + w * t * 0.5;
-              const hy = py - h * 0.65 + h * 1.1 * t;
-              ctx.beginPath();
-              ctx.moveTo(px + t * 2, hy - 3);
-              ctx.lineTo(hx + 4, hy + 2);
-              ctx.stroke();
-            }
-
-            ctx.strokeStyle = '#261A10';
-            ctx.lineWidth = 1.75;
-            ctx.beginPath();
-            ctx.moveTo(px - w, py + h * 0.55);
-            ctx.lineTo(px - w * 0.45, py - h * 0.05);
-            ctx.lineTo(px, py - h * 0.65);
-            ctx.lineTo(px + w * 0.5, py - h * 0.02);
-            ctx.lineTo(px + w, py + h * 0.55);
-            ctx.moveTo(px, py - h * 0.65);
-            ctx.quadraticCurveTo(
-              px - w * 0.1,
-              py,
-              px + w * 0.06,
-              py + h * 0.45
-            );
-            ctx.stroke();
-          };
-
-          drawPeak(
-            cx - 7 + ox * 0.5,
-            cy + 3 + oy * 0.5,
-            cellW * 0.42,
-            cellH * 0.55
-          );
-          drawPeak(cx + 5 + ox, cy - 1 + oy, cellW * 0.56, cellH * 0.78);
-        } else if (terrain === 'forest') {
-          const trees = [
-            { dx: -7, dy: -2, r: 6.5 },
-            { dx: 6, dy: -3, r: 6.5 },
-            { dx: 0, dy: -7, r: 7.5 },
-            { dx: -5, dy: 4, r: 6 },
-            { dx: 6, dy: 4, r: 6.5 },
-            { dx: 0, dy: 2, r: 7 },
-          ];
-          for (const tr of trees) {
-            ctx.fillStyle = '#9AA882';
-            ctx.strokeStyle = '#2B2116';
-            ctx.lineWidth = 1.35;
-            ctx.beginPath();
-            ctx.arc(
-              cx + tr.dx + ox * 0.4,
-              cy + tr.dy + oy * 0.4,
-              tr.r,
-              0,
-              Math.PI * 2
-            );
-            ctx.fill();
-            ctx.stroke();
-          }
-          ctx.strokeStyle = '#2B2116';
-          ctx.lineWidth = 1.4;
-          ctx.beginPath();
-          ctx.moveTo(cx - 4 + ox * 0.4, cy + 8);
-          ctx.lineTo(cx - 4 + ox * 0.4, cy + 12);
-          ctx.moveTo(cx + 4 + ox * 0.4, cy + 8);
-          ctx.lineTo(cx + 4 + ox * 0.4, cy + 12);
-          ctx.stroke();
-        } else if (terrain === 'desert') {
-          ctx.strokeStyle = '#5C4322';
-          ctx.lineWidth = 1.3;
-          ctx.beginPath();
-          ctx.moveTo(cx - 11, cy + 3);
-          ctx.quadraticCurveTo(cx - 3, cy - 5, cx + 6, cy + 2);
-          ctx.quadraticCurveTo(cx + 10, cy + 4, cx + 14, cy + 1);
-          ctx.stroke();
-          ctx.fillStyle = '#5C4322';
-          for (let d = 0; d < 6; d++) {
-            ctx.fillRect(cx - 8 + d * 3, cy + 5 + (d % 2) * 2, 1.3, 1.3);
-          }
-        } else if (terrain === 'swamp') {
-          ctx.strokeStyle = '#384234';
-          ctx.lineWidth = 1.25;
-          ctx.beginPath();
-          ctx.moveTo(cx - 10, cy + 4);
-          ctx.lineTo(cx + 10, cy + 4);
-          ctx.moveTo(cx - 6, cy + 7);
-          ctx.lineTo(cx + 6, cy + 7);
-          ctx.moveTo(cx - 3, cy + 4);
-          ctx.lineTo(cx - 5, cy - 5);
-          ctx.moveTo(cx, cy + 4);
-          ctx.lineTo(cx, cy - 7);
-          ctx.moveTo(cx + 3, cy + 4);
-          ctx.lineTo(cx + 5, cy - 5);
-          ctx.stroke();
-        } else if (terrain === 'tundra') {
-          ctx.strokeStyle = '#5B676D';
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.arc(cx, cy + 6, 9, Math.PI * 1.15, Math.PI * 1.85);
-          ctx.stroke();
-        }
-      }
+    if (cache.icons) {
+      ctx.drawImage(cache.icons, 0, 0, width, height);
     }
 
     // =========================================================================
@@ -1094,17 +797,21 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
     if (relX < 0 || relX > 1 || relY < 0 || relY > 1) return;
 
-    const centerCol = Math.floor(relX * mapData.gridCols);
-    const centerRow = Math.floor(relY * mapData.gridRows);
+    // brush centre in cell units
+    const gx = relX * mapData.gridCols;
+    const gy = relY * mapData.gridRows;
+    const paintWith: TerrainType = eraseStrokeRef.current ? 'sea' : selectedTerrain;
 
     const nextCells = [...mapData.cells];
-    const radius = brushSize - 1;
+    const radius = brushSize;
+    const reach = Math.ceil(radius);
     let changed = false;
 
-    for (let dr = -radius; dr <= radius; dr++) {
-      for (let dc = -radius; dc <= radius; dc++) {
-        const c = centerCol + dc;
-        const r = centerRow + dr;
+    for (let dr = -reach; dr <= reach; dr++) {
+      for (let dc = -reach; dc <= reach; dc++) {
+        const c = Math.floor(gx) + dc;
+        const r = Math.floor(gy) + dr;
+        if (Math.hypot(c + 0.5 - gx, r + 0.5 - gy) > radius) continue;
         if (
           c >= 1 &&
           c < mapData.gridCols - 1 &&
@@ -1112,8 +819,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           r < mapData.gridRows - 1
         ) {
           const idx = r * mapData.gridCols + c;
-          if (nextCells[idx] !== selectedTerrain) {
-            nextCells[idx] = selectedTerrain;
+          if (nextCells[idx] !== paintWith) {
+            nextCells[idx] = paintWith;
             changed = true;
           }
         }
@@ -1123,6 +830,25 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     if (changed) {
       onChangeMapData({ ...mapData, cells: nextCells });
     }
+  };
+
+  // Brush outline that follows the pointer in terrain mode (no React re-render).
+  const updateBrushCursor = (clientX: number, clientY: number) => {
+    const cursor = brushCursorRef.current;
+    const container = containerRef.current;
+    if (!cursor || !container) return;
+    const rect = container.getBoundingClientRect();
+    // the container is CSS-scaled by `zoom`, so convert screen px to its own px
+    const diameter = (Math.max(1, brushSize * 2) * (rect.width / mapData.gridCols)) / zoom;
+    cursor.style.width = `${diameter}px`;
+    cursor.style.height = `${diameter}px`;
+    cursor.style.left = `${(clientX - rect.left) / zoom}px`;
+    cursor.style.top = `${(clientY - rect.top) / zoom}px`;
+    cursor.style.opacity = '1';
+  };
+
+  const hideBrushCursor = () => {
+    if (brushCursorRef.current) brushCursorRef.current.style.opacity = '0';
   };
 
   const handleCanvasPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -1139,6 +865,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     );
 
     if (toolMode === 'terrain') {
+      eraseStrokeRef.current = e.button === 2;
       setIsPainting(true);
       paintCellAtPosition(e.clientX, e.clientY);
     } else if (toolMode === 'stamp') {
@@ -1206,6 +933,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
   };
 
   const handleCanvasPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (toolMode === 'terrain') updateBrushCursor(e.clientX, e.clientY);
     if (toolMode === 'terrain' && isPainting) {
       paintCellAtPosition(e.clientX, e.clientY);
       return;
@@ -1249,6 +977,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
   };
 
   const handleCanvasPointerUp = () => {
+    eraseStrokeRef.current = false;
     setIsPainting(false);
     setDraggingStampId(null);
     setDraggingLabelId(null);
@@ -1299,47 +1028,24 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     setIsEditingMapMeta(false);
   };
 
-  const handleGenerateRandomArchipelago = () => {
-    const { gridCols, gridRows } = mapData;
-    const nextCells: TerrainType[] = new Array(gridCols * gridRows).fill('sea');
-
-    const seeds = [
-      { cx: 11 + Math.random() * 5, cy: 9 + Math.random() * 4, rx: 8.5, ry: 6 },
-      {
-        cx: 23 + Math.random() * 4,
-        cy: 10 + Math.random() * 4,
-        rx: 8,
-        ry: 6.2,
-      },
-      {
-        cx: 18 + Math.random() * 4,
-        cy: 5 + Math.random() * 3,
-        rx: 5.5,
-        ry: 3.8,
-      },
-    ];
-
-    for (let r = 2; r < gridRows - 2; r++) {
-      for (let c = 3; c < gridCols - 3; c++) {
-        let minD = 99;
-        for (const s of seeds) {
-          const d = Math.hypot((c - s.cx) / s.rx, (r - s.cy) / s.ry);
-          if (d < minD) minD = d;
-        }
-        if (minD < 0.42) {
-          nextCells[r * gridCols + c] = r < 5 ? 'tundra' : 'mountain';
-        } else if (minD < 0.7) {
-          nextCells[r * gridCols + c] =
-            (c + r) % 2 === 0 ? 'forest' : 'plains';
-        } else if (minD < 0.98) {
-          nextCells[r * gridCols + c] = 'plains';
-        } else if (minD < 1.12) {
-          nextCells[r * gridCols + c] = 'shallows';
-        }
-      }
+  const handleGenerateWorld = (shape: WorldShape) => {
+    if (
+      hasAnyLand(mapData) &&
+      !window.confirm(
+        'Buat ulang daratan? Daratan dan sungai otomatis yang sekarang akan diganti. Kota, nama wilayah, rute, dan sungai yang Anda gambar sendiri tetap disimpan.'
+      )
+    ) {
+      return;
     }
-
-    onChangeMapData({ ...mapData, cells: nextCells });
+    const world = generateWorld(mapData.gridCols, mapData.gridRows, shape);
+    onChangeMapData({
+      ...mapData,
+      cells: world.cells,
+      rivers: [
+        ...mapData.rivers.filter((r) => !r.id.startsWith(AUTO_RIVER_PREFIX)),
+        ...world.rivers,
+      ],
+    });
   };
 
   // Composite Full PNG Export (Terrain + Rivers + Routes + Cartouche + Calligraphy Labels + Stamps)
@@ -1353,8 +1059,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     const ctx = exportCanvas.getContext('2d');
     if (!ctx) return;
 
-    // 1. Copy base terrain, rivers, routes, compass, and border frame
+    // 1. Copy base terrain, rivers, routes, compass, and border frame.
+    // Everything after this is drawn in the 1152×704 logical space.
     ctx.drawImage(baseCanvas, 0, 0);
+    ctx.scale(MAP_PIXEL_SCALE, MAP_PIXEL_SCALE);
 
     // 2. Draw Top-Left Liber Mundi Cartouche Box
     ctx.save();
@@ -1378,8 +1086,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     // 3. Draw Calligraphy Region Labels
     if (showLabelsLayer) {
       for (const lbl of mapData.regionLabels) {
-        const lx = (lbl.x / 100) * exportCanvas.width;
-        const ly = (lbl.y / 100) * exportCanvas.height;
+        const lx = (lbl.x / 100) * MAP_LOGICAL_W;
+        const ly = (lbl.y / 100) * MAP_LOGICAL_H;
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(((lbl.rotation || 0) * Math.PI) / 180);
@@ -1402,8 +1110,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     // 4. Draw Stamp Markers & Scroll Ribbons
     if (showStampsLayer) {
       for (const st of mapData.stamps) {
-        const sx = (st.x / 100) * exportCanvas.width;
-        const sy = (st.y / 100) * exportCanvas.height;
+        const sx = (st.x / 100) * MAP_LOGICAL_W;
+        const sy = (st.y / 100) * MAP_LOGICAL_H;
         ctx.save();
         ctx.fillStyle = st.nationColor || '#8B1E1E';
         ctx.strokeStyle = '#261A10';
@@ -1481,12 +1189,21 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             </button>
             <button
               type="button"
-              onClick={handleGenerateRandomArchipelago}
+              onClick={() => handleGenerateWorld('continent')}
               className="px-3.5 py-2 text-xs font-medium border border-sepia rounded-lg bg-parchment hover:bg-aged text-ink flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
-              title="Buat bentuk benua baru secara prosedural"
+              title="Buat benua besar lengkap dengan gunung, hutan, gurun, rawa, tundra, dan sungai"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Acak Benua
+            </button>
+            <button
+              type="button"
+              onClick={() => handleGenerateWorld('archipelago')}
+              className="px-3.5 py-2 text-xs font-medium border border-sepia rounded-lg bg-parchment hover:bg-aged text-ink flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              title="Buat gugusan pulau-pulau dengan medan dan sungai"
+            >
+              <Waves className="w-3.5 h-3.5" />
+              Acak Kepulauan
             </button>
             <button
               type="button"
@@ -1523,31 +1240,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             }`}
           >
             <Paintbrush className="w-3.5 h-3.5" />
-            Lukis Daratan
-          </button>
-          <button
-            type="button"
-            onClick={() => setToolMode('stamp')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'stamp'
-                ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-ink hover:bg-vellum'
-            }`}
-          >
-            <MapPin className="w-3.5 h-3.5" />
-            Kastil & Kota
-          </button>
-          <button
-            type="button"
-            onClick={() => setToolMode('label')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              toolMode === 'label'
-                ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-ink hover:bg-vellum'
-            }`}
-          >
-            <TypeIcon className="w-3.5 h-3.5" />
-            Kaligrafi Wilayah
+            1 · Lukis Daratan
           </button>
           <button
             type="button"
@@ -1562,7 +1255,31 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             }`}
           >
             <Route className="w-3.5 h-3.5" />
-            Sungai & Rute Jalan
+            2 · Sungai & Rute Jalan
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('stamp')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'stamp'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-ink hover:bg-vellum'
+            }`}
+          >
+            <MapPin className="w-3.5 h-3.5" />
+            3 · Kastil & Kota
+          </button>
+          <button
+            type="button"
+            onClick={() => setToolMode('label')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+              toolMode === 'label'
+                ? 'bg-[#9E2A2B] text-white shadow-2xs'
+                : 'text-ink hover:bg-vellum'
+            }`}
+          >
+            <TypeIcon className="w-3.5 h-3.5" />
+            4 · Kaligrafi Wilayah
           </button>
           <button
             type="button"
@@ -1776,23 +1493,32 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold text-ink-soft">
-                Diameter Kuas:
+                Ukuran Kuas:
               </span>
-              {([1, 2, 3] as const).map((sz) => (
+              {BRUSH_SIZES.map((sz) => (
                 <button
-                  key={sz}
+                  key={sz.label}
                   type="button"
-                  onClick={() => setBrushSize(sz)}
-                  className={`px-2.5 py-1 rounded text-xs font-mono-tabular font-semibold border cursor-pointer ${
-                    brushSize === sz
+                  onClick={() => setBrushSize(sz.radius)}
+                  className={`px-2.5 py-1 rounded text-xs font-semibold border cursor-pointer ${
+                    brushSize === sz.radius
                       ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
                       : 'bg-vellum text-ink border-sepia'
                   }`}
                 >
-                  {sz}x{sz}
+                  {sz.label}
                 </button>
               ))}
             </div>
+            <p className="w-full text-xs text-ink-soft leading-relaxed">
+              <strong className="text-ink">Cara melukis:</strong> pilih jenis
+              medan, lalu klik dan seret di peta. Mulailah dengan{' '}
+              <em>Daratan Perkamen</em> untuk membentuk pulau atau benua, lalu
+              tambahkan gunung, hutan, gurun, dan rawa di atasnya. Garis pantai,
+              riak laut, dan simbol medan digambar otomatis.{' '}
+              <strong className="text-ink">Klik kanan + seret</strong> untuk
+              menghapus jadi laut.
+            </p>
           </div>
         )}
 
@@ -2084,12 +1810,18 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             onPointerDown={handleCanvasPointerDown}
             onPointerMove={handleCanvasPointerMove}
             onPointerUp={handleCanvasPointerUp}
-            onPointerLeave={handleCanvasPointerUp}
+            onPointerLeave={() => {
+              handleCanvasPointerUp();
+              hideBrushCursor();
+            }}
+            onContextMenu={(e) => {
+              if (toolMode === 'terrain') e.preventDefault();
+            }}
             style={{
               transform: `scale(${zoom})`,
               transformOrigin: 'top left',
             }}
-            className={`relative w-full aspect-[16/10] select-none rounded overflow-hidden transition-transform duration-150 ${
+            className={`relative w-full aspect-[18/11] select-none rounded overflow-hidden transition-transform duration-150 ${
               toolMode === 'terrain' ||
               toolMode === 'river_route' ||
               toolMode === 'measure'
@@ -2101,10 +1833,69 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           >
             <canvas
               ref={canvasRef}
-              width={1152}
-              height={704}
+              width={MAP_LOGICAL_W * MAP_PIXEL_SCALE}
+              height={MAP_LOGICAL_H * MAP_PIXEL_SCALE}
               className="w-full h-full block"
             />
+
+            {/* Brush outline that follows the pointer while painting terrain */}
+            {toolMode === 'terrain' && (
+              <div
+                ref={brushCursorRef}
+                aria-hidden="true"
+                className="pointer-events-none absolute z-20 rounded-full border-2 border-[#2B1E12]/70 bg-white/10 shadow-[0_0_0_1px_rgba(255,248,230,0.6)] -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-100"
+              />
+            )}
+
+            {/* Empty map: show where to start */}
+            {!hasAnyLand(mapData) && toolMode === 'inspect' && (
+              <div className="absolute inset-0 z-20 flex items-center justify-center p-6">
+                <div className="max-w-md w-full bg-[#F5ECD9]/95 border-2 border-[#2B1E12] rounded-md shadow-lg p-5 text-center space-y-3">
+                  <div className="font-cartography text-xs tracking-[0.2em] text-[#8B1E1E] font-bold">
+                    PETA MASIH KOSONG
+                  </div>
+                  <p className="text-sm text-[#2B1E12] leading-relaxed">
+                    Mulai dari daratan. Biarkan peta dibuat otomatis, lalu ubah
+                    sesuai cerita Anda, atau lukis sendiri dari nol.
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleGenerateWorld('continent')}
+                      className="px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#9E2A2B] hover:bg-[#7E2021] text-white flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Acak Benua
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleGenerateWorld('archipelago')}
+                      className="px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#231C14] text-[#FBF8F1] flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Waves className="w-3.5 h-3.5" />
+                      Acak Kepulauan
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedTerrain('plains');
+                        setToolMode('terrain');
+                      }}
+                      className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-[#2B1E12]/50 bg-parchment text-ink flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <Paintbrush className="w-3.5 h-3.5" />
+                      Lukis Sendiri
+                    </button>
+                  </div>
+                  <ol className="text-left text-xs text-[#5A4632] space-y-1 pt-2 border-t border-[#8B7355]/40">
+                    <li><strong>1.</strong> Bentuk daratan, gunung, hutan, gurun, dan rawa.</li>
+                    <li><strong>2.</strong> Tarik sungai dan rute jalan antar wilayah.</li>
+                    <li><strong>3.</strong> Tempatkan kastil, kota, dan pelabuhan.</li>
+                    <li><strong>4.</strong> Beri nama kerajaan, lautan, dan wilayah.</li>
+                  </ol>
+                </div>
+              </div>
+            )}
 
             {/* Ornate Medieval Book Cartouche Banner (Top-Left Crest Box) */}
             <div className="pointer-events-none absolute top-6 left-7 bg-[#F5ECD9]/95 border-2 border-[#2B1E12] px-4 py-2.5 shadow-sm">
