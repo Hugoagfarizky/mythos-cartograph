@@ -28,6 +28,9 @@ import {
   X,
 } from 'lucide-react';
 import { STARTER_WORLD_PROJECT } from '../data/starterWorld';
+import archmagePortrait from '../assets/images/avatar_archmage_vaelen_1794157187885.jpg';
+import empressPortrait from '../assets/images/avatar_empress_seraphina_1794157189411.jpg';
+import astrolabeIllustration from '../assets/images/artifact_sunfire_astrolabe_1794157188936.jpg';
 import {
   ChapterOutline,
   LoreAttributes,
@@ -471,15 +474,15 @@ const ENCYCLOPEDIA_RARITY_OPTIONS = [
 const PRESET_PORTRAITS = [
   {
     label: 'Potret Archmage',
-    url: '/src/assets/images/avatar_archmage_vaelen_1794157187885.jpg',
+    url: archmagePortrait,
   },
   {
     label: 'Potret Maharani',
-    url: '/src/assets/images/avatar_empress_seraphina_1794157189411.jpg',
+    url: empressPortrait,
   },
   {
     label: 'Ilustrasi Pusaka',
-    url: '/src/assets/images/artifact_sunfire_astrolabe_1794157188936.jpg',
+    url: astrolabeIllustration,
   },
 ];
 

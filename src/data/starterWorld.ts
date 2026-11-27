@@ -1,4 +1,5 @@
 import { TerrainType, WorldProject } from '../types/world';
+import parchmentBanner from '../assets/images/parchment_cartography_banner_1794157187078.jpg';
 
 const GRID_COLS = 36;
 const GRID_ROWS = 22;
@@ -14,7 +15,7 @@ export const STARTER_WORLD_PROJECT: WorldProject = {
   genre: 'Fantasi',
   calendarSystem: 'Tahun ke-1 Era Baru',
   authorName: '',
-  heroBannerUrl: '/src/assets/images/parchment_cartography_banner_1794157187078.jpg',
+  heroBannerUrl: parchmentBanner,
   epigraphQuote: '',
   epigraphSource: '',
   centralConflict: '',

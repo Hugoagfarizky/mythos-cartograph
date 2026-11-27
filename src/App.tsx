@@ -80,6 +80,18 @@ const WORLDS_LIBRARY_KEY = 'mythos_cartograph_worlds_library_clean_v2';
 const SNAPSHOTS_KEY = 'mythos_cartograph_snapshots_clean_v2';
 const THEME_STORAGE_KEY = 'mythos_cartograph_theme_v1';
 
+const AI_SERVER_UNAVAILABLE_MESSAGE =
+  'Fitur AI butuh server MythosCartograph (server.ts) dengan GEMINI_API_KEY. Versi statis seperti GitHub Pages tidak punya server itu, jadi fitur ini hanya bisa dipakai saat aplikasi dijalankan dengan `npm run dev` atau di AI Studio.';
+
+// Static hosts answer /api/* with an HTML error page instead of JSON.
+async function readAiJsonResponse(response: Response) {
+  const contentType = response.headers.get('content-type') || '';
+  if (!contentType.includes('application/json')) {
+    throw new Error(AI_SERVER_UNAVAILABLE_MESSAGE);
+  }
+  return response.json();
+}
+
 export type WorkspaceTab =
   | 'overview'
   | 'cosmic_entity'
@@ -876,7 +888,7 @@ export default function App() {
           worldContext: buildWorldContextSummary(),
         }),
       });
-      const data = await response.json();
+      const data = await readAiJsonResponse(response);
       if (!response.ok) {
         throw new Error(data.error || 'Gagal menghubungi server audit AI.');
       }
@@ -910,7 +922,7 @@ export default function App() {
           worldSummary: buildWorldContextSummary(),
         }),
       });
-      const data = await response.json();
+      const data = await readAiJsonResponse(response);
       if (!response.ok) {
         throw new Error(data.error || 'Gagal menjalankan generator ide lore.');
       }
