@@ -71,33 +71,33 @@ const CATEGORY_ACCENT: Record<
   { bg: string; text: string; border: string; dot: string }
 > = {
   Peperangan: {
-    bg: 'bg-[#9E2A2B]/10',
-    text: 'text-[#9E2A2B]',
-    border: 'border-[#9E2A2B]/40',
+    bg: 'bg-wax/10',
+    text: 'text-wax',
+    border: 'border-wax/40',
     dot: 'bg-[#9E2A2B]',
   },
   'Bencana Arcane': {
-    bg: 'bg-[#5A3E7A]/10',
-    text: 'text-[#5A3E7A]',
-    border: 'border-[#5A3E7A]/40',
+    bg: 'bg-mystic/10',
+    text: 'text-mystic',
+    border: 'border-mystic/40',
     dot: 'bg-[#5A3E7A]',
   },
   'Berdirinya Kerajaan': {
-    bg: 'bg-[#8F5B14]/10',
-    text: 'text-[#8F5B14]',
-    border: 'border-[#8F5B14]/40',
+    bg: 'bg-amber/10',
+    text: 'text-amber',
+    border: 'border-amber/40',
     dot: 'bg-[#8F5B14]',
   },
   'Penemuan Pusaka': {
-    bg: 'bg-[#264653]/10',
-    text: 'text-[#264653]',
-    border: 'border-[#264653]/40',
+    bg: 'bg-sea/10',
+    text: 'text-sea',
+    border: 'border-sea/40',
     dot: 'bg-[#264653]',
   },
   'Kelahiran Tokoh': {
-    bg: 'bg-[#2D5A43]/10',
-    text: 'text-[#2D5A43]',
-    border: 'border-[#2D5A43]/40',
+    bg: 'bg-forest/10',
+    text: 'text-forest',
+    border: 'border-forest/40',
     dot: 'bg-[#2D5A43]',
   },
 };
@@ -533,11 +533,11 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {/* =================================================================== */}
       {/* TOP HEADER BAR & STATS                                              */}
       {/* =================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
         <OrnateCornerFiligree />
         <div className="relative z-10 flex-1 min-w-0 space-y-1 text-left">
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#7A3E1D]">
-            <Calendar className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <Calendar className="w-3.5 h-3.5 text-wax" />
             <span>Sistem Kalender Dunia: {calendarSystem}</span>
             <span aria-hidden="true">·</span>
             <span className="font-mono-tabular">
@@ -545,10 +545,10 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
               {totalYearSpan} Tahun)
             </span>
           </div>
-          <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+          <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink leading-tight">
             Pita Kronologi Dunia, Kalkulator Zaman & Sinkronisasi Sejarah
           </h2>
-          <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm text-ink-soft leading-relaxed max-w-3xl">
             Susun urutan tahun linier lintas era, hitung selisih usia tokoh antar peristiwa, dan hubungkan tonggak waktu langsung ke lembar Sejarah serta Alur Bab.
           </p>
         </div>
@@ -560,10 +560,10 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               showCalculator
                 ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                : 'bg-[#F6F1E6] text-[#231C14] border-[#B5832A] hover:bg-[#EFE7D6]'
+                : 'bg-parchment text-ink border-brass hover:bg-aged'
             }`}
           >
-            <Calculator className="w-3.5 h-3.5 text-[#B5832A]" />
+            <Calculator className="w-3.5 h-3.5 text-brass" />
             Kalkulator Jarak Tahun & Usia
           </button>
 
@@ -571,7 +571,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             <button
               type="button"
               onClick={handleSyncAllFromHistoryTab}
-              className="px-3.5 py-2 rounded-lg text-xs font-semibold border border-[#D8CBB3] bg-[#F6F1E6] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3.5 py-2 rounded-lg text-xs font-semibold border border-sepia bg-parchment text-ink hover:bg-aged flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title="Tarik otomatis seluruh peristiwa dari tab Sejarah ke Pita Kronologi"
             >
               <RefreshCw className="w-3.5 h-3.5 text-[#7A3E1D]" />
@@ -594,15 +594,15 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {/* INTERACTIVE TIME-SPAN & GENERATION / LIFESPAN CALCULATOR            */}
       {/* =================================================================== */}
       {showCalculator && (
-        <div className="bg-[#FBF8F1] border-2 border-[#B5832A] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="bg-vellum border-2 border-brass rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div className="flex items-center gap-2">
-              <Calculator className="w-4 h-4 text-[#9E2A2B]" />
+              <Calculator className="w-4 h-4 text-wax" />
               <div>
-                <h3 className="font-display text-lg font-bold text-[#231C14]">
+                <h3 className="font-display text-lg font-bold text-ink">
                   Kalkulator Rentang Waktu, Generasi & Usia Karakter Antar Peristiwa
                 </h3>
-                <p className="text-xs text-[#695A47]">
+                <p className="text-xs text-ink-soft">
                   Bandingkan dua tonggak peristiwa (atau tahun cerita saat ini) untuk memeriksa konsistensi usia tokoh, masa hidup ras, dan jarak sejarah.
                 </p>
               </div>
@@ -610,7 +610,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             <button
               type="button"
               onClick={() => setShowCalculator(false)}
-              className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+              className="p-1 text-ink-soft hover:text-ink cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -618,13 +618,13 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             <div className="md:col-span-5 space-y-1.5">
-              <label className="block text-xs font-semibold text-[#695A47]">
+              <label className="block text-xs font-semibold text-ink-soft">
                 Titik Waktu A (Peristiwa Awal / Kelahiran)
               </label>
               <select
                 value={calcEventA?.id || ''}
                 onChange={(e) => setCalcEventAId(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink font-semibold"
               >
                 {[...timeline]
                   .sort((a, b) => a.year - b.year)
@@ -637,11 +637,11 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             </div>
 
             <div className="md:col-span-2 text-center">
-              <div className="inline-flex flex-col items-center px-4 py-2 rounded-xl bg-[#EFE7D6] border border-[#B5832A]">
-                <span className="text-[10px] font-semibold text-[#695A47]">
+              <div className="inline-flex flex-col items-center px-4 py-2 rounded-xl bg-aged border border-brass">
+                <span className="text-[10px] font-semibold text-ink-soft">
                   SELISIH WAKTU
                 </span>
-                <span className="font-display text-xl font-bold text-[#9E2A2B] font-mono-tabular">
+                <span className="font-display text-xl font-bold text-wax font-mono-tabular">
                   {deltaYears} Tahun
                 </span>
               </div>
@@ -649,13 +649,13 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
 
             <div className="md:col-span-5 space-y-1.5">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-[#695A47]">
+                <label className="text-xs font-semibold text-ink-soft">
                   Titik Waktu B (Peristiwa Pembanding / Masa Kini)
                 </label>
                 <button
                   type="button"
                   onClick={() => setUsePresentYearForB((p) => !p)}
-                  className="text-[11px] font-semibold text-[#9E2A2B] hover:underline cursor-pointer"
+                  className="text-[11px] font-semibold text-wax hover:underline cursor-pointer"
                 >
                   {usePresentYearForB
                     ? 'Pilih dari Daftar Peristiwa'
@@ -671,10 +671,10 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                     onChange={(e) =>
                       setCustomPresentYear(Number(e.target.value))
                     }
-                    className="w-full px-3 py-2 text-xs font-mono-tabular bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                    className="w-full px-3 py-2 text-xs font-mono-tabular bg-parchment border border-sepia rounded-lg text-ink font-semibold"
                     placeholder="Masukkan angka tahun cerita saat ini (misal: 412)..."
                   />
-                  <span className="text-xs text-[#695A47] whitespace-nowrap">
+                  <span className="text-xs text-ink-soft whitespace-nowrap">
                     (Tahun Cerita)
                   </span>
                 </div>
@@ -682,7 +682,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 <select
                   value={calcEventB?.id || ''}
                   onChange={(e) => setCalcEventBId(e.target.value)}
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink font-semibold"
                 >
                   {[...timeline]
                     .sort((a, b) => a.year - b.year)
@@ -698,27 +698,27 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
 
           {/* Biological & Generational Context Bar */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-              <div className="text-[11px] text-[#695A47]">
+            <div className="p-3 rounded-lg bg-parchment border border-sepia">
+              <div className="text-[11px] text-ink-soft">
                 Skala Generasi Manusia (~25 thn/generasi)
               </div>
-              <div className="text-sm font-bold text-[#231C14] font-mono-tabular mt-0.5">
+              <div className="text-sm font-bold text-ink font-mono-tabular mt-0.5">
                 ≈ {humanGenerations} Generasi Manusia
               </div>
             </div>
-            <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-              <div className="text-[11px] text-[#695A47]">
+            <div className="p-3 rounded-lg bg-parchment border border-sepia">
+              <div className="text-[11px] text-ink-soft">
                 Skala Usia Dvergr Besi-Bintang (~350 thn hidup)
               </div>
-              <div className="text-sm font-bold text-[#8F5B14] font-mono-tabular mt-0.5">
+              <div className="text-sm font-bold text-amber font-mono-tabular mt-0.5">
                 ≈ {dvergrLifespans}× Rentang Hidup Dvergr
               </div>
             </div>
-            <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-              <div className="text-[11px] text-[#695A47]">
+            <div className="p-3 rounded-lg bg-parchment border border-sepia">
+              <div className="text-[11px] text-ink-soft">
                 Skala Usia Sylvan Aelfir (~700 thn hidup)
               </div>
-              <div className="text-sm font-bold text-[#2D5A43] font-mono-tabular mt-0.5">
+              <div className="text-sm font-bold text-forest font-mono-tabular mt-0.5">
                 ≈ {aelfirLifespans}× Rentang Hidup Aelfir
               </div>
             </div>
@@ -732,16 +732,16 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {showEditorForm && (
         <form
           onSubmit={handleSaveTimelineEvent}
-          className="bg-[#FBF8F1] border-2 border-[#9E2A2B] rounded-xl p-5 space-y-4"
+          className="bg-vellum border-2 border-wax rounded-xl p-5 space-y-4"
         >
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <span className="text-xs font-semibold text-[#9E2A2B]">
+              <span className="text-xs font-semibold text-wax">
                 {editingEventId
                   ? 'Penyuntingan Tonggak Kronologi'
                   : 'Pencatatan Tonggak Kronologi Baru'}
               </span>
-              <h3 className="font-display text-xl font-bold text-[#231C14]">
+              <h3 className="font-display text-xl font-bold text-ink">
                 {draftTitle || 'Peristiwa Bersejarah Baru'}
               </h3>
             </div>
@@ -752,7 +752,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                   setShowEditorForm(false);
                   setEditingEventId(null);
                 }}
-                className="px-3 py-1.5 text-xs border border-[#D8CBB3] rounded-lg text-[#695A47] hover:text-[#231C14] flex items-center gap-1 cursor-pointer"
+                className="px-3 py-1.5 text-xs border border-sepia rounded-lg text-ink-soft hover:text-ink flex items-center gap-1 cursor-pointer"
               >
                 <X className="w-3.5 h-3.5" />
                 Batal
@@ -770,7 +770,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
           {/* Row 1: Era, Year, Display Date, Season/Phase */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Era Penanggalan Sejarah
               </label>
               <div className="space-y-1">
@@ -783,7 +783,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                       setDraftEra(e.target.value);
                     }
                   }}
-                  className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                 >
                   {uniqueEras.map((er) => (
                     <option key={er} value={er}>
@@ -797,25 +797,25 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                   value={draftEra}
                   onChange={(e) => setDraftEra(e.target.value)}
                   placeholder="Nama Era Sejarah..."
-                  className="w-full px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Angka Tahun (Urutan Linier, boleh negatif untuk Pra-Era)
               </label>
               <input
                 type="number"
                 value={draftYear}
                 onChange={(e) => setDraftYear(Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-xs font-mono-tabular bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-semibold"
+                className="w-full px-3 py-1.5 text-xs font-mono-tabular bg-parchment border border-sepia rounded-lg font-semibold"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Label Penanggalan Kanon
               </label>
               <input
@@ -823,12 +823,12 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftDisplayDate}
                 onChange={(e) => setDraftDisplayDate(e.target.value)}
                 placeholder="Contoh: Tahun 214 PG · Musim Gugur"
-                className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Musim / Fase Langit / Konjungsi
               </label>
               <input
@@ -836,7 +836,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftSeasonOrPhase}
                 onChange={(e) => setDraftSeasonOrPhase(e.target.value)}
                 placeholder="Contoh: Malam Gerhana Ganda / Musim Dingin"
-                className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
               />
             </div>
           </div>
@@ -844,7 +844,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
           {/* Row 2: Title, Category, Hybrid Location Picker, Chapter Link */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             <div className="md:col-span-2">
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Judul Peristiwa Kronologi
               </label>
               <input
@@ -853,12 +853,12 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftTitle}
                 onChange={(e) => setDraftTitle(e.target.value)}
                 placeholder="Contoh: Perang Rantai Besi & Kemerdekaan Valdoria..."
-                className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-semibold text-[#231C14]"
+                className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg font-semibold text-ink"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Klasifikasi Jenis Peristiwa
               </label>
               <select
@@ -866,7 +866,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 onChange={(e) =>
                   setDraftCategory(e.target.value as TimelineEvent['category'])
                 }
-                className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg"
               >
                 {TIMELINE_CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -877,13 +877,13 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+              <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                 Tautkan ke Bab Cerita (Opsional)
               </label>
               <select
                 value={draftLinkedChapterId}
                 onChange={(e) => setDraftLinkedChapterId(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg"
               >
                 <option value="">-- Tidak Ditautkan ke Bab --</option>
                 {chapters.map((ch) => (
@@ -896,8 +896,8 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
           </div>
 
           {/* Hybrid Location Picker */}
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-            <label className="block text-[11px] font-semibold text-[#264653]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia space-y-2">
+            <label className="block text-[11px] font-semibold text-sea">
               Lokasi Wilayah / Negara Kejadian (Pilih dari Wilayah/Negara/Peta atau Ketik Manual)
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -912,7 +912,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                     setDraftRegion(e.target.value);
                   }
                 }}
-                className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
               >
                 <option value="__CUSTOM__">
                   -- Pilih dari Daftar Wilayah / Negara / Pin Peta atau Ketik --
@@ -933,7 +933,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftRegion}
                 onChange={(e) => setDraftRegion(e.target.value)}
                 placeholder="Ketik nama lokasi kejadian (misal: Teluk Naga / Puncak Wyvern)..."
-                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
               />
             </div>
           </div>
@@ -941,7 +941,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
           {/* Row 3: Summary, Consequence Impact, Secret Truth Note */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div>
-              <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+              <label className="block text-[11px] font-semibold text-ink mb-1">
                 Uraian Ringkas Jalannya Peristiwa
               </label>
               <textarea
@@ -949,12 +949,12 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftSummary}
                 onChange={(e) => setDraftSummary(e.target.value)}
                 placeholder="Apa yang terjadi pada tanggal ini? (Mendukung [[Nama Entitas]])..."
-                className="w-full p-2.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full p-2.5 text-xs bg-parchment border border-sepia rounded-lg"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+              <label className="block text-[11px] font-semibold text-sea mb-1">
                 Dampak Langsung & Perubahan Peta Kekuasaan
               </label>
               <textarea
@@ -962,12 +962,12 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftConsequenceImpact}
                 onChange={(e) => setDraftConsequenceImpact(e.target.value)}
                 placeholder="Konsekuensi politik, kehancuran, atau lahirnya hukum/negara baru..."
-                className="w-full p-2.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full p-2.5 text-xs bg-parchment border border-sepia rounded-lg"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+              <label className="block text-[11px] font-semibold text-wax mb-1">
                 Catatan Rahasia Penulis / Kebenaran Tersembunyi
               </label>
               <textarea
@@ -975,15 +975,15 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 value={draftSecretTruthNote}
                 onChange={(e) => setDraftSecretTruthNote(e.target.value)}
                 placeholder="Plot twist atau rahasia di balik layar yang tidak diketahui publik dunia..."
-                className="w-full p-2.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                className="w-full p-2.5 text-xs bg-parchment border border-sepia rounded-lg"
               />
             </div>
           </div>
 
           {/* Row 4: Multi-Entity Picker */}
-          <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
+          <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2.5">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <label className="text-xs font-semibold text-[#231C14]">
+              <label className="text-xs font-semibold text-ink">
                 Entitas World Bible yang Terlibat ({draftLinkedEntityIds.length}{' '}
                 Terpilih)
               </label>
@@ -1006,7 +1006,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                     className={`px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer ${
                       entityPickerFilter === tab.id
                         ? 'bg-[#231C14] text-[#FBF8F1]'
-                        : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                        : 'bg-aged text-ink-soft hover:text-ink'
                     }`}
                   >
                     {tab.label}
@@ -1031,8 +1031,8 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                       onClick={() => toggleDraftLinkedEntity(ent.id)}
                       className={`px-2.5 py-1 rounded text-xs font-medium border transition-colors cursor-pointer ${
                         selected
-                          ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                          : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                          ? 'bg-[#9E2A2B] text-white border-wax'
+                          : 'bg-vellum text-ink border-sepia hover:bg-aged'
                       }`}
                     >
                       {selected ? '✓ ' : '+ '}[
@@ -1048,21 +1048,21 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {/* =================================================================== */}
       {/* FILTER BAR: SEARCH, ERA FILTER, CATEGORY FILTER & SORT ORDER        */}
       {/* =================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
+      <div className="bg-vellum border border-sepia rounded-xl p-4 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="relative flex-1 min-w-[240px]">
-            <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-ink-soft absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari peristiwa, tahun, lokasi, tokoh terlibat, atau rahasia sejarah..."
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink placeholder:text-ink-soft focus:outline-none focus:border-wax"
             />
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-semibold text-[#695A47]">
+            <span className="text-xs font-semibold text-ink-soft">
               Filter Era:
             </span>
             <button
@@ -1071,7 +1071,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
                 filterEra === 'ALL'
                   ? 'bg-[#7A3E1D] text-white'
-                  : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                  : 'bg-aged text-ink-soft hover:text-ink'
               }`}
             >
               Semua Era
@@ -1084,7 +1084,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold cursor-pointer ${
                   filterEra === er
                     ? 'bg-[#7A3E1D] text-white'
-                    : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                    : 'bg-aged text-ink-soft hover:text-ink'
                 }`}
               >
                 {er}
@@ -1094,9 +1094,9 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
             <button
               type="button"
               onClick={() => setSortAscending((prev) => !prev)}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-parchment border border-sepia text-ink hover:bg-aged flex items-center gap-1.5 cursor-pointer"
             >
-              <ArrowDownUp className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <ArrowDownUp className="w-3.5 h-3.5 text-wax" />
               <span>
                 {sortAscending
                   ? 'Urutan: Kuno → Kini'
@@ -1107,8 +1107,8 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
         </div>
 
         {/* Category Filter Row */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-[#D8CBB3]/70">
-          <span className="text-[11px] font-semibold text-[#695A47] mr-1">
+        <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-sepia/70">
+          <span className="text-[11px] font-semibold text-ink-soft mr-1">
             Jenis Peristiwa:
           </span>
           {(['ALL', ...TIMELINE_CATEGORIES] as const).map((cat) => (
@@ -1119,7 +1119,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
               className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 filterCategory === cat
                   ? 'bg-[#231C14] text-[#FBF8F1]'
-                  : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                  : 'bg-aged text-ink-soft hover:text-ink'
               }`}
             >
               {cat === 'ALL' ? 'Semua Kategori' : cat}
@@ -1132,8 +1132,8 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
       {/* ERA-GROUPED CHRONOLOGICAL SPINE WITH YEAR-GAP MARKERS               */}
       {/* =================================================================== */}
       {sortedTimeline.length === 0 ? (
-        <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-10 text-center space-y-3">
-          <p className="text-sm text-[#695A47]">
+        <div className="bg-vellum border border-sepia rounded-xl p-10 text-center space-y-3">
+          <p className="text-sm text-ink-soft">
             Belum ada catatan peristiwa di Pita Kronologi yang cocok dengan filter pencarian.
           </p>
           <button
@@ -1145,7 +1145,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
           </button>
         </div>
       ) : (
-        <div className="relative pl-6 md:pl-10 border-l-2 border-[#B5832A] space-y-6 ml-3">
+        <div className="relative pl-6 md:pl-10 border-l-2 border-brass space-y-6 ml-3">
           {sortedTimeline.map((item, idx) => {
             const prevItem = idx > 0 ? sortedTimeline[idx - 1] : null;
             const isNewEra = !prevItem || prevItem.era !== item.era;
@@ -1175,7 +1175,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 {yearDiff !== null && yearDiff > 0 && (
                   <div className="relative flex items-center gap-2 py-0.5">
                     <div className="w-2 h-2 rounded-full bg-[#B5832A] absolute -left-[29px] md:-left-[45px]" />
-                    <span className="px-2.5 py-0.5 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-[11px] font-mono-tabular font-semibold text-[#695A47]">
+                    <span className="px-2.5 py-0.5 rounded bg-aged border border-sepia text-[11px] font-mono-tabular font-semibold text-ink-soft">
                       {sortAscending
                         ? `+ ${yearDiff} tahun kemudian`
                         : `- ${yearDiff} tahun sebelumnya`}
@@ -1186,25 +1186,25 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                 {/* Era Divider Banner */}
                 {isNewEra && (
                   <div className="relative pt-1">
-                    <div className="w-4 h-4 rounded-full bg-[#B5832A] border-2 border-[#FBF8F1] absolute -left-[33px] md:-left-[49px] top-3.5" />
+                    <div className="w-4 h-4 rounded-full bg-[#B5832A] border-2 border-vellum absolute -left-[33px] md:-left-[49px] top-3.5" />
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#231C14] text-[#FBF8F1] text-xs font-semibold">
-                      <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <Compass className="w-3.5 h-3.5 text-brass" />
                       <span>Babak Era: {item.era}</span>
                     </div>
                   </div>
                 )}
 
                 {/* Event Card */}
-                <div className="relative bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 hover:border-[#B5832A] transition-colors space-y-3">
+                <div className="relative bg-vellum border border-sepia rounded-xl p-5 hover:border-brass transition-colors space-y-3">
                   {/* Brass timeline node marker */}
                   <div
-                    className={`w-3.5 h-3.5 rounded-full ${catStyle.dot} border-2 border-[#FBF8F1] absolute -left-[32px] md:-left-[48px] top-6`}
+                    className={`w-3.5 h-3.5 rounded-full ${catStyle.dot} border-2 border-vellum absolute -left-[32px] md:-left-[48px] top-6`}
                   />
 
                   {/* Card Header: Date, Season, Category, Location & Action Buttons */}
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#695A47]">
+                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] font-mono-tabular font-bold text-[#9E2A2B]">
+                      <span className="px-2.5 py-1 rounded bg-aged border border-sepia font-mono-tabular font-bold text-wax">
                         {item.displayDate} (Tahun {item.year})
                       </span>
 
@@ -1215,8 +1215,8 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                       </span>
 
                       {item.seasonOrPhase && (
-                        <span className="text-[11px] text-[#695A47] italic flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-[#B5832A]" />
+                        <span className="text-[11px] text-ink-soft italic flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-brass" />
                           {item.seasonOrPhase}
                         </span>
                       )}
@@ -1230,14 +1230,14 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                               onClick={() =>
                                 onSelectEntity(matchedLocationEntity.id)
                               }
-                              className="text-xs font-semibold text-[#264653] hover:underline flex items-center gap-1 cursor-pointer"
+                              className="text-xs font-semibold text-sea hover:underline flex items-center gap-1 cursor-pointer"
                             >
                               <MapPin className="w-3.5 h-3.5" />
                               <span>{item.regionName}</span>
                               <ArrowUpRight className="w-3 h-3" />
                             </button>
                           ) : (
-                            <span className="flex items-center gap-1 text-[#264653] font-medium">
+                            <span className="flex items-center gap-1 text-sea font-medium">
                               <MapPin className="w-3.5 h-3.5" />
                               {item.regionName}
                             </span>
@@ -1252,7 +1252,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                         <button
                           type="button"
                           onClick={() => onSelectEntity(matchedHistoryEntity.id)}
-                          className="px-2.5 py-1 rounded-lg bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#7A3E1D]/40 text-[11px] font-semibold text-[#7A3E1D] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                          className="px-2.5 py-1 rounded-lg bg-aged hover:bg-sepia border border-[#7A3E1D]/40 text-[11px] font-semibold text-[#7A3E1D] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                         >
                           <BookOpen className="w-3 h-3" />
                           <span>Buka Arsip Sejarah</span>
@@ -1263,10 +1263,10 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                           <button
                             type="button"
                             onClick={() => handlePromoteToHistoryCodex(item)}
-                            className="px-2.5 py-1 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#B5832A] text-[11px] font-semibold text-[#231C14] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                            className="px-2.5 py-1 rounded-lg bg-parchment hover:bg-aged border border-brass text-[11px] font-semibold text-ink flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                             title="Buat lembar dokumen Sejarah lengkap dari peristiwa kronologi ini"
                           >
-                            <Sparkles className="w-3 h-3 text-[#B5832A]" />
+                            <Sparkles className="w-3 h-3 text-brass" />
                             <span>+ Jadikan Lembar Sejarah</span>
                           </button>
                         )
@@ -1288,7 +1288,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                             timeline.filter((t) => t.id !== item.id)
                           )
                         }
-                        className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#9E2A2B] cursor-pointer"
+                        className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-wax cursor-pointer"
                         title="Hapus peristiwa kronologi"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -1298,10 +1298,10 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
 
                   {/* Title & Summary */}
                   <div>
-                    <h3 className="font-display text-xl font-bold text-[#231C14]">
+                    <h3 className="font-display text-xl font-bold text-ink">
                       {item.title}
                     </h3>
-                    <div className="text-sm text-[#231C14]/90 mt-1 leading-relaxed">
+                    <div className="text-sm text-ink/90 mt-1 leading-relaxed">
                       <WikiTextRenderer
                         text={item.summary}
                         entities={entities}
@@ -1314,14 +1314,14 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                   {(item.consequenceImpact || item.secretTruthNote) && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                       {item.consequenceImpact && (
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                          <div className="text-[11px] font-semibold text-[#264653] flex items-center gap-1.5">
-                            <Flame className="w-3.5 h-3.5 text-[#8F5B14]" />
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-1">
+                          <div className="text-[11px] font-semibold text-sea flex items-center gap-1.5">
+                            <Flame className="w-3.5 h-3.5 text-amber" />
                             <span>
                               Dampak Geopolitik & Konsekuensi Sejarah
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={item.consequenceImpact}
                               entities={entities}
@@ -1332,14 +1332,14 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                       )}
 
                       {item.secretTruthNote && (
-                        <div className="p-3.5 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1">
-                          <div className="text-[11px] font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-aged/75 border border-sepia space-y-1">
+                          <div className="text-[11px] font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Catatan Rahasia Penulis / Kebenaran di Balik Layar
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={item.secretTruthNote}
                               entities={entities}
@@ -1353,9 +1353,9 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
 
                   {/* Footer: Linked Entities & Linked Chapter */}
                   {(linkedEntities.length > 0 || linkedChapter) && (
-                    <div className="pt-3 border-t border-[#D8CBB3]/70 flex flex-wrap items-center justify-between gap-2">
+                    <div className="pt-3 border-t border-sepia/70 flex flex-wrap items-center justify-between gap-2">
                       <div className="flex flex-wrap items-center gap-1.5">
-                        <span className="text-xs font-medium text-[#695A47]">
+                        <span className="text-xs font-medium text-ink-soft">
                           Entitas Terlibat:
                         </span>
                         {linkedEntities.map((le) => (
@@ -1363,7 +1363,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                             key={le.id}
                             type="button"
                             onClick={() => onSelectEntity(le.id)}
-                            className="px-2.5 py-1 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-semibold text-[#231C14] flex items-center gap-1 cursor-pointer"
+                            className="px-2.5 py-1 rounded bg-parchment hover:bg-aged border border-sepia text-xs font-semibold text-ink flex items-center gap-1 cursor-pointer"
                           >
                             <span
                               className="text-[10px]"
@@ -1374,7 +1374,7 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                               [{CATEGORY_META[le.category].singular}]
                             </span>
                             <span>{le.title}</span>
-                            <ArrowUpRight className="w-3 h-3 text-[#9E2A2B]" />
+                            <ArrowUpRight className="w-3 h-3 text-wax" />
                           </button>
                         ))}
                       </div>
@@ -1385,12 +1385,12 @@ export const ChronicleTimelineView: React.FC<TimelineViewProps> = ({
                           onClick={() => onOpenChapter(linkedChapter.id)}
                           className="px-3 py-1 rounded-lg bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                         >
-                          <BookOpen className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <BookOpen className="w-3.5 h-3.5 text-brass" />
                           <span>
                             Direferensikan di Bab {linkedChapter.chapterNumber}:{' '}
                             {linkedChapter.title}
                           </span>
-                          <ArrowUpRight className="w-3 h-3 text-[#B5832A]" />
+                          <ArrowUpRight className="w-3 h-3 text-brass" />
                         </button>
                       )}
                     </div>
@@ -2024,18 +2024,18 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
       {/* =================================================================== */}
       {/* HEADER BAR & NETWORK TELEMETRY METRICS                              */}
       {/* =================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="text-xs font-semibold text-[#9E2A2B]">
+            <div className="text-xs font-semibold text-wax">
               Modul World Bible · {allGraphCandidateEntities.length} Node Entitas
               · {relationships.length} Ikatan Relasi Tercatat
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink leading-tight">
               Peta Relasi Politik, Silsilah & Intrik Dunia
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
+            <p className="text-xs sm:text-sm text-ink-soft leading-relaxed max-w-3xl">
               Petakan aliansi terbuka, konspirasi di balik layar, silsilah
               darah, dan rantai komando antar karakter, kelompok, ras, maupun
               negara.
@@ -2048,11 +2048,11 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               onClick={() => setShowDetectorPanel((p) => !p)}
               className={`px-3.5 py-2 rounded-lg text-xs font-semibold border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 showDetectorPanel || detectedSuggestions.length > 0
-                  ? 'bg-[#F6F1E6] border-[#B5832A] text-[#231C14] hover:bg-[#EFE7D6]'
-                  : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47] hover:text-[#231C14]'
+                  ? 'bg-parchment border-brass text-ink hover:bg-aged'
+                  : 'bg-parchment border-sepia text-ink-soft hover:text-ink'
               }`}
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+              <Sparkles className="w-3.5 h-3.5 text-brass" />
               <span>
                 Deteksi Otomatis World Bible ({detectedSuggestions.length})
               </span>
@@ -2061,10 +2061,10 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
             <button
               type="button"
               onClick={handleApplyCircularLayout}
-              className="px-3 py-2 rounded-lg text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3 py-2 rounded-lg text-xs font-semibold bg-parchment border border-sepia text-ink hover:bg-aged flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title="Susun seluruh node secara melingkar"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-[#264653]" />
+              <RefreshCw className="w-3.5 h-3.5 text-sea" />
               <span>Tata Letak Lingkaran</span>
             </button>
 
@@ -2074,7 +2074,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               className="px-3.5 py-2 rounded-lg text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title="Susun berdasarkan hierarki: Negara di atas, Kelompok/Ras di tengah, Tokoh di bawah"
             >
-              <LayoutGrid className="w-3.5 h-3.5 text-[#B5832A]" />
+              <LayoutGrid className="w-3.5 h-3.5 text-brass" />
               <span>Klaster Hierarki</span>
             </button>
           </div>
@@ -2082,47 +2082,47 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
 
         {/* Summary Metrics Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Total Simpul (Node) Aktif
             </div>
-            <div className="font-display text-xl font-bold text-[#231C14] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-ink font-mono-tabular">
               {visibleNodes.length} / {allGraphCandidateEntities.length} Entitas
             </div>
           </div>
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Total Garis Ikatan Terlihat
             </div>
-            <div className="font-display text-xl font-bold text-[#2D5A43] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-forest font-mono-tabular">
               {visibleEdges.length} / {relationships.length} Relasi
             </div>
           </div>
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Konflik, Rivalitas & Pengkhianatan
             </div>
-            <div className="font-display text-xl font-bold text-[#9E2A2B] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-wax font-mono-tabular">
               {conflictEdgeCount} Sengketa Aktif
             </div>
           </div>
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Ikatan Rahasia & Konspirasi
             </div>
-            <div className="font-display text-xl font-bold text-[#8F5B14] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-amber font-mono-tabular">
               {secretEdgeCount} Ikatan Tertutup
             </div>
           </div>
         </div>
 
         {syncBannerMessage && (
-          <div className="p-3 rounded-lg bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-semibold text-[#2D5A43] flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-aged border border-forest/40 text-xs font-semibold text-forest flex items-center justify-between">
             <span>{syncBannerMessage}</span>
             <button
               type="button"
               onClick={() => setSyncBannerMessage('')}
-              className="text-[#695A47] hover:text-[#231C14] cursor-pointer"
+              className="text-ink-soft hover:text-ink cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -2134,16 +2134,16 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
       {/* AUTOMATIC WORLD BIBLE RELATIONSHIP DETECTOR & 1-CLICK IMPORTER      */}
       {/* =================================================================== */}
       {(showDetectorPanel || detectedSuggestions.length > 0) && (
-        <div className="bg-[#FBF8F1] border-2 border-[#B5832A] rounded-xl p-4 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#D8CBB3] pb-2.5">
+        <div className="bg-vellum border-2 border-brass rounded-xl p-4 space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sepia pb-2.5">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-[#B5832A]" />
+              <Sparkles className="w-4 h-4 text-brass" />
               <div>
-                <h3 className="font-display text-base font-bold text-[#231C14]">
+                <h3 className="font-display text-base font-bold text-ink">
                   Pendeteksi Ikatan Otomatis dari Atribut World Bible (
                   {detectedSuggestions.length} Ditemukan)
                 </h3>
-                <p className="text-xs text-[#695A47]">
+                <p className="text-xs text-ink-soft">
                   Hubungan di bawah ini terdeteksi dari atribut Afiliasi
                   Kelompok, Penguasa Negara, Ras, dan Pimpinan yang sudah Anda
                   isi di tab lain namun belum memiliki garis di Peta Relasi.
@@ -2168,7 +2168,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowDetectorPanel(false)}
-                className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1 text-ink-soft hover:text-ink cursor-pointer"
                 title="Sembunyikan panel deteksi"
               >
                 <X className="w-4 h-4" />
@@ -2177,7 +2177,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
           </div>
 
           {detectedSuggestions.length === 0 ? (
-            <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#2D5A43] font-medium">
+            <div className="p-3 rounded-lg bg-parchment border border-sepia text-xs text-forest font-medium">
               Seluruh atribut afiliasi tokoh, pimpinan kelompok, dan penguasa
               negara di World Bible sudah tersinkronisasi di Peta Relasi!
             </div>
@@ -2190,16 +2190,16 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 return (
                   <div
                     key={sug.key}
-                    className="p-3 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-col justify-between gap-2"
+                    className="p-3 rounded-xl bg-parchment border border-sepia flex flex-col justify-between gap-2"
                   >
                     <div>
-                      <div className="text-[11px] font-semibold text-[#8F5B14]">
+                      <div className="text-[11px] font-semibold text-amber">
                         {RELATION_STYLE[sug.type].label} · {sug.label}
                       </div>
-                      <div className="text-xs font-bold text-[#231C14] mt-0.5">
+                      <div className="text-xs font-bold text-ink mt-0.5">
                         {sEnt.title} → {tEnt.title}
                       </div>
-                      <p className="text-[11px] text-[#695A47] mt-0.5 line-clamp-2">
+                      <p className="text-[11px] text-ink-soft mt-0.5 line-clamp-2">
                         {sug.notes}
                       </p>
                     </div>
@@ -2208,7 +2208,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                       onClick={() => handleImportSingleSuggestion(sug)}
                       className="self-start px-3 py-1 rounded bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] text-[11px] font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                     >
-                      <Plus className="w-3 h-3 text-[#B5832A]" />
+                      <Plus className="w-3 h-3 text-brass" />
                       <span>+ Impor Ikatan Ini</span>
                     </button>
                   </div>
@@ -2222,29 +2222,29 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
       {/* =================================================================== */}
       {/* FILTER BAR: NODE CATEGORY, RELATION TYPE, EGO FOCUS & SEARCH        */}
       {/* =================================================================== */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
+      <div className="bg-vellum border border-sepia rounded-xl p-4 space-y-3">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-center">
           {/* Search Input */}
           <div className="lg:col-span-4 relative">
-            <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-ink-soft absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={graphSearchQuery}
               onChange={(e) => setGraphSearchQuery(e.target.value)}
               placeholder="Cari nama tokoh, faksi, negara, atau label ikatan..."
-              className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink placeholder:text-ink-soft focus:outline-none focus:border-wax"
             />
           </div>
 
           {/* Ego-Network Spotlight Selector */}
           <div className="lg:col-span-4 flex items-center gap-2">
-            <span className="text-xs font-semibold text-[#695A47] whitespace-nowrap">
+            <span className="text-xs font-semibold text-ink-soft whitespace-nowrap">
               Mode Fokus Tokoh/Entitas:
             </span>
             <select
               value={focusedEntityId}
               onChange={(e) => setFocusedEntityId(e.target.value)}
-              className="flex-1 px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+              className="flex-1 px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink font-semibold"
             >
               <option value="">-- Tampilkan Seluruh Jaringan --</option>
               {allGraphCandidateEntities.map((ent) => (
@@ -2266,13 +2266,13 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
 
           {/* Edge Type / Secret Filter */}
           <div className="lg:col-span-4 flex items-center gap-2">
-            <span className="text-xs font-semibold text-[#695A47] whitespace-nowrap">
+            <span className="text-xs font-semibold text-ink-soft whitespace-nowrap">
               Filter Ikatan:
             </span>
             <select
               value={edgeTypeFilter}
               onChange={(e) => setEdgeTypeFilter(e.target.value)}
-              className="flex-1 px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+              className="flex-1 px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink font-semibold"
             >
               <option value="ALL">Semua Sifat Hubungan</option>
               <option value="SECRET_ONLY">
@@ -2288,9 +2288,9 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
         </div>
 
         {/* Category Filter Buttons + Legend */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[#D8CBB3]/70">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-sepia/70">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-semibold text-[#695A47] mr-1">
+            <span className="text-[11px] font-semibold text-ink-soft mr-1">
               Filter Kategori Node:
             </span>
             {(
@@ -2309,7 +2309,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                   nodeCategoryFilter === cat.id
                     ? 'bg-[#231C14] text-[#FBF8F1]'
-                    : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                 }`}
               >
                 {cat.label}
@@ -2318,7 +2318,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
           </div>
 
           {/* Legend */}
-          <div className="flex flex-wrap items-center gap-3 text-[11px] text-[#695A47]">
+          <div className="flex flex-wrap items-center gap-3 text-[11px] text-ink-soft">
             {Object.entries(RELATION_STYLE).map(([k, v]) => (
               <div key={k} className="flex items-center gap-1">
                 <span
@@ -2341,11 +2341,11 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
         {/* Left 8 Cols: Interactive SVG + Draggable Node Canvas + Selected Edge Dossier */}
         <div className="xl:col-span-8 space-y-4">
-          <div className="bg-[#EFE7D6] border border-[#D8CBB3] rounded-xl p-3 space-y-2.5">
+          <div className="bg-aged border border-sepia rounded-xl p-3 space-y-2.5">
             {/* Canvas Top Toolbar (Zoom & Active Focus Indicator) */}
             <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-              <div className="text-xs text-[#695A47] flex items-center gap-2">
-                <span className="font-semibold text-[#231C14]">
+              <div className="text-xs text-ink-soft flex items-center gap-2">
+                <span className="font-semibold text-ink">
                   Kanvas Interaktif Peta Relasi
                 </span>
                 <span>·</span>
@@ -2363,12 +2363,12 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                       Math.max(0.75, Number((z - 0.1).toFixed(2)))
                     )
                   }
-                  className="p-1.5 rounded bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] hover:bg-[#F6F1E6] cursor-pointer"
+                  className="p-1.5 rounded bg-vellum border border-sepia text-ink hover:bg-parchment cursor-pointer"
                   title="Perkecil tampilan kanvas"
                 >
                   <ZoomOut className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-xs font-mono-tabular font-semibold text-[#231C14] px-1.5">
+                <span className="text-xs font-mono-tabular font-semibold text-ink px-1.5">
                   {Math.round(canvasZoom * 100)}%
                 </span>
                 <button
@@ -2378,7 +2378,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                       Math.min(1.35, Number((z + 0.1).toFixed(2)))
                     )
                   }
-                  className="p-1.5 rounded bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] hover:bg-[#F6F1E6] cursor-pointer"
+                  className="p-1.5 rounded bg-vellum border border-sepia text-ink hover:bg-parchment cursor-pointer"
                   title="Perbesar tampilan kanvas"
                 >
                   <ZoomIn className="w-3.5 h-3.5" />
@@ -2386,7 +2386,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setCanvasZoom(1)}
-                  className="px-2 py-1 rounded bg-[#FBF8F1] border border-[#D8CBB3] text-[11px] font-semibold text-[#695A47] hover:text-[#231C14] flex items-center gap-1 cursor-pointer"
+                  className="px-2 py-1 rounded bg-vellum border border-sepia text-[11px] font-semibold text-ink-soft hover:text-ink flex items-center gap-1 cursor-pointer"
                   title="Reset skala zoom ke 100%"
                 >
                   <Maximize2 className="w-3 h-3" />
@@ -2396,7 +2396,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
             </div>
 
             {/* Scrollable Canvas Viewport */}
-            <div className="overflow-x-auto overflow-y-auto rounded-lg border border-[#D8CBB3] bg-[#F6F1E6]">
+            <div className="overflow-x-auto overflow-y-auto rounded-lg border border-sepia bg-parchment">
               <div
                 ref={boardRef}
                 onPointerMove={handlePointerMove}
@@ -2408,10 +2408,10 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                   transform: `scale(${canvasZoom})`,
                   transformOrigin: 'top left',
                 }}
-                className="relative bg-[#F6F1E6] select-none overflow-hidden"
+                className="relative bg-parchment select-none overflow-hidden"
               >
                 {/* Subtle Hierarchy Tier Guides */}
-                <div className="absolute inset-x-0 top-3 flex justify-between px-4 text-[10px] font-semibold text-[#695A47]/60 pointer-events-none">
+                <div className="absolute inset-x-0 top-3 flex justify-between px-4 text-[10px] font-semibold text-ink-soft/60 pointer-events-none">
                   <span>ZONA KEDAULATAN & NEGARA</span>
                   <span>KLIK GARIS UNTUK INSPEKSI DINAMIKA</span>
                 </div>
@@ -2548,13 +2548,13 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                         e.stopPropagation();
                         setDraggingNodeId(ent.id);
                       }}
-                      className={`absolute z-10 w-48 bg-[#FBF8F1] rounded-xl p-2.5 shadow-xs cursor-grab active:cursor-grabbing transition-all ${
+                      className={`absolute z-10 w-48 bg-vellum rounded-xl p-2.5 shadow-xs cursor-grab active:cursor-grabbing transition-all ${
                         isFocused
-                          ? 'border-2 border-[#9E2A2B] ring-4 ring-[#9E2A2B]/15'
-                          : 'border-2 border-[#3B2E1E] hover:border-[#9E2A2B]'
+                          ? 'border-2 border-wax ring-4 ring-wax/15'
+                          : 'border-2 border-[#3B2E1E] hover:border-wax'
                       }`}
                     >
-                      <div className="flex items-center justify-between text-[10px] text-[#695A47] mb-1">
+                      <div className="flex items-center justify-between text-[10px] text-ink-soft mb-1">
                         <span
                           className="font-semibold truncate"
                           style={{ color: meta.accentColor }}
@@ -2573,7 +2573,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             className={`px-1.5 py-0.5 rounded text-[9px] font-semibold cursor-pointer ${
                               isFocused
                                 ? 'bg-[#9E2A2B] text-white'
-                                : 'bg-[#EFE7D6] text-[#231C14] hover:bg-[#D8CBB3]'
+                                : 'bg-aged text-ink hover:bg-sepia'
                             }`}
                             title="Sorot hanya jaringan entitas ini (Ego-Network)"
                           >
@@ -2585,7 +2585,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                               e.stopPropagation();
                               onSelectEntity(ent.id);
                             }}
-                            className="text-[#9E2A2B] hover:underline font-semibold cursor-pointer"
+                            className="text-wax hover:underline font-semibold cursor-pointer"
                             title="Buka lembar profil lengkap"
                           >
                             Buka →
@@ -2599,21 +2599,21 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             src={ent.imageUrl}
                             alt={ent.title}
                             referrerPolicy="no-referrer"
-                            className="w-8 h-8 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                            className="w-8 h-8 rounded-lg object-cover border border-sepia shrink-0"
                           />
                         ) : (
                           <div
-                            className="w-8 h-8 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0"
+                            className="w-8 h-8 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0"
                             style={{ color: meta.accentColor }}
                           >
                             <User className="w-4 h-4" />
                           </div>
                         )}
                         <div className="min-w-0 flex-1">
-                          <div className="font-display text-xs font-bold text-[#231C14] truncate">
+                          <div className="font-display text-xs font-bold text-ink truncate">
                             {ent.title}
                           </div>
-                          <div className="text-[10px] text-[#695A47] truncate">
+                          <div className="text-[10px] text-ink-soft truncate">
                             {ent.subtitle}
                           </div>
                         </div>
@@ -2629,7 +2629,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
           {/* SELECTED RELATIONSHIP DOSSIER CARD (BELOW CANVAS)               */}
           {/* =============================================================== */}
           {selectedEdge && (
-            <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
+            <div className="bg-vellum border border-sepia rounded-xl p-5 space-y-4">
               {(() => {
                 const sEnt = entities.find(
                   (e) => e.id === selectedEdge.sourceId
@@ -2643,7 +2643,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
 
                 return (
                   <>
-                    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
+                    <div className="flex flex-wrap items-start justify-between gap-3 border-b border-sepia pb-3.5">
                       <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2 text-xs">
                           <span
@@ -2653,7 +2653,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             {style.label}
                           </span>
                           <span>·</span>
-                          <span className="font-semibold text-[#231C14]">
+                          <span className="font-semibold text-ink">
                             {selectedEdge.directionality === 'directed'
                               ? 'Searah / Hierarkis (→)'
                               : 'Timbal Balik (↔)'}
@@ -2661,7 +2661,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                           <span>·</span>
                           <span
                             className={`inline-flex items-center gap-1 font-semibold ${
-                              secret ? 'text-[#9E2A2B]' : 'text-[#2D5A43]'
+                              secret ? 'text-wax' : 'text-forest'
                             }`}
                           >
                             {secret ? (
@@ -2674,19 +2674,19 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                           </span>
                         </div>
 
-                        <h3 className="font-display text-xl font-bold text-[#231C14] flex flex-wrap items-center gap-2">
+                        <h3 className="font-display text-xl font-bold text-ink flex flex-wrap items-center gap-2">
                           {sEnt ? (
                             <button
                               type="button"
                               onClick={() => onSelectEntity(sEnt.id)}
-                              className="hover:text-[#9E2A2B] hover:underline cursor-pointer"
+                              className="hover:text-wax hover:underline cursor-pointer"
                             >
                               {sEnt.title}
                             </button>
                           ) : (
                             <span>Entitas A</span>
                           )}
-                          <span className="text-[#9E2A2B]">
+                          <span className="text-wax">
                             {selectedEdge.directionality === 'directed'
                               ? '→'
                               : '↔'}
@@ -2695,14 +2695,14 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             <button
                               type="button"
                               onClick={() => onSelectEntity(tEnt.id)}
-                              className="hover:text-[#9E2A2B] hover:underline cursor-pointer"
+                              className="hover:text-wax hover:underline cursor-pointer"
                             >
                               {tEnt.title}
                             </button>
                           ) : (
                             <span>Entitas B</span>
                           )}
-                          <span className="text-sm font-normal text-[#695A47]">
+                          <span className="text-sm font-normal text-ink-soft">
                             ({selectedEdge.label})
                           </span>
                         </h3>
@@ -2714,7 +2714,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                           onClick={() => startEditingEdge(selectedEdge)}
                           className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                         >
-                          <Edit3 className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <Edit3 className="w-3.5 h-3.5 text-brass" />
                           <span>Sunting Ikatan Ini</span>
                         </button>
                         <button
@@ -2727,7 +2727,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             );
                             if (editingEdgeId === selectedEdge.id) resetForm();
                           }}
-                          className="p-1.5 rounded-lg border border-[#9E2A2B]/30 text-[#9E2A2B] hover:bg-[#9E2A2B]/10 cursor-pointer"
+                          className="p-1.5 rounded-lg border border-wax/30 text-wax hover:bg-wax/10 cursor-pointer"
                           title="Hapus ikatan relasi ini"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -2736,11 +2736,11 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="text-[11px] font-semibold text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="text-[11px] font-semibold text-ink-soft">
                           Dinamika Hubungan & Catatan Intrik Saat Ini
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={selectedEdge.notes}
                             entities={entities}
@@ -2749,17 +2749,17 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                         </div>
                       </div>
 
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="text-[11px] font-semibold text-[#8F5B14]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="text-[11px] font-semibold text-amber">
                           Tingkat Loyalitas / Ketegangan & Status Visibilitas
                         </div>
-                        <div className="text-xs font-bold text-[#231C14]">
+                        <div className="text-xs font-bold text-ink">
                           {selectedEdge.tensionOrLoyalty ||
                             'Stabil / Sesuai Kesepakatan Kanon'}
                         </div>
-                        <div className="text-[11px] text-[#695A47] pt-0.5">
+                        <div className="text-[11px] text-ink-soft pt-0.5">
                           Visibilitas:{' '}
-                          <strong className="text-[#231C14]">
+                          <strong className="text-ink">
                             {selectedEdge.visibilityStatus ||
                               'Publik / Diketahui Umum'}
                           </strong>
@@ -2771,14 +2771,14 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                       selectedEdge.storyEvolution) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {selectedEdge.originHistory && (
-                          <div className="p-3.5 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1">
+                          <div className="p-3.5 rounded-xl bg-aged/75 border border-sepia space-y-1">
                             <div className="text-[11px] font-semibold text-[#7A3E1D] flex items-center gap-1.5">
                               <Clock className="w-3.5 h-3.5" />
                               <span>
                                 Asal Mula Ikatan & Peristiwa Sejarah Pemicu
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={selectedEdge.originHistory}
                                 entities={entities}
@@ -2789,14 +2789,14 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                         )}
 
                         {selectedEdge.storyEvolution && (
-                          <div className="p-3.5 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1">
-                            <div className="text-[11px] font-semibold text-[#264653] flex items-center gap-1.5">
+                          <div className="p-3.5 rounded-xl bg-aged/75 border border-sepia space-y-1">
+                            <div className="text-[11px] font-semibold text-sea flex items-center gap-1.5">
                               <BookOpen className="w-3.5 h-3.5" />
                               <span>
                                 Perubahan & Evolusi Seiring Alur Bab Novel
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={selectedEdge.storyEvolution}
                                 entities={entities}
@@ -2820,16 +2820,16 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
         <div className="xl:col-span-4 space-y-4">
           <form
             onSubmit={handleSaveRelationship}
-            className={`bg-[#FBF8F1] border rounded-xl p-4 space-y-3 ${
+            className={`bg-vellum border rounded-xl p-4 space-y-3 ${
               editingEdgeId
-                ? 'border-2 border-[#9E2A2B]'
-                : 'border-[#D8CBB3]'
+                ? 'border-2 border-wax'
+                : 'border-sepia'
             }`}
           >
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-2.5">
+            <div className="flex items-center justify-between border-b border-sepia pb-2.5">
               <div className="flex items-center gap-2">
-                <GitBranch className="w-4 h-4 text-[#9E2A2B]" />
-                <h3 className="font-display text-lg font-bold text-[#231C14]">
+                <GitBranch className="w-4 h-4 text-wax" />
+                <h3 className="font-display text-lg font-bold text-ink">
                   {editingEdgeId
                     ? 'Sunting Ikatan Relasi'
                     : 'Tambah Ikatan Relasi Baru'}
@@ -2839,7 +2839,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="px-2 py-0.5 text-[11px] font-semibold border border-[#D8CBB3] rounded text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                  className="px-2 py-0.5 text-[11px] font-semibold border border-sepia rounded text-ink-soft hover:text-ink cursor-pointer"
                 >
                   Batal Edit
                 </button>
@@ -2849,7 +2849,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
             <div className="grid grid-cols-1 gap-2.5">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-semibold text-[#695A47]">
+                  <label className="text-xs font-semibold text-ink-soft">
                     Entitas Pertama (Sumber)
                   </label>
                   <button
@@ -2859,7 +2859,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                       setSourceId(targetId);
                       setTargetId(prevSource);
                     }}
-                    className="text-[11px] font-semibold text-[#9E2A2B] hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-[11px] font-semibold text-wax hover:underline flex items-center gap-1 cursor-pointer"
                     title="Tukar posisi Entitas Pertama dan Entitas Kedua"
                   >
                     <ArrowDownUp className="w-3 h-3" />
@@ -2869,7 +2869,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 <select
                   value={sourceId}
                   onChange={(e) => setSourceId(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                 >
                   {entities.map((e) => (
                     <option key={e.id} value={e.id}>
@@ -2880,13 +2880,13 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Entitas Kedua (Tujuan)
                 </label>
                 <select
                   value={targetId}
                   onChange={(e) => setTargetId(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                 >
                   {entities.map((e) => (
                     <option key={e.id} value={e.id}>
@@ -2898,13 +2898,13 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
 
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Sifat Hubungan
                   </label>
                   <select
                     value={relType}
                     onChange={(e) => setRelType(e.target.value as RelationType)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                   >
                     {Object.entries(RELATION_STYLE).map(([k, v]) => (
                       <option key={k} value={k}>
@@ -2915,7 +2915,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Arah Hubungan
                   </label>
                   <select
@@ -2925,7 +2925,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                         e.target.value as 'bidirectional' | 'directed'
                       )
                     }
-                    className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="bidirectional">Timbal Balik (↔)</option>
                     <option value="directed">Searah / Hierarkis (→)</option>
@@ -2934,7 +2934,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Julukan / Label Singkat Ikatan
                 </label>
                 <input
@@ -2942,19 +2942,19 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                   value={relLabel}
                   onChange={(e) => setRelLabel(e.target.value)}
                   placeholder="Contoh: Sumpah Setia, Sengketa Pusaka, Kontrak Rahasia..."
-                  className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                  <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                     Status Publik vs Rahasia
                   </label>
                   <select
                     value={relVisibility}
                     onChange={(e) => setRelVisibility(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                   >
                     {VISIBILITY_PRESETS.map((vp) => (
                       <option key={vp} value={vp}>
@@ -2965,7 +2965,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                  <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                     Tingkat Loyalitas / Ketegangan
                   </label>
                   <input
@@ -2974,7 +2974,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                     value={relTension}
                     onChange={(e) => setRelTension(e.target.value)}
                     placeholder="Sumpah Mati / Rapuh..."
-                    className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg"
                   />
                   <datalist id="tension-presets-list">
                     {TENSION_LOYALTY_PRESETS.map((tp) => (
@@ -2985,7 +2985,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                   Catatan Dinamika & Intrik Hubungan
                 </label>
                 <textarea
@@ -2993,7 +2993,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                   value={relNotes}
                   onChange={(e) => setRelNotes(e.target.value)}
                   placeholder="Jelaskan dinamika politik, emosional, atau kepentingan di antara keduanya..."
-                  className="w-full p-2.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 text-xs bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
@@ -3006,12 +3006,12 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                   value={relOriginHistory}
                   onChange={(e) => setRelOriginHistory(e.target.value)}
                   placeholder="Kapan atau karena peristiwa apa ikatan ini terbentuk? (Mendukung [[Nama Entitas]])..."
-                  className="w-full p-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2 text-xs bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                <label className="block text-[11px] font-semibold text-sea mb-1">
                   Perubahan Seiring Bab Cerita (Opsional)
                 </label>
                 <textarea
@@ -3019,7 +3019,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                   value={relStoryEvolution}
                   onChange={(e) => setRelStoryEvolution(e.target.value)}
                   placeholder="Bagaimana hubungan ini berubah dari Bab 1 menuju klimaks cerita..."
-                  className="w-full p-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2 text-xs bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
@@ -3035,8 +3035,8 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
           </form>
 
           {/* List of active edges */}
-          <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-2.5">
-            <div className="flex items-center justify-between text-xs font-semibold text-[#695A47]">
+          <div className="bg-vellum border border-sepia rounded-xl p-4 space-y-2.5">
+            <div className="flex items-center justify-between text-xs font-semibold text-ink-soft">
               <span>Daftar Ikatan Terfilter ({visibleEdges.length})</span>
               <span>Klik untuk inspeksi / edit</span>
             </div>
@@ -3052,11 +3052,11 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                     onClick={() => setSelectedEdgeId(r.id)}
                     className={`p-3 rounded-lg border text-xs cursor-pointer transition-colors ${
                       selectedEdge?.id === r.id
-                        ? 'bg-[#EFE7D6] border-[#9E2A2B]'
-                        : 'bg-[#F6F1E6] border-[#D8CBB3] hover:bg-[#EFE7D6]/60'
+                        ? 'bg-aged border-wax'
+                        : 'bg-parchment border-sepia hover:bg-aged/60'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 font-semibold text-[#231C14]">
+                    <div className="flex items-center justify-between gap-2 font-semibold text-ink">
                       <span className="truncate">
                         {sEnt.title}{' '}
                         {r.directionality === 'directed' ? '→' : '↔'}{' '}
@@ -3069,7 +3069,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             e.stopPropagation();
                             startEditingEdge(r);
                           }}
-                          className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                          className="p-1 text-ink-soft hover:text-ink cursor-pointer"
                           title="Sunting ikatan ini"
                         >
                           <Edit3 className="w-3.5 h-3.5" />
@@ -3083,7 +3083,7 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                             );
                             if (editingEdgeId === r.id) resetForm();
                           }}
-                          className="p-1 text-[#695A47] hover:text-[#9E2A2B] cursor-pointer"
+                          className="p-1 text-ink-soft hover:text-wax cursor-pointer"
                           title="Hapus ikatan ini"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -3103,13 +3103,13 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                         {RELATION_STYLE[r.type]?.label || r.type}
                       </span>
                       <span>·</span>
-                      <span className="font-semibold text-[#231C14]">
+                      <span className="font-semibold text-ink">
                         {r.label}
                       </span>
                       {secret && (
                         <>
                           <span>·</span>
-                          <span className="text-[#9E2A2B] font-semibold">
+                          <span className="text-wax font-semibold">
                             [Rahasia]
                           </span>
                         </>
@@ -3117,12 +3117,12 @@ export const RelationshipGraphView: React.FC<RelationshipGraphViewProps> = ({
                     </div>
 
                     {r.tensionOrLoyalty && (
-                      <div className="text-[10px] text-[#8F5B14] font-medium mt-0.5">
+                      <div className="text-[10px] text-amber font-medium mt-0.5">
                         Intensitas: {r.tensionOrLoyalty}
                       </div>
                     )}
 
-                    <p className="text-[11px] text-[#695A47] mt-1 line-clamp-2">
+                    <p className="text-[11px] text-ink-soft mt-1 line-clamp-2">
                       {r.notes}
                     </p>
                   </div>

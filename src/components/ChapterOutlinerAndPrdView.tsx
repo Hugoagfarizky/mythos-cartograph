@@ -412,6 +412,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
     );
   };
 
+  const insertableEntities = entities.filter(
+    (e) => wikiInsertCategory === 'ALL' || e.category === wikiInsertCategory
+  );
+
   const insertWikiLinkIntoDraft = (entityTitle: string) => {
     if (!activeChapter) return;
     const nextDraft = `${activeChapter.draftNotes} [[${entityTitle}]]`;
@@ -449,18 +453,18 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
       {/* =================================================================== */}
       {/* HEADER BAR & NOVEL MANUSCRIPT PROGRESS TELEMETRY                    */}
       {/* =================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="text-xs font-semibold text-[#9E2A2B]">
+            <div className="text-xs font-semibold text-wax">
               Studio Manuskrip & Alur Novel · {chapters.length} Bab ·{' '}
               {totalScenesCount} Adegan Terjadwal
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink leading-tight">
               Alur Bab, Struktur Dramaturgi & Manuskrip Cerita
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
+            <p className="text-xs sm:text-sm text-ink-soft leading-relaxed max-w-3xl">
               Rancang tujuan naratif tiap bab, susun urutan adegan (*scene
               beats*) dengan tokoh POV dan lokasi World Bible, serta pantau
               target kata novel Anda.
@@ -473,8 +477,8 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
               onClick={() => setIsFocusMode((prev) => !prev)}
               className={`px-3 py-2 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 isFocusMode
-                  ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
-                  : 'bg-[#F6F1E6] text-[#231C14] border-[#B5832A]/60 hover:bg-[#EFE7D6]'
+                  ? 'bg-[#231C14] text-[#FBF8F1] border-brass'
+                  : 'bg-parchment text-ink border-brass/60 hover:bg-aged'
               }`}
               title={
                 isFocusMode
@@ -484,12 +488,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             >
               {isFocusMode ? (
                 <>
-                  <Minimize2 className="w-3.5 h-3.5 text-[#B5832A]" />
+                  <Minimize2 className="w-3.5 h-3.5 text-brass" />
                   <span>Tampilkan Daftar Bab</span>
                 </>
               ) : (
                 <>
-                  <Maximize2 className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                  <Maximize2 className="w-3.5 h-3.5 text-wax" />
                   <span>Mode Fokus Naskah</span>
                 </>
               )}
@@ -508,17 +512,17 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
         {/* Summary Metrics & Overall Progress Bar */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5 sm:col-span-2">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia space-y-1.5 sm:col-span-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-[#695A47] font-medium">
+              <span className="text-ink-soft font-medium">
                 Total Progres Kata Manuskrip
               </span>
-              <span className="font-mono-tabular font-bold text-[#231C14]">
+              <span className="font-mono-tabular font-bold text-ink">
                 {totalWords.toLocaleString('id-ID')} /{' '}
                 {totalTarget.toLocaleString('id-ID')} kata ({totalProgressPct}%)
               </span>
             </div>
-            <div className="w-full h-2.5 rounded-full bg-[#EFE7D6] border border-[#D8CBB3] overflow-hidden">
+            <div className="w-full h-2.5 rounded-full bg-aged border border-sepia overflow-hidden">
               <div
                 className="h-full bg-[#9E2A2B] transition-all"
                 style={{ width: `${totalProgressPct}%` }}
@@ -526,32 +530,32 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             </div>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Status Penyelesaian Bab
             </div>
-            <div className="font-display text-xl font-bold text-[#2D5A43] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-forest font-mono-tabular">
               {completedCount} / {chapters.length} Bab Selesai
             </div>
           </div>
 
-          <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3]">
-            <div className="text-[11px] text-[#695A47]">
+          <div className="p-3 rounded-lg bg-parchment border border-sepia">
+            <div className="text-[11px] text-ink-soft">
               Total Rangkaian Adegan
             </div>
-            <div className="font-display text-xl font-bold text-[#8F5B14] font-mono-tabular">
+            <div className="font-display text-xl font-bold text-amber font-mono-tabular">
               {totalScenesCount} Adegan (Scene Beats)
             </div>
           </div>
         </div>
 
         {syncNotice && (
-          <div className="p-3 rounded-lg bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-semibold text-[#2D5A43] flex items-center justify-between">
+          <div className="p-3 rounded-lg bg-aged border border-forest/40 text-xs font-semibold text-forest flex items-center justify-between">
             <span>{syncNotice}</span>
             <button
               type="button"
               onClick={() => setSyncNotice('')}
-              className="text-[#695A47] hover:text-[#231C14] cursor-pointer"
+              className="text-ink-soft hover:text-ink cursor-pointer"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -565,21 +569,21 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Chapter List with Search, Act Filter, Status Filter & Reorder */}
         {!isFocusMode && (
-          <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
+          <div className="lg:col-span-4 bg-vellum border border-sepia rounded-xl p-4 space-y-3">
           <div className="relative">
-            <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-ink-soft absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={chapterSearch}
               onChange={(e) => setChapterSearch(e.target.value)}
               placeholder="Cari judul bab, tokoh POV, lokasi, atau isi..."
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink placeholder:text-ink-soft focus:outline-none focus:border-wax"
             />
           </div>
 
           {/* Status Filter Buttons */}
           <div className="space-y-1.5 pt-1">
-            <div className="text-[11px] font-semibold text-[#695A47]">
+            <div className="text-[11px] font-semibold text-ink-soft">
               Filter Status Penulisan:
             </div>
             <div className="flex flex-wrap items-center gap-1">
@@ -591,7 +595,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                   className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                     statusFilter === st
                       ? 'bg-[#9E2A2B] text-white'
-                      : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                      : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                   }`}
                 >
                   {st === 'ALL' ? 'Semua' : st}
@@ -602,13 +606,13 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
           {/* Act Filter Dropdown */}
           <div className="flex items-center justify-between gap-2 text-xs">
-            <span className="text-[11px] text-[#695A47] font-semibold whitespace-nowrap">
+            <span className="text-[11px] text-ink-soft font-semibold whitespace-nowrap">
               Filter Babak:
             </span>
             <select
               value={actFilter}
               onChange={(e) => setActFilter(e.target.value)}
-              className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
             >
               <option value="ALL">Semua Babak (Act)</option>
               {availableActs.map((act) => (
@@ -619,7 +623,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             </select>
           </div>
 
-          <div className="text-xs font-semibold text-[#695A47] flex items-center justify-between px-1 pt-1">
+          <div className="text-xs font-semibold text-ink-soft flex items-center justify-between px-1 pt-1">
             <span>Daftar Bab Cerita ({filteredChapters.length})</span>
             <span className="font-mono-tabular text-[11px]">
               Urutkan ↑↓ / Klik detail
@@ -629,7 +633,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
           <div className="space-y-2.5 max-h-[680px] overflow-y-auto pr-1">
             {filteredChapters.length === 0 ? (
               <div className="py-8 text-center space-y-2">
-                <p className="text-xs text-[#695A47]">
+                <p className="text-xs text-ink-soft">
                   Tidak ada bab yang cocok dengan filter pencarian.
                 </p>
                 <button
@@ -666,23 +670,23 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     }}
                     className={`arcana-card w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer space-y-2 ${
                       isSelected
-                        ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-xs'
-                        : 'bg-[#F6F1E6] border-[#B5832A]/45 hover:bg-[#EFE7D6]/60'
+                        ? 'bg-aged border-2 border-wax shadow-xs'
+                        : 'bg-parchment border-brass/45 hover:bg-aged/60'
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 text-[11px] text-[#695A47]">
+                    <div className="flex items-center justify-between gap-2 text-[11px] text-ink-soft">
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <span className="font-epic font-bold text-[#9E2A2B]">
+                        <span className="font-epic font-bold text-wax">
                           ❖ Bab {ch.chapterNumber}
                         </span>
                         <span>·</span>
                         <span
                           className={`font-semibold ${
                             ch.status === 'Selesai'
-                              ? 'text-[#2D5A43]'
+                              ? 'text-forest'
                               : ch.status === 'Sedang Ditulis'
-                              ? 'text-[#8F5B14]'
-                              : 'text-[#695A47]'
+                              ? 'text-amber'
+                              : 'text-ink-soft'
                           }`}
                         >
                           {ch.status}
@@ -698,10 +702,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             e.stopPropagation();
                             handleMoveChapter(ch.id, -1);
                           }}
-                          className="p-0.5 rounded hover:bg-[#D8CBB3] disabled:opacity-30 cursor-pointer"
+                          className="p-0.5 rounded hover:bg-sepia disabled:opacity-30 cursor-pointer"
                           title="Geser urutan bab ke atas"
                         >
-                          <ArrowUp className="w-3 h-3 text-[#231C14]" />
+                          <ArrowUp className="w-3 h-3 text-ink" />
                         </button>
                         <button
                           type="button"
@@ -710,20 +714,20 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             e.stopPropagation();
                             handleMoveChapter(ch.id, 1);
                           }}
-                          className="p-0.5 rounded hover:bg-[#D8CBB3] disabled:opacity-30 cursor-pointer"
+                          className="p-0.5 rounded hover:bg-sepia disabled:opacity-30 cursor-pointer"
                           title="Geser urutan bab ke bawah"
                         >
-                          <ArrowDown className="w-3 h-3 text-[#231C14]" />
+                          <ArrowDown className="w-3 h-3 text-ink" />
                         </button>
                       </div>
                     </div>
 
                     <div>
-                      <div className="font-display text-lg font-bold text-[#231C14] leading-snug">
+                      <div className="font-display text-lg font-bold text-ink leading-snug">
                         {ch.title}
                       </div>
                       {(ch.primaryPov || ch.primaryLocation) && (
-                        <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                        <div className="text-[11px] text-ink-soft truncate mt-0.5">
                           {ch.primaryPov ? `POV: ${ch.primaryPov}` : ''}
                           {ch.primaryPov && ch.primaryLocation ? ' · ' : ''}
                           {ch.primaryLocation
@@ -733,13 +737,13 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                       )}
                     </div>
 
-                    <p className="text-xs text-[#695A47] line-clamp-2">
+                    <p className="text-xs text-ink-soft line-clamp-2">
                       {ch.synopsis}
                     </p>
 
                     {/* Mini Word Count Progress Bar */}
                     <div className="space-y-1 pt-0.5">
-                      <div className="flex items-center justify-between text-[10px] text-[#695A47] font-mono-tabular">
+                      <div className="flex items-center justify-between text-[10px] text-ink-soft font-mono-tabular">
                         <span>{ch.scenes.length} Adegan</span>
                         <span>
                           {ch.currentWordCount.toLocaleString('id-ID')} /{' '}
@@ -747,7 +751,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           {chPct}%)
                         </span>
                       </div>
-                      <div className="w-full h-1.5 rounded-full bg-[#FBF8F1] border border-[#D8CBB3] overflow-hidden">
+                      <div className="w-full h-1.5 rounded-full bg-vellum border border-sepia overflow-hidden">
                         <div
                           className={`h-full ${
                             ch.status === 'Selesai'
@@ -774,20 +778,20 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
             isFocusMode
               ? 'lg:col-span-12 max-w-5xl mx-auto w-full'
               : 'lg:col-span-8'
-          } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs transition-all`}
+          } bg-vellum border-2 border-brass/45 rounded-xl p-6 shadow-xs transition-all`}
         >
-          <OrnateCornerFiligree className="text-[#B5832A]/50" />
+          <OrnateCornerFiligree className="text-brass/50" />
           {activeChapter ? (
             <div className="space-y-6">
               {/* Chapter Header & Action Toolbar */}
-              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-4">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-sepia pb-4">
                 <div className="space-y-1">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47] font-medium">
-                    <span className="font-epic font-bold text-[#9E2A2B]">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft font-medium">
+                    <span className="font-epic font-bold text-wax">
                       ❖ {activeChapter.act}
                     </span>
                     <span>·</span>
-                    <span className="font-semibold text-[#231C14]">
+                    <span className="font-semibold text-ink">
                       Status: {activeChapter.status}
                     </span>
                     {activeChapter.storyDateOrTime && (
@@ -799,7 +803,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                       </>
                     )}
                   </div>
-                  <h3 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14]">
+                  <h3 className="font-cartography text-2xl sm:text-3xl font-bold text-ink">
                     Bab {activeChapter.chapterNumber}: {activeChapter.title}
                   </h3>
                 </div>
@@ -808,9 +812,9 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                   <button
                     type="button"
                     onClick={() => onRunAuditOnChapter(activeChapter)}
-                    className="px-3 py-1.5 text-xs font-semibold border border-[#B5832A] bg-[#F6F1E6] text-[#231C14] hover:bg-[#EFE7D6] rounded-lg flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+                    className="px-3 py-1.5 text-xs font-semibold border border-brass bg-parchment text-ink hover:bg-aged rounded-lg flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-wax" />
                     <span>Audit Konsistensi Bab (AI)</span>
                   </button>
                   <button
@@ -818,14 +822,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     onClick={() => setIsEditing((prev) => !prev)}
                     className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] rounded-lg flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    <Edit3 className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <Edit3 className="w-3.5 h-3.5 text-brass" />
                     <span>{isEditing ? 'Selesai Sunting' : 'Sunting Bab'}</span>
                   </button>
                   {chapters.length > 1 && (
                     <button
                       type="button"
                       onClick={() => handleDeleteChapter(activeChapter.id)}
-                      className="p-1.5 text-[#9E2A2B] border border-[#9E2A2B]/30 rounded-lg hover:bg-[#9E2A2B]/10 cursor-pointer"
+                      className="p-1.5 text-wax border border-wax/30 rounded-lg hover:bg-wax/10 cursor-pointer"
                       title="Hapus bab ini"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -838,10 +842,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
               {/* CHAPTER EDITOR MODE                                         */}
               {/* =========================================================== */}
               {isEditing ? (
-                <div className="space-y-5 bg-[#F6F1E6] p-5 rounded-xl border border-[#D8CBB3]">
+                <div className="space-y-5 bg-parchment p-5 rounded-xl border border-sepia">
                   {/* Section 1: Identitas Bab, Babak, Status, Waktu Cerita, POV & Lokasi Utama */}
                   <div className="space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                    <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>
                         1. Identitas Bab, Penanggalan Cerita, Sudut Pandang
@@ -851,7 +855,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div className="md:col-span-2">
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Judul Bab
                         </label>
                         <input
@@ -860,11 +864,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           onChange={(e) =>
                             handleUpdateActiveChapter({ title: e.target.value })
                           }
-                          className="w-full px-3 py-1.5 text-sm bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg font-semibold text-[#231C14]"
+                          className="w-full px-3 py-1.5 text-sm bg-vellum border border-sepia rounded-lg font-semibold text-ink"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Status Penulisan
                         </label>
                         <select
@@ -875,7 +879,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 .value as ChapterOutline['status'],
                             })
                           }
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg font-semibold"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg font-semibold"
                         >
                           {CHAPTER_STATUS_OPTIONS.map((st) => (
                             <option key={st} value={st}>
@@ -888,7 +892,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Babak / Act Cerita (Pilih Preset atau Ketik)
                         </label>
                         <div className="space-y-1">
@@ -900,7 +904,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                 act: e.target.value,
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="">-- Pilih Preset Babak --</option>
                             {availableActs.map((act) => (
@@ -916,13 +920,13 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               handleUpdateActiveChapter({ act: e.target.value })
                             }
                             placeholder="Atau ketik nama babak..."
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Penanggalan Waktu Cerita pada Bab Ini
                         </label>
                         <input
@@ -934,7 +938,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             })
                           }
                           placeholder="Contoh: Tahun 412 PG · Malam Badai Salju Bulan Kesebelas"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -942,7 +946,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {/* Hybrid Picker for Primary POV Character */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tokoh Sudut Pandang Utama / Primary POV (Pilih
                           Character / Ketik)
                         </label>
@@ -956,7 +960,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                   primaryPov: e.target.value,
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih dari Tab Character --
@@ -977,14 +981,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               })
                             }
                             placeholder="Ketik nama tokoh POV..."
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Picker for Primary Location */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Lokasi Utama Bab (Pilih Wilayah / Negara / Ketik)
                         </label>
                         <div className="space-y-1">
@@ -997,7 +1001,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                   primaryLocation: e.target.value,
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih dari Tab Wilayah / Negara --
@@ -1019,16 +1023,16 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               })
                             }
                             placeholder="Ketik nama lokasi bab..."
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     {/* Word Count Target & Current Word Count Controls */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3]">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 rounded-lg bg-vellum border border-sepia">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Jumlah Kata Saat Ini
                         </label>
                         <input
@@ -1043,11 +1047,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               ),
                             })
                           }
-                          className="w-full px-2.5 py-1 text-xs font-mono-tabular font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="w-full px-2.5 py-1 text-xs font-mono-tabular font-semibold bg-parchment border border-sepia rounded"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Target Kata Bab Ini
                         </label>
                         <input
@@ -1063,7 +1067,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               ),
                             })
                           }
-                          className="w-full px-2.5 py-1 text-xs font-mono-tabular font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="w-full px-2.5 py-1 text-xs font-mono-tabular font-semibold bg-parchment border border-sepia rounded"
                         />
                       </div>
                       <div className="flex items-end">
@@ -1081,7 +1085,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               `Jumlah kata dihitung ulang dari panjang teks draf (${rawWords} kata murni).`
                             );
                           }}
-                          className="w-full px-2.5 py-1.5 text-[11px] font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#D8CBB3] rounded text-[#231C14] cursor-pointer"
+                          className="w-full px-2.5 py-1.5 text-[11px] font-semibold bg-aged hover:bg-sepia border border-sepia rounded text-ink cursor-pointer"
                         >
                           Hitung Kata Asli Draf
                         </button>
@@ -1089,7 +1093,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Sinopsis Eksekutif Bab
                       </label>
                       <textarea
@@ -1100,15 +1104,15 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             synopsis: e.target.value,
                           })
                         }
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* Section 2: Anatomi Dramaturgi Bab (Goal, Conflict, Cliffhanger, Foreshadowing) */}
-                  <div className="space-y-3 pt-3 border-t border-[#D8CBB3]">
-                    <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
-                      <Flame className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                  <div className="space-y-3 pt-3 border-t border-sepia">
+                    <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
+                      <Flame className="w-3.5 h-3.5 text-wax" />
                       <span>
                         2. Dossier Dramaturgi Bab: Tujuan, Konflik Utama,
                         Cliffhanger & Foreshadowing
@@ -1117,7 +1121,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Tujuan Naratif Bab (Chapter Goal)
                         </label>
                         <textarea
@@ -1129,12 +1133,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             })
                           }
                           placeholder="Apa misi tokoh POV atau tujuan perkembangan plot yang harus dicapai di bab ini..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Konflik & Rintangan Utama (Central Conflict)
                         </label>
                         <textarea
@@ -1146,7 +1150,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             })
                           }
                           placeholder="Ancaman, benturan kepentingan, atau batasan sihir yang menghalangi tokoh..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
@@ -1164,12 +1168,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             })
                           }
                           placeholder="Kejutan atau pengungkapan di kalimat terakhir yang membuat pembaca penasaran..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                        <label className="block text-[11px] font-semibold text-sea mb-1">
                           Catatan Revisi & Foreshadowing Rahasia Penulis
                         </label>
                         <textarea
@@ -1181,22 +1185,22 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             })
                           }
                           placeholder="Petunjuk tersembunyi (foreshadowing) yang ditanam atau catatan revisi alur..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Section 3: Studio Manuskrip & Bilah Sisipkan Cepat [[Entitas]] */}
-                  <div className="space-y-2.5 pt-3 border-t border-[#D8CBB3]">
+                  <div className="space-y-2.5 pt-3 border-t border-sepia">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <label className="text-xs font-semibold text-[#231C14]">
+                      <label className="text-xs font-semibold text-ink">
                         3. Naskah Bab & Draf Adegan (Gunakan [[Nama Entitas]]
                         untuk Cross-Link Otomatis)
                       </label>
 
                       <div className="flex items-center gap-1">
-                        <span className="text-[11px] text-[#695A47]">
+                        <span className="text-[11px] text-ink-soft">
                           Filter Tautan Cepat:
                         </span>
                         {(
@@ -1217,7 +1221,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             className={`px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer ${
                               wikiInsertCategory === cat.id
                                 ? 'bg-[#231C14] text-[#FBF8F1]'
-                                : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                                : 'bg-aged text-ink-soft hover:text-ink'
                             }`}
                           >
                             {cat.label}
@@ -1227,41 +1231,44 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     </div>
 
                     {/* Quick Insert [[Entity]] Buttons */}
-                    <div className="flex flex-wrap gap-1.5 p-2.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] max-h-24 overflow-y-auto">
-                      {entities
-                        .filter(
-                          (e) =>
-                            wikiInsertCategory === 'ALL' ||
-                            e.category === wikiInsertCategory
-                        )
-                        .map((ent) => (
+                    {insertableEntities.length === 0 ? (
+                      <p className="text-[11px] text-ink-soft italic">
+                        Belum ada entitas di kategori ini. Entitas yang Anda buat di
+                        Codex akan muncul di sini sebagai tombol sisip cepat.
+                      </p>
+                    ) : (
+                    <div className="flex flex-wrap gap-1.5 p-2.5 rounded-lg bg-vellum border border-sepia max-h-24 overflow-y-auto">
+                      {insertableEntities.map((ent) => (
                           <button
                             key={ent.id}
                             type="button"
                             onClick={() => insertWikiLinkIntoDraft(ent.title)}
-                            className="px-2 py-0.5 text-[11px] bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded border border-[#D8CBB3] font-medium cursor-pointer"
+                            className="px-2 py-0.5 text-[11px] bg-aged hover:bg-sepia text-ink rounded border border-sepia font-medium cursor-pointer"
                             title={`Sisipkan [[${ent.title}]] ke dalam naskah`}
                           >
                             +[[{ent.title}]]
                           </button>
                         ))}
                     </div>
+                    )}
 
                     <textarea
-                      rows={8}
+                      rows={12}
                       value={activeChapter.draftNotes}
                       onChange={(e) =>
                         handleUpdateActiveChapter({
                           draftNotes: e.target.value,
                         })
                       }
-                      className="w-full p-3.5 text-sm bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl text-[#231C14] leading-relaxed focus:outline-none focus:border-[#9E2A2B]"
+                      aria-label="Naskah bab"
+                      placeholder="Mulai tulis naskah bab di sini…"
+                      className={`paper-sheet ${isFocusMode ? 'min-h-[60vh]' : ''}`}
                     />
                   </div>
 
                   {/* Manual Multi-Select Featured Entities */}
                   <div className="space-y-2 pt-2">
-                    <label className="block text-xs font-semibold text-[#695A47]">
+                    <label className="block text-xs font-semibold text-ink-soft">
                       Pilih Entitas World Bible yang Terlibat di Bab Ini (
                       {activeChapter.featuredEntityIds.length} Terpilih):
                     </label>
@@ -1277,8 +1284,8 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             onClick={() => toggleFeaturedEntity(ent.id)}
                             className={`px-2.5 py-1 rounded text-xs font-medium border cursor-pointer ${
                               active
-                                ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                ? 'bg-[#9E2A2B] text-white border-wax'
+                                : 'bg-vellum text-ink border-sepia hover:bg-aged'
                             }`}
                           >
                             {active ? '✓ ' : '+ '}[
@@ -1296,9 +1303,9 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                 <div className="space-y-5">
                   {/* Context Strip: Primary POV, Primary Location & Word Count Progress */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                      <div className="text-[11px] text-[#695A47] flex items-center gap-1">
-                        <User className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia">
+                      <div className="text-[11px] text-ink-soft flex items-center gap-1">
+                        <User className="w-3.5 h-3.5 text-wax" />
                         <span>Tokoh Sudut Pandang Utama (POV)</span>
                       </div>
                       {(() => {
@@ -1310,22 +1317,22 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           <button
                             type="button"
                             onClick={() => onSelectEntity(matchedPov.id)}
-                            className="text-xs font-bold text-[#9E2A2B] hover:underline flex items-center gap-1 mt-1 cursor-pointer text-left"
+                            className="text-xs font-bold text-wax hover:underline flex items-center gap-1 mt-1 cursor-pointer text-left"
                           >
                             <span>{activeChapter.primaryPov}</span>
                             <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
                           </button>
                         ) : (
-                          <div className="text-xs font-semibold text-[#231C14] mt-1">
+                          <div className="text-xs font-semibold text-ink mt-1">
                             {activeChapter.primaryPov || 'Omniscient / Multi-POV'}
                           </div>
                         );
                       })()}
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                      <div className="text-[11px] text-[#695A47] flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#264653]" />
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia">
+                      <div className="text-[11px] text-ink-soft flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-sea" />
                         <span>Lokasi & Latar Utama Bab</span>
                       </div>
                       {(() => {
@@ -1342,23 +1349,23 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           <button
                             type="button"
                             onClick={() => onSelectEntity(matchedLoc.id)}
-                            className="text-xs font-bold text-[#264653] hover:underline flex items-center gap-1 mt-1 cursor-pointer text-left"
+                            className="text-xs font-bold text-sea hover:underline flex items-center gap-1 mt-1 cursor-pointer text-left"
                           >
                             <span>{activeChapter.primaryLocation}</span>
                             <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
                           </button>
                         ) : (
-                          <div className="text-xs font-semibold text-[#231C14] mt-1">
+                          <div className="text-xs font-semibold text-ink mt-1">
                             {activeChapter.primaryLocation || 'Lintas Wilayah'}
                           </div>
                         );
                       })()}
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] text-[#695A47]">
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                      <div className="flex items-center justify-between text-[11px] text-ink-soft">
                         <span>Progres Target Kata</span>
-                        <span className="font-mono-tabular font-bold text-[#231C14]">
+                        <span className="font-mono-tabular font-bold text-ink">
                           {activeChapter.currentWordCount.toLocaleString(
                             'id-ID'
                           )}{' '}
@@ -1368,7 +1375,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           )}
                         </span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-[#EFE7D6] border border-[#D8CBB3] overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-aged border border-sepia overflow-hidden">
                         <div
                           className="h-full bg-[#9E2A2B]"
                           style={{
@@ -1387,11 +1394,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                   </div>
 
                   {/* Executive Synopsis */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                    <div className="text-xs font-semibold text-[#695A47] mb-1">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia">
+                    <div className="text-xs font-semibold text-ink-soft mb-1">
                       Sinopsis Eksekutif Bab
                     </div>
-                    <div className="text-sm text-[#231C14] font-medium leading-relaxed">
+                    <div className="text-sm text-ink font-medium leading-relaxed">
                       <WikiTextRenderer
                         text={activeChapter.synopsis}
                         entities={entities}
@@ -1407,8 +1414,8 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     activeChapter.endingHookOrTwist ||
                     activeChapter.foreshadowingNotes) && (
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#8F5B14]">
-                        <Flame className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-amber">
+                        <Flame className="w-4 h-4 text-wax" />
                         <span>
                           Dossier Struktur Naratif: Tujuan Bab, Konflik Utama,
                           Cliffhanger & Foreshadowing
@@ -1417,12 +1424,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                         {activeChapter.chapterGoal && (
-                          <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                            <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                          <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                            <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                               <Compass className="w-3.5 h-3.5" />
                               <span>Tujuan Naratif Bab (Chapter Goal)</span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeChapter.chapterGoal}
                                 entities={entities}
@@ -1434,14 +1441,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         )}
 
                         {activeChapter.centralConflict && (
-                          <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                            <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                          <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                            <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                               <ShieldAlert className="w-3.5 h-3.5" />
                               <span>
                                 Konflik & Rintangan Utama (Central Conflict)
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeChapter.centralConflict}
                                 entities={entities}
@@ -1453,14 +1460,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         )}
 
                         {activeChapter.endingHookOrTwist && (
-                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1">
+                          <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1">
                             <div className="text-xs font-semibold text-[#7A3E1D] flex items-center gap-1.5">
-                              <Sparkles className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                              <Sparkles className="w-3.5 h-3.5 text-wax" />
                               <span>
                                 Cliffhanger & Pengungkapan Lore Akhir Bab
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeChapter.endingHookOrTwist}
                                 entities={entities}
@@ -1472,14 +1479,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         )}
 
                         {activeChapter.foreshadowingNotes && (
-                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1">
-                            <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                          <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1">
+                            <div className="text-xs font-semibold text-sea flex items-center gap-1.5">
                               <EyeOff className="w-3.5 h-3.5" />
                               <span>
                                 Catatan Revisi & Foreshadowing Rahasia Penulis
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeChapter.foreshadowingNotes}
                                 entities={entities}
@@ -1496,7 +1503,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                   {/* Full Chapter Manuscript Prose with Interactive [[Cross-Links]] & Illuminated Drop Cap */}
                   <div className="space-y-3 pt-2">
                     <FantasySectionDivider title="Kutipan Naskah Manuskrip & Catatan Lore Terhubung" />
-                    <div className="p-5 sm:p-6 rounded-xl bg-[#F6F1E6]/75 border border-[#B5832A]/45">
+                    <div className="paper-sheet">
                       <WikiTextRenderer
                         text={activeChapter.draftNotes}
                         entities={entities}
@@ -1512,10 +1519,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
               {/* =========================================================== */}
               {/* FEATURED & AUTO-DETECTED WORLD BIBLE ENTITIES IN CHAPTER    */}
               {/* =========================================================== */}
-              <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+              <div className="pt-4 border-t border-sepia space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                    <Link2 className="w-4 h-4 text-[#9E2A2B]" />
+                  <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                    <Link2 className="w-4 h-4 text-wax" />
                     <span>
                       Elemen World Bible yang Muncul di Bab Ini (
                       {
@@ -1563,8 +1570,8 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         onClick={() => onSelectEntity(ent.id)}
                         className={`px-3 py-1.5 rounded-lg border text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors ${
                           isSaved
-                            ? 'bg-[#EFE7D6] hover:bg-[#D8CBB3] border-[#D8CBB3] text-[#231C14]'
-                            : 'bg-[#F6F1E6] hover:bg-[#EFE7D6] border-[#B5832A] text-[#8F5B14]'
+                            ? 'bg-aged hover:bg-sepia border-sepia text-ink'
+                            : 'bg-parchment hover:bg-aged border-brass text-amber'
                         }`}
                       >
                         <span
@@ -1576,11 +1583,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         </span>
                         <span>{ent.title}</span>
                         {!isSaved && (
-                          <span className="text-[10px] text-[#9E2A2B]">
+                          <span className="text-[10px] text-wax">
                             (Terdeteksi [[...]])
                           </span>
                         )}
-                        <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                        <ArrowUpRight className="w-3.5 h-3.5 text-wax" />
                       </button>
                     );
                   })}
@@ -1590,10 +1597,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
               {/* =========================================================== */}
               {/* SCENE BREAKDOWN (SCENE BEATS) WITH EDIT, REORDER & LINKS    */}
               {/* =========================================================== */}
-              <div className="pt-4 border-t border-[#D8CBB3] space-y-3.5">
+              <div className="pt-4 border-t border-sepia space-y-3.5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                    <Clock className="w-4 h-4 text-[#8F5B14]" />
+                  <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                    <Clock className="w-4 h-4 text-amber" />
                     <span>
                       Urutan Adegan (Scene Beats) —{' '}
                       {activeChapter.scenes.length} Adegan Terjadwal
@@ -1627,7 +1634,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     }}
                     className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                   >
-                    <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <Plus className="w-3.5 h-3.5 text-brass" />
                     <span>
                       {showSceneForm && !editingSceneId
                         ? 'Tutup Form Adegan'
@@ -1640,10 +1647,10 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                 {showSceneForm && (
                   <form
                     onSubmit={handleSaveScene}
-                    className="p-4 rounded-xl bg-[#F6F1E6] border-2 border-[#B5832A] space-y-3"
+                    className="p-4 rounded-xl bg-parchment border-2 border-brass space-y-3"
                   >
-                    <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-2">
-                      <span className="text-xs font-bold text-[#231C14]">
+                    <div className="flex items-center justify-between border-b border-sepia pb-2">
+                      <span className="text-xs font-bold text-ink">
                         {editingSceneId
                           ? 'Sunting Rincian Adegan'
                           : 'Tambah Adegan (Scene Beat) Baru'}
@@ -1651,7 +1658,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                       <button
                         type="button"
                         onClick={resetSceneForm}
-                        className="text-xs text-[#695A47] hover:text-[#231C14] flex items-center gap-1 cursor-pointer"
+                        className="text-xs text-ink-soft hover:text-ink flex items-center gap-1 cursor-pointer"
                       >
                         <X className="w-3.5 h-3.5" />
                         <span>Batal</span>
@@ -1660,7 +1667,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div className="md:col-span-2">
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Judul Adegan
                         </label>
                         <input
@@ -1669,11 +1676,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           value={newSceneTitle}
                           onChange={(e) => setNewSceneTitle(e.target.value)}
                           placeholder="Contoh: Anomali Tengah Malam di Observatorium..."
-                          className="w-full px-3 py-1.5 text-xs font-semibold bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs font-semibold bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Waktu / Suasana Adegan
                         </label>
                         <input
@@ -1681,7 +1688,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           value={newSceneTimeOfDay}
                           onChange={(e) => setNewSceneTimeOfDay(e.target.value)}
                           placeholder="Contoh: Tengah Malam · Badai Salju"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -1689,7 +1696,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {/* Hybrid POV Character Picker for Scene */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tokoh Sudut Pandang (POV) Adegan (Pilih Character /
                           Ketik)
                         </label>
@@ -1700,7 +1707,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               if (!e.target.value) return;
                               setNewScenePov(e.target.value);
                             }}
-                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="">-- Pilih Tokoh --</option>
                             {characterEntities.map((c) => (
@@ -1714,14 +1721,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             value={newScenePov}
                             onChange={(e) => setNewScenePov(e.target.value)}
                             placeholder="Atau ketik nama POV..."
-                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Setting Region Picker for Scene */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Lokasi Wilayah / Negara Adegan (Pilih Wilayah / Ketik)
                         </label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
@@ -1731,7 +1738,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               if (!e.target.value) return;
                               setNewSceneRegion(e.target.value);
                             }}
-                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="">-- Pilih Lokasi --</option>
                             {locationEntities.map((loc) => (
@@ -1746,14 +1753,14 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             value={newSceneRegion}
                             onChange={(e) => setNewSceneRegion(e.target.value)}
                             placeholder="Atau ketik lokasi..."
-                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Ringkasan Jalannya Adegan
                       </label>
                       <textarea
@@ -1761,13 +1768,13 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         value={newSceneSummary}
                         onChange={(e) => setNewSceneSummary(e.target.value)}
                         placeholder="Apa yang terjadi di dalam adegan ini? (Mendukung [[Nama Entitas]])..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Tujuan & Konflik Adegan (Scene Goal / Conflict)
                         </label>
                         <textarea
@@ -1777,12 +1784,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             setNewSceneGoalConflict(e.target.value)
                           }
                           placeholder="Ketegangan atau tujuan spesifik yang dipertaruhkan dalam adegan ini..."
-                          className="w-full p-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Hasil Akhir / Perubahan Situasi (Scene Outcome)
                         </label>
                         <textarea
@@ -1790,7 +1797,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           value={newSceneOutcome}
                           onChange={(e) => setNewSceneOutcome(e.target.value)}
                           placeholder="Keputusan, petunjuk baru, atau konsekuensi di akhir adegan..."
-                          className="w-full p-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -1825,12 +1832,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                     return (
                       <div
                         key={sc.id}
-                        className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5"
+                        className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5"
                       >
                         <div className="flex flex-wrap items-start justify-between gap-2">
                           <div className="space-y-0.5">
-                            <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
-                              <span className="font-mono-tabular font-bold text-[#9E2A2B]">
+                            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
+                              <span className="font-mono-tabular font-bold text-wax">
                                 Adegan {idx + 1}
                               </span>
                               {sc.timeOfDay && (
@@ -1850,12 +1857,12 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                     onClick={() =>
                                       onSelectEntity(matchedScenePov.id)
                                     }
-                                    className="font-bold text-[#9E2A2B] hover:underline cursor-pointer"
+                                    className="font-bold text-wax hover:underline cursor-pointer"
                                   >
                                     {sc.povCharacter} ↗
                                   </button>
                                 ) : (
-                                  <strong className="text-[#231C14]">
+                                  <strong className="text-ink">
                                     {sc.povCharacter}
                                   </strong>
                                 )}
@@ -1869,19 +1876,19 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                     onClick={() =>
                                       onSelectEntity(matchedSceneLoc.id)
                                     }
-                                    className="font-bold text-[#264653] hover:underline cursor-pointer"
+                                    className="font-bold text-sea hover:underline cursor-pointer"
                                   >
                                     {sc.settingRegion} ↗
                                   </button>
                                 ) : (
-                                  <strong className="text-[#231C14]">
+                                  <strong className="text-ink">
                                     {sc.settingRegion}
                                   </strong>
                                 )}
                               </span>
                             </div>
 
-                            <div className="font-display text-lg font-bold text-[#231C14]">
+                            <div className="font-display text-lg font-bold text-ink">
                               {sc.title}
                             </div>
                           </div>
@@ -1892,7 +1899,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               type="button"
                               disabled={idx <= 0}
                               onClick={() => handleMoveScene(sc.id, -1)}
-                              className="p-1 rounded hover:bg-[#EFE7D6] disabled:opacity-30 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                              className="p-1 rounded hover:bg-aged disabled:opacity-30 text-ink-soft hover:text-ink cursor-pointer"
                               title="Geser adegan ke atas"
                             >
                               <ArrowUp className="w-3.5 h-3.5" />
@@ -1901,7 +1908,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                               type="button"
                               disabled={idx >= activeChapter.scenes.length - 1}
                               onClick={() => handleMoveScene(sc.id, 1)}
-                              className="p-1 rounded hover:bg-[#EFE7D6] disabled:opacity-30 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                              className="p-1 rounded hover:bg-aged disabled:opacity-30 text-ink-soft hover:text-ink cursor-pointer"
                               title="Geser adegan ke bawah"
                             >
                               <ArrowDown className="w-3.5 h-3.5" />
@@ -1909,7 +1916,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             <button
                               type="button"
                               onClick={() => startEditingScene(sc)}
-                              className="p-1 rounded hover:bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                              className="p-1 rounded hover:bg-aged text-ink-soft hover:text-ink cursor-pointer"
                               title="Sunting adegan ini"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -1923,7 +1930,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                                   ),
                                 })
                               }
-                              className="p-1 rounded hover:bg-[#EFE7D6] text-[#695A47] hover:text-[#9E2A2B] cursor-pointer"
+                              className="p-1 rounded hover:bg-aged text-ink-soft hover:text-wax cursor-pointer"
                               title="Hapus adegan ini"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -1931,7 +1938,7 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                           </div>
                         </div>
 
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={sc.summary}
                             entities={entities}
@@ -1943,11 +1950,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                         {(sc.sceneGoalOrConflict || sc.sceneOutcome) && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 pt-1">
                             {sc.sceneGoalOrConflict && (
-                              <div className="p-2.5 rounded-lg bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-0.5">
-                                <div className="text-[10px] font-semibold text-[#9E2A2B]">
+                              <div className="p-2.5 rounded-lg bg-aged/75 border border-sepia space-y-0.5">
+                                <div className="text-[10px] font-semibold text-wax">
                                   Tujuan & Konflik Adegan
                                 </div>
-                                <div className="text-xs text-[#231C14] leading-relaxed">
+                                <div className="text-xs text-ink leading-relaxed">
                                   <WikiTextRenderer
                                     text={sc.sceneGoalOrConflict}
                                     entities={entities}
@@ -1959,11 +1966,11 @@ export const ChapterOutlinerView: React.FC<ChapterOutlinerViewProps> = ({
                             )}
 
                             {sc.sceneOutcome && (
-                              <div className="p-2.5 rounded-lg bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-0.5">
-                                <div className="text-[10px] font-semibold text-[#2D5A43]">
+                              <div className="p-2.5 rounded-lg bg-aged/75 border border-sepia space-y-0.5">
+                                <div className="text-[10px] font-semibold text-forest">
                                   Hasil Akhir & Perubahan Situasi
                                 </div>
-                                <div className="text-xs text-[#231C14] leading-relaxed">
+                                <div className="text-xs text-ink leading-relaxed">
                                   <WikiTextRenderer
                                     text={sc.sceneOutcome}
                                     entities={entities}
@@ -2013,16 +2020,16 @@ export const WorldSettingsAndPowerView: React.FC<
   return (
     <div className="space-y-6">
       {/* World Identity & Cosmology Settings */}
-      <div className="bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-5">
-        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-4">
+      <div className="bg-vellum border border-sepia rounded-xl p-6 space-y-5">
+        <div className="flex flex-wrap items-start justify-between gap-4 border-b border-sepia pb-4">
           <div>
-            <div className="text-xs font-semibold text-[#9E2A2B]">
+            <div className="text-xs font-semibold text-wax">
               Identitas Semesta & Parameter Kanon
             </div>
-            <h2 className="font-display text-3xl font-bold text-[#231C14]">
+            <h2 className="font-display text-3xl font-bold text-ink">
               Pengaturan Dunia & Kosmologi ({project.worldName})
             </h2>
-            <p className="text-sm text-[#695A47] mt-1 max-w-3xl">
+            <p className="text-sm text-ink-soft mt-1 max-w-3xl">
               Atur nama dunia, genre, sistem penanggalan kalender, serta tinjau ringkasan struktur kekuatan (*Power System*) dan geopolitik di semesta cerita Anda.
             </p>
           </div>
@@ -2030,7 +2037,7 @@ export const WorldSettingsAndPowerView: React.FC<
           <button
             type="button"
             onClick={onCreateBlankWorld}
-            className="px-3.5 py-2 text-xs font-semibold border border-[#9E2A2B] text-[#9E2A2B] hover:bg-[#9E2A2B] hover:text-white rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+            className="px-3.5 py-2 text-xs font-semibold border border-wax text-wax hover:bg-[#9E2A2B] hover:text-white rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <FilePlus2 className="w-3.5 h-3.5" />
             Buat Dunia Kosong Baru
@@ -2039,7 +2046,7 @@ export const WorldSettingsAndPowerView: React.FC<
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-[#695A47] mb-1">
+            <label className="block text-xs font-semibold text-ink-soft mb-1">
               Nama Dunia / Judul Semesta
             </label>
             <input
@@ -2048,22 +2055,22 @@ export const WorldSettingsAndPowerView: React.FC<
               onChange={(e) =>
                 onUpdateProjectMeta({ worldName: e.target.value })
               }
-              className="w-full px-3 py-2 text-sm font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="w-full px-3 py-2 text-sm font-semibold bg-parchment border border-sepia rounded-lg text-ink"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[#695A47] mb-1">
+            <label className="block text-xs font-semibold text-ink-soft mb-1">
               Genre & Sub-Genre Cerita
             </label>
             <input
               type="text"
               value={project.genre}
               onChange={(e) => onUpdateProjectMeta({ genre: e.target.value })}
-              className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[#695A47] mb-1">
+            <label className="block text-xs font-semibold text-ink-soft mb-1">
               Sistem Penanggalan / Era Kalender
             </label>
             <input
@@ -2072,11 +2079,11 @@ export const WorldSettingsAndPowerView: React.FC<
               onChange={(e) =>
                 onUpdateProjectMeta({ calendarSystem: e.target.value })
               }
-              className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[#695A47] mb-1">
+            <label className="block text-xs font-semibold text-ink-soft mb-1">
               Nama Penulis / Kreator Dunia
             </label>
             <input
@@ -2085,70 +2092,70 @@ export const WorldSettingsAndPowerView: React.FC<
               onChange={(e) =>
                 onUpdateProjectMeta({ authorName: e.target.value })
               }
-              className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-[#695A47] mb-1">
+          <label className="block text-xs font-semibold text-ink-soft mb-1">
             Premis Utama / Tagline Dunia Cerita
           </label>
           <input
             type="text"
             value={project.tagline}
             onChange={(e) => onUpdateProjectMeta({ tagline: e.target.value })}
-            className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+            className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
           />
         </div>
       </div>
 
       {/* Power System & Skill Matrix Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#264653]">
+              <div className="text-xs font-semibold text-sea">
                 Hukum Kekuatan & Hirarki Sihir
               </div>
-              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+              <h3 className="font-display text-2xl font-bold text-ink">
                 Matriks Power System & Skill
               </h3>
             </div>
-            <Zap className="w-5 h-5 text-[#B5832A]" />
+            <Zap className="w-5 h-5 text-brass" />
           </div>
 
           <div className="space-y-3">
             {powerSystems.map((ps) => (
               <div
                 key={ps.id}
-                className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2"
+                className="p-4 rounded-xl bg-parchment border border-sepia space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <div className="font-display text-xl font-bold text-[#231C14]">
+                  <div className="font-display text-xl font-bold text-ink">
                     {ps.title}
                   </div>
                   <button
                     type="button"
                     onClick={() => onSelectEntity(ps.id)}
-                    className="text-xs font-semibold text-[#9E2A2B] hover:underline cursor-pointer"
+                    className="text-xs font-semibold text-wax hover:underline cursor-pointer"
                   >
                     Sunting Hukum →
                   </button>
                 </div>
-                <p className="text-xs text-[#695A47]">{ps.summary}</p>
+                <p className="text-xs text-ink-soft">{ps.summary}</p>
                 {ps.attributes.tierHierarchy && (
-                  <div className="text-xs bg-[#EFE7D6] p-2.5 rounded-lg border border-[#D8CBB3]">
-                    <span className="font-semibold text-[#231C14]">
+                  <div className="text-xs bg-aged p-2.5 rounded-lg border border-sepia">
+                    <span className="font-semibold text-ink">
                       Urutan Tingkatan (Tier):{' '}
                     </span>
-                    <span className="text-[#695A47]">
+                    <span className="text-ink-soft">
                       {ps.attributes.tierHierarchy}
                     </span>
                   </div>
                 )}
                 {ps.attributes.hardRules && (
-                  <div className="text-xs text-[#9E2A2B] font-medium">
+                  <div className="text-xs text-wax font-medium">
                     Batasan Mutlak: {ps.attributes.hardRules}
                   </div>
                 )}
@@ -2156,7 +2163,7 @@ export const WorldSettingsAndPowerView: React.FC<
             ))}
 
             <div className="pt-2">
-              <div className="text-xs font-semibold text-[#695A47] mb-2">
+              <div className="text-xs font-semibold text-ink-soft mb-2">
                 Daftar Skill & Teknik Terdaftar ({skills.length})
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -2165,15 +2172,15 @@ export const WorldSettingsAndPowerView: React.FC<
                     key={sk.id}
                     type="button"
                     onClick={() => onSelectEntity(sk.id)}
-                    className="text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                    className="text-left p-3 rounded-lg bg-parchment hover:bg-aged border border-sepia transition-colors cursor-pointer"
                   >
-                    <div className="text-[11px] font-semibold text-[#264653]">
+                    <div className="text-[11px] font-semibold text-sea">
                       {sk.attributes.skillRank || 'Teknik Khusus'}
                     </div>
-                    <div className="font-display text-base font-bold text-[#231C14]">
+                    <div className="font-display text-base font-bold text-ink">
                       {sk.title}
                     </div>
-                    <div className="text-xs text-[#695A47] line-clamp-1 mt-0.5">
+                    <div className="text-xs text-ink-soft line-clamp-1 mt-0.5">
                       {sk.summary}
                     </div>
                   </button>
@@ -2184,21 +2191,21 @@ export const WorldSettingsAndPowerView: React.FC<
         </div>
 
         {/* Geopolitics & Races Quick Atlas */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#2D5A43]">
+              <div className="text-xs font-semibold text-forest">
                 Geopolitik, Kerajaan & Bangsa
               </div>
-              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+              <h3 className="font-display text-2xl font-bold text-ink">
                 Ikhtisar Negara & Ras Penghuni
               </h3>
             </div>
-            <Globe className="w-5 h-5 text-[#9E2A2B]" />
+            <Globe className="w-5 h-5 text-wax" />
           </div>
 
           <div className="space-y-3">
-            <div className="text-xs font-semibold text-[#695A47]">
+            <div className="text-xs font-semibold text-ink-soft">
               Negara & Kedaulatan ({nations.length})
             </div>
             <div className="grid grid-cols-1 gap-2.5">
@@ -2207,23 +2214,23 @@ export const WorldSettingsAndPowerView: React.FC<
                   key={nat.id}
                   type="button"
                   onClick={() => onSelectEntity(nat.id)}
-                  className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                  className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors cursor-pointer"
                 >
-                  <div className="flex items-center justify-between text-xs text-[#695A47]">
-                    <span className="font-semibold text-[#9E2A2B]">
+                  <div className="flex items-center justify-between text-xs text-ink-soft">
+                    <span className="font-semibold text-wax">
                       Ibu Kota: {nat.attributes.capitalCity || '-'}
                     </span>
                     <span>Penguasa: {nat.attributes.ruler || '-'}</span>
                   </div>
-                  <div className="font-display text-lg font-bold text-[#231C14] mt-0.5">
+                  <div className="font-display text-lg font-bold text-ink mt-0.5">
                     {nat.title}
                   </div>
-                  <p className="text-xs text-[#695A47] mt-1">{nat.summary}</p>
+                  <p className="text-xs text-ink-soft mt-1">{nat.summary}</p>
                 </button>
               ))}
             </div>
 
-            <div className="text-xs font-semibold text-[#695A47] pt-2">
+            <div className="text-xs font-semibold text-ink-soft pt-2">
               Ras & Bangsa ({races.length})
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -2232,15 +2239,15 @@ export const WorldSettingsAndPowerView: React.FC<
                   key={rc.id}
                   type="button"
                   onClick={() => onSelectEntity(rc.id)}
-                  className="text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors cursor-pointer"
+                  className="text-left p-3 rounded-lg bg-parchment hover:bg-aged border border-sepia transition-colors cursor-pointer"
                 >
-                  <div className="text-[11px] font-semibold text-[#2D5A43]">
+                  <div className="text-[11px] font-semibold text-forest">
                     Usia: {rc.attributes.lifespan || 'Tidak diketahui'}
                   </div>
-                  <div className="font-display text-base font-bold text-[#231C14]">
+                  <div className="font-display text-base font-bold text-ink">
                     {rc.title}
                   </div>
-                  <div className="text-xs text-[#695A47] line-clamp-1 mt-0.5">
+                  <div className="text-xs text-ink-soft line-clamp-1 mt-0.5">
                     Habitat: {rc.attributes.homeland || '-'}
                   </div>
                 </button>

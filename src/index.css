@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+/* Theme tokens: utilities such as bg-vellum, text-ink, border-sepia/60 read the
+   CSS variables below, so the night theme only has to swap variable values. */
+@theme inline {
+  --color-parchment: var(--bg-parchment);
+  --color-vellum: var(--bg-vellum);
+  --color-aged: var(--bg-aged);
+  --color-sepia: var(--border-sepia);
+  --color-ink: var(--ink-primary);
+  --color-ink-soft: var(--ink-secondary);
+  --color-wax: var(--accent-wax);
+  --color-brass: var(--accent-brass);
+  --color-amber: var(--accent-amber);
+  --color-sea: var(--accent-cartography);
+  --color-forest: var(--accent-forest);
+  --color-mystic: var(--accent-mystic);
+  --color-paper: var(--bg-paper);
+}
+
 @layer base {
   :root {
     --bg-parchment: #F6F1E6;
@@ -14,6 +32,7 @@
     --accent-cartography: #264653;
     --accent-forest: #2D5A43;
     --accent-mystic: #5A3E7A;
+    --bg-paper: #FDFBF6;
   }
 
   body {
@@ -218,6 +237,7 @@
   --accent-cartography: #6EC3D4;
   --accent-forest: #6FD19D;
   --accent-mystic: #C4A1FF;
+  --bg-paper: #1A1511;
 }
 
 [data-theme="grimoire-dark"] .medieval-desk-bg {
@@ -272,56 +292,16 @@
 }
 
 /* 1. Primary Parchment & Recessed Surfaces */
-[data-theme="grimoire-dark"] body,
-[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\],
-[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/85,
-[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/80,
-[data-theme="grimoire-dark"] .bg-\[\#F6F1E6\]\/75 {
+[data-theme="grimoire-dark"] body {
   background-color: #14100C !important;
   color: #F5EFE4 !important;
 }
 
 /* 2. Elevated Vellum Sheets, Modals & Cards */
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\],
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/95,
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/90,
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/85,
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/80,
-[data-theme="grimoire-dark"] .bg-\[\#FBF8F1\]\/60,
 [data-theme="grimoire-dark"] .bg-\[\#F5ECD9\]\/95,
 [data-theme="grimoire-dark"] .bg-\[\#F5ECD9\]\/75 {
   background-color: #1D1712 !important;
   color: #F5EFE4 !important;
-}
-
-/* 3. Aged Vellum Sub-Cards, Pills & Secondary Panels */
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\],
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/90,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/80,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/75,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/70,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/60,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/50,
-[data-theme="grimoire-dark"] .bg-\[\#EFE7D6\]\/40 {
-  background-color: #271F18 !important;
-  color: #F5EFE4 !important;
-}
-
-/* 4. Subtle Tinted Accent Backgrounds in Dark Mode */
-[data-theme="grimoire-dark"] .bg-\[\#9E2A2B\]\/10 {
-  background-color: rgba(244, 124, 101, 0.14) !important;
-}
-[data-theme="grimoire-dark"] .bg-\[\#2D5A43\]\/10 {
-  background-color: rgba(111, 209, 157, 0.14) !important;
-}
-[data-theme="grimoire-dark"] .bg-\[\#264653\]\/10 {
-  background-color: rgba(110, 195, 212, 0.14) !important;
-}
-[data-theme="grimoire-dark"] .bg-\[\#8F5B14\]\/10 {
-  background-color: rgba(242, 182, 88, 0.14) !important;
-}
-[data-theme="grimoire-dark"] .bg-\[\#5A3E7A\]\/10 {
-  background-color: rgba(196, 161, 255, 0.14) !important;
 }
 
 /* 5. Dark Ink Action Buttons (#231C14) -> Burnished Bronze with Gold Trim in Dark Mode */
@@ -332,17 +312,6 @@
   border-color: #8C6830 !important;
 }
 
-/* 6. Hover Background States (Prevent turning bright white/cream on hover) */
-[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]:hover,
-[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]\/70:hover,
-[data-theme="grimoire-dark"] .hover\:bg-\[\#EFE7D6\]\/60:hover,
-[data-theme="grimoire-dark"] .hover\:bg-\[\#F6F1E6\]:hover,
-[data-theme="grimoire-dark"] .hover\:bg-\[\#FBF8F1\]:hover,
-[data-theme="grimoire-dark"] .hover\:bg-\[\#D8CBB3\]:hover {
-  background-color: #33271D !important;
-  color: #FFF8EC !important;
-}
-
 [data-theme="grimoire-dark"] .hover\:bg-\[\#3A2E21\]:hover,
 [data-theme="grimoire-dark"] .hover\:bg-\[\#3B2E1E\]:hover {
   background-color: #4A3726 !important;
@@ -350,19 +319,10 @@
 }
 
 /* 7. High-Contrast Primary & Secondary Typography */
-[data-theme="grimoire-dark"] .text-\[\#231C14\],
-[data-theme="grimoire-dark"] .text-\[\#231C14\]\/90,
-[data-theme="grimoire-dark"] .text-\[\#231C14\]\/85,
 [data-theme="grimoire-dark"] .text-\[\#FBF8F1\] {
   color: #F5EFE4 !important;
 }
 
-[data-theme="grimoire-dark"] .hover\:text-\[\#231C14\]:hover {
-  color: #FFF8EC !important;
-}
-
-[data-theme="grimoire-dark"] .text-\[\#695A47\],
-[data-theme="grimoire-dark"] .text-\[\#695A47\]\/60,
 [data-theme="grimoire-dark"] .text-\[\#5A4632\],
 [data-theme="grimoire-dark"] .text-\[\#D8CBB3\],
 [data-theme="grimoire-dark"] .text-\[\#E6D5B8\] {
@@ -370,52 +330,23 @@
 }
 
 /* 8. Luminous Fantasy Accent Text Colors (Fixing Dark Jewel Tones on Dark Background) */
-[data-theme="grimoire-dark"] .text-\[\#9E2A2B\],
-[data-theme="grimoire-dark"] .text-\[\#8B1E1E\],
-[data-theme="grimoire-dark"] .hover\:text-\[\#9E2A2B\]:hover {
+[data-theme="grimoire-dark"] .text-\[\#8B1E1E\] {
   color: #F47C65 !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#B5832A\],
-[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/65,
-[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/60,
-[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/50,
-[data-theme="grimoire-dark"] .text-\[\#B5832A\]\/45 {
-  color: #F0C36D !important;
-}
-
-[data-theme="grimoire-dark"] .text-\[\#7A3E1D\],
-[data-theme="grimoire-dark"] .text-\[\#8F5B14\] {
+[data-theme="grimoire-dark"] .text-\[\#7A3E1D\] {
   color: #F2B658 !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#264653\] {
-  color: #6EC3D4 !important;
-}
-
-[data-theme="grimoire-dark"] .text-\[\#2D5A43\],
 [data-theme="grimoire-dark"] .text-\[\#3D5A45\] {
   color: #6FD19D !important;
 }
 
-[data-theme="grimoire-dark"] .text-\[\#5A3E7A\] {
-  color: #C4A1FF !important;
-}
-
 /* 9. Borders & Dividers in Grimoire Dark Mode */
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\],
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/85,
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/80,
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/70,
-[data-theme="grimoire-dark"] .border-\[\#D8CBB3\]\/60,
 [data-theme="grimoire-dark"] .border-\[\#3B2E1E\],
 [data-theme="grimoire-dark"] .border-\[\#3B2E1E\]\/60,
 [data-theme="grimoire-dark"] .border-\[\#2B1E12\],
 [data-theme="grimoire-dark"] .border-\[\#8B7355\] {
-  border-color: #4A3928 !important;
-}
-
-[data-theme="grimoire-dark"] .divide-\[\#D8CBB3\]\/60 > :not([hidden]) ~ :not([hidden]) {
   border-color: #4A3928 !important;
 }
 
@@ -444,6 +375,92 @@
   background: linear-gradient(145deg, rgba(240, 195, 109, 0.22), rgba(244, 124, 101, 0.16));
   border-color: rgba(240, 195, 109, 0.6);
   box-shadow: inset 0 0 0 2px rgba(29, 23, 18, 0.85);
+}
+
+/* ============================================================================
+   PAPER SHEETS: calm surfaces for writing and reading long prose.
+   The grimoire ornament stays on the frame; the page itself stays quiet.
+   ============================================================================ */
+.paper-sheet {
+  background-color: var(--bg-paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.41 0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  border: 1px solid color-mix(in oklab, var(--border-sepia) 80%, transparent);
+  border-radius: 0.75rem;
+  color: var(--ink-primary);
+  box-shadow: 0 1px 2px rgba(35, 28, 20, 0.04);
+  /* keep a comfortable line length (~68 characters) inside any width */
+  padding-block: 2rem;
+  padding-inline: max(1.25rem, calc((100% - 68ch) / 2));
+}
+
+/* Writing: a textarea that feels like a page, not a form field */
+textarea.paper-sheet {
+  display: block;
+  width: 100%;
+  min-height: 24rem;
+  font-family: 'Lora', Georgia, Cambria, serif;
+  font-size: 1.0625rem;
+  line-height: 1.85;
+  resize: vertical;
+  caret-color: var(--accent-wax);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+textarea.paper-sheet:focus {
+  outline: none;
+  border-color: color-mix(in oklab, var(--accent-brass) 65%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent-brass) 14%, transparent);
+}
+
+textarea.paper-sheet::placeholder {
+  color: color-mix(in oklab, var(--ink-secondary) 70%, transparent);
+  font-style: italic;
+}
+
+/* Reading: larger body copy and a lighter drop cap */
+.paper-sheet > .fantasy-dropcap,
+.paper-sheet > div {
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.paper-sheet .fantasy-dropcap > p:first-of-type::first-letter {
+  font-size: 3.6rem;
+  line-height: 0.8;
+  padding: 0.3rem 0.55rem 0 0;
+  margin: 0.05rem 0.15rem 0 0;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  color: var(--accent-wax);
+}
+
+[data-theme="grimoire-dark"] textarea.paper-sheet {
+  background-color: var(--bg-paper) !important;
+  border-color: color-mix(in oklab, var(--border-sepia) 90%, transparent) !important;
+}
+
+[data-theme="grimoire-dark"] .paper-sheet .fantasy-dropcap > p:first-of-type::first-letter {
+  background: none;
+  box-shadow: none;
+  color: var(--accent-brass);
+}
+
+/* Keyboard focus: a brass ring on every control that lacks its own */
+:where(button, a, [role="button"], summary, select, input, textarea):focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--accent-brass) 80%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Custom parchment scrollbars */

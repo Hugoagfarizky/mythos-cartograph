@@ -599,13 +599,13 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
       {/* =================================================================== */}
       {/* 1. TOP HEADER & ONENOTE NOTEBOOK PAGE TABS                          */}
       {/* =================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 space-y-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-2xl p-5 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
-              <span className="font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
+              <span className="font-epic font-bold uppercase tracking-wider text-wax">
                 ❖ Studio Buku Catatan & Oret-Oret (Gabungan Docs · OneNote · Paint)
               </span>
               <span>·</span>
@@ -615,10 +615,10 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 OneNote
               </span>
             </div>
-            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-ink leading-tight">
               Lembar Catatan Bebas, Dokumen Cerita & Kanvas Gambar
             </h2>
-            <p className="text-xs sm:text-sm text-[#695A47] max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-ink-soft max-w-3xl leading-relaxed">
               Ketik draf catatan panjang seperti di <strong>Docs</strong>,
               taruh kotak teks bebas di titik mana pun seperti di{' '}
               <strong>OneNote</strong>, dan gambar sketsa/simbol/diagram secara
@@ -635,7 +635,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 layoutMode === 'split'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                  : 'bg-parchment text-ink border border-sepia hover:bg-aged'
               }`}
               title="Kiri: Lembar Catatan Docs · Kanan: Kanvas Oret-Oret Paint & OneNote"
             >
@@ -649,7 +649,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 layoutMode === 'onenote_sheet'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                  : 'bg-parchment text-ink border border-sepia hover:bg-aged'
               }`}
               title="Gabungkan dokumen dan kanvas oret-oret dalam satu lembar kertas OneNote utuh"
             >
@@ -663,7 +663,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 layoutMode === 'paint_only'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                  : 'bg-parchment text-ink border border-sepia hover:bg-aged'
               }`}
               title="Fokus penuh pada kanvas gambar Paint dan kotak teks bebas"
             >
@@ -674,20 +674,20 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
             <button
               type="button"
               onClick={() => setIsFullWidth((prev) => !prev)}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-parchment text-ink border border-sepia hover:bg-aged flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               title="Perluas tinggi area kerja"
             >
               {isFullWidth ? (
-                <Minimize2 className="w-3.5 h-3.5 text-[#B5832A]" />
+                <Minimize2 className="w-3.5 h-3.5 text-brass" />
               ) : (
-                <Maximize2 className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                <Maximize2 className="w-3.5 h-3.5 text-wax" />
               )}
             </button>
           </div>
         </div>
 
         {/* OneNote Notebook Page Tabs Bar */}
-        <div className="pt-3 border-t border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+        <div className="pt-3 border-t border-sepia flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-1.5">
             {pages.map((pg) => {
               const isAct = pg.id === activePage.id;
@@ -702,11 +702,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   }}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     isAct
-                      ? 'bg-[#231C14] text-[#FBF8F1] border border-[#B5832A] shadow-xs'
-                      : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                      ? 'bg-[#231C14] text-[#FBF8F1] border border-brass shadow-xs'
+                      : 'bg-parchment text-ink border border-sepia hover:bg-aged'
                   }`}
                 >
-                  <FileText className="w-3.5 h-3.5 text-[#B5832A]" />
+                  <FileText className="w-3.5 h-3.5 text-brass" />
                   <span>{pg.title}</span>
                 </button>
               );
@@ -728,7 +728,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               type="text"
               value={activePage.title}
               onChange={(e) => updateActivePage({ title: e.target.value })}
-              className="px-2.5 py-1 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] w-56"
+              className="px-2.5 py-1 text-xs font-semibold bg-parchment border border-sepia rounded-lg text-ink w-56"
               title="Ubah nama halaman buku catatan ini"
             />
 
@@ -736,7 +736,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               <button
                 type="button"
                 onClick={handleDeleteActivePage}
-                className="px-2.5 py-1 rounded-lg border border-[#D8CBB3] text-xs font-semibold text-[#9E2A2B] hover:bg-[#EFE7D6] flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg border border-sepia text-xs font-semibold text-wax hover:bg-aged flex items-center gap-1 cursor-pointer"
                 title="Hapus halaman catatan ini"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -750,11 +750,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
       {/* =================================================================== */}
       {/* 2. UNIFIED PAINT & ONENOTE RIBBON TOOLBAR                           */}
       {/* =================================================================== */}
-      <div className="bg-[#EFE7D6] border-2 border-[#B5832A]/45 rounded-2xl p-3.5 space-y-3 shadow-xs">
+      <div className="bg-aged border-2 border-brass/45 rounded-2xl p-3.5 space-y-3 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3">
           {/* Paint & OneNote Tools */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] font-epic font-bold uppercase tracking-wider text-[#9E2A2B] mr-1">
+            <span className="text-[11px] font-epic font-bold uppercase tracking-wider text-wax mr-1">
               Alat Kanvas:
             </span>
 
@@ -763,12 +763,12 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               onClick={() => setActiveTool('cursor')}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'cursor'
-                  ? 'bg-[#231C14] text-[#FBF8F1] border border-[#B5832A]'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  ? 'bg-[#231C14] text-[#FBF8F1] border border-brass'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Pilih, ketik, atau geser kotak teks OneNote"
             >
-              <MousePointer className="w-3.5 h-3.5 text-[#B5832A]" />
+              <MousePointer className="w-3.5 h-3.5 text-brass" />
               <span>Kursor / Pilih</span>
             </button>
 
@@ -778,11 +778,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'text_box'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Klik di mana saja pada kanvas untuk mengetik kotak teks baru (Gaya OneNote)"
             >
-              <Type className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <Type className="w-3.5 h-3.5 text-wax" />
               <span>+ Kotak Teks (OneNote)</span>
             </button>
 
@@ -792,11 +792,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'pen'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Pena Tinta Halus untuk oret-oret dan tulisan tangan"
             >
-              <PenTool className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <PenTool className="w-3.5 h-3.5 text-wax" />
               <span>Pena</span>
             </button>
 
@@ -806,11 +806,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'brush'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Kuas Lukis Tebal"
             >
-              <Brush className="w-3.5 h-3.5 text-[#2D5A43]" />
+              <Brush className="w-3.5 h-3.5 text-forest" />
               <span>Kuas</span>
             </button>
 
@@ -820,11 +820,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'highlighter'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Stabilo Transparan untuk menandai tulisan atau sketsa"
             >
-              <Highlighter className="w-3.5 h-3.5 text-[#B5832A]" />
+              <Highlighter className="w-3.5 h-3.5 text-brass" />
               <span>Stabilo</span>
             </button>
 
@@ -834,11 +834,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'eraser'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Penghapus Coretan Gambar"
             >
-              <Eraser className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <Eraser className="w-3.5 h-3.5 text-wax" />
               <span>Penghapus</span>
             </button>
 
@@ -848,7 +848,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'line'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Tarik Garis Lurus"
             >
@@ -862,7 +862,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'arrow'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Tarik Panah Penunjuk"
             >
@@ -876,7 +876,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'rect'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Gambar Persegi / Kotak"
             >
@@ -890,7 +890,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTool === 'circle'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3] hover:bg-[#F6F1E6]'
+                  : 'bg-vellum text-ink border border-sepia hover:bg-parchment'
               }`}
               title="Gambar Lingkaran / Elips"
             >
@@ -905,7 +905,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               type="button"
               disabled={activePage.drawings.length === 0}
               onClick={handleUndoDrawing}
-              className="px-2.5 py-1.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] text-xs font-semibold text-[#231C14] hover:bg-[#F6F1E6] disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 rounded-lg bg-vellum border border-sepia text-xs font-semibold text-ink hover:bg-parchment disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               title="Urungkan goresan terakhir"
             >
               <Undo2 className="w-3.5 h-3.5" />
@@ -916,7 +916,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               type="button"
               disabled={redoStack.length === 0}
               onClick={handleRedoDrawing}
-              className="px-2.5 py-1.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] text-xs font-semibold text-[#231C14] hover:bg-[#F6F1E6] disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 rounded-lg bg-vellum border border-sepia text-xs font-semibold text-ink hover:bg-parchment disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               title="Ulangi goresan"
             >
               <Redo2 className="w-3.5 h-3.5" />
@@ -927,7 +927,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               type="button"
               disabled={activePage.drawings.length === 0}
               onClick={handleClearDrawings}
-              className="px-2.5 py-1.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] text-xs font-semibold text-[#9E2A2B] hover:bg-[#F6F1E6] disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-2.5 py-1.5 rounded-lg bg-vellum border border-sepia text-xs font-semibold text-wax hover:bg-parchment disabled:opacity-40 flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
               title="Bersihkan seluruh oret-oret di halaman ini"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -940,16 +940,16 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
               className="px-3 py-1.5 rounded-lg bg-[#231C14] text-[#FBF8F1] text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
               title="Unduh gambar coretan kanvas sebagai berkas PNG"
             >
-              <Download className="w-3.5 h-3.5 text-[#B5832A]" />
+              <Download className="w-3.5 h-3.5 text-brass" />
               <span>Unduh .PNG</span>
             </button>
           </div>
         </div>
 
         {/* Second Ribbon Row: Paint Color Swatches, Custom Color Picker, Brush Thickness & Fill Toggle */}
-        <div className="pt-2 border-t border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="pt-2 border-t border-sepia flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="font-semibold text-[#695A47] mr-1">
+            <span className="font-semibold text-ink-soft mr-1">
               Warna Tinta & Cat:
             </span>
             {PAINT_COLORS.map((c) => (
@@ -959,8 +959,8 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 onClick={() => setStrokeColor(c.hex)}
                 className={`px-2 py-1 rounded-lg border text-[11px] font-semibold flex items-center gap-1.5 cursor-pointer ${
                   strokeColor.toLowerCase() === c.hex.toLowerCase()
-                    ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
-                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                    ? 'bg-[#231C14] text-[#FBF8F1] border-brass'
+                    : 'bg-vellum text-ink border-sepia'
                 }`}
               >
                 <span
@@ -972,7 +972,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
             ))}
 
             <label
-              className="px-2 py-1 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] text-[11px] font-semibold text-[#231C14] flex items-center gap-1.5 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-vellum border border-sepia text-[11px] font-semibold text-ink flex items-center gap-1.5 cursor-pointer"
               title="Pilih warna bebas (Custom Color Picker)"
             >
               <input
@@ -987,7 +987,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
 
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#695A47]">
+              <span className="font-semibold text-ink-soft">
                 Ukuran Kuas ({strokeWidth}px):
               </span>
               <input
@@ -1002,7 +1002,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
             </div>
 
             {(activeTool === 'rect' || activeTool === 'circle') && (
-              <label className="inline-flex items-center gap-1.5 font-semibold text-[#231C14] cursor-pointer">
+              <label className="inline-flex items-center gap-1.5 font-semibold text-ink cursor-pointer">
                 <input
                   type="checkbox"
                   checked={fillShape}
@@ -1030,15 +1030,15 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
           <div
             className={`${
               layoutMode === 'split' ? 'xl:col-span-5' : 'w-full'
-            } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-5 space-y-4 shadow-xs`}
+            } bg-vellum border-2 border-brass/45 rounded-2xl p-5 space-y-4 shadow-xs`}
           >
             {/* Docs Formatting Bar */}
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#D8CBB3] pb-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sepia pb-3">
               <div className="flex flex-wrap items-center gap-1">
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('\n### ')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Tambah Subjudul H1/H2"
                 >
                   <Heading1 className="w-3.5 h-3.5" />
@@ -1046,7 +1046,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('\n#### ')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Tambah Subjudul Kecil"
                 >
                   <Heading2 className="w-3.5 h-3.5" />
@@ -1054,7 +1054,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('**', '**')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Teks Tebal (Bold)"
                 >
                   <Bold className="w-3.5 h-3.5" />
@@ -1062,7 +1062,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('*', '*')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Teks Miring (Italic)"
                 >
                   <Italic className="w-3.5 h-3.5" />
@@ -1070,7 +1070,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('\n- ')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Daftar Poin (Bullet List)"
                 >
                   <List className="w-3.5 h-3.5" />
@@ -1078,7 +1078,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 <button
                   type="button"
                   onClick={() => insertTextSnippetInDoc('\n- [ ] Tugas / Ide: ')}
-                  className="p-1.5 rounded bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+                  className="p-1.5 rounded bg-parchment hover:bg-aged border border-sepia text-ink cursor-pointer"
                   title="Daftar Checklist"
                 >
                   <CheckSquare className="w-3.5 h-3.5" />
@@ -1089,7 +1089,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   <select
                     value={insertEntityId}
                     onChange={(e) => setInsertEntityId(e.target.value)}
-                    className="px-2 py-1 text-[11px] bg-[#F6F1E6] border border-[#D8CBB3] rounded text-[#231C14] max-w-[150px]"
+                    className="px-2 py-1 text-[11px] bg-parchment border border-sepia rounded text-ink max-w-[150px]"
                   >
                     <option value="">+ Sisipkan [[Entitas]]</option>
                     {entities.map((ent) => (
@@ -1117,7 +1117,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 className={`px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                   docPreviewMode
                     ? 'bg-[#9E2A2B] text-white'
-                    : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                    : 'bg-parchment text-ink border border-sepia hover:bg-aged'
                 }`}
               >
                 {docPreviewMode ? (
@@ -1127,7 +1127,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   </>
                 ) : (
                   <>
-                    <Eye className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <Eye className="w-3.5 h-3.5 text-wax" />
                     <span>Mode Baca & Klik [[Tautan]]</span>
                   </>
                 )}
@@ -1136,7 +1136,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
 
             {/* Document Paper Sheet (Plain Clean Surface) */}
             {docPreviewMode ? (
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] min-h-[460px] space-y-3">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia min-h-[460px] space-y-3">
                 <WikiTextRenderer
                   text={activePage.docContent}
                   entities={entities}
@@ -1153,14 +1153,14 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   updateActivePage({ docContent: e.target.value })
                 }
                 placeholder="Ketik catatan cerita, dialog, aturan dunia, atau ide bebas di sini... Gunakan [[Nama Entitas]] untuk menautkan ke World Bible."
-                className={`w-full p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-sm text-[#231C14] leading-relaxed focus:outline-none focus:border-[#9E2A2B] resize-y ${
+                className={`w-full p-5 rounded-xl bg-parchment border border-sepia text-sm text-ink leading-relaxed focus:outline-none focus:border-wax resize-y ${
                   isFullWidth ? 'min-h-[680px]' : 'min-h-[500px]'
                 }`}
               />
             )}
 
             {/* Footer: Word Count & Promote Document Page to World Bible Entity */}
-            <div className="pt-2 border-t border-[#D8CBB3] flex flex-wrap items-center justify-between gap-2 text-xs text-[#695A47]">
+            <div className="pt-2 border-t border-sepia flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
               <span className="font-mono-tabular">
                 {
                   activePage.docContent
@@ -1177,7 +1177,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   onChange={(e) =>
                     setPromoteCategory(e.target.value as LoreCategory)
                   }
-                  className="px-2 py-1 text-[11px] bg-[#F6F1E6] border border-[#D8CBB3] rounded text-[#231C14]"
+                  className="px-2 py-1 text-[11px] bg-parchment border border-sepia rounded text-ink"
                 >
                   {(Object.keys(CATEGORY_META) as LoreCategory[]).map((cat) => (
                     <option key={cat} value={cat}>
@@ -1191,7 +1191,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                   className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-[11px] font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                   title="Jadikan isi dokumen halaman ini sebagai entri baru di World Bible"
                 >
-                  <FilePlus2 className="w-3 h-3 text-[#B5832A]" />
+                  <FilePlus2 className="w-3 h-3 text-brass" />
                   <span>Jadikan Entri World Bible →</span>
                 </button>
               </div>
@@ -1205,12 +1205,12 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
         <div
           className={`${
             layoutMode === 'split' ? 'xl:col-span-7' : 'w-full'
-          } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-4 space-y-3 shadow-xs`}
+          } bg-vellum border-2 border-brass/45 rounded-2xl p-4 space-y-3 shadow-xs`}
         >
           <div className="flex flex-wrap items-center justify-between gap-2 px-1">
-            <div className="text-xs text-[#695A47] flex flex-wrap items-center gap-2">
-              <span className="font-bold text-[#231C14] flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <div className="text-xs text-ink-soft flex flex-wrap items-center gap-2">
+              <span className="font-bold text-ink flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-wax" />
                 <span>
                   Kanvas Oret-Oret Paint & Kotak Teks Bebas OneNote
                 </span>
@@ -1251,7 +1251,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
           </div>
 
           {/* Interactive Paint + OneNote Paper Surface */}
-          <div className="overflow-auto rounded-xl border-2 border-[#D8CBB3] bg-[#F6F1E6]">
+          <div className="overflow-auto rounded-xl border-2 border-sepia bg-parchment">
             <div
               ref={canvasWrapperRef}
               onPointerDown={handleCanvasPointerDown}
@@ -1263,7 +1263,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                 minWidth: '780px',
                 aspectRatio: `${CANVAS_WIDTH} / ${CANVAS_HEIGHT}`,
               }}
-              className={`relative bg-[#F6F1E6] select-none overflow-hidden ${
+              className={`relative bg-parchment select-none overflow-hidden ${
                 activeTool === 'cursor'
                   ? 'cursor-default'
                   : activeTool === 'text_box'
@@ -1307,11 +1307,11 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                       e.stopPropagation();
                       setSelectedTextBlockId(tb.id);
                     }}
-                    className={`absolute z-10 bg-[#FBF8F1]/95 border-2 rounded-xl p-3 shadow-sm space-y-1.5 transition-shadow ${
+                    className={`absolute z-10 bg-vellum/95 border-2 rounded-xl p-3 shadow-sm space-y-1.5 transition-shadow ${
                       activeTool !== 'cursor' && activeTool !== 'text_box'
                         ? 'pointer-events-none'
                         : ''
-                    } ${isSelected ? 'ring-2 ring-[#B5832A] shadow-md' : ''}`}
+                    } ${isSelected ? 'ring-2 ring-brass shadow-md' : ''}`}
                   >
                     {/* Drag Handle Header Bar */}
                     <div
@@ -1325,7 +1325,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                           offsetY: pt.y - tb.y,
                         });
                       }}
-                      className="flex items-center justify-between gap-1 border-b border-[#D8CBB3]/80 pb-1 cursor-grab active:cursor-grabbing"
+                      className="flex items-center justify-between gap-1 border-b border-sepia/80 pb-1 cursor-grab active:cursor-grabbing"
                     >
                       <input
                         type="text"
@@ -1340,7 +1340,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                             ),
                           })
                         }
-                        className="font-display text-xs font-bold text-[#231C14] bg-transparent border-0 p-0 focus:outline-none w-full"
+                        className="font-display text-xs font-bold text-ink bg-transparent border-0 p-0 focus:outline-none w-full"
                       />
 
                       <div className="flex items-center gap-1 shrink-0">
@@ -1360,7 +1360,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                               ),
                             })
                           }
-                          className="text-[10px] px-1 py-0.5 rounded bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14]"
+                          className="text-[10px] px-1 py-0.5 rounded bg-parchment border border-sepia text-ink"
                           title="Warna bingkai kotak teks"
                         >
                           {Object.entries(TEXT_BOX_COLORS).map(([k, v]) => (
@@ -1380,7 +1380,7 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                               ),
                             })
                           }
-                          className="p-0.5 text-[#695A47] hover:text-[#9E2A2B] cursor-pointer"
+                          className="p-0.5 text-ink-soft hover:text-wax cursor-pointer"
                           title="Hapus kotak teks ini"
                         >
                           <Trash2 className="w-3 h-3" />
@@ -1403,14 +1403,14 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                         })
                       }
                       placeholder="Ketik catatan di sini..."
-                      className="w-full text-xs bg-transparent border-0 p-0.5 text-[#231C14] leading-relaxed focus:outline-none resize-y"
+                      className="w-full text-xs bg-transparent border-0 p-0.5 text-ink leading-relaxed focus:outline-none resize-y"
                     />
 
                     {/* If text contains [[Entity]], render clickable chip links below */}
                     {tb.content.includes('[[') && (
                       <div
                         onPointerDown={(e) => e.stopPropagation()}
-                        className="pt-1 border-t border-dashed border-[#D8CBB3] text-[11px]"
+                        className="pt-1 border-t border-dashed border-sepia text-[11px]"
                       >
                         <WikiTextRenderer
                           text={tb.content}
@@ -1421,13 +1421,13 @@ export const FreeformCanvasView: React.FC<FreeformCanvasViewProps> = ({
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between text-[10px] text-[#695A47] pt-0.5">
+                    <div className="flex items-center justify-between text-[10px] text-ink-soft pt-0.5">
                       <span>Geser header ✥</span>
                       <button
                         type="button"
                         onPointerDown={(e) => e.stopPropagation()}
                         onClick={() => onPromoteCardToEntity(tb, 'encyclopedia')}
-                        className="font-semibold text-[#9E2A2B] hover:underline flex items-center gap-0.5 cursor-pointer"
+                        className="font-semibold text-wax hover:underline flex items-center gap-0.5 cursor-pointer"
                       >
                         <span>Jadikan Entri</span>
                         <ArrowUpRight className="w-2.5 h-2.5" />

@@ -225,14 +225,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* ===================================================================== */}
       {/* 1. HERO FRONTISPIECE & ANCIENT EPIGRAPH BANNER (Clean Book Mode)      */}
       {/* ===================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/55 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/55 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
         <OrnateCornerFiligree />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Left Column: Literary Book Frontispiece */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
             <div className="space-y-3">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
-                <span className="font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
+                <span className="font-epic font-bold uppercase tracking-wider text-wax">
                   ❖ {project.genre}
                 </span>
                 <span aria-hidden="true">·</span>
@@ -241,22 +241,22 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 <span>Arsiparis: {project.authorName}</span>
               </div>
 
-              <h1 className="font-cartography text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#231C14] leading-[1.14]">
+              <h1 className="font-cartography text-3xl sm:text-4xl lg:text-[42px] font-bold text-ink leading-[1.14]">
                 {project.worldName}
               </h1>
 
-              <p className="text-sm sm:text-base text-[#695A47] max-w-2xl leading-relaxed">
+              <p className="text-sm sm:text-base text-ink-soft max-w-2xl leading-relaxed">
                 {project.tagline}
               </p>
 
               {/* Epigraph / Ancient Prophecy Quote Block */}
               {epigraphQuote && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#B5832A]/45 space-y-1.5">
-                  <p className="text-sm italic text-[#231C14] leading-relaxed">
+                <div className="p-4 rounded-xl bg-parchment border border-brass/45 space-y-1.5">
+                  <p className="text-sm italic text-ink leading-relaxed">
                     “{epigraphQuote}”
                   </p>
                   {epigraphSource && (
-                    <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
+                    <div className="font-epic text-xs font-semibold text-wax">
                       — {epigraphSource}
                     </div>
                   )}
@@ -288,7 +288,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               <button
                 type="button"
                 onClick={onTriggerImportJson}
-                className="px-3.5 py-2 text-xs font-medium bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-3.5 py-2 text-xs font-medium bg-parchment text-ink border border-sepia rounded-lg hover:bg-aged flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <Upload className="w-3.5 h-3.5" />
                 Impor JSON
@@ -297,7 +297,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               <button
                 type="button"
                 onClick={onCreateBlankWorld}
-                className="px-3.5 py-2 text-xs font-medium bg-[#F6F1E6] text-[#9E2A2B] border border-[#D8CBB3] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-3.5 py-2 text-xs font-medium bg-parchment text-wax border border-sepia rounded-lg hover:bg-aged flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <FilePlus2 className="w-3.5 h-3.5" />
                 Buat Dunia Baru
@@ -306,7 +306,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               <button
                 type="button"
                 onClick={onResetStarterWorld}
-                className="px-3 py-2 text-xs font-medium text-[#695A47] hover:text-[#231C14] flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="px-3 py-2 text-xs font-medium text-ink-soft hover:text-ink flex items-center gap-1 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                 title="Kembalikan data contoh dunia Aethelia"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -317,7 +317,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
 
           {/* Right Column: Matching Height Visual Container */}
           <div className="lg:col-span-5">
-            <div className="relative h-60 lg:h-full min-h-[240px] rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
+            <div className="relative h-60 lg:h-full min-h-[240px] rounded-xl overflow-hidden border border-sepia bg-aged">
               <img
                 src={project.heroBannerUrl}
                 alt={project.worldName}
@@ -342,14 +342,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
         {isEditingOverview && (
           <form
             onSubmit={handleSaveOverview}
-            className="pt-6 border-t border-[#D8CBB3] space-y-5"
+            className="pt-6 border-t border-sepia space-y-5"
           >
             <div className="flex items-center justify-between">
               <div>
-                <div className="text-xs font-semibold text-[#9E2A2B]">
+                <div className="text-xs font-semibold text-wax">
                   Mode Penyuntingan Sampul & Kosmologi Dunia
                 </div>
-                <h3 className="font-display text-xl font-bold text-[#231C14]">
+                <h3 className="font-display text-xl font-bold text-ink">
                   Atur Identitas, Epigrafi, Konflik Pusat & Hukum Semesta
                 </h3>
               </div>
@@ -357,7 +357,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsEditingOverview(false)}
-                  className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg text-[#695A47] hover:text-[#231C14] flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-1.5 text-xs font-medium border border-sepia rounded-lg text-ink-soft hover:text-ink flex items-center gap-1 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                   Batal
@@ -374,7 +374,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Nama Dunia / Judul Semesta
                 </label>
                 <input
@@ -383,11 +383,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onChange={(e) =>
                     setDraftMeta({ ...draftMeta, worldName: e.target.value })
                   }
-                  className="w-full px-3 py-2 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs font-semibold bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Genre & Sub-Genre
                 </label>
                 <input
@@ -396,11 +396,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onChange={(e) =>
                     setDraftMeta({ ...draftMeta, genre: e.target.value })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Sistem Penanggalan / Kalender
                 </label>
                 <input
@@ -412,11 +412,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       calendarSystem: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Nama Penulis / Arsiparis
                 </label>
                 <input
@@ -425,14 +425,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onChange={(e) =>
                     setDraftMeta({ ...draftMeta, authorName: e.target.value })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Premis Utama / Tagline Dunia
                 </label>
                 <input
@@ -441,11 +441,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onChange={(e) =>
                     setDraftMeta({ ...draftMeta, tagline: e.target.value })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Tema Filosofis & Naratif Cerita
                 </label>
                 <input
@@ -454,14 +454,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onChange={(e) =>
                     setDraftMeta({ ...draftMeta, storyThemes: e.target.value })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="md:col-span-2">
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Kutipan Epigrafi / Ramalan Kuno Pembuka Dunia
                 </label>
                 <input
@@ -473,11 +473,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       epigraphQuote: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 text-xs italic bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs italic bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Sumber Kutipan / Naskah Kuno
                 </label>
                 <input
@@ -489,14 +489,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       epigraphSource: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Sinopsis Utama & Konflik Pusat (Mendukung [[Nama Entitas]])
                 </label>
                 <textarea
@@ -508,11 +508,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       centralConflict: e.target.value,
                     })
                   }
-                  className="w-full p-3 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] leading-relaxed"
+                  className="w-full p-3 text-xs bg-parchment border border-sepia rounded-lg text-ink leading-relaxed"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Pilar Kosmologi 1: Mitos Penciptaan & Asal-Usul
                 </label>
                 <textarea
@@ -524,11 +524,11 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       cosmologyCreationMyth: e.target.value,
                     })
                   }
-                  className="w-full p-3 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] leading-relaxed"
+                  className="w-full p-3 text-xs bg-parchment border border-sepia rounded-lg text-ink leading-relaxed"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Pilar Kosmologi 2: Hukum Alam & Energi Sihir
                 </label>
                 <textarea
@@ -540,7 +540,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       cosmologyLaws: e.target.value,
                     })
                   }
-                  className="w-full p-3 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] leading-relaxed"
+                  className="w-full p-3 text-xs bg-parchment border border-sepia rounded-lg text-ink leading-relaxed"
                 />
               </div>
             </div>
@@ -552,20 +552,20 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* 1B. EMPTY WORLD PARCHMENT QUICK-START GUIDE (Auto-hides once populated) */}
       {/* ===================================================================== */}
       {project.entities.length === 0 && project.chapters.length === 0 && (
-        <div className="relative overflow-hidden medieval-folio-frame bg-[#EFE7D6]/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+        <div className="relative overflow-hidden medieval-folio-frame bg-aged/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
           <OrnateCornerFiligree />
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#B5832A]/40 pb-3">
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-brass/40 pb-3">
             <div className="flex-1 min-w-0 space-y-0.5 text-left">
-              <div className="font-epic text-xs font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
+              <div className="font-epic text-xs font-bold uppercase tracking-widest text-wax flex items-center gap-1.5">
                 <span>⚜ Panduan Langkah Awal Grimoire</span>
                 <span aria-hidden="true">·</span>
-                <span className="text-[#695A47]">Kanvas Dunia Siap Diisi</span>
+                <span className="text-ink-soft">Kanvas Dunia Siap Diisi</span>
               </div>
-              <h2 className="font-display text-xl sm:text-2xl font-bold text-[#231C14]">
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-ink">
                 Mulai Bangun Semesta Fantasi Anda dalam 4 Langkah
               </h2>
             </div>
-            <span className="text-xs text-[#695A47] italic shrink-0">
+            <span className="text-xs text-ink-soft italic shrink-0">
               Kartu ini otomatis tertutup setelah Anda membuat entitas atau bab pertama
             </span>
           </div>
@@ -574,18 +574,18 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
             <button
               type="button"
               onClick={handleOpenEditor}
-              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+              className="text-left p-4 rounded-xl bg-vellum hover:bg-parchment border border-brass/50 transition-all space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-wax">
                   Langkah I · Pondasi
                 </span>
-                <Edit3 className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+                <Edit3 className="w-4 h-4 text-brass group-hover:translate-x-0.5 transition-transform" />
               </div>
-              <div className="font-display text-base font-bold text-[#231C14]">
+              <div className="font-display text-base font-bold text-ink">
                 1. Isi Identitas & Kosmologi
               </div>
-              <p className="text-xs text-[#695A47] leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Tentukan nama dunia, premis utama, sistem kalender, konflik pusat, dan hukum kosmologi.
               </p>
             </button>
@@ -593,18 +593,18 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
             <button
               type="button"
               onClick={onOpenMapTab}
-              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+              className="text-left p-4 rounded-xl bg-vellum hover:bg-parchment border border-brass/50 transition-all space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-wax">
                   Langkah II · Geografi
                 </span>
-                <Compass className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+                <Compass className="w-4 h-4 text-brass group-hover:translate-x-0.5 transition-transform" />
               </div>
-              <div className="font-display text-base font-bold text-[#231C14]">
+              <div className="font-display text-base font-bold text-ink">
                 2. Lukis Peta Dunia Baru
               </div>
-              <p className="text-xs text-[#695A47] leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Gambar benua atau acak kepulauan, sematkan pin kastil/kota, dan tambahkan kaligrafi wilayah.
               </p>
             </button>
@@ -614,18 +614,18 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               onClick={() =>
                 onQuickCreateEntity?.('Tokoh Utama Baru', 'character', true)
               }
-              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+              className="text-left p-4 rounded-xl bg-vellum hover:bg-parchment border border-brass/50 transition-all space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-wax">
                   Langkah III · Penghuni
                 </span>
-                <Users className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+                <Users className="w-4 h-4 text-brass group-hover:translate-x-0.5 transition-transform" />
               </div>
-              <div className="font-display text-base font-bold text-[#231C14]">
+              <div className="font-display text-base font-bold text-ink">
                 3. Buat Karakter Pertama
               </div>
-              <p className="text-xs text-[#695A47] leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Mulai tulis lembar tokoh protagonis, dewa, ras, atau sistem sihir pertama di dunia Anda.
               </p>
             </button>
@@ -633,18 +633,18 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
             <button
               type="button"
               onClick={() => onOpenChapter('')}
-              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+              className="text-left p-4 rounded-xl bg-vellum hover:bg-parchment border border-brass/50 transition-all space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-wax">
                   Langkah IV · Naskah
                 </span>
-                <BookOpen className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+                <BookOpen className="w-4 h-4 text-brass group-hover:translate-x-0.5 transition-transform" />
               </div>
-              <div className="font-display text-base font-bold text-[#231C14]">
+              <div className="font-display text-base font-bold text-ink">
                 4. Susun Alur Bab Cerita
               </div>
-              <p className="text-xs text-[#695A47] leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Rancang Bab 1, susun adegan (*scene beats*), dan hubungkan tokoh serta lokasi dengan `[[Nama]]`.
               </p>
             </button>
@@ -657,33 +657,33 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Global Omnibar Search */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#9E2A2B]">
+              <div className="text-xs font-semibold text-wax">
                 Pencarian Lintas Semesta
               </div>
-              <h2 className="font-display text-xl font-bold text-[#231C14]">
+              <h2 className="font-display text-xl font-bold text-ink">
                 Global Search World Bible
               </h2>
             </div>
-            <Search className="w-5 h-5 text-[#695A47]" />
+            <Search className="w-5 h-5 text-ink-soft" />
           </div>
 
           <div className="relative">
-            <Search className="w-4 h-4 text-[#695A47] absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-ink-soft absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={globalQuery}
               onChange={(e) => setGlobalQuery(e.target.value)}
               placeholder="Ketik nama karakter, ras, skill, kota di peta, peristiwa sejarah, atau bab..."
-              className="w-full pl-10 pr-8 py-2.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-10 pr-8 py-2.5 text-xs bg-parchment border border-sepia rounded-lg text-ink placeholder:text-ink-soft focus:outline-none focus:border-wax"
             />
             {globalQuery && (
               <button
                 type="button"
                 onClick={() => setGlobalQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -696,7 +696,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               matchedStamps.length === 0 &&
               matchedTimeline.length === 0 &&
               matchedChapters.length === 0 ? (
-                <div className="text-xs text-[#695A47] py-4 text-center">
+                <div className="text-xs text-ink-soft py-4 text-center">
                   Tidak ditemukan hasil untuk “{globalQuery}”.
                 </div>
               ) : (
@@ -706,20 +706,20 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       key={ent.id}
                       type="button"
                       onClick={() => onSelectEntity(ent.id)}
-                      className="w-full text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center justify-between gap-3 cursor-pointer"
+                      className="w-full text-left p-3 rounded-lg bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center justify-between gap-3 cursor-pointer"
                     >
                       <div className="min-w-0">
-                        <div className="text-[11px] font-semibold text-[#9E2A2B]">
+                        <div className="text-[11px] font-semibold text-wax">
                           Tab {CATEGORY_META[ent.category].singular} · {ent.subtitle}
                         </div>
-                        <div className="font-display text-base font-bold text-[#231C14] truncate">
+                        <div className="font-display text-base font-bold text-ink truncate">
                           {ent.title}
                         </div>
-                        <p className="text-xs text-[#695A47] truncate">
+                        <p className="text-xs text-ink-soft truncate">
                           {ent.summary}
                         </p>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-[#9E2A2B] shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-wax shrink-0" />
                     </button>
                   ))}
 
@@ -728,13 +728,13 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       key={st.id}
                       type="button"
                       onClick={onOpenMapTab}
-                      className="w-full text-left p-2.5 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-between text-xs cursor-pointer"
+                      className="w-full text-left p-2.5 rounded-lg bg-parchment hover:bg-aged border border-sepia flex items-center justify-between text-xs cursor-pointer"
                     >
                       <span>
-                        <strong className="text-[#264653]">[Lokasi Peta]</strong>{' '}
+                        <strong className="text-sea">[Lokasi Peta]</strong>{' '}
                         {st.label}
                       </span>
-                      <span className="font-mono-tabular text-[#695A47]">
+                      <span className="font-mono-tabular text-ink-soft">
                         {st.x}°,{st.y}° →
                       </span>
                     </button>
@@ -745,13 +745,13 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       key={tm.id}
                       type="button"
                       onClick={onOpenTimelineTab}
-                      className="w-full text-left p-2.5 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-between text-xs cursor-pointer"
+                      className="w-full text-left p-2.5 rounded-lg bg-parchment hover:bg-aged border border-sepia flex items-center justify-between text-xs cursor-pointer"
                     >
                       <span>
-                        <strong className="text-[#B5832A]">[Timeline]</strong>{' '}
+                        <strong className="text-brass">[Timeline]</strong>{' '}
                         {tm.displayDate} — {tm.title}
                       </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#695A47]" />
+                      <ArrowRight className="w-3.5 h-3.5 text-ink-soft" />
                     </button>
                   ))}
 
@@ -760,35 +760,35 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                       key={ch.id}
                       type="button"
                       onClick={() => onOpenChapter(ch.id)}
-                      className="w-full text-left p-2.5 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-between text-xs cursor-pointer"
+                      className="w-full text-left p-2.5 rounded-lg bg-parchment hover:bg-aged border border-sepia flex items-center justify-between text-xs cursor-pointer"
                     >
                       <span>
-                        <strong className="text-[#2D5A43]">[Alur Bab]</strong>{' '}
+                        <strong className="text-forest">[Alur Bab]</strong>{' '}
                         Bab {ch.chapterNumber}: {ch.title}
                       </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#695A47]" />
+                      <ArrowRight className="w-3.5 h-3.5 text-ink-soft" />
                     </button>
                   ))}
                 </>
               )}
             </div>
           ) : (
-            <div className="p-3.5 rounded-lg bg-[#F6F1E6]/80 border border-[#D8CBB3]/80 flex flex-wrap items-center justify-between gap-2 text-xs text-[#695A47]">
+            <div className="p-3.5 rounded-lg bg-parchment/80 border border-sepia/80 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
               <span>
                 Indeks aktif mencakup{' '}
-                <strong className="font-mono-tabular text-[#231C14]">
+                <strong className="font-mono-tabular text-ink">
                   {project.entities.length}
                 </strong>{' '}
                 entri lore,{' '}
-                <strong className="font-mono-tabular text-[#231C14]">
+                <strong className="font-mono-tabular text-ink">
                   {project.mapData.stamps.length}
                 </strong>{' '}
                 titik peta,{' '}
-                <strong className="font-mono-tabular text-[#231C14]">
+                <strong className="font-mono-tabular text-ink">
                   {project.timeline.length}
                 </strong>{' '}
                 peristiwa sejarah, dan{' '}
-                <strong className="font-mono-tabular text-[#231C14]">
+                <strong className="font-mono-tabular text-ink">
                   {project.chapters.length}
                 </strong>{' '}
                 bab.
@@ -798,17 +798,17 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
         </div>
 
         {/* Quick Idea Scratchpad (Catatan Ide Kilat) */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#B5832A]">
+              <div className="text-xs font-semibold text-brass">
                 Tangkap Inspirasi Mendadak Sebelum Lupa
               </div>
-              <h2 className="font-display text-xl font-bold text-[#231C14]">
+              <h2 className="font-display text-xl font-bold text-ink">
                 Catatan Ide Kilat (Scratchpad)
               </h2>
             </div>
-            <Lightbulb className="w-5 h-5 text-[#B5832A]" />
+            <Lightbulb className="w-5 h-5 text-brass" />
           </div>
 
           <form onSubmit={handleAddScratchpadNote} className="flex flex-wrap gap-2">
@@ -817,14 +817,14 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               value={newNoteText}
               onChange={(e) => setNewNoteText(e.target.value)}
               placeholder="Tulis ide karakter, skill, plot twist, atau misteri kuno..."
-              className="flex-1 min-w-[200px] px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] focus:outline-none focus:border-[#9E2A2B]"
+              className="flex-1 min-w-[200px] px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink focus:outline-none focus:border-wax"
             />
             <select
               value={newNoteCategory}
               onChange={(e) =>
                 setNewNoteCategory(e.target.value as LoreCategory)
               }
-              className="px-2.5 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="px-2.5 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink"
             >
               {ALL_CATEGORIES.map((c) => (
                 <option key={c} value={c}>
@@ -843,24 +843,24 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
 
           <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
             {scratchpadNotes.length === 0 ? (
-              <div className="text-xs text-[#695A47] py-3 text-center">
+              <div className="text-xs text-ink-soft py-3 text-center">
                 Belum ada catatan ide kilat. Tambahkan ide baru di atas!
               </div>
             ) : (
               scratchpadNotes.map((note) => (
                 <div
                   key={note.id}
-                  className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-start justify-between gap-3"
+                  className="p-3 rounded-lg bg-parchment border border-sepia flex items-start justify-between gap-3"
                 >
                   <div className="space-y-1 min-w-0">
-                    <div className="text-[11px] text-[#695A47]">
+                    <div className="text-[11px] text-ink-soft">
                       Calon{' '}
-                      <span className="font-semibold text-[#9E2A2B]">
+                      <span className="font-semibold text-wax">
                         {CATEGORY_META[note.targetCategory].singular}
                       </span>{' '}
                       · {note.createdAt}
                     </div>
-                    <p className="text-xs text-[#231C14] leading-relaxed">
+                    <p className="text-xs text-ink leading-relaxed">
                       {note.text}
                     </p>
                   </div>
@@ -876,7 +876,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                     <button
                       type="button"
                       onClick={() => handleDeleteScratchpadNote(note.id)}
-                      className="p-1 text-[#695A47] hover:text-[#9E2A2B] cursor-pointer"
+                      className="p-1 text-ink-soft hover:text-wax cursor-pointer"
                       title="Hapus catatan"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -896,22 +896,22 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Sinopsis Utama, Konflik Pusat & Tema Cerita */}
-        <div className="relative overflow-hidden lg:col-span-6 bg-[#FBF8F1] border border-[#B5832A]/45 rounded-xl p-6 flex flex-col justify-between space-y-4">
-          <OrnateCornerFiligree className="text-[#B5832A]/45" />
+        <div className="relative overflow-hidden lg:col-span-6 bg-vellum border border-brass/45 rounded-xl p-6 flex flex-col justify-between space-y-4">
+          <OrnateCornerFiligree className="text-brass/45" />
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+            <div className="flex items-center justify-between border-b border-sepia pb-3">
               <div>
-                <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
+                <div className="font-epic text-xs font-semibold text-wax">
                   Jantung Narasi & Ketegangan Utama
                 </div>
-                <h2 className="font-display text-2xl font-bold text-[#231C14]">
+                <h2 className="font-display text-2xl font-bold text-ink">
                   Sinopsis & Konflik Pusat Semesta
                 </h2>
               </div>
-              <Flame className="w-5 h-5 text-[#9E2A2B]" />
+              <Flame className="w-5 h-5 text-wax" />
             </div>
 
-            <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
+            <div className="p-4 rounded-xl bg-parchment border border-sepia">
               <WikiTextRenderer
                 text={centralConflict}
                 entities={project.entities}
@@ -922,34 +922,34 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
             </div>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-1">
-            <div className="text-[11px] font-semibold text-[#695A47]">
+          <div className="p-3.5 rounded-xl bg-aged/70 border border-sepia space-y-1">
+            <div className="text-[11px] font-semibold text-ink-soft">
               Tema Filosofis & Naratif Cerita
             </div>
-            <div className="text-xs font-semibold text-[#231C14]">
+            <div className="text-xs font-semibold text-ink">
               {storyThemes}
             </div>
           </div>
         </div>
 
         {/* Pilar Kosmologi: Mitos Penciptaan & Hukum Dunia */}
-        <div className="relative overflow-hidden lg:col-span-6 bg-[#FBF8F1] border border-[#B5832A]/45 rounded-xl p-6 space-y-4">
-          <OrnateCornerFiligree className="text-[#B5832A]/45" />
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="relative overflow-hidden lg:col-span-6 bg-vellum border border-brass/45 rounded-xl p-6 space-y-4">
+          <OrnateCornerFiligree className="text-brass/45" />
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="font-epic text-xs font-semibold text-[#264653]">
+              <div className="font-epic text-xs font-semibold text-sea">
                 Asal-Usul Semesta & Aturan Fundamental
               </div>
-              <h2 className="font-display text-2xl font-bold text-[#231C14]">
+              <h2 className="font-display text-2xl font-bold text-ink">
                 Pilar Kosmologi & Hukum Dunia
               </h2>
             </div>
-            <Globe className="w-5 h-5 text-[#264653]" />
+            <Globe className="w-5 h-5 text-sea" />
           </div>
 
           <div className="space-y-3">
-            <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-              <div className="font-epic text-xs font-semibold text-[#9E2A2B]">
+            <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+              <div className="font-epic text-xs font-semibold text-wax">
                 I. Mitos Penciptaan & Sejarah Awal Kosmos
               </div>
               <WikiTextRenderer
@@ -961,8 +961,8 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-              <div className="font-epic text-xs font-semibold text-[#264653]">
+            <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+              <div className="font-epic text-xs font-semibold text-sea">
                 II. Hukum Alam, Benda Langit & Batas Sihir
               </div>
               <WikiTextRenderer
@@ -983,13 +983,13 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Pratinjau Mini Peta Dunia & Lokasi Kunci */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#2D5A43]">
+              <div className="text-xs font-semibold text-forest">
                 Geografi Kerajaan & Titik Strategis
               </div>
-              <h2 className="font-display text-2xl font-bold text-[#231C14]">
+              <h2 className="font-display text-2xl font-bold text-ink">
                 Pratinjau Peta Dunia & Lokasi Kunci
               </h2>
             </div>
@@ -998,7 +998,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
               onClick={onOpenMapTab}
               className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Compass className="w-3.5 h-3.5 text-[#B5832A]" />
+              <Compass className="w-3.5 h-3.5 text-brass" />
               Buka Kanvas Map Penuh →
             </button>
           </div>
@@ -1043,8 +1043,8 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 style={{ left: `${st.x}%`, top: `${st.y}%` }}
                 className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center gap-1"
               >
-                <span className="w-2.5 h-2.5 rounded-full bg-[#9E2A2B] border border-[#FBF8F1] shadow-xs" />
-                <span className="px-1.5 py-0.5 rounded bg-[#FBF8F1]/90 border border-[#3B2818]/40 text-[10px] font-bold text-[#231C14] whitespace-nowrap">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#9E2A2B] border border-vellum shadow-xs" />
+                <span className="px-1.5 py-0.5 rounded bg-vellum/90 border border-[#3B2818]/40 text-[10px] font-bold text-ink whitespace-nowrap">
                   {st.label.split(' ')[0]}
                 </span>
               </div>
@@ -1068,19 +1068,19 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                   onClick={() =>
                     linked ? onSelectEntity(linked.id) : onOpenMapTab()
                   }
-                  className="text-left p-3 rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center justify-between gap-2 cursor-pointer"
+                  className="text-left p-3 rounded-lg bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center justify-between gap-2 cursor-pointer"
                 >
                   <div className="min-w-0">
-                    <div className="font-display text-sm font-bold text-[#231C14] truncate">
+                    <div className="font-display text-sm font-bold text-ink truncate">
                       {stamp.label}
                     </div>
-                    <div className="text-[11px] text-[#695A47] truncate">
+                    <div className="text-[11px] text-ink-soft truncate">
                       {linked
                         ? `${CATEGORY_META[linked.category].singular}: ${linked.title}`
                         : 'Klik untuk lihat di Peta Dunia'}
                     </div>
                   </div>
-                  <span className="font-mono-tabular text-[11px] text-[#9E2A2B] shrink-0">
+                  <span className="font-mono-tabular text-[11px] text-wax shrink-0">
                     {stamp.x}°,{stamp.y}°
                   </span>
                 </button>
@@ -1090,22 +1090,22 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
         </div>
 
         {/* Sorotan Tokoh Utama & Konflik Kelompok */}
-        <div className="lg:col-span-6 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-6 space-y-4">
-          <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+        <div className="lg:col-span-6 bg-vellum border border-sepia rounded-xl p-6 space-y-4">
+          <div className="flex items-center justify-between border-b border-sepia pb-3">
             <div>
-              <div className="text-xs font-semibold text-[#9E2A2B]">
+              <div className="text-xs font-semibold text-wax">
                 Figur Kunci & Dinamika Politik
               </div>
-              <h2 className="font-display text-2xl font-bold text-[#231C14]">
+              <h2 className="font-display text-2xl font-bold text-ink">
                 Sorotan Tokoh Utama & Konflik Kelompok
               </h2>
             </div>
             <button
               type="button"
               onClick={onOpenGraphTab}
-              className="px-3.5 py-1.5 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+              className="px-3.5 py-1.5 text-xs font-semibold bg-parchment border border-sepia text-ink rounded-lg hover:bg-aged flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
             >
-              <GitBranch className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <GitBranch className="w-3.5 h-3.5 text-wax" />
               Buka Peta Relasi →
             </button>
           </div>
@@ -1117,31 +1117,31 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 key={char.id}
                 type="button"
                 onClick={() => onSelectEntity(char.id)}
-                className="arcana-card text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#B5832A]/45 transition-all flex items-start gap-3 cursor-pointer"
+                className="arcana-card text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-brass/45 transition-all flex items-start gap-3 cursor-pointer"
               >
                 {char.imageUrl ? (
                   <img
                     src={char.imageUrl}
                     alt={char.title}
                     referrerPolicy="no-referrer"
-                    className="w-14 h-16 rounded-lg object-cover border border-[#B5832A] shrink-0"
+                    className="w-14 h-16 rounded-lg object-cover border border-brass shrink-0"
                   />
                 ) : (
-                  <div className="w-14 h-16 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/60 flex items-center justify-center shrink-0">
-                    <Users className="w-5 h-5 text-[#9E2A2B]" />
+                  <div className="w-14 h-16 rounded-lg bg-aged border border-brass/60 flex items-center justify-center shrink-0">
+                    <Users className="w-5 h-5 text-wax" />
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-1 text-[10px] font-epic uppercase tracking-wider text-[#B5832A]">
-                    <span className="truncate text-[#9E2A2B] font-bold">
+                  <div className="flex items-center justify-between gap-1 text-[10px] font-epic uppercase tracking-wider text-brass">
+                    <span className="truncate text-wax font-bold">
                       {char.attributes.role || 'Tokoh Kunci'}
                     </span>
                     <span className="shrink-0">❖ 0{idx + 1}</span>
                   </div>
-                  <div className="font-display text-base font-bold text-[#231C14] truncate mt-0.5">
+                  <div className="font-display text-base font-bold text-ink truncate mt-0.5">
                     {char.title}
                   </div>
-                  <div className="text-[11px] italic text-[#695A47] truncate mt-0.5">
+                  <div className="text-[11px] italic text-ink-soft truncate mt-0.5">
                     {char.attributes.powerTier || char.subtitle}
                   </div>
                 </div>
@@ -1151,7 +1151,7 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
 
           {/* Active Faction & Kingdom Conflicts */}
           <div className="pt-2 space-y-2">
-            <div className="text-xs font-semibold text-[#695A47]">
+            <div className="text-xs font-semibold text-ink-soft">
               Dinamika Konflik & Aliansi Utama ({project.relationships.length} Relasi)
             </div>
             <div className="space-y-2">
@@ -1162,28 +1162,28 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
                 return (
                   <div
                     key={rel.id}
-                    className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between gap-3"
+                    className="p-3 rounded-lg bg-parchment border border-sepia flex items-center justify-between gap-3"
                   >
                     <div className="min-w-0">
-                      <div className="text-xs font-bold text-[#231C14] flex flex-wrap items-center gap-1.5">
+                      <div className="text-xs font-bold text-ink flex flex-wrap items-center gap-1.5">
                         <button
                           type="button"
                           onClick={() => onSelectEntity(sEnt.id)}
-                          className="hover:text-[#9E2A2B] underline decoration-[#D8CBB3] underline-offset-4 cursor-pointer"
+                          className="hover:text-wax underline decoration-sepia underline-offset-4 cursor-pointer"
                         >
                           {sEnt.title}
                         </button>
-                        <span className="text-[#9E2A2B]">↔</span>
+                        <span className="text-wax">↔</span>
                         <button
                           type="button"
                           onClick={() => onSelectEntity(tEnt.id)}
-                          className="hover:text-[#9E2A2B] underline decoration-[#D8CBB3] underline-offset-4 cursor-pointer"
+                          className="hover:text-wax underline decoration-sepia underline-offset-4 cursor-pointer"
                         >
                           {tEnt.title}
                         </button>
                       </div>
-                      <p className="text-[11px] text-[#695A47] mt-0.5">
-                        <strong className="text-[#9E2A2B]">{rel.label}:</strong>{' '}
+                      <p className="text-[11px] text-ink-soft mt-0.5">
+                        <strong className="text-wax">{rel.label}:</strong>{' '}
                         {rel.notes}
                       </p>
                     </div>

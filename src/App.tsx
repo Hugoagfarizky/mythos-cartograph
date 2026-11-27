@@ -983,10 +983,10 @@ export default function App() {
   return (
     <div
       data-theme={themeMode === 'grimoire-dark' ? 'grimoire-dark' : undefined}
-      className="min-h-screen flex flex-col medieval-desk-bg bg-[#F6F1E6] text-[#231C14] transition-colors duration-200"
+      className="min-h-screen flex flex-col medieval-desk-bg bg-parchment text-ink transition-colors duration-200"
     >
       {/* Top Bar: Brand & Active Breadcrumb on Left, Global Productivity Actions on Right */}
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-[#FBF8F1]/95 backdrop-blur-xs border-b-2 border-[#B5832A]/60 shadow-sm print:hidden">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-vellum/95 backdrop-blur-xs border-b-2 border-brass/60 shadow-sm print:hidden">
         <div className="flex items-center gap-3.5 min-w-0">
           <a
             href="#top"
@@ -994,23 +994,23 @@ export default function App() {
               e.preventDefault();
               handleSwitchTab('overview');
             }}
-            className="flex items-center gap-2 font-cartography text-xl font-bold tracking-wider text-[#231C14] whitespace-nowrap shrink-0"
+            className="flex items-center gap-2 font-cartography text-xl font-bold tracking-wider text-ink whitespace-nowrap shrink-0"
           >
-            <span className="text-[#B5832A] text-base" aria-hidden="true">
+            <span className="text-brass text-base" aria-hidden="true">
               ❖
             </span>
             <span>MythosCartograph</span>
           </a>
 
-          <div className="hidden lg:flex items-center gap-2 text-xs text-[#695A47] truncate">
-            <span className="text-[#B5832A]/60" aria-hidden="true">
+          <div className="hidden lg:flex items-center gap-2 text-xs text-ink-soft truncate">
+            <span className="text-brass/60" aria-hidden="true">
               ✦
             </span>
-            <span className="font-epic font-semibold text-[#231C14] truncate">
+            <span className="font-epic font-semibold text-ink truncate">
               {project.worldName}
             </span>
             <span aria-hidden="true">/</span>
-            <span className="font-epic text-[#9E2A2B] font-bold">
+            <span className="font-epic text-wax font-bold">
               {activeTabLabel}
             </span>
           </div>
@@ -1025,17 +1025,17 @@ export default function App() {
                 prev === 'parchment' ? 'grimoire-dark' : 'parchment'
               )
             }
-            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#B5832A]/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold bg-parchment hover:bg-aged text-ink border border-brass/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Ubah Suasana Meja Penulis: Perkamen Siang atau Grimoire Malam Lilin"
           >
             {themeMode === 'parchment' ? (
               <>
-                <Moon className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                <Moon className="w-3.5 h-3.5 text-wax" />
                 <span>Grimoire Malam</span>
               </>
             ) : (
               <>
-                <Sun className="w-3.5 h-3.5 text-[#B5832A]" />
+                <Sun className="w-3.5 h-3.5 text-brass" />
                 <span>Perkamen Siang</span>
               </>
             )}
@@ -1045,12 +1045,12 @@ export default function App() {
           <button
             type="button"
             onClick={() => setOmniSearchOpen(true)}
-            className="px-3 py-1.5 text-xs bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3 py-1.5 text-xs bg-parchment hover:bg-aged text-ink border border-sepia rounded-lg flex items-center gap-2 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Pencarian Global Lintas Entitas, Bab, Timeline & Pin Peta (Ctrl+K)"
           >
-            <Search className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <Search className="w-3.5 h-3.5 text-wax" />
             <span>Cari di Dunia...</span>
-            <kbd className="px-1.5 py-0.5 text-[10px] font-mono-tabular bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#695A47]">
+            <kbd className="px-1.5 py-0.5 text-[10px] font-mono-tabular bg-aged border border-sepia rounded text-ink-soft">
               Ctrl+K
             </kbd>
           </button>
@@ -1059,10 +1059,10 @@ export default function App() {
           <button
             type="button"
             onClick={() => setStoryGuideOpen(true)}
-            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#B5832A]/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold bg-parchment hover:bg-aged text-ink border border-brass/60 rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Panduan Cara Menyusun Cerita, Kamus 21 Section & Checklist Progres"
           >
-            <BookOpen className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <BookOpen className="w-3.5 h-3.5 text-wax" />
             <span>Panduan Cerita</span>
           </button>
 
@@ -1070,14 +1070,14 @@ export default function App() {
           <button
             type="button"
             onClick={() => setLoreHealthOpen(true)}
-            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold bg-parchment hover:bg-aged text-ink border border-sepia rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Inspektur Kesehatan & Kelengkapan Lore (Deteksi Tautan Kosong, Entitas Yatim & Lokasi Tanpa Pin)"
           >
             <ShieldCheck
               className={`w-3.5 h-3.5 ${
                 healthMetrics.uncreatedMentions.length > 0
-                  ? 'text-[#9E2A2B]'
-                  : 'text-[#2D5A43]'
+                  ? 'text-wax'
+                  : 'text-forest'
               }`}
             />
             <span>Kesehatan Lore ({healthMetrics.healthScore}%)</span>
@@ -1087,10 +1087,10 @@ export default function App() {
           <button
             type="button"
             onClick={() => setProjectManagerOpen(true)}
-            className="px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3 py-1.5 text-xs font-semibold bg-parchment hover:bg-aged text-ink border border-sepia rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             title="Kelola Multi-Proyek Dunia & Slot Snapshot Versi"
           >
-            <FolderKanban className="w-3.5 h-3.5 text-[#B5832A]" />
+            <FolderKanban className="w-3.5 h-3.5 text-brass" />
             <span>Proyek & Snapshot ({savedWorlds.length})</span>
           </button>
 
@@ -1130,9 +1130,9 @@ export default function App() {
             <OrnateCornerFiligree />
 
             {/* Kepala Halaman Folio Kitab (Medieval Running Folio Header) */}
-            <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#B5832A]/40 text-[11px] text-[#695A47] print:hidden">
+            <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-brass/40 text-[11px] text-ink-soft print:hidden">
               <div className="flex items-center gap-2">
-                <span className="text-[#9E2A2B]" aria-hidden="true">
+                <span className="text-wax" aria-hidden="true">
                   ⚜
                 </span>
                 <span className="font-epic uppercase tracking-[0.18em] font-semibold">
@@ -1140,11 +1140,11 @@ export default function App() {
                 </span>
               </div>
               <div className="flex items-center gap-2 font-epic tracking-[0.14em] uppercase">
-                <span className="text-[#B5832A]">Lembar Aktif:</span>
-                <span className="font-bold text-[#9E2A2B]">
+                <span className="text-brass">Lembar Aktif:</span>
+                <span className="font-bold text-wax">
                   {activeTabLabel}
                 </span>
-                <span className="text-[#B5832A]" aria-hidden="true">
+                <span className="text-brass" aria-hidden="true">
                   ✦
                 </span>
               </div>
@@ -1153,7 +1153,7 @@ export default function App() {
             {/* SATU-SATUNYA Tempat Navigasi Tab Bagian World Bible — Dikelompokkan dalam 4 Pilar Semesta Fantasi */}
             <nav
               aria-label="Navigasi Bagian World Bible"
-              className="relative z-10 medieval-folio-frame bg-[#EFE7D6]/90 rounded-2xl p-3.5 shadow-xs"
+              className="relative z-10 medieval-folio-frame bg-aged/90 rounded-2xl p-3.5 shadow-xs"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-12 gap-3">
                 {FANTASY_PILLARS.map((pillar) => {
@@ -1161,11 +1161,11 @@ export default function App() {
                   return (
                     <div
                       key={pillar.roman}
-                      className={`${colSpan} relative bg-[#FBF8F1]/80 border border-[#B5832A]/40 rounded-xl px-3 py-2.5 flex flex-col justify-start gap-2 shadow-2xs`}
+                      className={`${colSpan} relative bg-vellum/80 border border-brass/40 rounded-xl px-3 py-2.5 flex flex-col justify-start gap-2 shadow-2xs`}
                     >
-                      <div className="flex items-center justify-between gap-1 border-b border-[#B5832A]/35 pb-1.5">
-                        <span className="font-epic text-[10px] font-bold uppercase tracking-[0.15em] text-[#B5832A] flex items-center gap-1">
-                          <span className="text-[#9E2A2B]" aria-hidden="true">
+                      <div className="flex items-center justify-between gap-1 border-b border-brass/35 pb-1.5">
+                        <span className="font-epic text-[10px] font-bold uppercase tracking-[0.15em] text-brass flex items-center gap-1">
+                          <span className="text-wax" aria-hidden="true">
                             §
                           </span>
                           <span>
@@ -1173,7 +1173,7 @@ export default function App() {
                           </span>
                         </span>
                         <span
-                          className="text-[11px] text-[#9E2A2B]"
+                          className="text-[11px] text-wax"
                           aria-hidden="true"
                         >
                           ❖
@@ -1192,12 +1192,12 @@ export default function App() {
                               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                                 isActive
                                   ? 'wax-seal-btn text-white'
-                                  : 'bg-[#FBF8F1] text-[#231C14] hover:border-[#B5832A] border border-[#D8CBB3]/90'
+                                  : 'bg-vellum text-ink hover:border-brass border border-sepia/90'
                               }`}
                             >
                               <IconComponent
                                 className={`w-3.5 h-3.5 shrink-0 ${
-                                  isActive ? 'text-[#FBF8F1]' : 'text-[#B5832A]'
+                                  isActive ? 'text-[#FBF8F1]' : 'text-brass'
                                 }`}
                               />
                               <span>{tab.label}</span>
@@ -1206,7 +1206,7 @@ export default function App() {
                                   className={`font-mono-tabular text-[10px] px-1.5 py-0.2 rounded ${
                                     isActive
                                       ? 'bg-black/25 text-white'
-                                      : 'bg-[#EFE7D6] text-[#695A47]'
+                                      : 'bg-aged text-ink-soft'
                                   }`}
                                 >
                                   {count}
@@ -1435,7 +1435,7 @@ export default function App() {
             </div>
 
             {/* Kolofon Kaki Halaman Kitab (Medieval Colophon Footer inside Tome) */}
-            <div className="relative z-10 pt-4 border-t border-[#B5832A]/35 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#695A47] font-epic tracking-wider print:hidden">
+            <div className="relative z-10 pt-4 border-t border-brass/35 flex flex-wrap items-center justify-between gap-2 text-[11px] text-ink-soft font-epic tracking-wider print:hidden">
               <span>
                 ✦ Ex Libris · {project.worldName || 'Kitab Semesta Fantasi'} ✦
               </span>
@@ -1448,8 +1448,8 @@ export default function App() {
       </main>
 
       {/* Quiet Editorial Footer */}
-      <footer className="border-t border-[#B5832A]/40 bg-[#EFE7D6]/80 px-6 py-4 mt-8 print:hidden">
-        <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-[#695A47]">
+      <footer className="border-t border-brass/40 bg-aged/80 px-6 py-4 mt-8 print:hidden">
+        <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-ink-soft">
           <span>
             MythosCartograph — Studio World Bible, Peta Abad Pertengahan & Arsitektur Cerita
           </span>
@@ -1457,14 +1457,14 @@ export default function App() {
             <button
               type="button"
               onClick={() => setProjectManagerOpen(true)}
-              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
+              className="hover:text-ink underline underline-offset-4 cursor-pointer"
             >
               Manajer Proyek & Snapshot ({savedWorlds.length} Dunia)
             </button>
             <button
               type="button"
               onClick={() => setExportStudioOpen(true)}
-              className="hover:text-[#231C14] underline underline-offset-4 cursor-pointer"
+              className="hover:text-ink underline underline-offset-4 cursor-pointer"
             >
               Ekspor Buku (.MD / PDF / .JSON)
             </button>
@@ -1474,8 +1474,8 @@ export default function App() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 bg-[#231C14] text-[#FBF8F1] px-4 py-2.5 rounded-xl shadow-lg border border-[#B5832A] text-xs font-medium flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-[#B5832A]" />
+        <div className="fixed bottom-5 right-5 z-50 bg-[#231C14] text-[#FBF8F1] px-4 py-2.5 rounded-xl shadow-lg border border-brass text-xs font-medium flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-brass" />
           <span>{toastMessage}</span>
         </div>
       )}
@@ -1483,20 +1483,20 @@ export default function App() {
       {/* Modal 1: AI Lore Consistency Auditor */}
       {auditModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-xl">
-            <div className="flex items-start justify-between gap-4 border-b border-[#D8CBB3] pb-3">
+          <div className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-2xl w-full max-h-[85vh] overflow-y-auto p-6 space-y-4 shadow-xl">
+            <div className="flex items-start justify-between gap-4 border-b border-sepia pb-3">
               <div>
-                <div className="text-xs font-semibold text-[#9E2A2B]">
+                <div className="text-xs font-semibold text-wax">
                   Editor Konsistensi Semesta Cerita (AI Lore Auditor)
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                <h3 className="font-display text-2xl font-bold text-ink">
                   Hasil Audit: {auditTargetTitle}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setAuditModalOpen(false)}
-                className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1504,15 +1504,15 @@ export default function App() {
 
             {auditLoading && (
               <div className="py-12 flex flex-col items-center justify-center gap-3 text-center">
-                <Loader2 className="w-7 h-7 text-[#9E2A2B] animate-spin" />
-                <div className="text-sm font-semibold text-[#231C14]">
+                <Loader2 className="w-7 h-7 text-wax animate-spin" />
+                <div className="text-sm font-semibold text-ink">
                   Memeriksa silang dengan aturan Power System, Timeline, dan Karakter...
                 </div>
               </div>
             )}
 
             {auditError && (
-              <div className="p-4 rounded-xl bg-[#9E2A2B]/10 border border-[#9E2A2B] text-xs text-[#9E2A2B] space-y-1">
+              <div className="p-4 rounded-xl bg-wax/10 border border-wax text-xs text-wax space-y-1">
                 <div className="font-bold">Gagal Menjalankan Audit</div>
                 <p>{auditError}</p>
               </div>
@@ -1520,42 +1520,42 @@ export default function App() {
 
             {auditResult && (
               <div className="space-y-4">
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                  <div className="text-xs font-semibold text-[#9E2A2B]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                  <div className="text-xs font-semibold text-wax">
                     Status Konsistensi: {auditResult.overallStatus}
                   </div>
-                  <p className="text-sm text-[#231C14] leading-relaxed">
+                  <p className="text-sm text-ink leading-relaxed">
                     {auditResult.summary}
                   </p>
                 </div>
 
                 <div className="space-y-2.5">
-                  <div className="text-xs font-semibold text-[#695A47]">
+                  <div className="text-xs font-semibold text-ink-soft">
                     Temuan Potensi Kontradiksi / Catatan Lore (
                     {auditResult.issues?.length || 0})
                   </div>
                   {!auditResult.issues || auditResult.issues.length === 0 ? (
-                    <div className="p-3.5 rounded-xl bg-[#EFE7D6] text-xs text-[#2D5A43] font-medium">
+                    <div className="p-3.5 rounded-xl bg-aged text-xs text-forest font-medium">
                       Tidak ditemukan kontradiksi langsung dengan entitas World Bible yang ada.
                     </div>
                   ) : (
                     auditResult.issues.map((iss, i) => (
                       <div
                         key={i}
-                        className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5"
+                        className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5"
                       >
-                        <div className="flex items-center justify-between text-xs text-[#695A47]">
-                          <span className="font-semibold text-[#9E2A2B]">
+                        <div className="flex items-center justify-between text-xs text-ink-soft">
+                          <span className="font-semibold text-wax">
                             [{iss.severity}] {iss.category}
                           </span>
                         </div>
-                        <div className="font-display text-lg font-bold text-[#231C14]">
+                        <div className="font-display text-lg font-bold text-ink">
                           {iss.title}
                         </div>
-                        <p className="text-xs text-[#231C14]/90 leading-relaxed">
+                        <p className="text-xs text-ink/90 leading-relaxed">
                           {iss.explanation}
                         </p>
-                        <div className="pt-1 text-xs text-[#2D5A43] font-medium">
+                        <div className="pt-1 text-xs text-forest font-medium">
                           Saran Solusi: {iss.suggestedFix}
                         </div>
                       </div>
@@ -1565,11 +1565,11 @@ export default function App() {
 
                 {auditResult.creativeSuggestions &&
                   auditResult.creativeSuggestions.length > 0 && (
-                    <div className="p-4 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-2">
-                      <div className="text-xs font-semibold text-[#231C14]">
+                    <div className="p-4 rounded-xl bg-aged/70 border border-sepia space-y-2">
+                      <div className="text-xs font-semibold text-ink">
                         Saran Pengembangan Cerita Terkait:
                       </div>
-                      <ul className="space-y-1.5 text-xs text-[#231C14] list-disc pl-4">
+                      <ul className="space-y-1.5 text-xs text-ink list-disc pl-4">
                         {auditResult.creativeSuggestions.map((s, idx) => (
                           <li key={idx}>{s}</li>
                         ))}
@@ -1585,20 +1585,20 @@ export default function App() {
       {/* Modal 2: AI Lore Brainstorming Generator */}
       {brainstormOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-3xl w-full max-h-[88vh] overflow-y-auto p-6 space-y-4 shadow-xl">
-            <div className="flex items-start justify-between gap-4 border-b border-[#D8CBB3] pb-3">
+          <div className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-3xl w-full max-h-[88vh] overflow-y-auto p-6 space-y-4 shadow-xl">
+            <div className="flex items-start justify-between gap-4 border-b border-sepia pb-3">
               <div>
-                <div className="text-xs font-semibold text-[#B5832A]">
+                <div className="text-xs font-semibold text-brass">
                   Asisten Perancang Semesta (AI Worldbuilding Architect)
                 </div>
-                <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                <h3 className="font-display text-2xl font-bold text-ink">
                   Brainstorm Entitas Baru untuk {project.worldName}
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setBrainstormOpen(false)}
-                className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1607,7 +1607,7 @@ export default function App() {
             <form onSubmit={handleRunBrainstorm} className="space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Kategori Entitas
                   </label>
                   <select
@@ -1615,7 +1615,7 @@ export default function App() {
                     onChange={(e) =>
                       setBrainstormCategory(e.target.value as LoreCategory)
                     }
-                    className="w-full px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg"
                   >
                     {Object.entries(CATEGORY_META).map(([k, v]) => (
                       <option key={k} value={k}>
@@ -1625,7 +1625,7 @@ export default function App() {
                   </select>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Arahan / Tema Khusus (Opsional)
                   </label>
                   <div className="flex gap-2">
@@ -1634,7 +1634,7 @@ export default function App() {
                       value={brainstormFocus}
                       onChange={(e) => setBrainstormFocus(e.target.value)}
                       placeholder="Contoh: Faksi mata-mata di Solis Prime atau skill terlarang jalur bulan..."
-                      className="flex-1 px-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                      className="flex-1 px-3 py-2 text-xs bg-parchment border border-sepia rounded-lg"
                     />
                     <button
                       type="submit"
@@ -1650,15 +1650,15 @@ export default function App() {
 
             {brainstormLoading && (
               <div className="py-10 flex flex-col items-center justify-center gap-2">
-                <Loader2 className="w-6 h-6 text-[#9E2A2B] animate-spin" />
-                <span className="text-xs text-[#695A47]">
+                <Loader2 className="w-6 h-6 text-wax animate-spin" />
+                <span className="text-xs text-ink-soft">
                   Menyusun konsep yang terhubung dengan entitas di {project.worldName}...
                 </span>
               </div>
             )}
 
             {brainstormError && (
-              <div className="p-3.5 rounded-xl bg-[#9E2A2B]/10 border border-[#9E2A2B] text-xs text-[#9E2A2B]">
+              <div className="p-3.5 rounded-xl bg-wax/10 border border-wax text-xs text-wax">
                 {brainstormError}
               </div>
             )}
@@ -1668,14 +1668,14 @@ export default function App() {
                 {brainstormIdeas.map((idea, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2"
+                    className="p-4 rounded-xl bg-parchment border border-sepia space-y-2"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <div className="font-display text-xl font-bold text-[#231C14]">
+                        <div className="font-display text-xl font-bold text-ink">
                           {idea.title}
                         </div>
-                        <div className="text-xs italic text-[#695A47]">
+                        <div className="text-xs italic text-ink-soft">
                           {idea.subtitle}
                         </div>
                       </div>
@@ -1687,13 +1687,13 @@ export default function App() {
                         + Tambahkan ke Tab {CATEGORY_META[brainstormCategory].singular}
                       </button>
                     </div>
-                    <p className="text-xs font-medium text-[#231C14]">
+                    <p className="text-xs font-medium text-ink">
                       {idea.summary}
                     </p>
-                    <p className="text-xs text-[#695A47] whitespace-pre-line leading-relaxed">
+                    <p className="text-xs text-ink-soft whitespace-pre-line leading-relaxed">
                       {idea.content}
                     </p>
-                    <div className="text-xs text-[#9E2A2B] font-medium pt-1">
+                    <div className="text-xs text-wax font-medium pt-1">
                       Pemicu Plot: {idea.plotHook}
                     </div>
                   </div>

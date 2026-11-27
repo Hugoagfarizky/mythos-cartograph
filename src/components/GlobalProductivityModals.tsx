@@ -229,26 +229,26 @@ export const GlobalOmniSearchModal: React.FC<GlobalOmniSearchModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[82vh]"
+        className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[82vh]"
         onClick={(e) => e.stopPropagation()}
         onKeyDown={handleKeyDown}
       >
         {/* Top Search Bar */}
-        <div className="p-4 border-b border-[#D8CBB3] bg-[#F6F1E6] space-y-3">
+        <div className="p-4 border-b border-sepia bg-parchment space-y-3">
           <div className="relative flex items-center">
-            <Search className="w-4 h-4 text-[#9E2A2B] absolute left-3.5 pointer-events-none" />
+            <Search className="w-4 h-4 text-wax absolute left-3.5 pointer-events-none" />
             <input
               type="text"
               autoFocus
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={`Cari tokoh, wilayah, skill, peristiwa sejarah, pin peta, atau bab di ${project.worldName}...`}
-              className="w-full pl-10 pr-20 py-2.5 text-sm bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl text-[#231C14] placeholder:text-[#695A47]/70 focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-10 pr-20 py-2.5 text-sm bg-vellum border border-sepia rounded-xl text-ink placeholder:text-ink-soft/70 focus:outline-none focus:border-wax"
             />
             <button
               type="button"
               onClick={onClose}
-              className="absolute right-2.5 px-2 py-1 text-[11px] font-mono-tabular text-[#695A47] bg-[#EFE7D6] hover:text-[#231C14] rounded-md cursor-pointer"
+              className="absolute right-2.5 px-2 py-1 text-[11px] font-mono-tabular text-ink-soft bg-aged hover:text-ink rounded-md cursor-pointer"
             >
               ESC
             </button>
@@ -275,7 +275,7 @@ export const GlobalOmniSearchModal: React.FC<GlobalOmniSearchModalProps> = ({
                     className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                       active
                         ? 'bg-[#9E2A2B] text-white'
-                        : 'bg-[#EFE7D6] text-[#695A47] hover:text-[#231C14]'
+                        : 'bg-aged text-ink-soft hover:text-ink'
                     }`}
                   >
                     {tab.label}
@@ -283,20 +283,20 @@ export const GlobalOmniSearchModal: React.FC<GlobalOmniSearchModalProps> = ({
                 );
               })}
             </div>
-            <span className="text-[11px] text-[#695A47] font-mono-tabular">
+            <span className="text-[11px] text-ink-soft font-mono-tabular">
               ↑↓ Navigasi · Enter Buka
             </span>
           </div>
         </div>
 
         {/* Results List */}
-        <div className="flex-1 overflow-y-auto divide-y divide-[#D8CBB3]/60">
+        <div className="flex-1 overflow-y-auto divide-y divide-sepia/60">
           {results.length === 0 ? (
             <div className="py-12 px-6 text-center space-y-1.5">
-              <div className="font-display text-lg font-bold text-[#231C14]">
+              <div className="font-display text-lg font-bold text-ink">
                 Tidak Ada Hasil yang Cocok
               </div>
-              <p className="text-xs text-[#695A47]">
+              <p className="text-xs text-ink-soft">
                 Coba gunakan kata kunci lain atau ubah filter cakupan di atas.
               </p>
             </div>
@@ -310,29 +310,29 @@ export const GlobalOmniSearchModal: React.FC<GlobalOmniSearchModalProps> = ({
                   onMouseEnter={() => setActiveIndex(idx)}
                   onClick={() => handleActivateItem(item)}
                   className={`w-full text-left px-4 py-3 flex items-start justify-between gap-3 transition-colors cursor-pointer ${
-                    isSelected ? 'bg-[#EFE7D6]' : 'hover:bg-[#F6F1E6]'
+                    isSelected ? 'bg-aged' : 'hover:bg-parchment'
                   }`}
                 >
                   <div className="min-w-0 space-y-0.5">
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-semibold text-[#9E2A2B] uppercase tracking-wider">
+                      <span className="text-[11px] font-semibold text-wax uppercase tracking-wider">
                         {item.badgeText}
                       </span>
                       <span className="text-[#D8CBB3]">•</span>
-                      <span className="text-xs text-[#695A47] truncate">
+                      <span className="text-xs text-ink-soft truncate">
                         {item.subtitle}
                       </span>
                     </div>
-                    <div className="font-display text-base font-bold text-[#231C14] truncate">
+                    <div className="font-display text-base font-bold text-ink truncate">
                       {item.title}
                     </div>
                     {item.matchSnippet && (
-                      <p className="text-xs text-[#695A47] line-clamp-1">
+                      <p className="text-xs text-ink-soft line-clamp-1">
                         {item.matchSnippet}
                       </p>
                     )}
                   </div>
-                  <div className="shrink-0 self-center flex items-center gap-1 text-xs font-semibold text-[#9E2A2B]">
+                  <div className="shrink-0 self-center flex items-center gap-1 text-xs font-semibold text-wax">
                     <span>Buka</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
@@ -431,31 +431,31 @@ export const MultiWorldProjectManagerModal: React.FC<
       onClick={onClose}
     >
       <div
-        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex items-start justify-between gap-4">
+        <div className="px-6 py-4 bg-parchment border-b border-sepia flex items-start justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
               <FolderKanban className="w-3.5 h-3.5" />
               <span>Manajer Multi-Proyek Semesta & Slot Snapshot</span>
             </div>
-            <h3 className="font-display text-2xl font-bold text-[#231C14]">
+            <h3 className="font-display text-2xl font-bold text-ink">
               Perpustakaan Proyek Dunia & Titik Pemulihan Versi
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+            className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Sub-Navigation Bar */}
-        <div className="px-6 py-3 bg-[#EFE7D6]/70 border-b border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+        <div className="px-6 py-3 bg-aged/70 border-b border-sepia flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -463,7 +463,7 @@ export const MultiWorldProjectManagerModal: React.FC<
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 activeSubTab === 'worlds'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                  : 'bg-vellum text-ink border border-sepia'
               }`}
             >
               <FolderKanban className="w-3.5 h-3.5" />
@@ -475,7 +475,7 @@ export const MultiWorldProjectManagerModal: React.FC<
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 activeSubTab === 'snapshots'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                  : 'bg-vellum text-ink border border-sepia'
               }`}
             >
               <History className="w-3.5 h-3.5" />
@@ -487,17 +487,17 @@ export const MultiWorldProjectManagerModal: React.FC<
             <button
               type="button"
               onClick={onTriggerImportJson}
-              className="px-3 py-1.5 text-xs font-semibold bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold bg-vellum border border-sepia text-ink rounded-lg hover:bg-aged flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <Upload className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <Upload className="w-3.5 h-3.5 text-wax" />
               <span>Impor Dunia (.JSON)</span>
             </button>
             <button
               type="button"
               onClick={onRestoreStarterWorld}
-              className="px-3 py-1.5 text-xs font-semibold bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold bg-vellum border border-sepia text-ink rounded-lg hover:bg-aged flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#B5832A]" />
+              <RotateCcw className="w-3.5 h-3.5 text-brass" />
               <span>Pulihkan Dunia Contoh Aethelia</span>
             </button>
           </div>
@@ -508,12 +508,12 @@ export const MultiWorldProjectManagerModal: React.FC<
           {activeSubTab === 'worlds' && (
             <>
               {/* Top Action Bar for Worlds */}
-              <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F6F1E6] p-4 rounded-xl border border-[#D8CBB3]">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-parchment p-4 rounded-xl border border-sepia">
                 <div>
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     Kelola Banyak Semesta Cerita Sekaligus
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Semua proyek dunia disimpan otomatis di browser Anda. Anda dapat membuat dunia baru tanpa menghapus dunia yang sedang aktif.
                   </p>
                 </div>
@@ -531,14 +531,14 @@ export const MultiWorldProjectManagerModal: React.FC<
               {showNewWorldForm && (
                 <form
                   onSubmit={handleCreateWorldSubmit}
-                  className="p-5 rounded-xl bg-[#F6F1E6] border-2 border-[#9E2A2B]/40 space-y-4"
+                  className="p-5 rounded-xl bg-parchment border-2 border-wax/40 space-y-4"
                 >
-                  <div className="font-display text-lg font-bold text-[#231C14]">
+                  <div className="font-display text-lg font-bold text-ink">
                     Inisialisasi Semesta Cerita Baru
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                      <label className="block text-xs font-semibold text-ink-soft mb-1">
                         Nama Dunia / Proyek Novel *
                       </label>
                       <input
@@ -547,11 +547,11 @@ export const MultiWorldProjectManagerModal: React.FC<
                         value={newWorldName}
                         onChange={(e) => setNewWorldName(e.target.value)}
                         placeholder="Contoh: Kekaisaran Langit Vermilion"
-                        className="w-full px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                      <label className="block text-xs font-semibold text-ink-soft mb-1">
                         Genre Cerita
                       </label>
                       <input
@@ -559,11 +559,11 @@ export const MultiWorldProjectManagerModal: React.FC<
                         value={newWorldGenre}
                         onChange={(e) => setNewWorldGenre(e.target.value)}
                         placeholder="Contoh: Dark Fantasy / Steampunk"
-                        className="w-full px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                      <label className="block text-xs font-semibold text-ink-soft mb-1">
                         Sistem Kalender
                       </label>
                       <input
@@ -571,12 +571,12 @@ export const MultiWorldProjectManagerModal: React.FC<
                         value={newWorldCalendar}
                         onChange={(e) => setNewWorldCalendar(e.target.value)}
                         placeholder="Contoh: Tahun Surya (TS)"
-                        className="w-full px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">
                       Tagline / Premis Utama Dunia
                     </label>
                     <input
@@ -584,14 +584,14 @@ export const MultiWorldProjectManagerModal: React.FC<
                       value={newWorldTagline}
                       onChange={(e) => setNewWorldTagline(e.target.value)}
                       placeholder="Contoh: Benua terapung yang bertahan hidup di atas badai abu abadi..."
-                      className="w-full px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                      className="w-full px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                     />
                   </div>
                   <div className="flex justify-end gap-2">
                     <button
                       type="button"
                       onClick={() => setShowNewWorldForm(false)}
-                      className="px-3.5 py-2 text-xs font-semibold bg-[#EFE7D6] text-[#231C14] rounded-lg cursor-pointer"
+                      className="px-3.5 py-2 text-xs font-semibold bg-aged text-ink rounded-lg cursor-pointer"
                     >
                       Batal
                     </button>
@@ -614,28 +614,28 @@ export const MultiWorldProjectManagerModal: React.FC<
                       key={world.id}
                       className={`p-4 rounded-xl border transition-all flex flex-col justify-between gap-4 ${
                         isCurrent
-                          ? 'bg-[#F6F1E6] border-2 border-[#9E2A2B] shadow-xs'
-                          : 'bg-[#FBF8F1] border-[#D8CBB3]'
+                          ? 'bg-parchment border-2 border-wax shadow-xs'
+                          : 'bg-vellum border-sepia'
                       }`}
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#9E2A2B]">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-wax">
                             {isCurrent ? '● Proyek Sedang Aktif' : world.genre || 'Proyek Tersimpan'}
                           </span>
-                          <span className="text-[11px] font-mono-tabular text-[#695A47]">
+                          <span className="text-[11px] font-mono-tabular text-ink-soft">
                             {world.entities.length} Entitas · {world.chapters.length} Bab
                           </span>
                         </div>
-                        <h4 className="font-display text-xl font-bold text-[#231C14]">
+                        <h4 className="font-display text-xl font-bold text-ink">
                           {world.worldName}
                         </h4>
-                        <p className="text-xs text-[#695A47] line-clamp-2">
+                        <p className="text-xs text-ink-soft line-clamp-2">
                           {world.tagline}
                         </p>
                       </div>
 
-                      <div className="pt-3 border-t border-[#D8CBB3]/70 flex flex-wrap items-center justify-between gap-2">
+                      <div className="pt-3 border-t border-sepia/70 flex flex-wrap items-center justify-between gap-2">
                         <div className="flex items-center gap-1.5">
                           {!isCurrent ? (
                             <button
@@ -649,14 +649,14 @@ export const MultiWorldProjectManagerModal: React.FC<
                               Buka Dunia Ini
                             </button>
                           ) : (
-                            <span className="px-2.5 py-1 text-xs font-semibold bg-[#EFE7D6] text-[#231C14] rounded-lg whitespace-nowrap shrink-0">
+                            <span className="px-2.5 py-1 text-xs font-semibold bg-aged text-ink rounded-lg whitespace-nowrap shrink-0">
                               Sedang Dibuka
                             </span>
                           )}
                           <button
                             type="button"
                             onClick={() => onDuplicateWorld(world)}
-                            className="px-2.5 py-1.5 text-xs font-semibold bg-[#EFE7D6] text-[#231C14] hover:bg-[#D8CBB3] rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+                            className="px-2.5 py-1.5 text-xs font-semibold bg-aged text-ink hover:bg-sepia rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
                             title="Gandakan proyek dunia ini"
                           >
                             <Copy className="w-3.5 h-3.5" />
@@ -668,7 +668,7 @@ export const MultiWorldProjectManagerModal: React.FC<
                           <button
                             type="button"
                             onClick={() => onExportWorld(world)}
-                            className="p-1.5 text-xs text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3] rounded-lg cursor-pointer"
+                            className="p-1.5 text-xs text-ink-soft hover:text-ink border border-sepia rounded-lg cursor-pointer"
                             title="Unduh Berkas JSON"
                           >
                             <Download className="w-3.5 h-3.5" />
@@ -677,7 +677,7 @@ export const MultiWorldProjectManagerModal: React.FC<
                             <button
                               type="button"
                               onClick={() => onDeleteWorld(world.id)}
-                              className="p-1.5 text-xs text-[#9E2A2B] hover:bg-[#9E2A2B]/10 border border-[#D8CBB3] rounded-lg cursor-pointer"
+                              className="p-1.5 text-xs text-wax hover:bg-wax/10 border border-sepia rounded-lg cursor-pointer"
                               title="Hapus proyek dunia ini"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -697,14 +697,14 @@ export const MultiWorldProjectManagerModal: React.FC<
               {/* Create Snapshot Form */}
               <form
                 onSubmit={handleSaveSnapshotSubmit}
-                className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                className="p-4 rounded-xl bg-parchment border border-sepia space-y-3"
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <div className="text-xs font-semibold text-[#231C14]">
+                    <div className="text-xs font-semibold text-ink">
                       Simpan Titik Versi Baru untuk "{activeProject.worldName}"
                     </div>
-                    <p className="text-xs text-[#695A47]">
+                    <p className="text-xs text-ink-soft">
                       Buat cadangan instan sebelum melakukan perombakan besar pada plot, peta, atau entitas.
                     </p>
                   </div>
@@ -715,7 +715,7 @@ export const MultiWorldProjectManagerModal: React.FC<
                     value={snapshotLabel}
                     onChange={(e) => setSnapshotLabel(e.target.value)}
                     placeholder="Catatan versi (contoh: Sebelum merombak Babak II atau Draf Revisi Faksi)..."
-                    className="flex-1 px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    className="flex-1 px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                   />
                   <button
                     type="submit"
@@ -729,11 +729,11 @@ export const MultiWorldProjectManagerModal: React.FC<
 
               {/* Snapshots List */}
               {snapshots.length === 0 ? (
-                <div className="py-12 px-6 text-center rounded-xl border border-dashed border-[#D8CBB3] space-y-1.5">
-                  <div className="font-display text-lg font-bold text-[#231C14]">
+                <div className="py-12 px-6 text-center rounded-xl border border-dashed border-sepia space-y-1.5">
+                  <div className="font-display text-lg font-bold text-ink">
                     Belum Ada Snapshot Versi Tersimpan
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Klik tombol "+ Simpan Snapshot Sekarang" di atas untuk merekam kondisi proyek saat ini sebagai titik pemulihan aman.
                   </p>
                 </div>
@@ -742,11 +742,11 @@ export const MultiWorldProjectManagerModal: React.FC<
                   {snapshots.map((snap) => (
                     <div
                       key={snap.id}
-                      className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-4"
+                      className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-4"
                     >
                       <div className="space-y-0.5">
-                        <div className="flex items-center gap-2 text-xs text-[#695A47]">
-                          <span className="font-semibold text-[#9E2A2B]">
+                        <div className="flex items-center gap-2 text-xs text-ink-soft">
+                          <span className="font-semibold text-wax">
                             {snap.worldName}
                           </span>
                           <span>•</span>
@@ -756,7 +756,7 @@ export const MultiWorldProjectManagerModal: React.FC<
                             {snap.entityCount} Entitas, {snap.chapterCount} Bab
                           </span>
                         </div>
-                        <div className="font-display text-lg font-bold text-[#231C14]">
+                        <div className="font-display text-lg font-bold text-ink">
                           {snap.label}
                         </div>
                       </div>
@@ -770,13 +770,13 @@ export const MultiWorldProjectManagerModal: React.FC<
                           }}
                           className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3B2E1E] rounded-lg flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
                         >
-                          <RotateCcw className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <RotateCcw className="w-3.5 h-3.5 text-brass" />
                           <span>Pulihkan Versi Ini</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => onExportWorld(snap.projectData)}
-                          className="px-2.5 py-1.5 text-xs font-semibold bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] hover:bg-[#EFE7D6] rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+                          className="px-2.5 py-1.5 text-xs font-semibold bg-vellum border border-sepia text-ink hover:bg-aged rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
                         >
                           <Download className="w-3.5 h-3.5" />
                           <span>.JSON</span>
@@ -784,7 +784,7 @@ export const MultiWorldProjectManagerModal: React.FC<
                         <button
                           type="button"
                           onClick={() => onDeleteSnapshot(snap.id)}
-                          className="p-1.5 text-xs text-[#9E2A2B] hover:bg-[#9E2A2B]/10 border border-[#D8CBB3] rounded-lg cursor-pointer"
+                          className="p-1.5 text-xs text-wax hover:bg-wax/10 border border-sepia rounded-lg cursor-pointer"
                           title="Hapus snapshot"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1349,38 +1349,38 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden print:max-w-none print:max-h-none print:border-0 print:shadow-none print:bg-white"
+        className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden print:max-w-none print:max-h-none print:border-0 print:shadow-none print:bg-white"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header (hidden when printing) */}
-        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex items-start justify-between gap-4 print:hidden">
+        <div className="px-6 py-4 bg-parchment border-b border-sepia flex items-start justify-between gap-4 print:hidden">
           <div>
-            <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+            <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
               <FileDown className="w-3.5 h-3.5" />
               <span>Studio Ekspor, Dokumentasi & Pencetakan Naskah</span>
             </div>
-            <h3 className="font-display text-2xl font-bold text-[#231C14]">
+            <h3 className="font-display text-2xl font-bold text-ink">
               Ekspor Buku World Bible & Naskah "{project.worldName}"
             </h3>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+            className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Mode Selector Tabs (hidden when printing) */}
-        <div className="px-6 py-3 bg-[#EFE7D6]/80 border-b border-[#D8CBB3] flex flex-wrap items-center gap-2 print:hidden">
+        <div className="px-6 py-3 bg-aged/80 border-b border-sepia flex flex-wrap items-center gap-2 print:hidden">
           <button
             type="button"
             onClick={() => setExportTab('markdown_bible')}
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               exportTab === 'markdown_bible'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <BookOpen className="w-3.5 h-3.5" />
@@ -1392,7 +1392,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               exportTab === 'markdown_chapters'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <FileText className="w-3.5 h-3.5" />
@@ -1404,7 +1404,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               exportTab === 'print_book'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <Printer className="w-3.5 h-3.5" />
@@ -1416,7 +1416,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               exportTab === 'json_backup'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <FileJson className="w-3.5 h-3.5" />
@@ -1429,25 +1429,25 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
           {(exportTab === 'markdown_bible' ||
             exportTab === 'markdown_chapters') && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3">
                 <div className="space-y-1">
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     {exportTab === 'markdown_bible'
                       ? 'Kompilasi Ensiklopedia World Bible Lengkap (13 Kategori Entitas + Silsilah Dinasti + Tracker Nubuat + Kanvas)'
                       : 'Kompilasi Kerangka Bab, Urutan Adegan & Draf Naskah (Format Markdown .md)'}
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Siap dibuka langsung di Obsidian, Notion, Scrivener, Google Docs, atau editor teks favorit Anda.
                   </p>
                   {exportTab === 'markdown_bible' && (
-                    <label className="inline-flex items-center gap-2 pt-1 text-xs font-medium text-[#231C14] cursor-pointer">
+                    <label className="inline-flex items-center gap-2 pt-1 text-xs font-medium text-ink cursor-pointer">
                       <input
                         type="checkbox"
                         checked={includeCanonicalSpoilers}
                         onChange={(e) =>
                           setIncludeCanonicalSpoilers(e.target.checked)
                         }
-                        className="accent-[#9E2A2B]"
+                        className="accent-wax"
                       />
                       <span>
                         Sertakan Kebenaran Kanonik Rahasia Penulis (Spoiler Tracker Nubuat)
@@ -1459,12 +1459,12 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                   <button
                     type="button"
                     onClick={() => handleCopyMarkdown(activeMarkdown)}
-                    className="px-3.5 py-2 text-xs font-semibold bg-[#FBF8F1] border border-[#D8CBB3] text-[#231C14] rounded-lg hover:bg-[#EFE7D6] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+                    className="px-3.5 py-2 text-xs font-semibold bg-vellum border border-sepia text-ink rounded-lg hover:bg-aged flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     {copied ? (
-                      <Check className="w-3.5 h-3.5 text-[#2D5A43]" />
+                      <Check className="w-3.5 h-3.5 text-forest" />
                     ) : (
-                      <Copy className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                      <Copy className="w-3.5 h-3.5 text-wax" />
                     )}
                     <span>{copied ? 'Tersalin!' : 'Salin Teks .MD'}</span>
                   </button>
@@ -1486,7 +1486,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 </div>
               </div>
 
-              <div className="rounded-xl border border-[#D8CBB3] bg-[#231C14] text-[#FBF8F1] p-4 font-mono text-xs overflow-x-auto max-h-[52vh] whitespace-pre-wrap leading-relaxed">
+              <div className="rounded-xl border border-sepia bg-[#231C14] text-[#FBF8F1] p-4 font-mono text-xs overflow-x-auto max-h-[52vh] whitespace-pre-wrap leading-relaxed">
                 {activeMarkdown}
               </div>
             </div>
@@ -1495,13 +1495,13 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
           {exportTab === 'print_book' && (
             <div className="space-y-5">
               {/* Print Controls (hidden when printing) */}
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3 print:hidden">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3 print:hidden">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
-                    <div className="text-xs font-semibold text-[#231C14]">
+                    <div className="text-xs font-semibold text-ink">
                       Konfigurasi Lembar Cetak / Simpan sebagai PDF
                     </div>
-                    <p className="text-xs text-[#695A47]">
+                    <p className="text-xs text-ink-soft">
                       Pilih bagian buku yang ingin disertakan, lalu klik tombol Cetak / Simpan PDF untuk membuka dialog cetak browser.
                     </p>
                   </div>
@@ -1515,13 +1515,13 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                   </button>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-[#D8CBB3]/70 text-xs text-[#231C14]">
+                <div className="flex flex-wrap items-center gap-4 pt-2 border-t border-sepia/70 text-xs text-ink">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={printIncludeCosmology}
                       onChange={(e) => setPrintIncludeCosmology(e.target.checked)}
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>Sampul & Kosmologi Dunia</span>
                   </label>
@@ -1530,7 +1530,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       type="checkbox"
                       checked={printIncludeEntities}
                       onChange={(e) => setPrintIncludeEntities(e.target.checked)}
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>Ensiklopedia 13 Kategori ({project.entities.length})</span>
                   </label>
@@ -1539,7 +1539,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       type="checkbox"
                       checked={printIncludeDynasties}
                       onChange={(e) => setPrintIncludeDynasties(e.target.checked)}
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>
                       Silsilah Dinasti ({(project.dynastyTrees || []).length})
@@ -1552,7 +1552,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       onChange={(e) =>
                         setPrintIncludeProphecies(e.target.checked)
                       }
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>
                       Tracker Nubuat & Misteri ({(project.mysteryPlots || []).length})
@@ -1563,7 +1563,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       type="checkbox"
                       checked={printIncludeTimeline}
                       onChange={(e) => setPrintIncludeTimeline(e.target.checked)}
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>Kronologi Sejarah ({project.timeline.length})</span>
                   </label>
@@ -1572,7 +1572,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       type="checkbox"
                       checked={printIncludeChapters}
                       onChange={(e) => setPrintIncludeChapters(e.target.checked)}
-                      className="accent-[#9E2A2B]"
+                      className="accent-wax"
                     />
                     <span>Alur Bab & Naskah ({project.chapters.length})</span>
                   </label>
@@ -1580,19 +1580,19 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
               </div>
 
               {/* Printable Book Preview Sheet */}
-              <div className="p-8 rounded-2xl bg-white border border-[#D8CBB3] text-[#231C14] space-y-8 shadow-xs print:border-0 print:shadow-none print:p-0">
+              <div className="p-8 rounded-2xl bg-white border border-sepia text-ink space-y-8 shadow-xs print:border-0 print:shadow-none print:p-0">
                 {/* Book Title Page */}
                 <div className="text-center border-b-2 border-[#231C14] pb-6 space-y-2">
-                  <div className="text-xs font-semibold uppercase tracking-widest text-[#9E2A2B]">
+                  <div className="text-xs font-semibold uppercase tracking-widest text-wax">
                     Kodeks Ensiklopedia & Arsitektur Cerita
                   </div>
-                  <h1 className="font-cartography text-4xl font-bold text-[#231C14]">
+                  <h1 className="font-cartography text-4xl font-bold text-ink">
                     {project.worldName}
                   </h1>
-                  <p className="font-serif italic text-base text-[#695A47]">
+                  <p className="font-serif italic text-base text-ink-soft">
                     {project.tagline}
                   </p>
-                  <div className="pt-2 text-xs text-[#695A47] font-mono-tabular">
+                  <div className="pt-2 text-xs text-ink-soft font-mono-tabular">
                     Genre: {project.genre} · Kalender: {project.calendarSystem}
                     {project.authorName ? ` · Karya: ${project.authorName}` : ''}
                   </div>
@@ -1601,14 +1601,14 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {/* Section 1: Cosmology */}
                 {printIncludeCosmology && (
                   <section className="space-y-4">
-                    <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                    <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                       I. Kosmologi, Epigrafi & Konflik Utama
                     </h2>
                     {project.epigraphQuote && (
-                      <blockquote className="p-4 rounded-xl bg-[#F6F1E6] italic text-sm text-[#231C14]">
+                      <blockquote className="p-4 rounded-xl bg-parchment italic text-sm text-ink">
                         "{project.epigraphQuote}"
                         {project.epigraphSource && (
-                          <footer className="not-italic font-semibold text-xs text-[#9E2A2B] mt-1">
+                          <footer className="not-italic font-semibold text-xs text-wax mt-1">
                             — {project.epigraphSource}
                           </footer>
                         )}
@@ -1616,8 +1616,8 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                     )}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed">
                       {project.centralConflict && (
-                        <div className="p-4 rounded-xl border border-[#D8CBB3] space-y-1">
-                          <div className="font-bold text-[#9E2A2B]">Konflik Sentral Dunia</div>
+                        <div className="p-4 rounded-xl border border-sepia space-y-1">
+                          <div className="font-bold text-wax">Konflik Sentral Dunia</div>
                           <div>
                             <WikiTextRenderer
                               text={project.centralConflict}
@@ -1628,8 +1628,8 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                         </div>
                       )}
                       {project.cosmologyCreationMyth && (
-                        <div className="p-4 rounded-xl border border-[#D8CBB3] space-y-1">
-                          <div className="font-bold text-[#9E2A2B]">Mitos Penciptaan</div>
+                        <div className="p-4 rounded-xl border border-sepia space-y-1">
+                          <div className="font-bold text-wax">Mitos Penciptaan</div>
                           <div>
                             <WikiTextRenderer
                               text={project.cosmologyCreationMyth}
@@ -1646,7 +1646,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {/* Section 2: Entities */}
                 {printIncludeEntities && (
                   <section className="space-y-6">
-                    <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                    <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                       II. Ensiklopedia Entitas World Bible ({project.entities.length})
                     </h2>
                     {ORDERED_CATEGORIES.map((cat) => {
@@ -1656,7 +1656,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                       if (items.length === 0) return null;
                       return (
                         <div key={cat} className="space-y-3">
-                          <h3 className="font-display text-lg font-bold text-[#9E2A2B]">
+                          <h3 className="font-display text-lg font-bold text-wax">
                             {CATEGORY_META[cat].label} ({items.length})
                           </h3>
                           <div className="grid grid-cols-1 gap-3">
@@ -1670,36 +1670,36 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                               return (
                                 <div
                                   key={ent.id}
-                                  className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
+                                  className="p-4 rounded-xl border border-sepia space-y-2 break-inside-avoid"
                                 >
                                   <div>
-                                    <div className="font-display text-lg font-bold text-[#231C14]">
+                                    <div className="font-display text-lg font-bold text-ink">
                                       {ent.title}
                                     </div>
                                     {ent.subtitle && (
-                                      <div className="text-xs italic text-[#695A47]">
+                                      <div className="text-xs italic text-ink-soft">
                                         {ent.subtitle}
                                       </div>
                                     )}
                                   </div>
-                                  <p className="text-xs font-medium text-[#231C14]">
+                                  <p className="text-xs font-medium text-ink">
                                     {ent.summary}
                                   </p>
                                   {attrEntries.length > 0 && (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 pb-1 text-[11px] bg-[#F6F1E6]/60 p-2.5 rounded-lg border border-[#D8CBB3]/70">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-1 pb-1 text-[11px] bg-parchment/60 p-2.5 rounded-lg border border-sepia/70">
                                       {attrEntries.map(([k, v]) => (
                                         <div key={k}>
-                                          <span className="font-bold text-[#695A47]">
+                                          <span className="font-bold text-ink-soft">
                                             {ATTRIBUTE_LABELS_ID[k] || k}:{' '}
                                           </span>
-                                          <span className="text-[#231C14]">
+                                          <span className="text-ink">
                                             {String(v)}
                                           </span>
                                         </div>
                                       ))}
                                     </div>
                                   )}
-                                  <div className="text-xs text-[#231C14]/90 leading-relaxed">
+                                  <div className="text-xs text-ink/90 leading-relaxed">
                                     <WikiTextRenderer
                                       text={ent.content}
                                       entities={project.entities}
@@ -1720,7 +1720,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {printIncludeDynasties &&
                   (project.dynastyTrees || []).length > 0 && (
                     <section className="space-y-4">
-                      <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                      <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                         III. Pohon Silsilah Keluarga & Dinasti Kerajaan (
                         {(project.dynastyTrees || []).length})
                       </h2>
@@ -1728,39 +1728,39 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                         {(project.dynastyTrees || []).map((tree) => (
                           <div
                             key={tree.id}
-                            className="p-4 rounded-xl border border-[#D8CBB3] space-y-2.5 break-inside-avoid"
+                            className="p-4 rounded-xl border border-sepia space-y-2.5 break-inside-avoid"
                           >
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <div>
-                                <h3 className="font-display text-xl font-bold text-[#231C14]">
+                                <h3 className="font-display text-xl font-bold text-ink">
                                   {tree.houseName}
                                 </h3>
-                                <div className="text-xs italic text-[#9E2A2B]">
+                                <div className="text-xs italic text-wax">
                                   {tree.motto}
                                   {tree.coatOfArms ? ` · ${tree.coatOfArms}` : ''}
                                 </div>
                               </div>
-                              <div className="text-xs text-[#695A47]">
+                              <div className="text-xs text-ink-soft">
                                 Kursi Kekuasaan: {tree.ancestralSeat || '-'}
                               </div>
                             </div>
-                            <p className="text-xs text-[#231C14]">
+                            <p className="text-xs text-ink">
                               {tree.overview}
                             </p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
                               {(tree.members || []).map((m) => (
                                 <div
                                   key={m.id}
-                                  className="p-2.5 rounded-lg bg-[#F6F1E6]/70 border border-[#D8CBB3] text-xs space-y-0.5"
+                                  className="p-2.5 rounded-lg bg-parchment/70 border border-sepia text-xs space-y-0.5"
                                 >
-                                  <div className="font-bold text-[#231C14]">
+                                  <div className="font-bold text-ink">
                                     Gen {m.generation} · {m.name}
                                   </div>
-                                  <div className="text-[11px] text-[#9E2A2B] font-medium">
+                                  <div className="text-[11px] text-wax font-medium">
                                     {m.titleOrRole} ({m.successionStatus} ·{' '}
                                     {m.status})
                                   </div>
-                                  <div className="text-[11px] text-[#695A47]">
+                                  <div className="text-[11px] text-ink-soft">
                                     {m.notes}
                                   </div>
                                 </div>
@@ -1776,7 +1776,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {printIncludeProphecies &&
                   (project.mysteryPlots || []).length > 0 && (
                     <section className="space-y-4">
-                      <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                      <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                         IV. Tracker Misteri, Nubuat & Foreshadowing (
                         {(project.mysteryPlots || []).length})
                       </h2>
@@ -1784,38 +1784,38 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                         {(project.mysteryPlots || []).map((item) => (
                           <div
                             key={item.id}
-                            className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
+                            className="p-4 rounded-xl border border-sepia space-y-2 break-inside-avoid"
                           >
-                            <div className="flex items-center justify-between text-xs text-[#695A47]">
-                              <span className="font-bold text-[#9E2A2B]">
+                            <div className="flex items-center justify-between text-xs text-ink-soft">
+                              <span className="font-bold text-wax">
                                 {item.category} · Status: {item.status}
                               </span>
                               <span>Sumber: {item.originEntityName || '-'}</span>
                             </div>
-                            <h3 className="font-display text-lg font-bold text-[#231C14]">
+                            <h3 className="font-display text-lg font-bold text-ink">
                               {item.title}
                             </h3>
                             {item.prophecyVerseOrQuestion && (
-                              <blockquote className="p-3 rounded-lg bg-[#F6F1E6] italic text-xs text-[#231C14]">
+                              <blockquote className="p-3 rounded-lg bg-parchment italic text-xs text-ink">
                                 "{item.prophecyVerseOrQuestion}"
                               </blockquote>
                             )}
                             <div className="text-xs space-y-1">
                               <div>
-                                <span className="font-bold text-[#695A47]">
+                                <span className="font-bold text-ink-soft">
                                   Tafsir Umum Masyarakat:{' '}
                                 </span>
-                                <span className="text-[#231C14]">
+                                <span className="text-ink">
                                   {item.publicInterpretation}
                                 </span>
                               </div>
                               {includeCanonicalSpoilers &&
                                 item.trueCanonicalAnswer && (
                                   <div>
-                                    <span className="font-bold text-[#9E2A2B]">
+                                    <span className="font-bold text-wax">
                                       Kebenaran Kanonik Rahasia:{' '}
                                     </span>
-                                    <span className="text-[#231C14]">
+                                    <span className="text-ink">
                                       {item.trueCanonicalAnswer}
                                     </span>
                                   </div>
@@ -1830,7 +1830,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {/* Section 5: Timeline */}
                 {printIncludeTimeline && project.timeline.length > 0 && (
                   <section className="space-y-4">
-                    <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                    <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                       V. Pita Kronologi Sejarah ({project.timeline.length})
                     </h2>
                     <div className="space-y-2.5">
@@ -1839,15 +1839,15 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                         .map((ev) => (
                           <div
                             key={ev.id}
-                            className="p-3.5 rounded-xl border border-[#D8CBB3] space-y-1 break-inside-avoid"
+                            className="p-3.5 rounded-xl border border-sepia space-y-1 break-inside-avoid"
                           >
-                            <div className="flex items-center justify-between text-xs text-[#695A47]">
-                              <span className="font-bold text-[#9E2A2B]">
+                            <div className="flex items-center justify-between text-xs text-ink-soft">
+                              <span className="font-bold text-wax">
                                 {ev.displayDate} — {ev.title}
                               </span>
                               <span>{ev.era}</span>
                             </div>
-                            <p className="text-xs text-[#231C14]">{ev.summary}</p>
+                            <p className="text-xs text-ink">{ev.summary}</p>
                           </div>
                         ))}
                     </div>
@@ -1857,7 +1857,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 {/* Section 6: Chapters */}
                 {printIncludeChapters && project.chapters.length > 0 && (
                   <section className="space-y-4">
-                    <h2 className="font-display text-2xl font-bold text-[#231C14] border-b border-[#D8CBB3] pb-1.5">
+                    <h2 className="font-display text-2xl font-bold text-ink border-b border-sepia pb-1.5">
                       VI. Alur Bab & Draf Naskah ({project.chapters.length} Bab)
                     </h2>
                     <div className="space-y-4">
@@ -1866,24 +1866,24 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                         .map((ch) => (
                           <div
                             key={ch.id}
-                            className="p-4 rounded-xl border border-[#D8CBB3] space-y-2 break-inside-avoid"
+                            className="p-4 rounded-xl border border-sepia space-y-2 break-inside-avoid"
                           >
-                            <div className="flex items-center justify-between text-xs text-[#695A47]">
-                              <span className="font-semibold text-[#9E2A2B]">
+                            <div className="flex items-center justify-between text-xs text-ink-soft">
+                              <span className="font-semibold text-wax">
                                 {ch.act} · Status: {ch.status}
                               </span>
                               <span className="font-mono-tabular">
                                 {ch.currentWordCount}/{ch.wordCountTarget} kata
                               </span>
                             </div>
-                            <h3 className="font-display text-xl font-bold text-[#231C14]">
+                            <h3 className="font-display text-xl font-bold text-ink">
                               Bab {ch.chapterNumber}: {ch.title}
                             </h3>
-                            <p className="text-xs font-medium text-[#231C14]">
+                            <p className="text-xs font-medium text-ink">
                               {ch.synopsis}
                             </p>
                             {ch.draftNotes && (
-                              <div className="pt-2 border-t border-[#D8CBB3]/60 text-xs text-[#231C14]/90 leading-relaxed">
+                              <div className="pt-2 border-t border-sepia/60 text-xs text-ink/90 leading-relaxed">
                                 <WikiTextRenderer
                                   text={ch.draftNotes}
                                   entities={project.entities}
@@ -1902,15 +1902,15 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
 
           {exportTab === 'json_backup' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3 flex flex-col justify-between">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-3 flex flex-col justify-between">
                 <div className="space-y-1.5">
-                  <div className="text-xs font-semibold text-[#9E2A2B]">
+                  <div className="text-xs font-semibold text-wax">
                     Cadangan Data Mentah Utuh (.JSON)
                   </div>
-                  <h4 className="font-display text-xl font-bold text-[#231C14]">
+                  <h4 className="font-display text-xl font-bold text-ink">
                     Unduh Berkas JSON World Bible
                   </h4>
-                  <p className="text-xs text-[#695A47] leading-relaxed">
+                  <p className="text-xs text-ink-soft leading-relaxed">
                     Menyimpan seluruh entitas, atribut, grid kanvas peta dunia, pin kartografi, koordinat grafik relasi, linimasa, dan adegan bab dalam satu berkas JSON yang dapat diimpor kembali kapan saja.
                   </p>
                 </div>
@@ -1924,15 +1924,15 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                 </button>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3 flex flex-col justify-between">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-3 flex flex-col justify-between">
                 <div className="space-y-1.5">
-                  <div className="text-xs font-semibold text-[#2D5A43]">
+                  <div className="text-xs font-semibold text-forest">
                     Pemulihan & Impor Proyek (.JSON)
                   </div>
-                  <h4 className="font-display text-xl font-bold text-[#231C14]">
+                  <h4 className="font-display text-xl font-bold text-ink">
                     Muat Berkas JSON dari Komputer
                   </h4>
-                  <p className="text-xs text-[#695A47] leading-relaxed">
+                  <p className="text-xs text-ink-soft leading-relaxed">
                     Impor berkas cadangan JSON World Bible dari perangkat Anda. Proyek yang diimpor akan otomatis ditambahkan ke Perpustakaan Multi-Proyek tanpa menghapus dunia Anda yang lain.
                   </p>
                 </div>
@@ -1941,7 +1941,7 @@ export const WorldExportStudioModal: React.FC<WorldExportStudioModalProps> = ({
                   onClick={onTriggerImportJson}
                   className="px-4 py-2.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3B2E1E] flex items-center justify-center gap-2 whitespace-nowrap shrink-0 cursor-pointer"
                 >
-                  <Upload className="w-4 h-4 text-[#B5832A]" />
+                  <Upload className="w-4 h-4 text-brass" />
                   <span>Pilih Berkas .JSON untuk Diimpor</span>
                 </button>
               </div>
@@ -2176,32 +2176,32 @@ export const LoreHealthInspectorModal: React.FC<
       onClick={onClose}
     >
       <div
-        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex items-start justify-between gap-4">
+        <div className="px-6 py-4 bg-parchment border-b border-sepia flex items-start justify-between gap-4">
           <div>
-            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex items-center gap-1.5">
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax flex items-center gap-1.5">
               <span>❖ Diagnostik Ketersambungan World Bible</span>
             </div>
-            <h3 className="font-cartography text-2xl font-bold text-[#231C14]">
+            <h3 className="font-cartography text-2xl font-bold text-ink">
               Inspektur Kesehatan & Kelengkapan Lore — {project.worldName}
             </h3>
           </div>
           <div className="flex items-center gap-3">
-            <div className="px-3 py-1.5 rounded-xl bg-[#EFE7D6] border border-[#B5832A]/60 text-right">
-              <div className="text-[10px] font-epic uppercase tracking-wider text-[#695A47]">
+            <div className="px-3 py-1.5 rounded-xl bg-aged border border-brass/60 text-right">
+              <div className="text-[10px] font-epic uppercase tracking-wider text-ink-soft">
                 Skor Kohesi Dunia
               </div>
-              <div className="font-mono-tabular text-base font-bold text-[#9E2A2B]">
+              <div className="font-mono-tabular text-base font-bold text-wax">
                 {metrics.healthScore}%
               </div>
             </div>
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+              className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -2209,14 +2209,14 @@ export const LoreHealthInspectorModal: React.FC<
         </div>
 
         {/* 4 Diagnostic Category Tabs */}
-        <div className="px-6 py-3 bg-[#EFE7D6]/80 border-b border-[#D8CBB3] flex flex-wrap items-center gap-2">
+        <div className="px-6 py-3 bg-aged/80 border-b border-sepia flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setActiveSubTab('redlinks')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               activeSubTab === 'redlinks'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <span>Tautan [[...]] Kosong</span>
@@ -2231,7 +2231,7 @@ export const LoreHealthInspectorModal: React.FC<
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               activeSubTab === 'orphans'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <span>Entitas Yatim Relasi</span>
@@ -2246,7 +2246,7 @@ export const LoreHealthInspectorModal: React.FC<
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               activeSubTab === 'unfeatured'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <span>Belum Muncul di Alur Bab</span>
@@ -2261,7 +2261,7 @@ export const LoreHealthInspectorModal: React.FC<
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               activeSubTab === 'unmapped'
                 ? 'bg-[#9E2A2B] text-white'
-                : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                : 'bg-vellum text-ink border border-sepia'
             }`}
           >
             <span>Lokasi Tanpa Pin Peta</span>
@@ -2275,23 +2275,23 @@ export const LoreHealthInspectorModal: React.FC<
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
           {activeSubTab === 'redlinks' && (
             <div className="space-y-3">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     Deteksi Tautan Kurung Ganda `[[Nama Entitas]]` yang Belum Dibuat
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Daftar nama di bawah ini sudah Anda tulis di dalam naskah bab atau artikel lore dengan tanda `[[...]]`, namun belum memiliki halaman entitas di World Bible.
                   </p>
                 </div>
               </div>
 
               {metrics.uncreatedMentions.length === 0 ? (
-                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                <div className="py-10 px-6 text-center rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="font-display text-lg font-bold text-forest">
                     ✓ Semua Tautan `[[...]]` Sudah Memiliki Halaman Kodeks!
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Tidak ada tautan kurung ganda yang menggantung di naskah maupun artikel lore Anda.
                   </p>
                 </div>
@@ -2302,15 +2302,15 @@ export const LoreHealthInspectorModal: React.FC<
                     return (
                       <div
                         key={item.name}
-                        className="p-4 rounded-xl bg-[#F6F1E6] border border-[#B5832A]/50 flex flex-wrap items-center justify-between gap-3"
+                        className="p-4 rounded-xl bg-parchment border border-brass/50 flex flex-wrap items-center justify-between gap-3"
                       >
                         <div className="space-y-1 min-w-0">
-                          <div className="font-display text-lg font-bold text-[#9E2A2B]">
+                          <div className="font-display text-lg font-bold text-wax">
                             [[{item.name}]]
                           </div>
-                          <div className="text-xs text-[#695A47]">
+                          <div className="text-xs text-ink-soft">
                             Disebut pada:{' '}
-                            <span className="font-semibold text-[#231C14]">
+                            <span className="font-semibold text-ink">
                               {item.sources.join(' · ')}
                             </span>
                           </div>
@@ -2325,7 +2325,7 @@ export const LoreHealthInspectorModal: React.FC<
                                 [item.name]: e.target.value as LoreCategory,
                               }))
                             }
-                            className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                            className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink font-semibold"
                           >
                             {ORDERED_CATEGORIES.map((c) => (
                               <option key={c} value={c}>
@@ -2364,12 +2364,12 @@ export const LoreHealthInspectorModal: React.FC<
 
           {activeSubTab === 'orphans' && (
             <div className="space-y-3">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     Karakter, Kelompok & Negara yang Belum Memiliki Ikatan di Peta Relasi
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Menghubungkan tokoh dan faksi di Peta Relasi akan memperkaya dinamika konflik politik maupun personal dalam cerita.
                   </p>
                 </div>
@@ -2386,8 +2386,8 @@ export const LoreHealthInspectorModal: React.FC<
               </div>
 
               {metrics.relationshipOrphans.length === 0 ? (
-                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                <div className="py-10 px-6 text-center rounded-xl bg-parchment border border-sepia">
+                  <div className="font-display text-lg font-bold text-forest">
                     ✓ Seluruh Tokoh, Kelompok & Negara Sudah Terhubung di Peta Relasi!
                   </div>
                 </div>
@@ -2396,16 +2396,16 @@ export const LoreHealthInspectorModal: React.FC<
                   {metrics.relationshipOrphans.map((ent) => (
                     <div
                       key={ent.id}
-                      className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between gap-3"
+                      className="p-3.5 rounded-xl bg-parchment border border-sepia flex items-center justify-between gap-3"
                     >
                       <div className="min-w-0">
-                        <div className="text-[11px] font-epic font-semibold text-[#9E2A2B]">
+                        <div className="text-[11px] font-epic font-semibold text-wax">
                           {CATEGORY_META[ent.category].singular}
                         </div>
-                        <div className="font-display text-base font-bold text-[#231C14] truncate">
+                        <div className="font-display text-base font-bold text-ink truncate">
                           {ent.title}
                         </div>
-                        <div className="text-xs text-[#695A47] truncate">
+                        <div className="text-xs text-ink-soft truncate">
                           {ent.subtitle}
                         </div>
                       </div>
@@ -2415,7 +2415,7 @@ export const LoreHealthInspectorModal: React.FC<
                           onSelectEntity(ent.id);
                           onClose();
                         }}
-                        className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 text-xs font-semibold bg-aged hover:bg-sepia text-ink rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         Buka Profil ↗
                       </button>
@@ -2428,12 +2428,12 @@ export const LoreHealthInspectorModal: React.FC<
 
           {activeSubTab === 'unfeatured' && (
             <div className="space-y-3">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     Entitas World Bible yang Belum Pernah Muncul di Alur Bab
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Entitas berikut sudah Anda rancang di World Bible tetapi belum disebut atau ditautkan pada bab cerita mana pun.
                   </p>
                 </div>
@@ -2450,8 +2450,8 @@ export const LoreHealthInspectorModal: React.FC<
               </div>
 
               {metrics.unfeaturedEntities.length === 0 ? (
-                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                <div className="py-10 px-6 text-center rounded-xl bg-parchment border border-sepia">
+                  <div className="font-display text-lg font-bold text-forest">
                     ✓ Seluruh Entitas World Bible Sudah Terintegrasi ke dalam Alur Bab!
                   </div>
                 </div>
@@ -2460,16 +2460,16 @@ export const LoreHealthInspectorModal: React.FC<
                   {metrics.unfeaturedEntities.map((ent) => (
                     <div
                       key={ent.id}
-                      className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between gap-3"
+                      className="p-3.5 rounded-xl bg-parchment border border-sepia flex items-center justify-between gap-3"
                     >
                       <div className="min-w-0">
-                        <div className="text-[11px] font-epic font-semibold text-[#B5832A]">
+                        <div className="text-[11px] font-epic font-semibold text-brass">
                           {CATEGORY_META[ent.category].singular}
                         </div>
-                        <div className="font-display text-base font-bold text-[#231C14] truncate">
+                        <div className="font-display text-base font-bold text-ink truncate">
                           {ent.title}
                         </div>
-                        <div className="text-xs text-[#695A47] truncate">
+                        <div className="text-xs text-ink-soft truncate">
                           {ent.summary}
                         </div>
                       </div>
@@ -2479,7 +2479,7 @@ export const LoreHealthInspectorModal: React.FC<
                           onSelectEntity(ent.id);
                           onClose();
                         }}
-                        className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 text-xs font-semibold bg-aged hover:bg-sepia text-ink rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         Lihat Entri ↗
                       </button>
@@ -2492,18 +2492,18 @@ export const LoreHealthInspectorModal: React.FC<
 
           {activeSubTab === 'unmapped' && (
             <div className="space-y-3">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                <div className="text-xs font-semibold text-[#231C14]">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia">
+                <div className="text-xs font-semibold text-ink">
                   Entitas Wilayah & Negara yang Belum Memiliki Pin di Peta Dunia
                 </div>
-                <p className="text-xs text-[#695A47]">
+                <p className="text-xs text-ink-soft">
                   Pasang pin lokasi dengan 1 klik agar Wilayah dan Negara ini langsung tampil di kanvas Map Dunia.
                 </p>
               </div>
 
               {metrics.unmappedLocations.length === 0 ? (
-                <div className="py-10 px-6 text-center rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                  <div className="font-display text-lg font-bold text-[#2D5A43]">
+                <div className="py-10 px-6 text-center rounded-xl bg-parchment border border-sepia">
+                  <div className="font-display text-lg font-bold text-forest">
                     ✓ Seluruh Wilayah & Negara Sudah Memiliki Pin di Peta Dunia!
                   </div>
                 </div>
@@ -2512,16 +2512,16 @@ export const LoreHealthInspectorModal: React.FC<
                   {metrics.unmappedLocations.map((loc) => (
                     <div
                       key={loc.id}
-                      className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                      className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3"
                     >
                       <div className="min-w-0">
-                        <div className="text-[11px] font-epic font-semibold text-[#2D5A43]">
+                        <div className="text-[11px] font-epic font-semibold text-forest">
                           {CATEGORY_META[loc.category].singular}
                         </div>
-                        <div className="font-display text-lg font-bold text-[#231C14]">
+                        <div className="font-display text-lg font-bold text-ink">
                           {loc.title}
                         </div>
-                        <div className="text-xs text-[#695A47]">
+                        <div className="text-xs text-ink-soft">
                           {loc.summary}
                         </div>
                       </div>
@@ -2540,7 +2540,7 @@ export const LoreHealthInspectorModal: React.FC<
                             onSelectEntity(loc.id);
                             onClose();
                           }}
-                          className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] text-[#231C14] rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
+                          className="px-3 py-1.5 text-xs font-semibold bg-aged text-ink rounded-lg whitespace-nowrap shrink-0 cursor-pointer"
                         >
                           Buka Profil ↗
                         </button>
@@ -2923,17 +2923,17 @@ export const StoryArchitectGuideModal: React.FC<
       onClick={onClose}
     >
       <div
-        className="bg-[#FBF8F1] border-2 border-[#3B2E1E] rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
+        className="bg-vellum border-2 border-[#3B2E1E] rounded-2xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="px-6 py-4 bg-[#F6F1E6] border-b border-[#D8CBB3] flex flex-wrap items-start justify-between gap-4">
+        <div className="px-6 py-4 bg-parchment border-b border-sepia flex flex-wrap items-start justify-between gap-4">
           <div>
-            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex items-center gap-1.5">
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax flex items-center gap-1.5">
               <Compass className="w-3.5 h-3.5" />
               <span>Panduan Arsitek Semesta & Alur Penulisan Cerita</span>
             </div>
-            <h3 className="font-cartography text-2xl font-bold text-[#231C14]">
+            <h3 className="font-cartography text-2xl font-bold text-ink">
               Cara Menyusun Dunia & Naskah Cerita di MythosCartograph
             </h3>
           </div>
@@ -2942,15 +2942,15 @@ export const StoryArchitectGuideModal: React.FC<
             <button
               type="button"
               onClick={handleDownloadGuideMd}
-              className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] border border-[#B5832A]/60 text-[#231C14] rounded-lg hover:bg-[#D8CBB3] flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3 py-1.5 text-xs font-semibold bg-aged border border-brass/60 text-ink rounded-lg hover:bg-sepia flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <Download className="w-3.5 h-3.5 text-wax" />
               <span>Unduh Panduan (.MD)</span>
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 rounded-lg border border-[#D8CBB3] text-[#695A47] hover:text-[#231C14] cursor-pointer"
+              className="p-1.5 rounded-lg border border-sepia text-ink-soft hover:text-ink cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -2958,7 +2958,7 @@ export const StoryArchitectGuideModal: React.FC<
         </div>
 
         {/* Sub-Tabs */}
-        <div className="px-6 py-3 bg-[#EFE7D6]/80 border-b border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+        <div className="px-6 py-3 bg-aged/80 border-b border-sepia flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
@@ -2966,7 +2966,7 @@ export const StoryArchitectGuideModal: React.FC<
               className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 guideTab === 'checklist'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                  : 'bg-vellum text-ink border border-sepia'
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
@@ -2978,7 +2978,7 @@ export const StoryArchitectGuideModal: React.FC<
               className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 guideTab === 'pillars'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                  : 'bg-vellum text-ink border border-sepia'
               }`}
             >
               <BookOpen className="w-3.5 h-3.5" />
@@ -2990,7 +2990,7 @@ export const StoryArchitectGuideModal: React.FC<
               className={`px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 guideTab === 'tips'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                  : 'bg-vellum text-ink border border-sepia'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
@@ -2998,9 +2998,9 @@ export const StoryArchitectGuideModal: React.FC<
             </button>
           </div>
 
-          <div className="text-xs font-mono-tabular text-[#695A47]">
+          <div className="text-xs font-mono-tabular text-ink-soft">
             Progres Pondasi "{project.worldName}":{' '}
-            <span className="font-bold text-[#9E2A2B]">
+            <span className="font-bold text-wax">
               {completedSteps}/{totalSteps} ({completionPct}%)
             </span>
           </div>
@@ -3010,14 +3010,14 @@ export const StoryArchitectGuideModal: React.FC<
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
           {guideTab === 'checklist' && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3">
                 <div className="space-y-0.5">
-                  <div className="text-xs font-semibold text-[#231C14]">
+                  <div className="text-xs font-semibold text-ink">
                     Peta Jalan Interaktif Membangun Semesta & Menulis Bab
                   </div>
-                  <p className="text-xs text-[#695A47]">
+                  <p className="text-xs text-ink-soft">
                     Daftar di bawah ini memeriksa kelengkapan proyek{' '}
-                    <span className="font-semibold text-[#231C14]">
+                    <span className="font-semibold text-ink">
                       {project.worldName}
                     </span>{' '}
                     secara otomatis. Klik tombol di sebelah kanan tiap langkah untuk langsung menuju ke ruang kerja terkait.
@@ -3029,16 +3029,16 @@ export const StoryArchitectGuideModal: React.FC<
                 {stageChecklist.map((stage) => (
                   <div
                     key={stage.stageNumber}
-                    className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                    className="p-5 rounded-xl bg-parchment border border-sepia space-y-3"
                   >
                     <div>
-                      <div className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                      <div className="font-epic text-[11px] font-bold uppercase tracking-wider text-wax">
                         {stage.stageNumber}
                       </div>
-                      <h4 className="font-display text-xl font-bold text-[#231C14]">
+                      <h4 className="font-display text-xl font-bold text-ink">
                         {stage.title}
                       </h4>
-                      <p className="text-xs text-[#695A47] mt-0.5">
+                      <p className="text-xs text-ink-soft mt-0.5">
                         {stage.description}
                       </p>
                     </div>
@@ -3047,23 +3047,23 @@ export const StoryArchitectGuideModal: React.FC<
                       {stage.steps.map((st, idx) => (
                         <div
                           key={idx}
-                          className="p-3 rounded-xl bg-[#FBF8F1] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                          className="p-3 rounded-xl bg-vellum border border-sepia flex flex-wrap items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
                             <span
                               className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-bold shrink-0 ${
                                 st.done
                                   ? 'bg-[#2D5A43] text-white'
-                                  : 'bg-[#EFE7D6] text-[#695A47] border border-[#D8CBB3]'
+                                  : 'bg-aged text-ink-soft border border-sepia'
                               }`}
                             >
                               {st.done ? '✓' : idx + 1}
                             </span>
                             <div className="min-w-0">
-                              <div className="text-xs font-semibold text-[#231C14]">
+                              <div className="text-xs font-semibold text-ink">
                                 {st.label}
                               </div>
-                              <div className="text-[11px] font-mono-tabular text-[#695A47]">
+                              <div className="text-[11px] font-mono-tabular text-ink-soft">
                                 Status saat ini: {st.metric}
                               </div>
                             </div>
@@ -3078,7 +3078,7 @@ export const StoryArchitectGuideModal: React.FC<
                             className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] hover:bg-[#3B2E1E] rounded-lg flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer"
                           >
                             <span>{st.buttonLabel}</span>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#B5832A]" />
+                            <ArrowRight className="w-3.5 h-3.5 text-brass" />
                           </button>
                         </div>
                       ))}
@@ -3094,13 +3094,13 @@ export const StoryArchitectGuideModal: React.FC<
               {PILLAR_DIRECTORY.map((group) => (
                 <div
                   key={group.pilar}
-                  className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                  className="p-5 rounded-xl bg-parchment border border-sepia space-y-3"
                 >
-                  <div className="border-b border-[#D8CBB3] pb-2">
-                    <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  <div className="border-b border-sepia pb-2">
+                    <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                       {group.pilar}
                     </div>
-                    <div className="text-xs text-[#695A47]">
+                    <div className="text-xs text-ink-soft">
                       {group.subtitle}
                     </div>
                   </div>
@@ -3109,13 +3109,13 @@ export const StoryArchitectGuideModal: React.FC<
                     {group.items.map((item) => (
                       <div
                         key={item.id}
-                        className="p-3.5 rounded-xl bg-[#FBF8F1] border border-[#D8CBB3] flex flex-col justify-between gap-2.5"
+                        className="p-3.5 rounded-xl bg-vellum border border-sepia flex flex-col justify-between gap-2.5"
                       >
                         <div className="space-y-1">
-                          <div className="font-display text-base font-bold text-[#231C14]">
+                          <div className="font-display text-base font-bold text-ink">
                             {item.name}
                           </div>
-                          <p className="text-xs text-[#695A47] leading-relaxed">
+                          <p className="text-xs text-ink-soft leading-relaxed">
                             {item.desc}
                           </p>
                         </div>
@@ -3126,10 +3126,10 @@ export const StoryArchitectGuideModal: React.FC<
                               onNavigateToTab(item.id);
                               onClose();
                             }}
-                            className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
+                            className="px-3 py-1 text-xs font-semibold bg-aged hover:bg-sepia text-ink rounded-lg flex items-center gap-1 whitespace-nowrap shrink-0 cursor-pointer"
                           >
                             <span>Buka Tab {item.name}</span>
-                            <ArrowRight className="w-3 h-3 text-[#9E2A2B]" />
+                            <ArrowRight className="w-3 h-3 text-wax" />
                           </button>
                         </div>
                       </div>
@@ -3142,67 +3142,67 @@ export const StoryArchitectGuideModal: React.FC<
 
           {guideTab === 'tips' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                   1. Sistem Tautan Kurung Ganda [[Nama Entitas]]
                 </div>
-                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                <h4 className="font-display text-lg font-bold text-ink">
                   Hubungkan Lore & Bab Secara Otomatis
                 </h4>
-                <p className="text-xs text-[#695A47] leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   Ketik nama tokoh, kerajaan, dewa, monster, atau pusaka di dalam kurung siku ganda seperti{' '}
-                  <code className="px-1.5 py-0.5 rounded bg-[#EFE7D6] text-[#9E2A2B] font-mono">
+                  <code className="px-1.5 py-0.5 rounded bg-aged text-wax font-mono">
                     [[Kaelen Vance]]
                   </code>{' '}
                   di kolom ringkasan, isi lore, maupun catatan bab.
                 </p>
-                <p className="text-xs text-[#231C14] leading-relaxed">
+                <p className="text-xs text-ink leading-relaxed">
                   • Jika entitas sudah ada: Teks menjadi tautan emas yang menampilkan kartu pratinjau saat disentuh kursor.
                   <br />• Jika entitas belum ada: Teks tampil merah bergaris putus-putus. Klik tautan tersebut untuk memilih kategori dan membuatnya otomatis!
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                   2. Silsilah Dinasti & Tracker Nubuat
                 </div>
-                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                <h4 className="font-display text-lg font-bold text-ink">
                   Kelola Politik Kerajaan & Plot Twist
                 </h4>
-                <p className="text-xs text-[#695A47] leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   Di Pilar IV, gunakan <strong>Silsilah Dinasti</strong> untuk memetakan pohon keluarga bangsawan per generasi (Gen 1, Gen 2, dst.) yang terhubung langsung ke profil Character.
                 </p>
-                <p className="text-xs text-[#231C14] leading-relaxed">
+                <p className="text-xs text-ink leading-relaxed">
                   Gunakan <strong>Tracker Nubuat</strong> untuk memisahkan <em>Tafsir Umum Masyarakat</em> vs <em>Kebenaran Kanonik Rahasia Penulis</em>, serta mencatat di bab mana petunjuk (Clue) dan pengecoh (Red Herring) disebar.
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                   3. Kanvas Bebas (Docs + OneNote + Paint)
                 </div>
-                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                <h4 className="font-display text-lg font-bold text-ink">
                   Ruang Brainstorming & Sketsa Polos
                 </h4>
-                <p className="text-xs text-[#695A47] leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   Buka tab <strong>Kanvas Bebas</strong> saat Anda ingin mencatat ide liar tanpa format kaku. Anda bisa mengetik dokumen panjang, menempelkan kartu catatan di titik mana pun, dan menggambar sketsa dengan kuas.
                 </p>
-                <p className="text-xs text-[#231C14] leading-relaxed">
+                <p className="text-xs text-ink leading-relaxed">
                   Setiap kartu catatan di Kanvas Bebas memiliki tombol <strong>Promosikan ke World Bible</strong> untuk mengubah ide kasar menjadi entitas resmi.
                 </p>
               </div>
 
-              <div className="p-5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+              <div className="p-5 rounded-xl bg-parchment border border-sepia space-y-2">
+                <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                   4. Inspektur Kesehatan Lore & Ekspor Buku
                 </div>
-                <h4 className="font-display text-lg font-bold text-[#231C14]">
+                <h4 className="font-display text-lg font-bold text-ink">
                   Audit Kohesi Dunia & Cetak ke .MD / PDF
                 </h4>
-                <p className="text-xs text-[#695A47] leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   Klik <strong>Kesehatan Lore (%)</strong> di bilah atas untuk mendeteksi tautan <code>[[...]]</code> yang belum dibuat, tokoh yatim yang belum memiliki relasi, atau wilayah yang belum dipin di peta.
                 </p>
-                <p className="text-xs text-[#231C14] leading-relaxed">
+                <p className="text-xs text-ink leading-relaxed">
                   Klik <strong>Ekspor & Cetak Buku</strong> untuk mengunduh seluruh 13 kategori entitas, silsilah dinasti, tracker nubuat, dan naskah bab ke file <strong>.MD (Markdown)</strong> atau <strong>PDF</strong>.
                 </p>
               </div>

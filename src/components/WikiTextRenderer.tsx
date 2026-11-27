@@ -166,7 +166,7 @@ const ALL_LORE_CATEGORIES: LoreCategory[] = [
 ];
 
 export const OrnateCornerFiligree: React.FC<{ className?: string }> = ({
-  className = 'text-[#B5832A]/75',
+  className = 'text-brass/75',
 }) => {
   return (
     <div
@@ -376,9 +376,9 @@ export const MedievalCompassDivider: React.FC<{
       aria-hidden={!label}
     >
       <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#B5832A]/60 to-[#9E2A2B]/65" />
-      <div className="flex items-center gap-2 text-[#B5832A]">
-        <span className="text-[10px] text-[#9E2A2B]">◆</span>
-        <svg className="w-4 h-4 text-[#B5832A]" viewBox="0 0 24 24" fill="none">
+      <div className="flex items-center gap-2 text-brass">
+        <span className="text-[10px] text-wax">◆</span>
+        <svg className="w-4 h-4 text-brass" viewBox="0 0 24 24" fill="none">
           <path
             d="M12 1L14.2 9.8L23 12L14.2 14.2L12 23L9.8 14.2L1 12L9.8 9.8L12 1Z"
             stroke="currentColor"
@@ -389,13 +389,13 @@ export const MedievalCompassDivider: React.FC<{
           <circle cx="12" cy="12" r="2" fill="#9E2A2B" />
         </svg>
         {label && (
-          <span className="font-epic text-[11px] font-bold uppercase tracking-[0.18em] text-[#9E2A2B] px-1">
+          <span className="font-epic text-[11px] font-bold uppercase tracking-[0.18em] text-wax px-1">
             {label}
           </span>
         )}
         {label && (
           <svg
-            className="w-4 h-4 text-[#B5832A]"
+            className="w-4 h-4 text-brass"
             viewBox="0 0 24 24"
             fill="none"
           >
@@ -409,7 +409,7 @@ export const MedievalCompassDivider: React.FC<{
             <circle cx="12" cy="12" r="2" fill="#9E2A2B" />
           </svg>
         )}
-        <span className="text-[10px] text-[#9E2A2B]">◆</span>
+        <span className="text-[10px] text-wax">◆</span>
       </div>
       <div className="flex-1 h-px bg-gradient-to-l from-transparent via-[#B5832A]/60 to-[#9E2A2B]/65" />
     </div>
@@ -420,14 +420,14 @@ export const FantasySectionDivider: React.FC<{ title?: string }> = ({ title }) =
   return (
     <div className="flex items-center justify-center gap-3 py-1.5 select-none" aria-hidden={!title}>
       <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#B5832A]/60 to-[#9E2A2B]/60" />
-      <div className="flex items-center gap-2 text-[#B5832A]">
+      <div className="flex items-center gap-2 text-brass">
         <span className="text-[10px]">❖</span>
         {title ? (
-          <span className="font-epic text-[11px] font-bold uppercase tracking-[0.18em] text-[#9E2A2B]">
+          <span className="font-epic text-[11px] font-bold uppercase tracking-[0.18em] text-wax">
             {title}
           </span>
         ) : (
-          <span className="text-xs text-[#9E2A2B]">✦</span>
+          <span className="text-xs text-wax">✦</span>
         )}
         <span className="text-[10px]">❖</span>
       </div>
@@ -468,7 +468,7 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
       <button
         type="button"
         onClick={() => onSelectEntity(entity.id)}
-        className="inline font-semibold text-[#9E2A2B] underline decoration-[#B5832A]/75 decoration-dotted underline-offset-4 hover:decoration-solid hover:bg-[#B5832A]/15 px-1 rounded transition-colors cursor-pointer"
+        className="inline font-semibold text-wax underline decoration-brass/75 decoration-dotted underline-offset-4 hover:decoration-solid hover:bg-brass/15 px-1 rounded transition-colors cursor-pointer"
       >
         {label}
       </button>
@@ -477,14 +477,14 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
         <span
           role="tooltip"
           onClick={() => onSelectEntity(entity.id)}
-          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 rounded-xl bg-[#FBF8F1] border-2 border-[#B5832A] shadow-2xl text-left cursor-pointer block animate-in fade-in duration-150"
+          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 rounded-xl bg-vellum border-2 border-brass shadow-2xl text-left cursor-pointer block animate-in fade-in duration-150"
         >
           {/* Top Arcana Banner */}
-          <span className="flex items-center justify-between gap-2 pb-1.5 mb-2 border-b border-[#D8CBB3] text-[10px] font-epic uppercase tracking-widest text-[#B5832A]">
+          <span className="flex items-center justify-between gap-2 pb-1.5 mb-2 border-b border-sepia text-[10px] font-epic uppercase tracking-widest text-brass">
             <span>
               Arcana {meta.romanNumeral} · {meta.singular}
             </span>
-            <span className="text-[#9E2A2B] font-semibold">Kodeks ↗</span>
+            <span className="text-wax font-semibold">Kodeks ↗</span>
           </span>
 
           {/* Entity Header with Optional Portrait */}
@@ -493,19 +493,19 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
               <img
                 src={entity.imageUrl}
                 alt={entity.title}
-                className="w-11 h-11 rounded-lg object-cover border border-[#B5832A] shrink-0"
+                className="w-11 h-11 rounded-lg object-cover border border-brass shrink-0"
               />
             ) : (
-              <span className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/60 flex items-center justify-center font-cartography text-sm font-bold text-[#9E2A2B] shrink-0">
+              <span className="w-10 h-10 rounded-lg bg-aged border border-brass/60 flex items-center justify-center font-cartography text-sm font-bold text-wax shrink-0">
                 {entity.title.slice(0, 2).toUpperCase()}
               </span>
             )}
             <span className="min-w-0 block">
-              <span className="font-display text-sm font-bold text-[#231C14] block leading-snug">
+              <span className="font-display text-sm font-bold text-ink block leading-snug">
                 {entity.title}
               </span>
               {entity.subtitle && (
-                <span className="text-[11px] italic text-[#695A47] block truncate">
+                <span className="text-[11px] italic text-ink-soft block truncate">
                   {entity.subtitle}
                 </span>
               )}
@@ -514,13 +514,13 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
 
           {/* Key Attributes Strip */}
           {keyAttrs.length > 0 && (
-            <span className="mt-2.5 pt-2 border-t border-[#D8CBB3]/60 grid grid-cols-1 gap-1 text-[11px]">
+            <span className="mt-2.5 pt-2 border-t border-sepia/60 grid grid-cols-1 gap-1 text-[11px]">
               {keyAttrs.map(([k, v]) => (
                 <span key={k} className="flex items-center justify-between gap-2">
-                  <span className="text-[#695A47] font-medium">
+                  <span className="text-ink-soft font-medium">
                     {PREVIEW_ATTR_LABELS[k]}:
                   </span>
-                  <span className="font-semibold text-[#231C14] truncate max-w-[170px]">
+                  <span className="font-semibold text-ink truncate max-w-[170px]">
                     {String(v)}
                   </span>
                 </span>
@@ -529,7 +529,7 @@ const WikiEntityLinkWithPreview: React.FC<WikiEntityLinkWithPreviewProps> = ({
           )}
 
           {/* Summary Snippet */}
-          <span className="mt-2 pt-2 border-t border-[#D8CBB3]/60 text-xs text-[#231C14]/90 line-clamp-3 leading-relaxed block">
+          <span className="mt-2 pt-2 border-t border-sepia/60 text-xs text-ink/90 line-clamp-3 leading-relaxed block">
             {entity.summary}
           </span>
         </span>
@@ -558,7 +558,7 @@ const UncreatedWikiLinkPopover: React.FC<UncreatedWikiLinkPopoverProps> = ({
   if (!onQuickCreateEntity) {
     return (
       <span
-        className="inline font-medium text-[#B5832A] border-b border-dashed border-[#B5832A]"
+        className="inline font-medium text-brass border-b border-dashed border-brass"
         title="Entitas belum dibuat di Codex"
       >
         {refName}
@@ -571,7 +571,7 @@ const UncreatedWikiLinkPopover: React.FC<UncreatedWikiLinkPopoverProps> = ({
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="inline-flex items-center gap-1 font-semibold text-[#B5832A] hover:text-[#9E2A2B] border-b border-dashed border-[#B5832A] hover:border-[#9E2A2B] hover:bg-[#B5832A]/15 px-1 rounded transition-colors cursor-pointer"
+        className="inline-flex items-center gap-1 font-semibold text-brass hover:text-wax border-b border-dashed border-brass hover:border-wax hover:bg-brass/15 px-1 rounded transition-colors cursor-pointer"
         title={`"${refName}" belum ada di Codex — Klik untuk membuat entitas baru`}
       >
         <span className="text-[11px] font-bold">+</span>
@@ -582,29 +582,29 @@ const UncreatedWikiLinkPopover: React.FC<UncreatedWikiLinkPopoverProps> = ({
         <span
           role="dialog"
           aria-label={`Buat entitas baru ${refName}`}
-          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 rounded-xl bg-[#FBF8F1] border-2 border-[#B5832A] shadow-2xl text-left block"
+          className="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 sm:w-80 p-3.5 rounded-xl bg-vellum border-2 border-brass shadow-2xl text-left block"
           onClick={(e) => e.stopPropagation()}
         >
-          <span className="flex items-center justify-between gap-2 pb-1.5 mb-2 border-b border-[#D8CBB3] text-[10px] font-epic uppercase tracking-widest text-[#9E2A2B]">
+          <span className="flex items-center justify-between gap-2 pb-1.5 mb-2 border-b border-sepia text-[10px] font-epic uppercase tracking-widest text-wax">
             <span>❖ Entitas Baru dari Tautan</span>
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="text-[#695A47] hover:text-[#231C14] font-mono-tabular px-1 cursor-pointer"
+              className="text-ink-soft hover:text-ink font-mono-tabular px-1 cursor-pointer"
             >
               ✕
             </button>
           </span>
 
-          <span className="font-display text-sm font-bold text-[#231C14] block mb-1">
+          <span className="font-display text-sm font-bold text-ink block mb-1">
             “{refName}”
           </span>
-          <span className="text-[11px] text-[#695A47] block mb-2.5 leading-snug">
+          <span className="text-[11px] text-ink-soft block mb-2.5 leading-snug">
             Tautan ini belum memiliki halaman di World Bible. Pilih kategori untuk membuatnya secara instan:
           </span>
 
           <span className="block mb-3">
-            <label className="block text-[10px] font-epic uppercase tracking-wider text-[#695A47] mb-1">
+            <label className="block text-[10px] font-epic uppercase tracking-wider text-ink-soft mb-1">
               Kategori World Bible
             </label>
             <select
@@ -612,7 +612,7 @@ const UncreatedWikiLinkPopover: React.FC<UncreatedWikiLinkPopoverProps> = ({
               onChange={(e) =>
                 setSelectedCategory(e.target.value as LoreCategory)
               }
-              className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+              className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink font-semibold"
             >
               {ALL_LORE_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -712,7 +712,7 @@ export const WikiTextRenderer: React.FC<WikiTextRendererProps> = ({
 
   return (
     <div
-      className={`space-y-3.5 text-[15px] leading-relaxed text-[#231C14] ${
+      className={`space-y-3.5 text-[15px] leading-relaxed text-ink ${
         dropCap ? 'fantasy-dropcap' : ''
       }`}
     >
@@ -722,9 +722,9 @@ export const WikiTextRenderer: React.FC<WikiTextRendererProps> = ({
           return (
             <h4
               key={idx}
-              className="font-display text-lg font-bold text-[#231C14] pt-3 border-b border-[#B5832A]/45 pb-1 flex items-center gap-2 clear-both"
+              className="font-display text-lg font-bold text-ink pt-3 border-b border-brass/45 pb-1 flex items-center gap-2 clear-both"
             >
-              <span className="text-[#B5832A] text-xs" aria-hidden="true">
+              <span className="text-brass text-xs" aria-hidden="true">
                 ❖
               </span>
               <span>{trimmed.replace('### ', '')}</span>

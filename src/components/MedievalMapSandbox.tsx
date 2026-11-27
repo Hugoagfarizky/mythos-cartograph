@@ -1437,22 +1437,22 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       {/* ===================================================================== */}
       {/* 1. TOP MAP STUDIO HEADER & MODE SELECTOR                              */}
       {/* ===================================================================== */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
         <OrnateCornerFiligree />
 
         {/* Row 1: Map Title & Subtitle on Left + Map Actions on Right */}
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B] flex flex-wrap items-center gap-1.5">
+            <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax flex flex-wrap items-center gap-1.5">
               <span>❖ Atlas Ilustrasi Buku Abad Pertengahan</span>
               <span aria-hidden="true">·</span>
-              <span className="text-[#695A47]">{mapData.scaleLabel}</span>
+              <span className="text-ink-soft">{mapData.scaleLabel}</span>
             </div>
-            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-ink leading-tight">
               {mapData.mapTitle}
             </h2>
             {mapData.subtitle && (
-              <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed">
+              <p className="text-xs sm:text-sm text-ink-soft leading-relaxed">
                 {mapData.subtitle}
               </p>
             )}
@@ -1472,8 +1472,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               }}
               className={`px-3.5 py-2 text-xs font-semibold border rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                 isEditingMapMeta
-                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                  : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                  ? 'bg-[#9E2A2B] text-white border-wax'
+                  : 'bg-parchment text-ink border-sepia hover:bg-aged'
               }`}
             >
               <Edit3 className="w-3.5 h-3.5" />
@@ -1482,7 +1482,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             <button
               type="button"
               onClick={handleGenerateRandomArchipelago}
-              className="px-3.5 py-2 text-xs font-medium border border-[#D8CBB3] rounded-lg bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3.5 py-2 text-xs font-medium border border-sepia rounded-lg bg-parchment hover:bg-aged text-ink flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               title="Buat bentuk benua baru secara prosedural"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -1500,14 +1500,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         </div>
 
         {/* Row 2: 6 Cartography Tool Modes */}
-        <div className="relative z-10 flex flex-wrap items-center gap-1.5 bg-[#EFE7D6] p-1.5 rounded-xl border border-[#D8CBB3]">
+        <div className="relative z-10 flex flex-wrap items-center gap-1.5 bg-aged p-1.5 rounded-xl border border-sepia">
           <button
             type="button"
             onClick={() => setToolMode('inspect')}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'inspect'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -1519,7 +1519,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'terrain'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <Paintbrush className="w-3.5 h-3.5" />
@@ -1531,7 +1531,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'stamp'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <MapPin className="w-3.5 h-3.5" />
@@ -1543,7 +1543,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'label'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <TypeIcon className="w-3.5 h-3.5" />
@@ -1558,7 +1558,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'river_route'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <Route className="w-3.5 h-3.5" />
@@ -1570,7 +1570,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               toolMode === 'measure'
                 ? 'bg-[#9E2A2B] text-white shadow-2xs'
-                : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                : 'text-ink hover:bg-vellum'
             }`}
           >
             <Ruler className="w-3.5 h-3.5" />
@@ -1579,10 +1579,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         </div>
 
         {/* Layer Visibility Toggles Bar */}
-        <div className="pt-3 border-t border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="pt-3 border-t border-sepia flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="font-semibold text-[#695A47] flex items-center gap-1">
-              <Layers className="w-3.5 h-3.5 text-[#9E2A2B]" />
+            <span className="font-semibold text-ink-soft flex items-center gap-1">
+              <Layers className="w-3.5 h-3.5 text-wax" />
               Tampilan Layer Peta:
             </span>
             <button
@@ -1591,7 +1591,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
                 showStampsLayer
                   ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+                  : 'bg-parchment text-ink-soft border-sepia'
               }`}
             >
               Simbol Kota ({mapData.stamps.length})
@@ -1602,7 +1602,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
                 showLabelsLayer
                   ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+                  : 'bg-parchment text-ink-soft border-sepia'
               }`}
             >
               Kaligrafi Wilayah ({mapData.regionLabels.length})
@@ -1613,7 +1613,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
                 showRiversLayer
                   ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+                  : 'bg-parchment text-ink-soft border-sepia'
               }`}
             >
               Sungai ({mapData.rivers.length})
@@ -1624,7 +1624,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
                 showRoutesLayer
                   ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+                  : 'bg-parchment text-ink-soft border-sepia'
               }`}
             >
               Rute Jalan & Ekspedisi ({routes.length})
@@ -1635,7 +1635,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`px-2.5 py-1 rounded border text-[11px] font-medium cursor-pointer ${
                 showRhumbLines
                   ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                  : 'bg-[#F6F1E6] text-[#695A47] border-[#D8CBB3]'
+                  : 'bg-parchment text-ink-soft border-sepia'
               }`}
             >
               Garis Kompas Portolan
@@ -1649,12 +1649,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               onClick={() =>
                 setZoom((z) => Math.max(0.85, Number((z - 0.15).toFixed(2))))
               }
-              className="p-1.5 rounded bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+              className="p-1.5 rounded bg-parchment border border-sepia text-ink cursor-pointer"
               title="Perkecil tampilan"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="font-mono-tabular text-xs font-semibold text-[#231C14] px-1">
+            <span className="font-mono-tabular text-xs font-semibold text-ink px-1">
               {Math.round(zoom * 100)}%
             </span>
             <button
@@ -1662,7 +1662,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               onClick={() =>
                 setZoom((z) => Math.min(1.45, Number((z + 0.15).toFixed(2))))
               }
-              className="p-1.5 rounded bg-[#F6F1E6] border border-[#D8CBB3] text-[#231C14] cursor-pointer"
+              className="p-1.5 rounded bg-parchment border border-sepia text-ink cursor-pointer"
               title="Perbesar tampilan"
             >
               <ZoomIn className="w-3.5 h-3.5" />
@@ -1674,10 +1674,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {isEditingMapMeta && (
           <form
             onSubmit={handleSaveMapMeta}
-            className="pt-4 border-t border-[#D8CBB3] grid grid-cols-1 md:grid-cols-4 gap-3 items-end"
+            className="pt-4 border-t border-sepia grid grid-cols-1 md:grid-cols-4 gap-3 items-end"
           >
             <div>
-              <label className="block text-xs font-semibold text-[#695A47] mb-1">
+              <label className="block text-xs font-semibold text-ink-soft mb-1">
                 Judul Peta (Lencana Liber Mundi)
               </label>
               <input
@@ -1686,11 +1686,11 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 onChange={(e) =>
                   setDraftMapMeta({ ...draftMapMeta, mapTitle: e.target.value })
                 }
-                className="w-full px-3 py-1.5 text-xs font-semibold bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                className="w-full px-3 py-1.5 text-xs font-semibold bg-parchment border border-sepia rounded-lg text-ink"
               />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-xs font-semibold text-[#695A47] mb-1">
+              <label className="block text-xs font-semibold text-ink-soft mb-1">
                 Subjudul / Deskripsi Geografi
               </label>
               <input
@@ -1699,12 +1699,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 onChange={(e) =>
                   setDraftMapMeta({ ...draftMapMeta, subtitle: e.target.value })
                 }
-                className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink"
               />
             </div>
             <div className="flex items-end gap-2">
               <div className="flex-1">
-                <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                <label className="block text-xs font-semibold text-ink-soft mb-1">
                   Skala: 1 Grid Berapa Liga?
                 </label>
                 <input
@@ -1718,7 +1718,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       leaguesPerCell: Number(e.target.value),
                     })
                   }
-                  className="w-full px-3 py-1.5 text-xs font-mono-tabular bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="w-full px-3 py-1.5 text-xs font-mono-tabular bg-parchment border border-sepia rounded-lg text-ink"
                 />
               </div>
               <button
@@ -1736,9 +1736,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       {/* ===================================================================== */}
       {/* 2. CONTEXTUAL SUB-TOOLBAR FOR ACTIVE CARTOGRAPHY MODE                 */}
       {/* ===================================================================== */}
-      <div className="bg-[#EFE7D6]/90 border border-[#D8CBB3] rounded-xl p-3.5">
+      <div className="bg-aged/90 border border-sepia rounded-xl p-3.5">
         {toolMode === 'inspect' && (
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-[#695A47]">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
             <span>
               <strong>Mode Jelajah & Geser:</strong> Klik simbol kastil/kota
               atau teks kaligrafi wilayah di peta untuk mengedit detail, warna
@@ -1751,7 +1751,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {toolMode === 'terrain' && (
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-[#695A47] mr-1">
+              <span className="text-xs font-semibold text-ink-soft mr-1">
                 Kuas Ilustrasi Buku Kuno:
               </span>
               {TERRAIN_PALETTE.map((item) => (
@@ -1761,8 +1761,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   onClick={() => setSelectedTerrain(item.type)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-2 border transition-all whitespace-nowrap shrink-0 cursor-pointer ${
                     selectedTerrain === item.type
-                      ? 'bg-[#FBF8F1] border-[#9E2A2B] text-[#231C14] shadow-xs ring-1 ring-[#9E2A2B]'
-                      : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47] hover:text-[#231C14]'
+                      ? 'bg-vellum border-wax text-ink shadow-xs ring-1 ring-wax'
+                      : 'bg-parchment border-sepia text-ink-soft hover:text-ink'
                   }`}
                 >
                   <span
@@ -1775,7 +1775,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#695A47]">
+              <span className="text-xs font-semibold text-ink-soft">
                 Diameter Kuas:
               </span>
               {([1, 2, 3] as const).map((sz) => (
@@ -1786,7 +1786,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   className={`px-2.5 py-1 rounded text-xs font-mono-tabular font-semibold border cursor-pointer ${
                     brushSize === sz
                       ? 'bg-[#231C14] text-[#FBF8F1] border-[#231C14]'
-                      : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                      : 'bg-vellum text-ink border-sepia'
                   }`}
                 >
                   {sz}x{sz}
@@ -1799,7 +1799,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {toolMode === 'stamp' && (
           <div className="space-y-2.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-[#695A47]">
+              <span className="text-xs font-semibold text-ink-soft">
                 1. Pilih Simbol:
               </span>
               {STAMP_PALETTE.map((st) => (
@@ -1812,8 +1812,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   }}
                   className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border cursor-pointer whitespace-nowrap shrink-0 ${
                     selectedStampType === st.type
-                      ? 'bg-[#FBF8F1] border-[#9E2A2B] text-[#9E2A2B] font-semibold'
-                      : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#231C14]'
+                      ? 'bg-vellum border-wax text-wax font-semibold'
+                      : 'bg-parchment border-sepia text-ink'
                   }`}
                 >
                   {st.label}
@@ -1823,7 +1823,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
             <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs font-semibold text-[#695A47]">
+                <span className="text-xs font-semibold text-ink-soft">
                   2. Warna Panji Kerajaan:
                 </span>
                 {BANNER_COLORS.map((c) => (
@@ -1833,8 +1833,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                     onClick={() => setSelectedBannerColor(c.hex)}
                     className={`px-2 py-1 rounded text-[11px] font-medium flex items-center gap-1.5 border cursor-pointer ${
                       selectedBannerColor === c.hex
-                        ? 'bg-[#FBF8F1] border-[#231C14] font-semibold'
-                        : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47]'
+                        ? 'bg-vellum border-[#231C14] font-semibold'
+                        : 'bg-parchment border-sepia text-ink-soft'
                     }`}
                   >
                     <span
@@ -1852,12 +1852,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   value={newStampLabel}
                   onChange={(e) => setNewStampLabel(e.target.value)}
                   placeholder="Nama Kota / Benteng..."
-                  className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                 />
                 <select
                   value={newStampEntityId}
                   onChange={(e) => setNewStampEntityId(e.target.value)}
-                  className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                 >
                   <option value="">-- Hubungkan ke Entitas (Opsional) --</option>
                   {entities.map((ent) => (
@@ -1866,7 +1866,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                     </option>
                   ))}
                 </select>
-                <span className="text-xs text-[#9E2A2B] font-semibold">
+                <span className="text-xs text-wax font-semibold">
                   → Klik pada peta untuk menaruh simbol
                 </span>
               </div>
@@ -1876,7 +1876,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
         {toolMode === 'label' && (
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-xs font-semibold text-[#695A47]">
+            <span className="text-xs font-semibold text-ink-soft">
               Teks Kaligrafi Baru:
             </span>
             <input
@@ -1884,14 +1884,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               value={newRegionText}
               onChange={(e) => setNewRegionText(e.target.value)}
               placeholder="Contoh: KEKAISARAN GONDORIA atau Teluk Naga..."
-              className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] w-60"
+              className="px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink w-60"
             />
             <select
               value={newRegionStyle}
               onChange={(e) =>
                 setNewRegionStyle(e.target.value as 'empire' | 'region' | 'sea')
               }
-              className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+              className="px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink"
             >
               <option value="empire">Kaligrafi Kerajaan / Negara Besar</option>
               <option value="region">
@@ -1899,8 +1899,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               </option>
               <option value="sea">Kaligrafi Miring Samudra / Teluk</option>
             </select>
-            <div className="flex items-center gap-1.5 text-xs text-[#231C14]">
-              <span className="text-[#695A47] font-semibold">Kemiringan:</span>
+            <div className="flex items-center gap-1.5 text-xs text-ink">
+              <span className="text-ink-soft font-semibold">Kemiringan:</span>
               <input
                 type="range"
                 min={-45}
@@ -1908,13 +1908,13 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 step={3}
                 value={newRegionRotation}
                 onChange={(e) => setNewRegionRotation(Number(e.target.value))}
-                className="w-24 accent-[#9E2A2B]"
+                className="w-24 accent-wax"
               />
               <span className="font-mono-tabular w-9">
                 {newRegionRotation}°
               </span>
             </div>
-            <span className="text-xs text-[#9E2A2B] font-semibold ml-auto">
+            <span className="text-xs text-wax font-semibold ml-auto">
               → Klik titik di peta untuk menempelkan teks
             </span>
           </div>
@@ -1923,7 +1923,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {toolMode === 'river_route' && (
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-[#695A47]">
+              <span className="text-xs font-semibold text-ink-soft">
                 Jenis Jalur Kartografi:
               </span>
               <button
@@ -1931,8 +1931,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 onClick={() => setPathDrawKind('river')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
                   pathDrawKind === 'river'
-                    ? 'bg-[#264653] text-white border-[#264653]'
-                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                    ? 'bg-[#264653] text-white border-sea'
+                    : 'bg-vellum text-ink border-sepia'
                 }`}
               >
                 <Waves className="w-3.5 h-3.5" />
@@ -1944,7 +1944,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
                   pathDrawKind === 'road'
                     ? 'bg-[#3B2818] text-white border-[#3B2818]'
-                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                    : 'bg-vellum text-ink border-sepia'
                 }`}
               >
                 Jalan Raya Kerajaan
@@ -1954,8 +1954,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 onClick={() => setPathDrawKind('expedition')}
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
                   pathDrawKind === 'expedition'
-                    ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                    ? 'bg-[#9E2A2B] text-white border-wax'
+                    : 'bg-vellum text-ink border-sepia'
                 }`}
               >
                 Rute Ekspedisi Tokoh
@@ -1966,7 +1966,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 border cursor-pointer ${
                   pathDrawKind === 'sea_lane'
                     ? 'bg-[#1F485B] text-white border-[#1F485B]'
-                    : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                    : 'bg-vellum text-ink border-sepia'
                 }`}
               >
                 Jalur Pelayaran Laut
@@ -1981,14 +1981,14 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                     ? 'Nama Sungai (cth: Sungai Perak)...'
                     : 'Nama Rute (cth: Ekspedisi Bab 2)...'
                 }
-                className="px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14] w-56"
+                className="px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink w-56"
               />
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[#695A47]">
+              <span className="text-xs text-ink-soft">
                 Klik minimal 2 titik berurutan di peta (
-                <strong className="font-mono-tabular text-[#231C14]">
+                <strong className="font-mono-tabular text-ink">
                   {draftPoints.length}
                 </strong>{' '}
                 titik dipilih)
@@ -1997,7 +1997,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 <button
                   type="button"
                   onClick={() => setDraftPoints([])}
-                  className="px-2.5 py-1.5 text-xs font-medium text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3] bg-[#FBF8F1] rounded-lg cursor-pointer"
+                  className="px-2.5 py-1.5 text-xs font-medium text-ink-soft hover:text-ink border border-sepia bg-vellum rounded-lg cursor-pointer"
                 >
                   Reset Titik
                 </button>
@@ -2018,20 +2018,20 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {toolMode === 'measure' && (
           <div className="space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="text-xs text-[#231C14]">
-                <strong className="text-[#9E2A2B]">
+              <div className="text-xs text-ink">
+                <strong className="text-wax">
                   Pengukur Jarak & Kalkulator Waktu Tempuh:
                 </strong>{' '}
                 Klik dua lokasi atau titik mana saja di atas peta untuk mengukur
                 jarak dan estimasi hari perjalanan.
               </div>
               {measuredDistance && (
-                <div className="flex items-center gap-3 bg-[#FBF8F1] border border-[#D8CBB3] px-3.5 py-1.5 rounded-lg">
-                  <span className="text-xs text-[#695A47]">
+                <div className="flex items-center gap-3 bg-vellum border border-sepia px-3.5 py-1.5 rounded-lg">
+                  <span className="text-xs text-ink-soft">
                     <strong>{measurePointA?.label}</strong> →{' '}
                     <strong>{measurePointB?.label}</strong>:
                   </span>
-                  <span className="font-mono-tabular text-sm font-bold text-[#9E2A2B]">
+                  <span className="font-mono-tabular text-sm font-bold text-wax">
                     {measuredDistance.totalLeagues} Liga (~
                     {measuredDistance.totalKm} km)
                   </span>
@@ -2053,15 +2053,15 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   return (
                     <div
                       key={tm.id}
-                      className="p-2.5 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-0.5"
+                      className="p-2.5 rounded-lg bg-vellum border border-sepia space-y-0.5"
                     >
-                      <div className="text-[11px] font-semibold text-[#695A47]">
+                      <div className="text-[11px] font-semibold text-ink-soft">
                         {tm.label}
                       </div>
-                      <div className="font-mono-tabular text-base font-bold text-[#231C14]">
+                      <div className="font-mono-tabular text-base font-bold text-ink">
                         {days} Hari
                       </div>
-                      <div className="text-[10px] text-[#9E2A2B]">
+                      <div className="text-[10px] text-wax">
                         Kecepatan {tm.leaguesPerDay} Liga/hari ({tm.note})
                       </div>
                     </div>
@@ -2112,7 +2112,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                 <div className="text-[10px] tracking-[0.25em] font-cartography text-[#8B1E1E] font-bold">
                   LIBER MUNDI · CHRONICA
                 </div>
-                <div className="font-cartography text-sm md:text-base font-bold tracking-wider text-[#231C14]">
+                <div className="font-cartography text-sm md:text-base font-bold tracking-wider text-ink">
                   {mapData.mapTitle.toUpperCase()}
                 </div>
                 <div className="font-display italic text-xs text-[#5A4632]">
@@ -2132,7 +2132,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                     top: `${(measurePointA.y + measurePointB.y) / 2}%`,
                     transform: 'translate(-50%, -120%)',
                   }}
-                  className="pointer-events-none absolute z-20 px-3 py-1 rounded-lg bg-[#231C14] text-[#FBF8F1] border border-[#B5832A] shadow-md text-xs font-mono-tabular font-bold whitespace-nowrap"
+                  className="pointer-events-none absolute z-20 px-3 py-1 rounded-lg bg-[#231C14] text-[#FBF8F1] border border-brass shadow-md text-xs font-mono-tabular font-bold whitespace-nowrap"
                 >
                   {measuredDistance.totalLeagues} Liga (~
                   {measuredDistance.totalKm} km)
@@ -2166,7 +2166,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                         : 'pointer-events-none'
                     } ${
                       isLabelSelected
-                        ? 'ring-2 ring-[#9E2A2B] bg-[#F5ECD9]/75'
+                        ? 'ring-2 ring-wax bg-[#F5ECD9]/75'
                         : ''
                     }`}
                   >
@@ -2225,7 +2225,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       className={`-mt-1 px-2.5 py-0.5 border text-[11px] font-display font-bold tracking-wide whitespace-nowrap transition-colors ${
                         isSelected
                           ? 'bg-[#8B1E1E] text-[#FBF8F1] border-[#261A10] shadow-xs'
-                          : 'bg-[#F5ECD9]/95 text-[#231C14] border-[#2B1E12]'
+                          : 'bg-[#F5ECD9]/95 text-ink border-[#2B1E12]'
                       }`}
                     >
                       {stamp.label}
@@ -2239,16 +2239,16 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
         {/* =================================================================== */}
         {/* 4. RIGHT CARTOGRAPHY INSPECTOR PANEL (STAMPS, LABELS, RIVERS/ROUTES)*/}
         {/* =================================================================== */}
-        <div className="xl:col-span-3 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-4">
+        <div className="xl:col-span-3 bg-vellum border border-sepia rounded-xl p-4 space-y-4">
           {/* Switcher between Stamp Inspector and Label Inspector */}
-          <div className="flex items-center gap-1.5 bg-[#EFE7D6] p-1 rounded-lg border border-[#D8CBB3]">
+          <div className="flex items-center gap-1.5 bg-aged p-1 rounded-lg border border-sepia">
             <button
               type="button"
               onClick={() => setInspectorKind('stamp')}
               className={`flex-1 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer ${
                 inspectorKind === 'stamp'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                  : 'text-ink hover:bg-vellum'
               }`}
             >
               Lokasi Pin ({mapData.stamps.length})
@@ -2259,7 +2259,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               className={`flex-1 py-1.5 rounded text-xs font-semibold transition-colors cursor-pointer ${
                 inspectorKind === 'label'
                   ? 'bg-[#9E2A2B] text-white'
-                  : 'text-[#231C14] hover:bg-[#FBF8F1]'
+                  : 'text-ink hover:bg-vellum'
               }`}
             >
               Kaligrafi ({mapData.regionLabels.length})
@@ -2272,7 +2272,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               {activeStamp ? (
                 <div className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">
                       Nama Tempat di Peta
                     </label>
                     <input
@@ -2288,13 +2288,13 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           ),
                         })
                       }
-                      className="w-full px-3 py-1.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                      className="w-full px-3 py-1.5 text-sm bg-parchment border border-sepia rounded-lg text-ink font-semibold"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-xs font-medium text-[#695A47] mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Simbol Ilustrasi
                       </label>
                       <select
@@ -2309,7 +2309,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                             ),
                           })
                         }
-                        className="w-full px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                       >
                         {STAMP_PALETTE.map((st) => (
                           <option key={st.type} value={st.type}>
@@ -2319,10 +2319,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-medium text-[#695A47] mb-1">
+                      <label className="block text-xs font-medium text-ink-soft mb-1">
                         Koordinat Atlas
                       </label>
-                      <div className="px-2.5 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-mono-tabular text-[#231C14]">
+                      <div className="px-2.5 py-1.5 text-xs bg-parchment border border-sepia rounded-lg font-mono-tabular text-ink">
                         {activeStamp.x}°B · {activeStamp.y}°U
                       </div>
                     </div>
@@ -2330,7 +2330,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
                   {/* Kingdom Flag / Banner Color Picker */}
                   <div>
-                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Warna Panji Kerajaan / Faksi
                     </label>
                     <div className="grid grid-cols-3 gap-1.5">
@@ -2350,8 +2350,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           }
                           className={`px-2 py-1 rounded text-[11px] font-medium flex items-center gap-1.5 border cursor-pointer ${
                             (activeStamp.nationColor || '#9E2A2B') === c.hex
-                              ? 'bg-[#EFE7D6] border-[#231C14] font-semibold text-[#231C14]'
-                              : 'bg-[#F6F1E6] border-[#D8CBB3] text-[#695A47]'
+                              ? 'bg-aged border-[#231C14] font-semibold text-ink'
+                              : 'bg-parchment border-sepia text-ink-soft'
                           }`}
                         >
                           <span
@@ -2365,7 +2365,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Tautkan ke Entri World Bible
                     </label>
                     <select
@@ -2383,7 +2383,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           ),
                         })
                       }
-                      className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                      className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                     >
                       <option value="">-- Tidak Ditautkan --</option>
                       {entities.map((ent) => (
@@ -2395,15 +2395,15 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   </div>
 
                   {linkedEntity ? (
-                    <div className="p-3.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                      <div className="text-xs text-[#9E2A2B] font-semibold">
+                    <div className="p-3.5 rounded-lg bg-parchment border border-sepia space-y-2">
+                      <div className="text-xs text-wax font-semibold">
                         {CATEGORY_META[linkedEntity.category].singular}{' '}
                         Terhubung
                       </div>
-                      <div className="font-display text-lg font-bold text-[#231C14]">
+                      <div className="font-display text-lg font-bold text-ink">
                         {linkedEntity.title}
                       </div>
-                      <p className="text-xs text-[#695A47] leading-relaxed">
+                      <p className="text-xs text-ink-soft leading-relaxed">
                         {linkedEntity.summary}
                       </p>
                       <button
@@ -2415,15 +2415,15 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       </button>
                     </div>
                   ) : (
-                    <div className="p-3.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs text-[#695A47]">
+                    <div className="p-3.5 rounded-lg bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs text-ink-soft">
                         Lokasi <strong>{activeStamp.label}</strong> belum
                         memiliki lembar entri di World Bible.
                       </div>
                       {onCreateEntityFromStamp && (
                         <div className="space-y-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[11px] text-[#695A47]">
+                            <span className="text-[11px] text-ink-soft">
                               Jadikan Kategori:
                             </span>
                             <select
@@ -2433,7 +2433,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                                   e.target.value as LoreCategory
                                 )
                               }
-                              className="flex-1 px-2 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded text-[#231C14]"
+                              className="flex-1 px-2 py-1 text-xs bg-vellum border border-sepia rounded text-ink"
                             >
                               <option value="region">Wilayah</option>
                               <option value="nation">Negara / Kerajaan</option>
@@ -2454,7 +2454,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                             }
                             className="w-full px-3 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                           >
-                            <FilePlus2 className="w-3.5 h-3.5 text-[#B5832A]" />
+                            <FilePlus2 className="w-3.5 h-3.5 text-brass" />
                             + Buat Entri World Bible dari Pin Ini
                           </button>
                         </div>
@@ -2471,22 +2471,22 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       onChangeMapData({ ...mapData, stamps: remaining });
                       setActiveStampId(remaining[0]?.id ?? null);
                     }}
-                    className="w-full px-3 py-1.5 text-xs font-medium text-[#9E2A2B] border border-[#9E2A2B]/40 rounded-lg hover:bg-[#9E2A2B]/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="w-full px-3 py-1.5 text-xs font-medium text-wax border border-wax/40 rounded-lg hover:bg-wax/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     Hapus Simbol dari Peta
                   </button>
                 </div>
               ) : (
-                <div className="text-xs text-[#695A47] py-4 text-center">
+                <div className="text-xs text-ink-soft py-4 text-center">
                   Klik salah satu simbol kastil atau kota di atas peta untuk
                   melihat detail lokasinya.
                 </div>
               )}
 
               {/* List of all map stamps */}
-              <div className="pt-3 border-t border-[#D8CBB3]">
-                <div className="text-xs font-semibold text-[#695A47] mb-2">
+              <div className="pt-3 border-t border-sepia">
+                <div className="text-xs font-semibold text-ink-soft mb-2">
                   Daftar Tempat di Peta ({mapData.stamps.length})
                 </div>
                 <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
@@ -2500,8 +2500,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
                         s.id === activeStampId
-                          ? 'bg-[#EFE7D6] text-[#231C14] font-semibold border border-[#D8CBB3]'
-                          : 'text-[#695A47] hover:bg-[#F6F1E6]'
+                          ? 'bg-aged text-ink font-semibold border border-sepia'
+                          : 'text-ink-soft hover:bg-parchment'
                       }`}
                     >
                       <span className="truncate flex items-center gap-1.5">
@@ -2513,7 +2513,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                         />
                         {s.label}
                       </span>
-                      <span className="font-mono-tabular text-[11px] text-[#695A47] shrink-0 ml-2">
+                      <span className="font-mono-tabular text-[11px] text-ink-soft shrink-0 ml-2">
                         {s.x}°,{s.y}°
                       </span>
                     </button>
@@ -2529,7 +2529,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               {activeLabel ? (
                 <div className="space-y-3.5">
                   <div>
-                    <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                    <label className="block text-xs font-semibold text-ink-soft mb-1">
                       Teks Kaligrafi Wilayah
                     </label>
                     <input
@@ -2545,12 +2545,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           ),
                         })
                       }
-                      className="w-full px-3 py-1.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                      className="w-full px-3 py-1.5 text-sm bg-parchment border border-sepia rounded-lg text-ink font-semibold"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-medium text-[#695A47] mb-1">
+                    <label className="block text-xs font-medium text-ink-soft mb-1">
                       Gaya Kaligrafi Peta
                     </label>
                     <select
@@ -2571,7 +2571,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           ),
                         })
                       }
-                      className="w-full px-3 py-1.5 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                      className="w-full px-3 py-1.5 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                     >
                       <option value="empire">
                         Kaligrafi Kerajaan / Negara Besar
@@ -2587,10 +2587,10 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
 
                   <div>
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="font-medium text-[#695A47]">
+                      <span className="font-medium text-ink-soft">
                         Rotasi / Kemiringan Teks
                       </span>
-                      <span className="font-mono-tabular font-semibold text-[#231C14]">
+                      <span className="font-mono-tabular font-semibold text-ink">
                         {activeLabel.rotation || 0}°
                       </span>
                     </div>
@@ -2610,9 +2610,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                           ),
                         })
                       }
-                      className="w-full accent-[#9E2A2B]"
+                      className="w-full accent-wax"
                     />
-                    <div className="flex justify-between text-[10px] text-[#695A47] mt-1">
+                    <div className="flex justify-between text-[10px] text-ink-soft mt-1">
                       <button
                         type="button"
                         onClick={() =>
@@ -2673,21 +2673,21 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       onChangeMapData({ ...mapData, regionLabels: remaining });
                       setActiveLabelId(remaining[0]?.id ?? null);
                     }}
-                    className="w-full px-3 py-1.5 text-xs font-medium text-[#9E2A2B] border border-[#9E2A2B]/40 rounded-lg hover:bg-[#9E2A2B]/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    className="w-full px-3 py-1.5 text-xs font-medium text-wax border border-wax/40 rounded-lg hover:bg-wax/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     Hapus Teks Kaligrafi
                   </button>
                 </div>
               ) : (
-                <div className="text-xs text-[#695A47] py-4 text-center">
+                <div className="text-xs text-ink-soft py-4 text-center">
                   Pilih salah satu teks kaligrafi di peta atau dari daftar di
                   bawah.
                 </div>
               )}
 
-              <div className="pt-3 border-t border-[#D8CBB3]">
-                <div className="text-xs font-semibold text-[#695A47] mb-2">
+              <div className="pt-3 border-t border-sepia">
+                <div className="text-xs font-semibold text-ink-soft mb-2">
                   Daftar Kaligrafi Wilayah ({mapData.regionLabels.length})
                 </div>
                 <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
@@ -2701,12 +2701,12 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                       }}
                       className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs flex items-center justify-between transition-colors cursor-pointer ${
                         lbl.id === activeLabelId
-                          ? 'bg-[#EFE7D6] text-[#231C14] font-semibold border border-[#D8CBB3]'
-                          : 'text-[#695A47] hover:bg-[#F6F1E6]'
+                          ? 'bg-aged text-ink font-semibold border border-sepia'
+                          : 'text-ink-soft hover:bg-parchment'
                       }`}
                     >
                       <span className="truncate">{lbl.text}</span>
-                      <span className="font-mono-tabular text-[11px] text-[#695A47] shrink-0 ml-2">
+                      <span className="font-mono-tabular text-[11px] text-ink-soft shrink-0 ml-2">
                         {lbl.rotation || 0}°
                       </span>
                     </button>
@@ -2717,9 +2717,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
           )}
 
           {/* Rivers & Routes Management List at Bottom of Inspector */}
-          <div className="pt-3 border-t border-[#D8CBB3] space-y-2">
+          <div className="pt-3 border-t border-sepia space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-[#695A47]">
+              <span className="text-xs font-semibold text-ink-soft">
                 Jaringan Sungai ({mapData.rivers.length}) & Rute (
                 {routes.length})
               </span>
@@ -2729,7 +2729,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                   setDraftPoints([]);
                   setToolMode('river_route');
                 }}
-                className="text-[11px] font-semibold text-[#9E2A2B] hover:underline cursor-pointer"
+                className="text-[11px] font-semibold text-wax hover:underline cursor-pointer"
               >
                 + Gambar Baru
               </button>
@@ -2739,9 +2739,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               {mapData.rivers.map((rv) => (
                 <div
                   key={rv.id}
-                  className="px-2.5 py-1.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between text-xs"
+                  className="px-2.5 py-1.5 rounded-lg bg-parchment border border-sepia flex items-center justify-between text-xs"
                 >
-                  <span className="truncate text-[#264653] font-medium">
+                  <span className="truncate text-sea font-medium">
                     [Sungai] {rv.name}
                   </span>
                   <button
@@ -2752,7 +2752,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                         rivers: mapData.rivers.filter((r) => r.id !== rv.id),
                       })
                     }
-                    className="text-[#695A47] hover:text-[#9E2A2B] cursor-pointer ml-2"
+                    className="text-ink-soft hover:text-wax cursor-pointer ml-2"
                     title="Hapus sungai"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -2763,9 +2763,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
               {routes.map((rt) => (
                 <div
                   key={rt.id}
-                  className="px-2.5 py-1.5 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] flex items-center justify-between text-xs"
+                  className="px-2.5 py-1.5 rounded-lg bg-parchment border border-sepia flex items-center justify-between text-xs"
                 >
-                  <span className="truncate text-[#9E2A2B] font-medium">
+                  <span className="truncate text-wax font-medium">
                     [
                     {rt.style === 'road'
                       ? 'Jalan'
@@ -2782,7 +2782,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
                         routes: routes.filter((r) => r.id !== rt.id),
                       })
                     }
-                    className="text-[#695A47] hover:text-[#9E2A2B] cursor-pointer ml-2"
+                    className="text-ink-soft hover:text-wax cursor-pointer ml-2"
                     title="Hapus rute"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

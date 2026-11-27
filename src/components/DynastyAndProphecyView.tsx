@@ -53,19 +53,19 @@ const SUCCESSION_BADGE_STYLE: Record<
   DynastyMember['successionStatus'],
   string
 > = {
-  'Penguasa Takhta': 'bg-[#9E2A2B] text-white border-[#B5832A]',
-  'Pendiri Wangsa': 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]',
-  'Pewaris Utama': 'bg-[#B5832A]/20 text-[#9E2A2B] border-[#B5832A]',
-  'Pangeran / Putri': 'bg-[#EFE7D6] text-[#231C14] border-[#D8CBB3]',
-  'Cabang Kadet': 'bg-[#264653]/15 text-[#264653] border-[#264653]/40',
-  'Pasangan / Konsort': 'bg-[#2D5A43]/15 text-[#2D5A43] border-[#2D5A43]/40',
+  'Penguasa Takhta': 'bg-[#9E2A2B] text-white border-brass',
+  'Pendiri Wangsa': 'bg-[#231C14] text-[#FBF8F1] border-brass',
+  'Pewaris Utama': 'bg-brass/20 text-wax border-brass',
+  'Pangeran / Putri': 'bg-aged text-ink border-sepia',
+  'Cabang Kadet': 'bg-sea/15 text-sea border-sea/40',
+  'Pasangan / Konsort': 'bg-forest/15 text-forest border-forest/40',
 };
 
 const MEMBER_STATUS_BADGE: Record<DynastyMember['status'], string> = {
-  Hidup: 'text-[#2D5A43] bg-[#2D5A43]/12 border-[#2D5A43]/30',
-  Gugur: 'text-[#695A47] bg-[#EFE7D6] border-[#D8CBB3]',
-  Menghilang: 'text-[#9E2A2B] bg-[#9E2A2B]/12 border-[#9E2A2B]/30',
-  Diasingkan: 'text-[#8F5B14] bg-[#B5832A]/15 border-[#B5832A]/40',
+  Hidup: 'text-forest bg-forest/12 border-forest/30',
+  Gugur: 'text-ink-soft bg-aged border-sepia',
+  Menghilang: 'text-wax bg-wax/12 border-wax/30',
+  Diasingkan: 'text-amber bg-brass/15 border-brass/40',
 };
 
 export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
@@ -246,16 +246,16 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
   return (
     <div className="space-y-5">
       {/* Top Banner: Dynasty Selector & Heraldry Header */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 shadow-xs space-y-4">
-        <OrnateCornerFiligree className="text-[#B5832A]/50" />
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-2xl p-5 shadow-xs space-y-4">
+        <OrnateCornerFiligree className="text-brass/50" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-sepia pb-3.5">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="text-xs font-epic font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
-              <Crown className="w-3.5 h-3.5 text-[#B5832A]" />
+            <div className="text-xs font-epic font-bold uppercase tracking-widest text-wax flex items-center gap-1.5">
+              <Crown className="w-3.5 h-3.5 text-brass" />
               <span>Pilar IV · Studio Silsilah Keluarga & Dinasti Kerajaan</span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink leading-tight">
               Arsip Genealogi, Garis Darah & Suksesi Takhta
             </h2>
           </div>
@@ -266,7 +266,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
               onClick={handleOpenNewHouse}
               className="px-3.5 py-2 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+              <Plus className="w-3.5 h-3.5 text-brass" />
               <span>+ Buat Wangsa / Dinasti Baru</span>
             </button>
             {activeTree && (
@@ -284,7 +284,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
 
         {/* Dynasty Tabs Selector */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs font-semibold text-[#695A47]">
+          <span className="text-xs font-semibold text-ink-soft">
             Pilih Wangsa / Klan:
           </span>
           {trees.map((tree) => {
@@ -299,8 +299,8 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                 }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
                   isSelected
-                    ? 'bg-[#9E2A2B] text-white shadow-xs ring-1 ring-[#B5832A]'
-                    : 'bg-[#F6F1E6] text-[#231C14] border border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                    ? 'bg-[#9E2A2B] text-white shadow-xs ring-1 ring-brass'
+                    : 'bg-parchment text-ink border border-sepia hover:bg-aged'
                 }`}
               >
                 <Shield className="w-3.5 h-3.5" />
@@ -309,7 +309,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   className={`font-mono-tabular text-[10px] px-1.5 py-0.2 rounded ${
                     isSelected
                       ? 'bg-black/25 text-white'
-                      : 'bg-[#EFE7D6] text-[#695A47]'
+                      : 'bg-aged text-ink-soft'
                   }`}
                 >
                   {tree.members.length} Tokoh
@@ -321,9 +321,9 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
 
         {/* Active Dynasty Heraldry Metadata */}
         {activeTree && (
-          <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="p-4 rounded-xl bg-parchment border border-sepia grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
             <div className="lg:col-span-8 space-y-1.5">
-              <div className="flex flex-wrap items-center gap-2 text-xs text-[#9E2A2B] font-semibold">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-wax font-semibold">
                 <span>Semboyan Wangsa: “{activeTree.motto}”</span>
                 {activeTree.originNation && (
                   <>
@@ -338,7 +338,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   </>
                 )}
               </div>
-              <div className="text-xs text-[#231C14] leading-relaxed">
+              <div className="text-xs text-ink leading-relaxed">
                 <WikiTextRenderer
                   text={activeTree.overview}
                   entities={entities}
@@ -346,8 +346,8 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   onQuickCreateEntity={onQuickCreateEntity}
                 />
               </div>
-              <div className="text-[11px] text-[#695A47] pt-0.5">
-                <strong className="text-[#231C14]">Lambang Kebesaran:</strong>{' '}
+              <div className="text-[11px] text-ink-soft pt-0.5">
+                <strong className="text-ink">Lambang Kebesaran:</strong>{' '}
                 {activeTree.coatOfArms}
               </div>
             </div>
@@ -359,16 +359,16 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   setEditingHouse(activeTree);
                   setShowHouseForm(true);
                 }}
-                className="px-3 py-1.5 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] border border-[#D8CBB3] rounded-lg flex items-center gap-1.5 cursor-pointer"
+                className="px-3 py-1.5 text-xs font-semibold bg-aged hover:bg-sepia text-ink border border-sepia rounded-lg flex items-center gap-1.5 cursor-pointer"
               >
-                <Edit3 className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                <Edit3 className="w-3.5 h-3.5 text-wax" />
                 <span>Sunting Info Wangsa</span>
               </button>
               {trees.length > 1 && (
                 <button
                   type="button"
                   onClick={() => handleDeleteHouse(activeTree.id)}
-                  className="px-2.5 py-1.5 text-xs font-semibold text-[#9E2A2B] border border-[#9E2A2B]/30 rounded-lg hover:bg-[#9E2A2B]/10 cursor-pointer"
+                  className="px-2.5 py-1.5 text-xs font-semibold text-wax border border-wax/30 rounded-lg hover:bg-wax/10 cursor-pointer"
                   title="Hapus wangsa ini"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -383,15 +383,15 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
       {activeTree && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Left 8 Cols: Multi-Generation Lineage Tree */}
-          <div className="lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-5 space-y-6">
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
+          <div className="lg:col-span-8 bg-vellum border-2 border-brass/45 rounded-2xl p-5 space-y-6">
+            <div className="flex items-center justify-between border-b border-sepia pb-3">
               <div className="flex items-center gap-2">
-                <GitBranch className="w-4 h-4 text-[#9E2A2B]" />
-                <h3 className="font-display text-xl font-bold text-[#231C14]">
+                <GitBranch className="w-4 h-4 text-wax" />
+                <h3 className="font-display text-xl font-bold text-ink">
                   Bagan Garis Keturunan Lintas Generasi ({activeTree.houseName})
                 </h3>
               </div>
-              <span className="text-xs text-[#695A47]">
+              <span className="text-xs text-ink-soft">
                 Klik kartu anggota untuk melihat detail & tautan Tokoh
               </span>
             </div>
@@ -404,8 +404,8 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                 return (
                   <div key={genNum} className=" relative space-y-3">
                     {/* Generation Header */}
-                    <div className="flex items-center justify-between gap-2 bg-[#EFE7D6] border border-[#D8CBB3] px-3.5 py-1.5 rounded-lg">
-                      <span className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                    <div className="flex items-center justify-between gap-2 bg-aged border border-sepia px-3.5 py-1.5 rounded-lg">
+                      <span className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                         Generasi ke-{genNum}{' '}
                         {genNum === 1
                           ? '· Leluhur Pendiri'
@@ -418,7 +418,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       <button
                         type="button"
                         onClick={() => handleOpenNewMember(genNum)}
-                        className="text-[11px] font-semibold text-[#231C14] hover:text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                        className="text-[11px] font-semibold text-ink hover:text-wax flex items-center gap-1 cursor-pointer"
                       >
                         <Plus className="w-3 h-3" />
                         <span>Tambah di Gen {genNum}</span>
@@ -440,8 +440,8 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                             onClick={() => setSelectedMemberId(member.id)}
                             className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
                               isSelected
-                                ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-sm'
-                                : 'bg-[#F6F1E6] border-[#D8CBB3] hover:bg-[#EFE7D6]/70'
+                                ? 'bg-aged border-2 border-wax shadow-sm'
+                                : 'bg-parchment border-sepia hover:bg-aged/70'
                             }`}
                           >
                             <div className="flex items-center justify-between gap-2">
@@ -464,25 +464,25 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                             </div>
 
                             <div>
-                              <div className="font-display text-lg font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-lg font-bold text-ink flex items-center justify-between gap-2">
                                 <span>{member.name}</span>
                                 {linkedChar && (
                                   <span
-                                    className="text-[10px] font-semibold text-[#9E2A2B] bg-[#FBF8F1] px-2 py-0.5 rounded border border-[#B5832A]/50 shrink-0"
+                                    className="text-[10px] font-semibold text-wax bg-vellum px-2 py-0.5 rounded border border-brass/50 shrink-0"
                                     title="Terhubung ke halaman Karakter di Codex"
                                   >
                                     Profil Codex ↗
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs italic text-[#695A47]">
+                              <div className="text-xs italic text-ink-soft">
                                 {member.titleOrRole}
                               </div>
                             </div>
 
                             {parents.length > 0 && (
-                              <div className="text-[11px] text-[#695A47] pt-1 border-t border-[#D8CBB3]/70">
-                                <strong className="text-[#231C14]">
+                              <div className="text-[11px] text-ink-soft pt-1 border-t border-sepia/70">
+                                <strong className="text-ink">
                                   Putra/Putri dari:
                                 </strong>{' '}
                                 {parents.map((p) => p.name).join(' & ')}
@@ -490,13 +490,13 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                             )}
 
                             {member.spouseName && (
-                              <div className="text-[11px] text-[#2D5A43] font-medium">
+                              <div className="text-[11px] text-forest font-medium">
                                 ❖ Pasangan / Konsort: {member.spouseName}
                               </div>
                             )}
 
                             {member.bloodlineTrait && (
-                              <div className="text-[11px] text-[#8F5B14] bg-[#FBF8F1] px-2.5 py-1 rounded border border-[#D8CBB3]">
+                              <div className="text-[11px] text-amber bg-vellum px-2.5 py-1 rounded border border-sepia">
                                 ✦ Warisan Darah: {member.bloodlineTrait}
                               </div>
                             )}
@@ -526,9 +526,9 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       selectedMember?.id
                     )
                   }
-                  className="px-4 py-2 text-xs font-semibold bg-[#F6F1E6] hover:bg-[#EFE7D6] text-[#231C14] border border-[#B5832A] rounded-xl flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 text-xs font-semibold bg-parchment hover:bg-aged text-ink border border-brass rounded-xl flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                  <Plus className="w-3.5 h-3.5 text-wax" />
                   <span>
                     + Tambah Generasi Berikutnya (Keturunan{' '}
                     {selectedMember ? selectedMember.name : 'Wangsa'})
@@ -539,18 +539,18 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
           </div>
 
           {/* Right 4 Cols: Selected Member Dossier & Character Codex Bridge */}
-          <div className="lg:col-span-4 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-5 space-y-4 sticky top-20">
+          <div className="lg:col-span-4 bg-vellum border-2 border-brass/45 rounded-2xl p-5 space-y-4 sticky top-20">
             {selectedMember ? (
               <>
-                <div className="flex items-start justify-between gap-2 border-b border-[#D8CBB3] pb-3">
+                <div className="flex items-start justify-between gap-2 border-b border-sepia pb-3">
                   <div>
-                    <span className="text-[11px] font-epic uppercase tracking-wider text-[#9E2A2B] font-bold">
+                    <span className="text-[11px] font-epic uppercase tracking-wider text-wax font-bold">
                       Dossier Anggota Dinasti · Gen {selectedMember.generation}
                     </span>
-                    <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                    <h3 className="font-display text-2xl font-bold text-ink">
                       {selectedMember.name}
                     </h3>
-                    <p className="text-xs italic text-[#695A47]">
+                    <p className="text-xs italic text-ink-soft">
                       {selectedMember.titleOrRole}
                     </p>
                   </div>
@@ -567,7 +567,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       <button
                         type="button"
                         onClick={() => handleDeleteMember(selectedMember.id)}
-                        className="p-1.5 rounded-lg border border-[#9E2A2B]/30 text-[#9E2A2B] hover:bg-[#9E2A2B]/10 cursor-pointer"
+                        className="p-1.5 rounded-lg border border-wax/30 text-wax hover:bg-wax/10 cursor-pointer"
                         title="Hapus anggota"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -577,23 +577,23 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                 </div>
 
                 <div className="space-y-2.5 text-xs">
-                  <div className="p-3 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
+                  <div className="p-3 rounded-xl bg-parchment border border-sepia space-y-1.5">
                     <div className="flex justify-between">
-                      <span className="text-[#695A47]">Status Suksesi:</span>
-                      <span className="font-bold text-[#9E2A2B]">
+                      <span className="text-ink-soft">Status Suksesi:</span>
+                      <span className="font-bold text-wax">
                         {selectedMember.successionStatus}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-[#695A47]">Status & Masa Hidup:</span>
-                      <span className="font-semibold text-[#231C14]">
+                      <span className="text-ink-soft">Status & Masa Hidup:</span>
+                      <span className="font-semibold text-ink">
                         {selectedMember.status} ({selectedMember.birthDeathYears})
                       </span>
                     </div>
                     {selectedMember.spouseName && (
                       <div className="flex justify-between">
-                        <span className="text-[#695A47]">Pasangan / Konsort:</span>
-                        <span className="font-semibold text-[#2D5A43]">
+                        <span className="text-ink-soft">Pasangan / Konsort:</span>
+                        <span className="font-semibold text-forest">
                           {selectedMember.spouseName}
                         </span>
                       </div>
@@ -601,22 +601,22 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   </div>
 
                   {selectedMember.bloodlineTrait && (
-                    <div className="p-3 rounded-xl bg-[#EFE7D6]/75 border border-[#B5832A]/50 space-y-1">
-                      <div className="text-[11px] font-semibold text-[#8F5B14] flex items-center gap-1">
+                    <div className="p-3 rounded-xl bg-aged/75 border border-brass/50 space-y-1">
+                      <div className="text-[11px] font-semibold text-amber flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5" />
                         <span>Ciri Khas & Bakat Warisan Darah</span>
                       </div>
-                      <p className="text-xs text-[#231C14] font-medium">
+                      <p className="text-xs text-ink font-medium">
                         {selectedMember.bloodlineTrait}
                       </p>
                     </div>
                   )}
 
-                  <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                    <div className="text-[11px] font-semibold text-[#695A47]">
+                  <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                    <div className="text-[11px] font-semibold text-ink-soft">
                       Catatan Sejarah & Konflik Suksesi
                     </div>
-                    <div className="text-xs text-[#231C14] leading-relaxed">
+                    <div className="text-xs text-ink leading-relaxed">
                       <WikiTextRenderer
                         text={selectedMember.notes}
                         entities={entities}
@@ -656,7 +656,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                           }
                           className="w-full py-2.5 px-4 rounded-xl bg-[#231C14] hover:bg-[#3A2E21] text-[#FBF8F1] font-semibold text-xs flex items-center justify-center gap-2 cursor-pointer"
                         >
-                          <UserPlus className="w-4 h-4 text-[#B5832A]" />
+                          <UserPlus className="w-4 h-4 text-brass" />
                           <span>
                             + Buat Halaman Karakter di Codex untuk Tokoh Ini
                           </span>
@@ -668,7 +668,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                 </div>
               </>
             ) : (
-              <div className="text-xs text-[#695A47] py-8 text-center">
+              <div className="text-xs text-ink-soft py-8 text-center">
                 Pilih salah satu anggota silsilah di sebelah kiri.
               </div>
             )}
@@ -681,16 +681,16 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <form
             onSubmit={handleSaveHouse}
-            className="bg-[#FBF8F1] border-2 border-[#B5832A] rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl"
+            className="bg-vellum border-2 border-brass rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
-              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+            <div className="flex items-center justify-between border-b border-sepia pb-3">
+              <h3 className="font-display text-2xl font-bold text-ink">
                 Konfigurasi Wangsa / Dinasti Kerajaan
               </h3>
               <button
                 type="button"
                 onClick={() => setShowHouseForm(false)}
-                className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1 text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -698,7 +698,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Nama Wangsa / Klan Dinasti
                 </label>
                 <input
@@ -711,12 +711,12 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       houseName: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-semibold"
+                  className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg font-semibold"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Semboyan Wangsa (Motto)
                   </label>
                   <input
@@ -725,11 +725,11 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                     onChange={(e) =>
                       setEditingHouse({ ...editingHouse, motto: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Negara / Kedaulatan Asal
                   </label>
                   <input
@@ -741,12 +741,12 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                         originNation: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
               </div>
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Lambang Kebesaran (Coat of Arms)
                 </label>
                 <input
@@ -758,11 +758,11 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       coatOfArms: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Ikhtisar Sejarah Wangsa (Mendukung [[Tautan Wiki]])
                 </label>
                 <textarea
@@ -774,7 +774,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       overview: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
             </div>
@@ -783,7 +783,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowHouseForm(false)}
-                className="px-4 py-2 text-xs font-semibold border border-[#D8CBB3] rounded-lg text-[#695A47] cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold border border-sepia rounded-lg text-ink-soft cursor-pointer"
               >
                 Batal
               </button>
@@ -803,16 +803,16 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <form
             onSubmit={handleSaveMember}
-            className="bg-[#FBF8F1] border-2 border-[#B5832A] rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl"
+            className="bg-vellum border-2 border-brass rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
-              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+            <div className="flex items-center justify-between border-b border-sepia pb-3">
+              <h3 className="font-display text-2xl font-bold text-ink">
                 Anggota Silsilah {activeTree.houseName}
               </h3>
               <button
                 type="button"
                 onClick={() => setShowMemberForm(false)}
-                className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1 text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -821,7 +821,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
             <div className="space-y-3 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Nama Lengkap Tokoh
                   </label>
                   <input
@@ -831,11 +831,11 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                     onChange={(e) =>
                       setDraftMember({ ...draftMember, name: e.target.value })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-semibold"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg font-semibold"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Gelar / Peran dalam Dinasti
                   </label>
                   <input
@@ -847,14 +847,14 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                         titleOrRole: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Urutan Generasi (1, 2, 3...)
                   </label>
                   <input
@@ -868,11 +868,11 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                         generation: Number(e.target.value) || 1,
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Status Suksesi
                   </label>
                   <select
@@ -884,7 +884,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                           e.target.value as DynastyMember['successionStatus'],
                       })
                     }
-                    className="w-full px-2.5 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-2 bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="Pendiri Wangsa">Pendiri Wangsa</option>
                     <option value="Penguasa Takhta">Penguasa Takhta</option>
@@ -895,7 +895,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Status Kehidupan
                   </label>
                   <select
@@ -906,7 +906,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                         status: e.target.value as DynastyMember['status'],
                       })
                     }
-                    className="w-full px-2.5 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-2 bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="Hidup">Hidup</option>
                     <option value="Gugur">Gugur</option>
@@ -918,7 +918,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Tahun Lahir – Wafat
                   </label>
                   <input
@@ -931,11 +931,11 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       })
                     }
                     placeholder="373 PG – Sekarang"
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Nama Pasangan / Konsort (Opsional)
                   </label>
                   <input
@@ -947,13 +947,13 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                         spouseName: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Orang Tua di Wangsa Ini (Opsional)
                 </label>
                 <select
@@ -964,7 +964,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                       parentIds: e.target.value ? [e.target.value] : [],
                     })
                   }
-                  className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                 >
                   <option value="">-- Tidak Ada / Leluhur Awal --</option>
                   {activeTree.members
@@ -978,7 +978,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
               </div>
 
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Warisan Bakat Darah / Ciri Genetik Khas
                 </label>
                 <input
@@ -991,12 +991,12 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                     })
                   }
                   placeholder="Contoh: Afinitas Meridian Surya Murni..."
-                  className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Catatan Sejarah & Peran Suksesi (Mendukung [[Tautan Wiki]])
                 </label>
                 <textarea
@@ -1005,7 +1005,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
                   onChange={(e) =>
                     setDraftMember({ ...draftMember, notes: e.target.value })
                   }
-                  className="w-full p-2.5 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
             </div>
@@ -1014,7 +1014,7 @@ export const DynastyTreeStudioView: React.FC<DynastyTreeStudioViewProps> = ({
               <button
                 type="button"
                 onClick={() => setShowMemberForm(false)}
-                className="px-4 py-2 text-xs font-semibold border border-[#D8CBB3] rounded-lg text-[#695A47] cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold border border-sepia rounded-lg text-ink-soft cursor-pointer"
               >
                 Batal
               </button>
@@ -1051,10 +1051,10 @@ interface ProphecyAndMysteryTrackerViewProps {
 }
 
 const MYSTERY_STATUS_STYLE: Record<MysteryPlotItem['status'], string> = {
-  'Belum Terungkap': 'bg-[#EFE7D6] text-[#695A47] border-[#D8CBB3]',
-  'Petunjuk Ditanam': 'bg-[#B5832A]/20 text-[#8F5B14] border-[#B5832A]',
-  'Terungkap Sebagian': 'bg-[#264653]/15 text-[#264653] border-[#264653]/40',
-  'Terungkap Penuh': 'bg-[#2D5A43]/15 text-[#2D5A43] border-[#2D5A43]/40',
+  'Belum Terungkap': 'bg-aged text-ink-soft border-sepia',
+  'Petunjuk Ditanam': 'bg-brass/20 text-amber border-brass',
+  'Terungkap Sebagian': 'bg-sea/15 text-sea border-sea/40',
+  'Terungkap Penuh': 'bg-forest/15 text-forest border-forest/40',
 };
 
 export const ProphecyAndMysteryTrackerView: React.FC<
@@ -1177,18 +1177,18 @@ export const ProphecyAndMysteryTrackerView: React.FC<
   return (
     <div className="space-y-5">
       {/* Header Banner */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-2xl p-5 shadow-xs space-y-4">
-        <OrnateCornerFiligree className="text-[#B5832A]/50" />
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-2xl p-5 shadow-xs space-y-4">
+        <OrnateCornerFiligree className="text-brass/50" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#D8CBB3] pb-3.5">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-sepia pb-3.5">
           <div className="flex-1 min-w-0 space-y-1 text-left">
-            <div className="text-xs font-epic font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+            <div className="text-xs font-epic font-bold uppercase tracking-widest text-wax flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-brass" />
               <span>
                 Pilar IV · Tracker Misteri, Nubuat Kuno & Foreshadowing Plot
               </span>
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+            <h2 className="font-display text-2xl sm:text-3xl font-bold text-ink leading-tight">
               Arsitektur Benang Merah, Petunjuk Bab & Pengungkapan Kanon
             </h2>
           </div>
@@ -1220,7 +1220,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                 className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                   categoryFilter === cat
                     ? 'bg-[#231C14] text-[#FBF8F1]'
-                    : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                    : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                 }`}
               >
                 {cat}
@@ -1228,12 +1228,12 @@ export const ProphecyAndMysteryTrackerView: React.FC<
             ))}
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-[#695A47] font-mono-tabular">
+          <div className="flex items-center gap-3 text-xs text-ink-soft font-mono-tabular">
             <span>{plots.length} Misteri/Nubuat</span>
             <span>·</span>
             <span>{totalClues} Petunjuk Ditanam</span>
             <span>·</span>
-            <span className="text-[#9E2A2B] font-semibold">
+            <span className="text-wax font-semibold">
               {totalRedHerrings} Pengecoh (Red Herring)
             </span>
           </div>
@@ -1243,8 +1243,8 @@ export const ProphecyAndMysteryTrackerView: React.FC<
       {/* Main Split View: Mystery List (4 cols) + Active Mystery Inspector & Clue Chain (8 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* Left 4 Cols: Mystery & Prophecy Directory */}
-        <div className="lg:col-span-4 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-4 space-y-3">
-          <div className="text-xs font-semibold text-[#695A47] px-1">
+        <div className="lg:col-span-4 bg-vellum border-2 border-brass/45 rounded-2xl p-4 space-y-3">
+          <div className="text-xs font-semibold text-ink-soft px-1">
             Daftar Nubuat & Misteri ({filteredPlots.length})
           </div>
 
@@ -1258,12 +1258,12 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                   onClick={() => setSelectedPlotId(item.id)}
                   className={`w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer space-y-1.5 ${
                     isSelected
-                      ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-xs'
-                      : 'bg-[#F6F1E6] border-[#D8CBB3] hover:bg-[#EFE7D6]/70'
+                      ? 'bg-aged border-2 border-wax shadow-xs'
+                      : 'bg-parchment border-sepia hover:bg-aged/70'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
+                    <span className="text-[10px] font-epic font-bold uppercase tracking-wider text-wax">
                       {item.category}
                     </span>
                     <span
@@ -1274,13 +1274,13 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                       {item.status}
                     </span>
                   </div>
-                  <div className="font-display text-lg font-bold text-[#231C14] leading-snug">
+                  <div className="font-display text-lg font-bold text-ink leading-snug">
                     {item.title}
                   </div>
-                  <p className="text-xs italic text-[#695A47] line-clamp-2">
+                  <p className="text-xs italic text-ink-soft line-clamp-2">
                     {item.prophecyVerseOrQuestion}
                   </p>
-                  <div className="text-[11px] text-[#264653] font-medium pt-1 flex items-center justify-between">
+                  <div className="text-[11px] text-sea font-medium pt-1 flex items-center justify-between">
                     <span>{item.clues.length} Petunjuk Bab</span>
                     {item.payoffChapterId && (
                       <span>
@@ -1302,13 +1302,13 @@ export const ProphecyAndMysteryTrackerView: React.FC<
         </div>
 
         {/* Right 8 Cols: Active Mystery Dossier & Foreshadowing Clue Chain */}
-        <div className="lg:col-span-8 bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-2xl p-6 space-y-5">
+        <div className="lg:col-span-8 bg-vellum border-2 border-brass/45 rounded-2xl p-6 space-y-5">
           {activePlot ? (
             <>
-              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-[#D8CBB3] pb-4">
+              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-sepia pb-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-epic font-bold uppercase tracking-wider text-[#9E2A2B]">
+                    <span className="text-xs font-epic font-bold uppercase tracking-wider text-wax">
                       {activePlot.category}
                     </span>
                     <span>·</span>
@@ -1320,7 +1320,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                       {activePlot.status}
                     </span>
                   </div>
-                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-[#231C14]">
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-ink">
                     {activePlot.title}
                   </h3>
                 </div>
@@ -1341,7 +1341,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                     <button
                       type="button"
                       onClick={() => handleDeleteMystery(activePlot.id)}
-                      className="p-1.5 rounded-lg border border-[#9E2A2B]/30 text-[#9E2A2B] hover:bg-[#9E2A2B]/10 cursor-pointer"
+                      className="p-1.5 rounded-lg border border-wax/30 text-wax hover:bg-wax/10 cursor-pointer"
                       title="Hapus misteri ini"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -1351,24 +1351,24 @@ export const ProphecyAndMysteryTrackerView: React.FC<
               </div>
 
               {/* Prophecy Verse / Mystery Question Callout */}
-              <div className="p-4 rounded-xl bg-[#EFE7D6] border-2 border-[#B5832A]/60 space-y-1.5">
-                <div className="text-[11px] font-epic font-bold uppercase tracking-wider text-[#9E2A2B] flex items-center gap-1.5">
-                  <ScrollText className="w-3.5 h-3.5 text-[#B5832A]" />
+              <div className="p-4 rounded-xl bg-aged border-2 border-brass/60 space-y-1.5">
+                <div className="text-[11px] font-epic font-bold uppercase tracking-wider text-wax flex items-center gap-1.5">
+                  <ScrollText className="w-3.5 h-3.5 text-brass" />
                   <span>Bait Nubuat Kuno / Pertanyaan Sentral Misteri</span>
                 </div>
-                <p className="font-display text-lg italic text-[#231C14] leading-relaxed">
+                <p className="font-display text-lg italic text-ink leading-relaxed">
                   {activePlot.prophecyVerseOrQuestion}
                 </p>
               </div>
 
               {/* Public Interpretation vs True Canonical Answer */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                  <div className="text-xs font-semibold text-[#695A47] flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-[#B5832A]" />
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                  <div className="text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-brass" />
                     <span>Tafsiran Umum / Dugaan Awal Tokoh</span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activePlot.publicInterpretation}
                       entities={entities}
@@ -1378,12 +1378,12 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border-2 border-[#9E2A2B]/40 space-y-1.5">
-                  <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                <div className="p-4 rounded-xl bg-parchment border-2 border-wax/40 space-y-1.5">
+                  <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                     <Eye className="w-3.5 h-3.5" />
                     <span>Kebenaran Kanonik (Rahasia Penulis & Payoff)</span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activePlot.trueCanonicalAnswer}
                       entities={entities}
@@ -1408,7 +1408,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                               Target Pengungkapan: Bab {payoffCh.chapterNumber}{' '}
                               ({payoffCh.title})
                             </span>
-                            <ArrowUpRight className="w-3 h-3 text-[#B5832A]" />
+                            <ArrowUpRight className="w-3 h-3 text-brass" />
                           </button>
                         );
                       })()}
@@ -1418,10 +1418,10 @@ export const ProphecyAndMysteryTrackerView: React.FC<
               </div>
 
               {/* Planted Clues & Foreshadowing Chain */}
-              <div className="pt-3 border-t border-[#D8CBB3] space-y-3.5">
+              <div className="pt-3 border-t border-sepia space-y-3.5">
                 <div className="flex items-center justify-between">
-                  <div className="text-xs font-bold text-[#231C14] flex items-center gap-1.5">
-                    <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
+                  <div className="text-xs font-bold text-ink flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-wax" />
                     <span>
                       Rantai Petunjuk (Foreshadowing Clues) & Pengecoh (
                       {activePlot.clues.length})
@@ -1439,13 +1439,13 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                         key={clue.id}
                         className={`p-3.5 rounded-xl border flex flex-wrap items-start justify-between gap-3 ${
                           clue.isRedHerring
-                            ? 'bg-[#9E2A2B]/8 border-[#9E2A2B]/40'
-                            : 'bg-[#F6F1E6] border-[#D8CBB3]'
+                            ? 'bg-wax/8 border-wax/40'
+                            : 'bg-parchment border-sepia'
                         }`}
                       >
                         <div className="space-y-1 flex-1 min-w-[220px]">
                           <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                            <span className="font-mono-tabular font-bold text-[#9E2A2B]">
+                            <span className="font-mono-tabular font-bold text-wax">
                               Petunjuk #{idx + 1}
                             </span>
                             {clue.isRedHerring ? (
@@ -1454,7 +1454,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                                 <span>Pengecoh (Red Herring)</span>
                               </span>
                             ) : (
-                              <span className="px-2 py-0.5 rounded bg-[#2D5A43]/15 text-[#2D5A43] text-[10px] font-semibold flex items-center gap-1">
+                              <span className="px-2 py-0.5 rounded bg-forest/15 text-forest text-[10px] font-semibold flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" />
                                 <span>Petunjuk Kanon Asli</span>
                               </span>
@@ -1463,17 +1463,17 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                               <button
                                 type="button"
                                 onClick={() => onOpenChapter(linkedChap.id)}
-                                className="px-2 py-0.5 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#B5832A]/50 text-[#231C14] font-semibold flex items-center gap-1 cursor-pointer"
+                                className="px-2 py-0.5 rounded bg-aged hover:bg-sepia border border-brass/50 text-ink font-semibold flex items-center gap-1 cursor-pointer"
                               >
                                 <span>
                                   Ditanam di Bab {linkedChap.chapterNumber}:{' '}
                                   {linkedChap.title}
                                 </span>
-                                <ArrowUpRight className="w-3 h-3 text-[#9E2A2B]" />
+                                <ArrowUpRight className="w-3 h-3 text-wax" />
                               </button>
                             )}
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {clue.clueText}
                           </p>
                         </div>
@@ -1481,7 +1481,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                         <button
                           type="button"
                           onClick={() => handleRemoveClue(clue.id)}
-                          className="text-[#695A47] hover:text-[#9E2A2B] p-1 cursor-pointer"
+                          className="text-ink-soft hover:text-wax p-1 cursor-pointer"
                           title="Hapus petunjuk"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1494,9 +1494,9 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                 {/* Add Clue Inline Form */}
                 <form
                   onSubmit={handleAddClue}
-                  className="p-3.5 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-2.5"
+                  className="p-3.5 rounded-xl bg-aged/70 border border-sepia space-y-2.5"
                 >
-                  <div className="text-[11px] font-semibold text-[#231C14]">
+                  <div className="text-[11px] font-semibold text-ink">
                     + Tanam Petunjuk Baru / Foreshadowing ke dalam Bab
                   </div>
                   <input
@@ -1504,14 +1504,14 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                     value={newClueText}
                     onChange={(e) => setNewClueText(e.target.value)}
                     placeholder="Tuliskan detail petunjuk halus, simbol, atau dialog foreshadowing..."
-                    className="w-full px-3 py-2 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-3 py-2 text-xs bg-vellum border border-sepia rounded-lg"
                   />
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-2">
                       <select
                         value={newClueChapterId}
                         onChange={(e) => setNewClueChapterId(e.target.value)}
-                        className="px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       >
                         <option value="">-- Pilih Bab Tempat Ditanam --</option>
                         {chapters.map((ch) => (
@@ -1521,7 +1521,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                         ))}
                       </select>
 
-                      <label className="flex items-center gap-1.5 text-xs text-[#231C14] cursor-pointer">
+                      <label className="flex items-center gap-1.5 text-xs text-ink cursor-pointer">
                         <input
                           type="checkbox"
                           checked={newClueIsRedHerring}
@@ -1552,16 +1552,16 @@ export const ProphecyAndMysteryTrackerView: React.FC<
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
           <form
             onSubmit={handleSaveMystery}
-            className="bg-[#FBF8F1] border-2 border-[#B5832A] rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl"
+            className="bg-vellum border-2 border-brass rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-[#D8CBB3] pb-3">
-              <h3 className="font-display text-2xl font-bold text-[#231C14]">
+            <div className="flex items-center justify-between border-b border-sepia pb-3">
+              <h3 className="font-display text-2xl font-bold text-ink">
                 Konfigurasi Nubuat, Misteri & Foreshadowing
               </h3>
               <button
                 type="button"
                 onClick={() => setShowMysteryForm(false)}
-                className="p-1 text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                className="p-1 text-ink-soft hover:text-ink cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1569,7 +1569,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Judul Nubuat / Misteri Plot
                 </label>
                 <input
@@ -1579,13 +1579,13 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                   onChange={(e) =>
                     setDraftPlot({ ...draftPlot, title: e.target.value })
                   }
-                  className="w-full px-3 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg font-semibold"
+                  className="w-full px-3 py-2 bg-parchment border border-sepia rounded-lg font-semibold"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Kategori
                   </label>
                   <select
@@ -1597,7 +1597,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                           e.target.value as MysteryPlotItem['category'],
                       })
                     }
-                    className="w-full px-2.5 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-2 bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="Nubuat Kuno">Nubuat Kuno</option>
                     <option value="Misteri Utama">Misteri Utama</option>
@@ -1609,7 +1609,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Status Pengungkapan
                   </label>
                   <select
@@ -1620,7 +1620,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                         status: e.target.value as MysteryPlotItem['status'],
                       })
                     }
-                    className="w-full px-2.5 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-2 bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="Belum Terungkap">Belum Terungkap</option>
                     <option value="Petunjuk Ditanam">Petunjuk Ditanam</option>
@@ -1632,7 +1632,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-[#695A47] mb-1">
+                  <label className="block font-semibold text-ink-soft mb-1">
                     Target Bab Pengungkapan (Payoff)
                   </label>
                   <select
@@ -1643,7 +1643,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                         payoffChapterId: e.target.value,
                       })
                     }
-                    className="w-full px-2.5 py-2 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                    className="w-full px-2.5 py-2 bg-parchment border border-sepia rounded-lg"
                   >
                     <option value="">-- Belum Ditentukan --</option>
                     {chapters.map((ch) => (
@@ -1656,7 +1656,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
               </div>
 
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Bait Nubuat Kuno / Pertanyaan Sentral Misteri
                 </label>
                 <textarea
@@ -1668,12 +1668,12 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                       prophecyVerseOrQuestion: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-[#695A47] mb-1">
+                <label className="block font-semibold text-ink-soft mb-1">
                   Tafsiran Umum / Dugaan Tokoh (Mendukung [[Tautan Wiki]])
                 </label>
                 <textarea
@@ -1685,12 +1685,12 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                       publicInterpretation: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-[#9E2A2B] mb-1">
+                <label className="block font-semibold text-wax mb-1">
                   Solusi & Kebenaran Kanonik Sejati (Rahasia Penulis)
                 </label>
                 <textarea
@@ -1702,7 +1702,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
                       trueCanonicalAnswer: e.target.value,
                     })
                   }
-                  className="w-full p-2.5 bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg"
+                  className="w-full p-2.5 bg-parchment border border-sepia rounded-lg"
                 />
               </div>
             </div>
@@ -1711,7 +1711,7 @@ export const ProphecyAndMysteryTrackerView: React.FC<
               <button
                 type="button"
                 onClick={() => setShowMysteryForm(false)}
-                className="px-4 py-2 text-xs font-semibold border border-[#D8CBB3] rounded-lg text-[#695A47] cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold border border-sepia rounded-lg text-ink-soft cursor-pointer"
               >
                 Batal
               </button>

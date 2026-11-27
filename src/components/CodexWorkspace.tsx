@@ -1882,7 +1882,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
   return (
     <div className="space-y-5">
       {/* Dedicated Section Header Bar with Ornate Manuscript Filigree */}
-      <div className="relative overflow-hidden bg-[#FBF8F1] border-2 border-[#B5832A]/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
+      <div className="relative overflow-hidden bg-vellum border-2 border-brass/50 rounded-xl p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 shadow-xs">
         <OrnateCornerFiligree />
         <div className="relative z-10 flex-1 min-w-0 space-y-1 text-left">
           <div
@@ -1895,10 +1895,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {sectionEntities.length} {sectionMeta.singular} Tercatat
             </span>
           </div>
-          <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-[#231C14] leading-tight">
+          <h2 className="font-cartography text-2xl sm:text-3xl font-bold text-ink leading-tight">
             {sectionMeta.label}
           </h2>
-          <p className="text-xs sm:text-sm text-[#695A47] leading-relaxed max-w-3xl">
+          <p className="text-xs sm:text-sm text-ink-soft leading-relaxed max-w-3xl">
             {sectionMeta.description}
           </p>
         </div>
@@ -1909,12 +1909,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             onClick={() => setIsFocusMode((prev) => !prev)}
             className={`px-3.5 py-2 rounded-lg text-xs font-semibold border flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               isFocusMode
-                ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
-                : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                ? 'bg-[#231C14] text-[#FBF8F1] border-brass'
+                : 'bg-parchment text-ink border-sepia hover:bg-aged'
             }`}
             title="Sembunyikan atau tampilkan panel daftar direktori kiri agar fokus membaca/menulis"
           >
-            <BookOpen className="w-3.5 h-3.5 text-[#B5832A]" />
+            <BookOpen className="w-3.5 h-3.5 text-brass" />
             <span>
               {isFocusMode ? 'Tampilkan Direktori Kiri' : 'Mode Fokus Naskah'}
             </span>
@@ -1922,9 +1922,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           <button
             type="button"
             onClick={() => onOpenBrainstormModal(category)}
-            className="px-3.5 py-2 rounded-lg text-xs font-semibold border border-[#B5832A] bg-[#F6F1E6] text-[#231C14] hover:bg-[#EFE7D6] flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="px-3.5 py-2 rounded-lg text-xs font-semibold border border-brass bg-parchment text-ink hover:bg-aged flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
-            <Wand2 className="w-3.5 h-3.5 text-[#B5832A]" />
+            <Wand2 className="w-3.5 h-3.5 text-brass" />
             Ide {sectionMeta.singular} (AI)
           </button>
           <button
@@ -1944,15 +1944,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         {/* LEFT DIRECTORY COLUMN                                             */}
         {/* ================================================================= */}
         {!isFocusMode && (
-        <div className="lg:col-span-4 bg-[#FBF8F1] border border-[#D8CBB3] rounded-xl p-4 space-y-3">
+        <div className="lg:col-span-4 bg-vellum border border-sepia rounded-xl p-4 space-y-3">
           <div className="relative">
-            <Search className="w-4 h-4 text-[#695A47] absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-ink-soft absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={`Cari ${sectionMeta.singular.toLowerCase()}...`}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] placeholder:text-[#695A47] focus:outline-none focus:border-[#9E2A2B]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-parchment border border-sepia rounded-lg text-ink placeholder:text-ink-soft focus:outline-none focus:border-wax"
             />
           </div>
 
@@ -1968,7 +1968,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       roleFilter === rf
                         ? 'bg-[#9E2A2B] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {rf}
@@ -1976,13 +1976,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 ))}
               </div>
               <div className="flex items-center justify-between gap-2 text-xs">
-                <span className="text-[11px] text-[#695A47] font-medium">
+                <span className="text-[11px] text-ink-soft font-medium">
                   Filter Status:
                 </span>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 >
                   <option value="Semua">Semua Status</option>
                   {CHARACTER_STATUS_OPTIONS.map((st) => (
@@ -1998,7 +1998,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Race-Specific Origin Classification Filters */}
           {category === 'race' && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Klasifikasi Asal-Usul Ras:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2010,7 +2010,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       raceClassFilter === rc
                         ? 'bg-[#2D5A43] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {rc}
@@ -2023,7 +2023,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Faction-Specific Organization Type & Influence Scale Filters */}
           {category === 'faction' && (
             <div className="space-y-2 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Jenis Organisasi:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2035,7 +2035,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       factionTypeFilter === ft
                         ? 'bg-[#8F5B14] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {ft}
@@ -2043,13 +2043,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 ))}
               </div>
               <div className="flex items-center justify-between gap-2 text-xs">
-                <span className="text-[11px] text-[#695A47] font-medium">
+                <span className="text-[11px] text-ink-soft font-medium">
                   Skala Pengaruh:
                 </span>
                 <select
                   value={factionScaleFilter}
                   onChange={(e) => setFactionScaleFilter(e.target.value)}
-                  className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 >
                   {FACTION_SCALE_OPTIONS.map((sc) => (
                     <option key={sc} value={sc}>
@@ -2064,7 +2064,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Power System-Specific Typology Filters */}
           {category === 'power_system' && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Tipologi Sistem Kekuatan:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2076,7 +2076,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       powerTypologyFilter === pt
                         ? 'bg-[#5A3E7A] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {pt}
@@ -2089,7 +2089,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Nation-Specific Government Type Filters */}
           {category === 'nation' && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Bentuk Pemerintahan:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2101,7 +2101,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       nationGovFilter === gf
                         ? 'bg-[#9E2A2B] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {gf}
@@ -2114,7 +2114,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Region-Specific Typology Filters */}
           {category === 'region' && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Tipologi Wilayah:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2126,7 +2126,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       regionTypeFilter === rt
                         ? 'bg-[#264653] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {rt}
@@ -2139,7 +2139,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* History-Specific Event Scale / Type Filters */}
           {category === 'history' && (
             <div className="space-y-1.5 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Jenis & Skala Peristiwa Sejarah:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2151,7 +2151,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       historyTypeFilter === ht
                         ? 'bg-[#7A3E1D] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {ht}
@@ -2164,7 +2164,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           {/* Encyclopedia-Specific Sub-Category & Rarity Filters */}
           {category === 'encyclopedia' && (
             <div className="space-y-2 pt-1">
-              <div className="text-[11px] font-semibold text-[#695A47]">
+              <div className="text-[11px] font-semibold text-ink-soft">
                 Filter Sub-Kategori Ensiklopedia:
               </div>
               <div className="flex flex-wrap items-center gap-1">
@@ -2176,7 +2176,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     className={`px-2.5 py-1 rounded text-[11px] font-semibold transition-colors cursor-pointer ${
                       encSubCategoryFilter === sc
                         ? 'bg-[#3D5A45] text-white'
-                        : 'bg-[#F6F1E6] text-[#695A47] hover:text-[#231C14] border border-[#D8CBB3]'
+                        : 'bg-parchment text-ink-soft hover:text-ink border border-sepia'
                     }`}
                   >
                     {sc}
@@ -2184,13 +2184,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 ))}
               </div>
               <div className="flex items-center justify-between gap-2 text-xs">
-                <span className="text-[11px] text-[#695A47] font-medium">
+                <span className="text-[11px] text-ink-soft font-medium">
                   Kelangkaan:
                 </span>
                 <select
                   value={encRarityFilter}
                   onChange={(e) => setEncRarityFilter(e.target.value)}
-                  className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                  className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                 >
                   {ENCYCLOPEDIA_RARITY_OPTIONS.map((rar) => (
                     <option key={rar} value={rar}>
@@ -2202,7 +2202,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
             </div>
           )}
 
-          <div className="text-xs text-[#695A47] flex items-center justify-between px-1 pt-1">
+          <div className="text-xs text-ink-soft flex items-center justify-between px-1 pt-1">
             <span>
               Daftar {sectionMeta.singular} ({filteredEntities.length})
             </span>
@@ -2212,7 +2212,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
           <div className="space-y-2 max-h-[680px] overflow-y-auto pr-1">
             {filteredEntities.length === 0 ? (
               <div className="py-10 text-center space-y-3">
-                <p className="text-xs text-[#695A47]">
+                <p className="text-xs text-ink-soft">
                   Belum ada data {sectionMeta.singular.toLowerCase()} yang
                   cocok dengan filter.
                 </p>
@@ -2238,8 +2238,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     }}
                     className={`arcana-card w-full text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-[#EFE7D6] border-2 border-[#9E2A2B] shadow-xs'
-                        : 'bg-[#F6F1E6]/85 border-[#B5832A]/45 hover:bg-[#EFE7D6]/70'
+                        ? 'bg-aged border-2 border-wax shadow-xs'
+                        : 'bg-parchment/85 border-brass/45 hover:bg-aged/70'
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -2250,17 +2250,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               src={item.imageUrl}
                               alt={item.title}
                               referrerPolicy="no-referrer"
-                              className="w-12 h-14 rounded-lg object-cover border border-[#B5832A] shrink-0 mt-0.5"
+                              className="w-12 h-14 rounded-lg object-cover border border-brass shrink-0 mt-0.5"
                             />
                           ) : (
-                            <div className="w-12 h-14 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/60 flex items-center justify-center shrink-0 mt-0.5">
-                              <User className="w-5 h-5 text-[#9E2A2B]" />
+                            <div className="w-12 h-14 rounded-lg bg-aged border border-brass/60 flex items-center justify-center shrink-0 mt-0.5">
+                              <User className="w-5 h-5 text-wax" />
                             </div>
                           )}
                         </>
                       ) : (
-                        <div className="w-9 h-11 rounded-lg bg-[#EFE7D6] border border-[#B5832A]/50 flex flex-col items-center justify-center shrink-0 mt-0.5 text-[#9E2A2B]">
-                          <span className="font-epic text-[9px] text-[#B5832A] leading-none">
+                        <div className="w-9 h-11 rounded-lg bg-aged border border-brass/50 flex flex-col items-center justify-center shrink-0 mt-0.5 text-wax">
+                          <span className="font-epic text-[9px] text-brass leading-none">
                             {sectionMeta.romanNumeral}
                           </span>
                           <span className="font-mono-tabular text-[11px] font-bold leading-tight">
@@ -2270,7 +2270,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       )}
 
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center justify-between text-[11px] text-[#695A47] mb-0.5">
+                        <div className="flex items-center justify-between text-[11px] text-ink-soft mb-0.5">
                           <span
                             className="font-epic font-semibold truncate"
                             style={{ color: sectionMeta.accentColor }}
@@ -2353,12 +2353,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </span>
                         </div>
 
-                        <div className="font-display text-lg font-bold text-[#231C14] leading-snug truncate">
+                        <div className="font-display text-lg font-bold text-ink leading-snug truncate">
                           {item.title}
                         </div>
 
                         {category === 'character' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             {itemAttrs.raceName || item.subtitle}
                             {itemAttrs.powerTier
                               ? ` · ${itemAttrs.powerTier}`
@@ -2367,7 +2367,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'race' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Habitat: {itemAttrs.homeland || 'Belum ditentukan'}
                             {itemAttrs.subRaces && itemAttrs.subRaces.length > 0
                               ? ` · ${itemAttrs.subRaces.length} Sub-Ras`
@@ -2376,7 +2376,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'faction' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Markas: {itemAttrs.headquarters || 'Belum ditentukan'}
                             {itemAttrs.leader
                               ? ` · Pemimpin: ${itemAttrs.leader}`
@@ -2385,13 +2385,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'power_system' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Energi: {itemAttrs.energySource || 'Belum ditentukan'}
                           </div>
                         )}
 
                         {category === 'skill' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             {itemAttrs.impactScale ||
                               itemAttrs.skillRank ||
                               'Skala Khusus'}
@@ -2403,7 +2403,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'nation' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Penguasa: {itemAttrs.ruler || 'Majelis / Kolektif'}
                             {itemAttrs.dominantRaces &&
                             itemAttrs.dominantRaces.length > 0
@@ -2413,7 +2413,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'region' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Bahaya: {itemAttrs.dangerLevel || 'Menengah'}
                             {itemAttrs.landmarksList &&
                             itemAttrs.landmarksList.length > 0
@@ -2423,7 +2423,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'history' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Lokasi: {itemAttrs.eventLocation || 'Lintas Benua'}
                             {itemAttrs.belligerentsList &&
                             itemAttrs.belligerentsList.length > 0
@@ -2433,7 +2433,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'encyclopedia' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             {itemAttrs.currentHolder
                               ? `Pemegang: ${itemAttrs.currentHolder}`
                               : `Habitat: ${
@@ -2443,30 +2443,30 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {category === 'cosmic_entity' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Dimensi: {itemAttrs.originPlane || 'Luar Ruang-Waktu'}
                           </div>
                         )}
 
                         {category === 'deity' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Simbol: {itemAttrs.sacredSymbol || item.subtitle}
                           </div>
                         )}
 
                         {category === 'bestiary' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Habitat: {itemAttrs.naturalHabitat || 'Alam Liar'}
                           </div>
                         )}
 
                         {category === 'culture_religion' && (
-                          <div className="text-[11px] text-[#695A47] truncate mt-0.5">
+                          <div className="text-[11px] text-ink-soft truncate mt-0.5">
                             Penganut: {itemAttrs.practicingPeoples || 'Lintas Bangsa'}
                           </div>
                         )}
 
-                        <div className="text-xs text-[#695A47] line-clamp-2 mt-1">
+                        <div className="text-xs text-ink-soft line-clamp-2 mt-1">
                           {item.summary}
                         </div>
                       </div>
@@ -2485,17 +2485,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
         <div
           className={`relative overflow-hidden ${
             isFocusMode ? 'lg:col-span-12 max-w-5xl mx-auto w-full' : 'lg:col-span-8'
-          } bg-[#FBF8F1] border-2 border-[#B5832A]/45 rounded-xl p-6 shadow-xs`}
+          } bg-vellum border-2 border-brass/45 rounded-xl p-6 shadow-xs`}
         >
-          <OrnateCornerFiligree className="text-[#B5832A]/50" />
+          <OrnateCornerFiligree className="text-brass/50" />
           {isEditing && draftEntity ? (
             <form onSubmit={handleSaveDraft} className="space-y-5">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#D8CBB3] pb-4">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-sepia pb-4">
                 <div>
-                  <span className="text-xs font-semibold text-[#9E2A2B]">
+                  <span className="text-xs font-semibold text-wax">
                     Penyuntingan {sectionMeta.label}
                   </span>
-                  <h3 className="font-display text-2xl font-bold text-[#231C14]">
+                  <h3 className="font-display text-2xl font-bold text-ink">
                     {draftEntity.title || `${sectionMeta.singular} Baru`}
                   </h3>
                 </div>
@@ -2505,11 +2505,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     onClick={() => setNameForgeOpen((prev) => !prev)}
                     className={`px-3 py-1.5 text-xs font-semibold rounded-lg border flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                       nameForgeOpen
-                        ? 'bg-[#231C14] text-[#FBF8F1] border-[#B5832A]'
-                        : 'bg-[#F6F1E6] text-[#231C14] border-[#B5832A]'
+                        ? 'bg-[#231C14] text-[#FBF8F1] border-brass'
+                        : 'bg-parchment text-ink border-brass'
                     }`}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <Sparkles className="w-3.5 h-3.5 text-brass" />
                     <span>Tempa Nama & Gelar Fantasi</span>
                   </button>
                   <button
@@ -2518,7 +2518,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       setIsEditing(false);
                       setDraftEntity(null);
                     }}
-                    className="px-3 py-1.5 text-xs font-medium border border-[#D8CBB3] rounded-lg text-[#695A47] hover:text-[#231C14] flex items-center gap-1 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-medium border border-sepia rounded-lg text-ink-soft hover:text-ink flex items-center gap-1 cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                     Batal
@@ -2535,20 +2535,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* GENERATOR NAMA FANTASI & GELAR EPIK (FANTASY NAME FORGE) */}
               {nameForgeOpen && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border-2 border-[#B5832A]/60 space-y-3">
+                <div className="p-4 rounded-xl bg-parchment border-2 border-brass/60 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <div className="font-epic text-xs font-bold uppercase tracking-wider text-[#9E2A2B]">
+                      <div className="font-epic text-xs font-bold uppercase tracking-wider text-wax">
                         ❖ Tempa Nama & Gelar Epik ({sectionMeta.singular})
                       </div>
-                      <p className="text-[11px] text-[#695A47]">
+                      <p className="text-[11px] text-ink-soft">
                         Pilih nuansa budaya/bahasa dunia, lalu klik salah satu saran untuk mengisi Nama dan Subjudul secara instan.
                       </p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setNameForgeSeed((s) => s + 1)}
-                      className="px-2.5 py-1 text-xs font-semibold bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] border border-[#D8CBB3] rounded-lg cursor-pointer whitespace-nowrap shrink-0"
+                      className="px-2.5 py-1 text-xs font-semibold bg-aged hover:bg-sepia text-ink border border-sepia rounded-lg cursor-pointer whitespace-nowrap shrink-0"
                     >
                       ↻ Putar Kombinasi Lain
                     </button>
@@ -2566,7 +2566,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                           nameForgeStyle === st.id
                             ? 'bg-[#9E2A2B] text-white'
-                            : 'bg-[#FBF8F1] text-[#231C14] border border-[#D8CBB3]'
+                            : 'bg-vellum text-ink border border-sepia'
                         }`}
                       >
                         {st.label}
@@ -2590,17 +2590,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             subtitle: sug.subtitle,
                           })
                         }
-                        className="p-2.5 rounded-lg bg-[#FBF8F1] hover:bg-[#EFE7D6] border border-[#D8CBB3] text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
+                        className="p-2.5 rounded-lg bg-vellum hover:bg-aged border border-sepia text-left flex items-center justify-between gap-2 transition-colors cursor-pointer"
                       >
                         <div className="min-w-0">
-                          <div className="font-display text-sm font-bold text-[#231C14] truncate">
+                          <div className="font-display text-sm font-bold text-ink truncate">
                             {sug.title}
                           </div>
-                          <div className="text-[11px] italic text-[#695A47] truncate">
+                          <div className="text-[11px] italic text-ink-soft truncate">
                             {sug.subtitle}
                           </div>
                         </div>
-                        <span className="text-[11px] font-semibold text-[#9E2A2B] shrink-0">
+                        <span className="text-[11px] font-semibold text-wax shrink-0">
                           Pakai →
                         </span>
                       </button>
@@ -2611,7 +2611,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Nama {sectionMeta.singular}
                   </label>
                   <input
@@ -2621,11 +2621,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     onChange={(e) =>
                       setDraftEntity({ ...draftEntity, title: e.target.value })
                     }
-                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14] font-semibold"
+                    className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink font-semibold"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Gelar / Julukan / Sub-Klasifikasi
                   </label>
                   <input
@@ -2637,14 +2637,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         subtitle: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Ringkasan Singkat (1-2 Kalimat)
                   </label>
                   <input
@@ -2656,11 +2656,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         summary: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#695A47] mb-1">
+                  <label className="block text-xs font-semibold text-ink-soft mb-1">
                     Tag (pisahkan dengan koma)
                   </label>
                   <input
@@ -2668,7 +2668,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     placeholder="Contoh: Ras Kuno, Penjaga Hutan, Sensitif Eter"
-                    className="w-full px-3 py-2 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    className="w-full px-3 py-2 text-sm bg-parchment border border-sepia rounded-lg text-ink"
                   />
                 </div>
               </div>
@@ -2677,13 +2677,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {(category === 'character' ||
                 category === 'race' ||
                 category === 'encyclopedia') && (
-                <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <label className="text-xs font-semibold text-[#695A47]">
+                    <label className="text-xs font-semibold text-ink-soft">
                       URL Potret / Ilustrasi (Opsional)
                     </label>
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span className="text-[11px] text-[#695A47]">
+                      <span className="text-[11px] text-ink-soft">
                         Preset Ilustrasi:
                       </span>
                       {PRESET_PORTRAITS.map((p) => (
@@ -2696,7 +2696,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               imageUrl: p.url,
                             })
                           }
-                          className="px-2 py-0.5 text-[11px] bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded cursor-pointer"
+                          className="px-2 py-0.5 text-[11px] bg-aged hover:bg-sepia text-ink rounded cursor-pointer"
                         >
                           {p.label}
                         </button>
@@ -2710,7 +2710,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               imageUrl: undefined,
                             })
                           }
-                          className="px-2 py-0.5 text-[11px] text-[#9E2A2B] hover:underline cursor-pointer"
+                          className="px-2 py-0.5 text-[11px] text-wax hover:underline cursor-pointer"
                         >
                           Hapus Gambar
                         </button>
@@ -2727,7 +2727,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       })
                     }
                     placeholder="Tempel URL gambar potret atau pilih preset di atas..."
-                    className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                    className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                   />
                 </div>
               )}
@@ -2738,13 +2738,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'character' && (
                 <div className="space-y-4">
                   {/* 1. Identity & Relational Pickers */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-wax">
                       1. Identitas Kanon & Afiliasi (Pilih dari Entitas atau Ketik Baru)
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Peran Cerita
                         </label>
                         <input
@@ -2761,7 +2761,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Protagonis / Antagonis..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="char-roles-list">
                           <option value="Protagonis" />
@@ -2773,7 +2773,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Status Kanon
                         </label>
                         <input
@@ -2790,7 +2790,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Hidup / Diasingkan / Gugur..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="char-status-list">
                           {CHARACTER_STATUS_OPTIONS.map((st) => (
@@ -2800,7 +2800,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Usia Tokoh
                         </label>
                         <input
@@ -2816,13 +2816,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: 39 Tahun"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       {/* Hybrid Race Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Ras / Bangsa (Terhubung ke Tab Ras)
                         </label>
                         <div className="space-y-1">
@@ -2838,7 +2838,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih dari Tab Ras ({raceEntities.length}) --
@@ -2862,14 +2862,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik nama ras..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Faction Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Kelompok / Faksi (Terhubung ke Tab Kelompok)
                         </label>
                         <div className="space-y-1">
@@ -2885,7 +2885,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih dari Tab Kelompok (
@@ -2910,14 +2910,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik nama kelompok..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Nation/Region Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Negara / Tanah Asal
                         </label>
                         <div className="space-y-1">
@@ -2933,7 +2933,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih Negara / Wilayah (
@@ -2958,14 +2958,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik negara asal..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Tingkatan Kekuatan / Power Tier
                       </label>
                       <input
@@ -2981,15 +2981,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Contoh: Lingkar ke-6 (Sovereign Scholar)"
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* 2. Interactive Skill & Artifact / Relic Pickers */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-wax">
                         2A. Keahlian & Skill yang Dikuasai
                       </div>
 
@@ -3016,7 +3016,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-[11px] text-[#695A47]">
+                        <span className="text-[11px] text-ink-soft">
                           Pilih dari Tab Skill:
                         </span>
                         {skillEntities.map((skEnt) => {
@@ -3035,8 +3035,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               }
                               className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
                                 active
-                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                  ? 'bg-[#9E2A2B] text-white border-wax'
+                                  : 'bg-vellum text-ink border-sepia'
                               }`}
                             >
                               {active ? '✓ ' : '+ '}
@@ -3052,7 +3052,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           value={customSkillInput}
                           onChange={(e) => setCustomSkillInput(e.target.value)}
                           placeholder="Ketik skill lain..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -3064,15 +3064,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomSkillInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah
                         </button>
                       </div>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#B5832A]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-brass">
                         2B. Senjata, Artefak & Pusaka Milik Tokoh
                       </div>
 
@@ -3099,7 +3099,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-[11px] text-[#695A47]">
+                        <span className="text-[11px] text-ink-soft">
                           Pilih dari Tab Artefak:
                         </span>
                         {artifactEntities.map((artEnt) => {
@@ -3118,8 +3118,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               }
                               className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
                                 active
-                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                  ? 'bg-[#9E2A2B] text-white border-wax'
+                                  : 'bg-vellum text-ink border-sepia'
                               }`}
                             >
                               {active ? '✓ ' : '+ '}
@@ -3137,7 +3137,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomArtifactInput(e.target.value)
                           }
                           placeholder="Ketik senjata/pusaka lain..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -3149,7 +3149,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomArtifactInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah
                         </button>
@@ -3158,13 +3158,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* 3. Signature Quote, Voice Style & Physical Appearance */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-wax">
                       3. Kutipan Khas, Gaya Bicara & Ciri Fisik Penampilan
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Kutipan Khas / Dialog Ikonik Tokoh
                         </label>
                         <textarea
@@ -3180,11 +3180,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Dialog atau kalimat ikonik yang mencerminkan prinsip hidup tokoh ini..."
-                          className="w-full p-2.5 text-xs italic bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs italic bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Gaya Bicara & Bahasa Tubuh (Voice & Mannerism)
                         </label>
                         <textarea
@@ -3200,12 +3200,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Nada bicara, kebiasaan unik, atau diksi khas..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Ciri Fisik, Busana & Penampilan (Appearance)
                       </label>
                       <textarea
@@ -3221,19 +3221,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Perawakan, warna mata/rambut, pakaian khas, atau bekas luka sihir..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* 4. Psychology (Motivation/Goal vs Fatal Flaw) & 3-Act Character Arc */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#264653]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-sea">
                       4. Psikologi (Motivasi vs Kelemahan Fatal) & Busur Perkembangan (Character Arc)
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Motivasi / Tujuan Utama (Goal & Desire)
                         </label>
                         <textarea
@@ -3249,11 +3249,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Apa yang paling ingin dicapai atau dilindungi tokoh ini?"
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Ketakutan / Kelemahan Fatal (Fatal Flaw)
                         </label>
                         <textarea
@@ -3269,14 +3269,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kelemahan batin, trauma, atau kebohongan yang ia percayai..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Arc I: Kondisi Awal (Babak I)
                         </label>
                         <textarea
@@ -3292,11 +3292,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Sikap tokoh di awal cerita..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Arc II: Titik Balik / Krisis
                         </label>
                         <textarea
@@ -3312,11 +3312,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Ujian terberat yang mengguncang prinsipnya..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Arc III: Perubahan Akhir
                         </label>
                         <textarea
@@ -3332,7 +3332,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Transformasi tokoh di akhir cerita..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -3346,13 +3346,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'race' && (
                 <div className="space-y-4">
                   {/* 1. Origin Classification, Lifespan & Hybrid Homeland Picker */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#2D5A43]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-forest">
                       1. Klasifikasi Spesies, Rentang Usia & Tanah Kelahiran
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Klasifikasi Asal-Usul Ras
                         </label>
                         <input
@@ -3369,7 +3369,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Sylvan / Subterranean / Manusia..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="race-origin-list">
                           {RACE_ORIGIN_FILTERS.filter((f) => f !== 'Semua').map(
@@ -3381,7 +3381,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Rentang Usia (Lifespan)
                         </label>
                         <input
@@ -3397,12 +3397,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: 450 - 700 Tahun"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tanah Kelahiran / Habitat Utama
                         </label>
                         <div className="space-y-1">
@@ -3418,7 +3418,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih Wilayah / Negara (
@@ -3444,7 +3444,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik nama wilayah..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
@@ -3454,8 +3454,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* 2. Sub-Races / Bloodlines & Signature Skills Pickers */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Sub-Races Picker */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#2D5A43]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-forest">
                         2A. Cabang Sub-Ras / Garis Keturunan Darah
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -3485,7 +3485,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomSubRaceInput(e.target.value)
                           }
                           placeholder="Contoh: Aelfir Kanopi Perak..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -3497,7 +3497,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomSubRaceInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah Sub-Ras
                         </button>
@@ -3505,8 +3505,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Signature Skills Picker */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-wax">
                         2B. Teknik / Skill Khas Warisan Ras
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -3531,7 +3531,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-[11px] text-[#695A47]">
+                        <span className="text-[11px] text-ink-soft">
                           Pilih dari Tab Skill:
                         </span>
                         {skillEntities.map((skEnt) => {
@@ -3550,8 +3550,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               }
                               className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
                                 active
-                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                  ? 'bg-[#9E2A2B] text-white border-wax'
+                                  : 'bg-vellum text-ink border-sepia'
                               }`}
                             >
                               {active ? '✓ ' : '+ '}
@@ -3568,7 +3568,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomRaceSkillInput(e.target.value)
                           }
                           placeholder="Ketik teknik khas lain..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -3580,7 +3580,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomRaceSkillInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah
                         </button>
@@ -3589,12 +3589,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* 3. Biology, Physical Traits, Innate Abilities & Racial Weakness */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#2D5A43]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-forest">
                       3. Anatomi Fisik, Bakat Bawaan & Kelemahan Biologis Ras
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Ciri Anatomi & Fisik Khas (Traits)
                       </label>
                       <textarea
@@ -3610,12 +3610,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Ciri mata, telinga, perawakan, atau penanda biologis..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Bakat Magis & Kemampuan Bawaan (Innate Abilities)
                         </label>
                         <textarea
@@ -3631,11 +3631,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Keunggulan alami, pancaindra khusus, atau afinitas elemen..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Kelemahan Biologis / Pantangan Rasial (Racial Weakness)
                         </label>
                         <textarea
@@ -3651,19 +3651,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kerentanan terhadap elemen tertentu, kutukan darah, atau batasan fisik..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* 4. Language & Naming Conventions, Culture/Traditions & Inter-Race Relations */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#B5832A]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-brass">
                       4. Bahasa, Pola Nama Khas (Naming Conventions), Budaya & Diplomasi
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Bahasa, Aksara & Pola Penamaan Tokoh (Naming Conventions)
                       </label>
                       <textarea
@@ -3679,12 +3679,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Nama bahasa, bentuk aksara, dan contoh format nama depan/marga khas ras ini..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Struktur Sosial, Tradisi & Tabu Budaya
                         </label>
                         <textarea
@@ -3702,11 +3702,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Adat istiadat, ritual sakral, dan pantangan sosial..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Pandangan & Hubungan dengan Ras Lain
                         </label>
                         <textarea
@@ -3724,7 +3724,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Bangsa mana yang menjadi sekutu atau rival sejarah mereka..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -3738,13 +3738,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'faction' && (
                 <div className="space-y-4">
                   {/* 1. Organization Classification, Scale, Hybrid Leader & Headquarters Pickers */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#8F5B14]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-amber">
                       1. Klasifikasi Organisasi, Pucuk Pimpinan & Markas Besar
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Jenis Organisasi / Faksi
                         </label>
                         <input
@@ -3761,7 +3761,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Ordo Ksatria / Majelis Sihir / Gilda Dagang..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="faction-type-list">
                           {FACTION_TYPE_FILTERS.filter(
@@ -3773,7 +3773,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Skala Pengaruh & Jangkauan Operasi
                         </label>
                         <input
@@ -3790,7 +3790,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Lintas Benua / Regional / Bawah Tanah..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="faction-scale-list">
                           {FACTION_SCALE_OPTIONS.filter(
@@ -3803,7 +3803,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                       {/* Hybrid Leader Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Pemimpin Tertinggi (Pilih dari Tokoh atau Ketik Baru)
                         </label>
                         <div className="space-y-1">
@@ -3819,7 +3819,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih dari Tab Character (
@@ -3844,14 +3844,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik nama/gelar pemimpin..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Headquarters Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Markas Besar Utama (Pilih dari Wilayah/Negara atau Ketik)
                         </label>
                         <div className="space-y-1">
@@ -3867,7 +3867,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih Wilayah / Negara (
@@ -3893,14 +3893,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik lokasi markas..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Lambang Panji, Warna Seragam & Semboyan Organisasi
                       </label>
                       <input
@@ -3916,7 +3916,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder='Contoh: Kompas Perak di atas Beludru Biru · Semboyan: "Mengukur Langit, Menjaga Bumi"'
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -3924,8 +3924,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* 2. Rank Hierarchy Ladder & Faction Artifacts Pickers */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Rank Hierarchy Manager */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#8F5B14]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-amber">
                         2A. Struktur Tangga Hierarki Pangkat (Bawah ke Atas)
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -3955,7 +3955,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           value={customRankInput}
                           onChange={(e) => setCustomRankInput(e.target.value)}
                           placeholder="Contoh: 1. Akolit Lentera..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -3967,7 +3967,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomRankInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah Pangkat
                         </button>
@@ -3975,8 +3975,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Faction Artifacts / Strategic Assets Picker */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-wax">
                         2B. Pusaka, Relik & Aset Strategis Milik Kelompok
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -4001,7 +4001,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
                       </div>
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                        <span className="text-[11px] text-[#695A47]">
+                        <span className="text-[11px] text-ink-soft">
                           Pilih dari Tab Artefak:
                         </span>
                         {artifactEntities.map((artEnt) => {
@@ -4020,8 +4020,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               }
                               className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
                                 active
-                                  ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                  : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                  ? 'bg-[#9E2A2B] text-white border-wax'
+                                  : 'bg-vellum text-ink border-sepia'
                               }`}
                             >
                               {active ? '✓ ' : '+ '}
@@ -4038,7 +4038,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomFactionArtifactInput(e.target.value)
                           }
                           placeholder="Ketik relik/aset lain..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -4050,7 +4050,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomFactionArtifactInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah
                         </button>
@@ -4059,12 +4059,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* 3. Recruitment Oath, Public Ideology vs Secret Agenda & Resources */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#8F5B14]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-amber">
                       3. Sumpah Setia, Doktrin Publik vs Agenda Rahasia & Sumber Daya
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Syarat Perekrutan, Ujian Inisiasi & Sumpah Setia Anggota
                       </label>
                       <textarea
@@ -4080,12 +4080,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Bagaimana seseorang direkrut, apa ujian masuknya, dan apa konsekuensi mengkhianati kelompok..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Doktrin & Ideologi Publik (Tujuan Resmi)
                         </label>
                         <textarea
@@ -4101,11 +4101,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Tujuan mulia atau filosofi resmi yang diumumkan kepada publik..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Agenda Rahasia & Konspirasi Internal (Di Balik Layar)
                         </label>
                         <textarea
@@ -4121,12 +4121,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Rencana tersembunyi, operasi bayangan, atau rahasia yang hanya diketahui petinggi..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Sumber Pendanaan, Pasukan Khusus & Wilayah Pengaruh
                       </label>
                       <textarea
@@ -4142,19 +4142,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Dari mana kelompok ini mendapat emas, senjata, intelijen, atau dukungan militer..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* 4. Diplomacy: Allied Factions vs Rival Factions */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#264653]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-sea">
                       4. Peta Politik & Diplomasi Antar-Kelompok (Gunakan [[Nama Entitas]] untuk Tautan)
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Sekutu, Patron & Mitra Dagang (Allied Factions)
                         </label>
                         <textarea
@@ -4170,11 +4170,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kelompok, ras, atau kerajaan mana yang bersekutu dengan organisasi ini..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Rival Politik & Musuh Bebuyutan (Rival Factions)
                         </label>
                         <textarea
@@ -4190,7 +4190,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kelompok atau penguasa mana yang berusaha menghancurkan atau menyaingi mereka..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -4204,13 +4204,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'power_system' && (
                 <div className="space-y-4">
                   {/* 1. Typology, Energy Source, Hybrid Origin & Catalyst Pickers */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#5A3E7A]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-mystic">
                       1. Tipologi Sistem, Sumber Energi, Asal-Usul & Medium Penyalur
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tipologi Sistem Kekuatan
                         </label>
                         <input
@@ -4227,7 +4227,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Hard Magic / Kultivasi / Runik & Kriya..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <datalist id="power-typology-list">
                           {POWER_SYSTEM_TYPOLOGY_FILTERS.filter(
@@ -4239,7 +4239,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Sumber Energi Utama (Energy Source)
                         </label>
                         <input
@@ -4255,13 +4255,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Cahaya Matahari, Bulan & Gugus Bintang"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       {/* Hybrid Origin Picker (Race / Region / History) */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Asal-Usul / Pencipta (Pilih dari Ras/Wilayah/Sejarah atau Ketik)
                         </label>
                         <div className="space-y-1">
@@ -4277,7 +4277,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih Entitas Asal-Usul --
@@ -4306,14 +4306,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Atau ketik asal-usul kekuatan..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Catalyst / Focus Medium Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Medium Fokus / Alat Penyalur (Pilih dari Artefak atau Ketik)
                         </label>
                         <div className="space-y-1">
@@ -4329,7 +4329,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                            className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                           >
                             <option value="">
                               -- Pilih dari Tab Artefak (
@@ -4354,14 +4354,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Contoh: Astrolabe Kuningan, Segel Runik, Tongkat..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Syarat Bangkit (Awakening) & Cara Mempelajari Sistem Ini
                       </label>
                       <textarea
@@ -4377,7 +4377,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Siapa yang bisa menggunakan kekuatan ini? Apakah butuh garis darah khusus, pembukaan meridian, atau ujian ritual?"
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -4385,8 +4385,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* 2. Power Tiers Ladder & Element Branches / Schools Pickers */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Power Tiers List Manager */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#5A3E7A]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-mystic">
                         2A. Tangga Tingkatan Kekuatan (Power Tiers / Ranks)
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -4418,7 +4418,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomPowerTierInput(e.target.value)
                           }
                           placeholder="Contoh: Lingkar 1: Inisiat..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -4430,7 +4430,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomPowerTierInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah Tier
                         </button>
@@ -4438,8 +4438,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Element Branches / Schools Manager */}
-                    <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2.5">
-                      <div className="text-xs font-semibold text-[#9E2A2B]">
+                    <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2.5">
+                      <div className="text-xs font-semibold text-wax">
                         2B. Cabang Aliran, Disiplin, atau Elemen Turunan
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -4471,7 +4471,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomElementBranchInput(e.target.value)
                           }
                           placeholder="Contoh: Jalur Solar (Api Surya)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="button"
@@ -4483,7 +4483,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             );
                             setCustomElementBranchInput('');
                           }}
-                          className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                          className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                         >
                           + Tambah Aliran
                         </button>
@@ -4492,12 +4492,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* 3. Hard Magic Rules, Counter-Weakness & Corruption / Backlash Cost */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                    <div className="text-xs font-semibold text-[#9E2A2B]">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                    <div className="text-xs font-semibold text-wax">
                       3. Hukum Mutlak (Hard Rules), Kelemahan Sistem & Risiko Efek Samping
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                      <label className="block text-[11px] font-semibold text-forest mb-1">
                         Hukum Besi & Batasan Mutlak (Hard Magic Rules — Apa yang TIDAK BISA Dilakukan)
                       </label>
                       <textarea
@@ -4513,12 +4513,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Tuliskan hukum mutlak agar sistem kekuatan konsisten dan bebas plot hole..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Risiko Over-Resonansi & Harga Kekuatan (Corruption / Backlash Cost)
                         </label>
                         <textarea
@@ -4534,11 +4534,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Efek samping fisik, mental, atau kutukan bila dipaksakan melampaui batas..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Kelemahan Lingkungan & Material Penangkal (Anti-Magic / Counter)
                         </label>
                         <textarea
@@ -4554,7 +4554,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kondisi cuaca, tempat, atau material logam yang melemahkan kekuatan ini..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -4580,14 +4580,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   return (
                     <div className="space-y-4">
                       {/* 1. Dynamic Parent Power System, Tier & Branch Picker */}
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                        <div className="text-xs font-semibold text-[#5A3E7A]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                        <div className="text-xs font-semibold text-mystic">
                           1. Sistem Kekuatan Induk, Peringkat Tier & Cabang Aliran (Otomatis dari Power System)
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           {/* Parent Power System Picker */}
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Sistem Kekuatan Induk (Power System)
                             </label>
                             <div className="space-y-1">
@@ -4621,7 +4621,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   });
                                 }}
-                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                                className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                               >
                                 <option value="">
                                   -- Pilih Power System Induk (
@@ -4648,14 +4648,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   })
                                 }
                                 placeholder="Atau ketik sistem kekuatan..."
-                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                                className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                               />
                             </div>
                           </div>
 
                           {/* Dynamic Tier / Rank Picker from Parent Power System */}
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Peringkat / Tier (Tarik dari{' '}
                               {matchedParentPs
                                 ? matchedParentPs.title.split(' ')[0]
@@ -4675,7 +4675,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   });
                                 }}
-                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                                className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                               >
                                 <option value="">
                                   {availableTiers.length > 0
@@ -4701,14 +4701,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   })
                                 }
                                 placeholder="Atau ketik tingkatan tier..."
-                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                                className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                               />
                             </div>
                           </div>
 
                           {/* Dynamic Branch / Element Picker from Parent Power System */}
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Cabang Aliran / Elemen (Tarik dari{' '}
                               {matchedParentPs
                                 ? matchedParentPs.title.split(' ')[0]
@@ -4728,7 +4728,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   });
                                 }}
-                                className="w-full px-2.5 py-1 text-[11px] bg-[#EFE7D6] border border-[#D8CBB3] rounded text-[#231C14]"
+                                className="w-full px-2.5 py-1 text-[11px] bg-aged border border-sepia rounded text-ink"
                               >
                                 <option value="">
                                   {availableBranches.length > 0
@@ -4756,7 +4756,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   })
                                 }
                                 placeholder="Atau ketik cabang aliran..."
-                                className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                                className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                               />
                             </div>
                           </div>
@@ -4764,13 +4764,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       {/* 2. Skill Exclusivity, Exclusive Races & Impact Scale */}
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                        <div className="text-xs font-semibold text-[#9E2A2B]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                        <div className="text-xs font-semibold text-wax">
                           2. Sifat Eksklusivitas Rasial & Skala Cakupan Dampak
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Sifat Kepemilikan / Eksklusivitas Skill
                             </label>
                             <input
@@ -4789,7 +4789,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 })
                               }
                               placeholder="Warisan Rasial Eksklusif / Teknik Skala Strategis..."
-                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                             />
                             <datalist id="skill-exclusivity-list">
                               {SKILL_EXCLUSIVITY_OPTIONS.map((opt) => (
@@ -4799,7 +4799,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
 
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Skala & Radius Cakupan Dampak (Impact Scale)
                             </label>
                             <input
@@ -4816,7 +4816,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 })
                               }
                               placeholder="Skala Pasukan / Benteng / Kota / Regional..."
-                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                             />
                             <datalist id="skill-scale-list">
                               {SKILL_IMPACT_SCALE_OPTIONS.map((sc) => (
@@ -4828,7 +4828,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                         {/* Exclusive Races / Bloodline Picker */}
                         <div className="space-y-2 pt-1">
-                          <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                          <label className="block text-[11px] font-semibold text-forest">
                             Ras atau Garis Darah Pemilik Eksklusif Skill Ini
                           </label>
                           <div className="flex flex-wrap gap-1.5">
@@ -4853,7 +4853,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             )}
                           </div>
                           <div className="flex flex-wrap items-center gap-1.5">
-                            <span className="text-[11px] text-[#695A47]">
+                            <span className="text-[11px] text-ink-soft">
                               Pilih dari Tab Ras:
                             </span>
                             {raceEntities.map((rEnt) => {
@@ -4872,8 +4872,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   }
                                   className={`px-2 py-0.5 rounded text-[11px] border cursor-pointer ${
                                     active
-                                      ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
-                                      : 'bg-[#FBF8F1] text-[#231C14] border-[#D8CBB3]'
+                                      ? 'bg-[#2D5A43] text-white border-forest'
+                                      : 'bg-vellum text-ink border-sepia'
                                   }`}
                                 >
                                   {active ? '✓ ' : '+ '}
@@ -4890,7 +4890,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 setCustomExclusiveRaceInput(e.target.value)
                               }
                               placeholder="Ketik sub-ras atau klan garis darah khusus..."
-                              className="flex-1 px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              className="flex-1 px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                             />
                             <button
                               type="button"
@@ -4902,7 +4902,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 );
                                 setCustomExclusiveRaceInput('');
                               }}
-                              className="px-3 py-1 text-xs font-semibold bg-[#EFE7D6] border border-[#D8CBB3] rounded-lg text-[#231C14] cursor-pointer"
+                              className="px-3 py-1 text-xs font-semibold bg-aged border border-sepia rounded-lg text-ink cursor-pointer"
                             >
                               + Tambah Garis Darah
                             </button>
@@ -4911,12 +4911,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       {/* 3. Large-Scale Strategic Impact, Visual Manifestation & Activation Cost */}
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3">
-                        <div className="text-xs font-semibold text-[#9E2A2B]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3">
+                        <div className="text-xs font-semibold text-wax">
                           3. Dampak Skala Besar / Strategis, Manifestasi Visual & Syarat Aktivasi
                         </div>
                         <div>
-                          <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                          <label className="block text-[11px] font-semibold text-wax mb-1">
                             Dampak Skala Besar & Efek Strategis terhadap Medan / Wilayah (Gunakan [[Nama Entitas]] untuk Tautan)
                           </label>
                           <textarea
@@ -4934,12 +4934,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Apa yang terjadi pada benteng, pasukan, atau lanskap alam ketika skill berskala besar ini dilepaskan..."
-                            className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[11px] font-semibold text-[#5A3E7A] mb-1">
+                          <label className="block text-[11px] font-semibold text-mystic mb-1">
                             Manifestasi Visual, Suara & Fenomena Alam Saat Diaktifkan (Panduan Adegan Novel)
                           </label>
                           <textarea
@@ -4957,13 +4957,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Bagaimana wujud visual segel, warna cahaya, perubahan langit, atau getaran tanah saat teknik ini dirapal..."
-                            className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Syarat Pemicu & Biaya Aktivasi (Activation Cost)
                             </label>
                             <input
@@ -4981,12 +4981,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 })
                               }
                               placeholder="Contoh: Membutuhkan darah murni Aelfir atau kompas logam..."
-                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                            <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                               Batas Cooldown, Frekuensi & Efek Balik Pengguna
                             </label>
                             <input
@@ -5004,7 +5004,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 })
                               }
                               placeholder="Contoh: Maksimal 90 detik sebelum memicu pendarahan retina..."
-                              className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                              className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                             />
                           </div>
                         </div>
@@ -5019,8 +5019,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'nation' && (
                 <div className="space-y-5">
                   {/* Section 1: Bentuk Pemerintahan, Penguasa, Ibu Kota & Simbol Kedaulatan */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-brass flex items-center gap-1.5">
                       <Crown className="w-3.5 h-3.5" />
                       <span>
                         1. Kedaulatan Politik, Penguasa, Ibu Kota & Lambang Negara
@@ -5029,7 +5029,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Klasifikasi Bentuk Pemerintahan (Filter Direktori)
                         </label>
                         <select
@@ -5046,7 +5046,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         >
                           {NATION_GOVERNMENT_FILTERS.filter(
                             (f) => f !== 'Semua'
@@ -5059,7 +5059,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Detail Struktur Pemerintahan & Parlemen/Tahta
                         </label>
                         <input
@@ -5075,13 +5075,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Monarki Teokratis Absolut / Serikat Klan Bawah Tanah..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       {/* Hybrid Ruler Picker (From Character Codex or Custom) */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Penguasa / Kepala Negara Saat Ini (Pilih dari Character atau Ketik)
                         </label>
                         <div className="space-y-1.5">
@@ -5104,7 +5104,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 });
                               }
                             }}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="__CUSTOM__">
                               -- Pilih dari Daftar Tokoh atau Ketik Manual --
@@ -5128,14 +5128,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Nama Raja / Kaisar / Kanselir / Dewan Penguasa..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Capital City Picker (From Region Codex / Map Stamps or Custom) */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Ibu Kota & Pusat Pemerintahan (Pilih dari Wilayah/Peta atau Ketik)
                         </label>
                         <div className="space-y-1.5">
@@ -5159,7 +5159,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 });
                               }
                             }}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="__CUSTOM__">
                               -- Pilih dari Daftar Wilayah / Pin Peta atau Ketik Manual --
@@ -5188,13 +5188,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Nama Ibu Kota atau Benteng Takhta..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Agama Negara / Kepercayaan Resmi
                         </label>
                         <input
@@ -5210,12 +5210,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Gereja Cahaya Sol-Aurea / Kultus Leluhur..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Mata Uang Resmi & Standar Nilai Tukar
                         </label>
                         <input
@@ -5231,13 +5231,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Dinar Emas Surya, Keping Perak..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#B5832A] mb-1">
+                      <label className="block text-[11px] font-semibold text-brass mb-1">
                         Lambang Kebesaran Negara, Panji Bendera & Semboyan Kedaulatan
                       </label>
                       <input
@@ -5253,14 +5253,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Contoh: Elang Kembar Bermahkota Matahari — 'Di Bawah Terang Surya, Tak Ada Bayangan yang Abadi'"
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* Section 2: Demografi Ras Mayoritas, Komoditas Ekonomi & Kekuatan Militer */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                       <Users className="w-3.5 h-3.5" />
                       <span>
                         2. Demografi Ras Mayoritas, Komoditas Ekonomi & Kekuatan Militer
@@ -5268,8 +5268,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Hybrid Dominant Races Multi-Picker */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
-                      <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-forest">
                         Demografi Ras Penduduk Negara Ini (Pilih dari Tab Ras atau Ketik Manual)
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -5277,7 +5277,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (rName) => (
                             <span
                               key={rName}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-medium text-[#231C14]"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-aged border border-forest/40 text-xs font-medium text-ink"
                             >
                               {rName}
                               <button
@@ -5294,7 +5294,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   })
                                 }
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -5305,7 +5305,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                       {raceEntities.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[11px] text-[#695A47]">
+                          <span className="text-[11px] text-ink-soft">
                             Pilih Cepat dari Tab Ras:
                           </span>
                           {raceEntities.map((rEnt) => {
@@ -5332,8 +5332,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 }}
                                 className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
                                   already
-                                    ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
-                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                    ? 'bg-[#2D5A43] text-white border-forest'
+                                    : 'bg-parchment text-ink border-sepia hover:bg-aged'
                                 }`}
                               >
                                 {already ? '✓ ' : '+ '}
@@ -5352,7 +5352,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomDominantRaceInput(e.target.value)
                           }
                           placeholder="Ketik ras/etnis demografi lain (misal: Manusia Dataran Aurelia 70%)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -5381,7 +5381,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#8F5B14] mb-1">
+                        <label className="block text-[11px] font-semibold text-amber mb-1">
                           Komoditas Ekonomi Utama, Perdagangan & Sumber Daya Strategis
                         </label>
                         <textarea
@@ -5399,12 +5399,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Apa komoditas ekspor utama, monopoli tambang/pertanian, dan jalur niaga yang menghidupi negara ini..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Kekuatan Militer, Pasukan Elit & Pertahanan Strategis
                         </label>
                         <textarea
@@ -5420,15 +5420,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Jumlah legiun/armada, unit ksatria atau penyihir elit, serta benteng pertahanan utama negara..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Section 3: Hukum Utama, Budaya Masyarakat & Peta Diplomasi / Konflik Perbatasan */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                       <Swords className="w-3.5 h-3.5" />
                       <span>
                         3. Hukum Utama, Budaya Masyarakat & Peta Diplomasi / Konflik Perbatasan
@@ -5436,7 +5436,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink mb-1">
                         Hukum Utama, Larangan Negara & Adat Budaya Masyarakat
                       </label>
                       <textarea
@@ -5452,13 +5452,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Undang-undang mutlak (misal: larangan sihir tanpa lisensi), sistem kasta warga, dan tradisi masyarakat..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Aliansi Diplomatik & Perjanjian Dagang (Gunakan [[Nama]] untuk tautan)
                         </label>
                         <textarea
@@ -5474,12 +5474,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Negara sahabat, pakta pertahanan, atau kelompok sekutu..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Rival Geopolitik, Musuh & Konflik Perbatasan Aktif
                         </label>
                         <textarea
@@ -5495,7 +5495,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Sengketa wilayah perbatasan, perang dingin, embargo, atau ancaman invasi..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -5509,8 +5509,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'region' && (
                 <div className="space-y-5">
                   {/* Section 1: Klasifikasi Tipologi, Negara Induk, Pin Peta & Iklim/Bahaya */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-sea flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5" />
                       <span>
                         1. Klasifikasi Geografis, Kedaulatan Negara Induk & Pin Peta Dunia
@@ -5519,7 +5519,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tipologi Wilayah (Filter Direktori Kiri)
                         </label>
                         <select
@@ -5536,7 +5536,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         >
                           {REGION_TYPOLOGY_FILTERS.filter(
                             (f) => f !== 'Semua'
@@ -5549,7 +5549,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tingkat Bahaya Wilayah (Pilih Preset atau Ketik Manual)
                         </label>
                         <div className="space-y-1.5">
@@ -5572,7 +5572,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 });
                               }
                             }}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="__CUSTOM__">
                               -- Pilih Preset Bahaya atau Ketik Manual --
@@ -5596,14 +5596,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Contoh: Sangat Tinggi (Predator Wyvern & Badai Eter)..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Parent Nation Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Negara / Kedaulatan Induk (Pilih dari Tab Negara atau Ketik)
                         </label>
                         <div className="space-y-1.5">
@@ -5628,7 +5628,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 });
                               }
                             }}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="__CUSTOM__">
                               -- Pilih dari Daftar Negara atau Ketik Wilayah Bebas --
@@ -5652,14 +5652,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Contoh: Kekaisaran Gondoria / Zona Bebas Perbatasan Utara..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Map Stamp Picker */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tautan Pin Lokasi di Map Dunia (Pilih dari Pin Peta atau Ketik)
                         </label>
                         <div className="space-y-1.5">
@@ -5684,7 +5684,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 });
                               }
                             }}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="__CUSTOM__">
                               -- Pilih dari Daftar Pin Peta Dunia atau Ketik Manual --
@@ -5711,7 +5711,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               })
                             }
                             placeholder="Nama Pin di Map Dunia (opsional)..."
-                            className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
@@ -5719,7 +5719,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Iklim, Cuaca & Siklus Musim Wilayah
                         </label>
                         <input
@@ -5735,12 +5735,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Lembap berkabut abadi dengan bioluminesensi malam..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Sumber Daya Alam, Magis & Komoditas Lokal
                         </label>
                         <input
@@ -5756,15 +5756,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Bijih Bintang Jatuh, Getah Eter, Bunga Lentera Malam..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Section 2: Atmosfer Sensorik Latar Adegan Novel & Daftar Landmark Lokal */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>
                         2. Atmosfer Sensorik Latar Adegan Novel & Daftar Titik Penting (Landmark)
@@ -5772,7 +5772,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#8F5B14] mb-1">
+                      <label className="block text-[11px] font-semibold text-amber mb-1">
                         Atmosfer Sensorik, Pencahayaan, Aroma & Suara Latar (Panduan Deskripsi Adegan Novel)
                       </label>
                       <textarea
@@ -5788,13 +5788,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Bagaimana warna langit, aroma udara, suara langkah kaki/alam, dan suasana arsitektur saat tokoh melangkah masuk ke wilayah ini..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
 
                     {/* Landmarks List Chip Builder */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
-                      <label className="block text-[11px] font-semibold text-[#264653]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-sea">
                         Daftar Titik Penting (Landmark), Distrik & Reruntuhan Lokal di Wilayah Ini
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -5802,9 +5802,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (lm, idx) => (
                             <span
                               key={lm}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#264653]/40 text-xs font-medium text-[#231C14]"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-aged border border-sea/40 text-xs font-medium text-ink"
                             >
-                              <span className="text-[#264653] font-bold">
+                              <span className="text-sea font-bold">
                                 #{idx + 1}
                               </span>{' '}
                               {lm}
@@ -5822,7 +5822,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   })
                                 }
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -5838,7 +5838,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomLandmarkInput(e.target.value)
                           }
                           placeholder="Ketik nama tempat/bangunan penting (misal: Observatorium Cakrawala Perak)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -5869,8 +5869,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* Section 3: Ekologi Monster, Flora/Fauna Endemik & Anomali Bahaya */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                       <ShieldAlert className="w-3.5 h-3.5" />
                       <span>
                         3. Ekologi Monster, Flora/Fauna Endemik & Anomali Bahaya Lingkungan
@@ -5878,8 +5878,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Hybrid Endemic Flora/Fauna/Artifacts Multi-Picker */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
-                      <label className="block text-[11px] font-semibold text-[#2D5A43]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-forest">
                         Flora, Fauna, Monster & Pusaka Endemik Wilayah Ini (Pilih dari Artefak & Flora atau Ketik)
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -5887,7 +5887,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (ef) => (
                             <span
                               key={ef}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-medium text-[#231C14]"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-aged border border-forest/40 text-xs font-medium text-ink"
                             >
                               {ef}
                               <button
@@ -5904,7 +5904,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   })
                                 }
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -5915,7 +5915,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                       {artifactEntities.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[11px] text-[#695A47]">
+                          <span className="text-[11px] text-ink-soft">
                             Pilih Cepat dari Artefak & Flora:
                           </span>
                           {artifactEntities.map((artEnt) => {
@@ -5943,8 +5943,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 }}
                                 className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
                                   already
-                                    ? 'bg-[#2D5A43] text-white border-[#2D5A43]'
-                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                    ? 'bg-[#2D5A43] text-white border-forest'
+                                    : 'bg-parchment text-ink border-sepia hover:bg-aged'
                                 }`}
                               >
                                 {already ? '✓ ' : '+ '}
@@ -5963,7 +5963,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomEndemicInput(e.target.value)
                           }
                           placeholder="Ketik makhluk/tanaman/anomali endemik lain (misal: Wyvern Sayap-Es Utara)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -5991,7 +5991,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                      <label className="block text-[11px] font-semibold text-wax mb-1">
                         Detail Anomali Bahaya, Monster Penguasa Medan & Pantangan Penjelajah
                       </label>
                       <textarea
@@ -6009,7 +6009,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Ancaman spesifik saat tokoh melintasi wilayah ini (misal: kabut penghilang ingatan, badai kaca eter, atau patroli predator)..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -6022,7 +6022,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'history' && (
                 <div className="space-y-5">
                   {/* Section 1: Klasifikasi Skala Peristiwa, Era Penanggalan & Lokasi Kejadian */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
                     <div className="text-xs font-semibold text-[#7A3E1D] flex items-center gap-1.5">
                       <Clock className="w-3.5 h-3.5" />
                       <span>
@@ -6032,7 +6032,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Jenis / Skala Peristiwa (Filter Direktori Kiri)
                         </label>
                         <select
@@ -6049,7 +6049,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         >
                           {HISTORY_EVENT_TYPE_FILTERS.filter(
                             (f) => f !== 'Semua'
@@ -6062,7 +6062,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Era Penanggalan Sejarah
                         </label>
                         <input
@@ -6078,12 +6078,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Era Surya Emas / Era Abu (Post-Gerhana)..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tahun Numerik (Untuk Urutan Otomatis di Tab Kronologi)
                         </label>
                         <input
@@ -6103,12 +6103,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: -340 atau 298"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg font-mono-tabular"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg font-mono-tabular"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Penanggalan Kanon Lengkap (Label Tanggal)
                         </label>
                         <input
@@ -6124,14 +6124,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Contoh: Tahun 0 PG — Malam Tanpa Bayangan / Musim Gugur 214 PG"
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
 
                     {/* Hybrid Event Location Picker */}
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                      <label className="block text-[11px] font-semibold text-sea mb-1">
                         Lokasi Utama Kejadian / Medan Peristiwa (Pilih dari Wilayah/Negara/Peta atau Ketik Manual)
                       </label>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -6156,7 +6156,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               });
                             }
                           }}
-                          className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         >
                           <option value="__CUSTOM__">
                             -- Pilih dari Daftar Wilayah / Negara / Pin Peta atau Ketik --
@@ -6190,15 +6190,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Ketik lokasi peristiwa (misal: Kawah Gerhana Merah / Lembah Aethelgard)..."
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Section 2: Pemilih Hibrida Pihak Terlibat (Negara/Kelompok/Ras) & Tokoh Kunci */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                       <Swords className="w-3.5 h-3.5" />
                       <span>
                         2. Pihak yang Terlibat (Negara / Kelompok / Ras) & Tokoh Kunci Sejarah
@@ -6206,8 +6206,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Hybrid Belligerents Multi-Picker */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
-                      <label className="block text-[11px] font-semibold text-[#9E2A2B]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-wax">
                         Pihak / Fraksi / Negara / Bangsa yang Terlibat (Pilih dari Codex atau Ketik Manual)
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -6215,7 +6215,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (bName) => (
                             <span
                               key={bName}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#9E2A2B]/40 text-xs font-medium text-[#231C14]"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-aged border border-wax/40 text-xs font-medium text-ink"
                             >
                               {bName}
                               <button
@@ -6234,7 +6234,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   });
                                 }}
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -6247,7 +6247,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         factionEntities.length > 0 ||
                         raceEntities.length > 0) && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[11px] text-[#695A47]">
+                          <span className="text-[11px] text-ink-soft">
                             Pilih Cepat Negara / Kelompok / Ras:
                           </span>
                           {[
@@ -6280,8 +6280,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 }}
                                 className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
                                   already
-                                    ? 'bg-[#9E2A2B] text-white border-[#9E2A2B]'
-                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                    ? 'bg-[#9E2A2B] text-white border-wax'
+                                    : 'bg-parchment text-ink border-sepia hover:bg-aged'
                                 }`}
                               >
                                 {already ? '✓ ' : '+ '}
@@ -6300,7 +6300,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomBelligerentInput(e.target.value)
                           }
                           placeholder="Ketik pihak terlibat lain (misal: Armada Bajak Laut Lautan Abu)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -6330,8 +6330,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {/* Hybrid Key Historical Figures Multi-Picker */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2.5">
-                      <label className="block text-[11px] font-semibold text-[#8F5B14]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2.5">
+                      <label className="block text-[11px] font-semibold text-amber">
                         Tokoh Kunci, Panglima, atau Saksi Sejarah (Pilih dari Tab Character atau Ketik Manual)
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -6340,7 +6340,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         ).map((kf) => (
                           <span
                             key={kf}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-medium text-[#231C14]"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-aged border border-amber/40 text-xs font-medium text-ink"
                           >
                             {kf}
                             <button
@@ -6357,7 +6357,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   },
                                 })
                               }
-                              className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                              className="text-wax hover:text-ink cursor-pointer"
                             >
                               <X className="w-3 h-3" />
                             </button>
@@ -6367,7 +6367,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                       {characterEntities.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[11px] text-[#695A47]">
+                          <span className="text-[11px] text-ink-soft">
                             Pilih Cepat dari Tab Character:
                           </span>
                           {characterEntities.map((cEnt) => {
@@ -6395,8 +6395,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 }}
                                 className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
                                   already
-                                    ? 'bg-[#8F5B14] text-white border-[#8F5B14]'
-                                    : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                    ? 'bg-[#8F5B14] text-white border-amber'
+                                    : 'bg-parchment text-ink border-sepia hover:bg-aged'
                                 }`}
                               >
                                 {already ? '✓ ' : '+ '}
@@ -6415,7 +6415,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomKeyFigureInput(e.target.value)
                           }
                           placeholder="Ketik tokoh sejarah lain (misal: Kaisar Aurelius I / Kanselir Cassian)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -6444,9 +6444,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* Section 3: Pemicu Konflik, Dampak Dunia & Sejarah Resmi vs Kebenaran Rahasia */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
-                      <BookOpen className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-ink flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5 text-wax" />
                       <span>
                         3. Anatomi Historiografi: Pemicu, Dampak Dunia & Propaganda vs Kebenaran Rahasia
                       </span>
@@ -6470,12 +6470,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Insiden, krisis politik, atau ritual gagal yang menyulut meletusnya peristiwa ini..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Korban Jiwa, Kehancuran & Kerugian Besar
                         </label>
                         <textarea
@@ -6493,12 +6493,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Kota yang hancur, jumlah legiun gugur, atau pusaka kuno yang hilang..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink mb-1">
                           Hasil Akhir Langsung (Outcome)
                         </label>
                         <textarea
@@ -6514,12 +6514,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Siapa yang menang, traktat apa yang ditandatangani, atau perubahan batas negara..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#264653] mb-1">
+                        <label className="block text-[11px] font-semibold text-sea mb-1">
                           Dampak Jangka Panjang terhadap Dunia Saat Ini (Legacy)
                         </label>
                         <textarea
@@ -6535,7 +6535,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Bagaimana peristiwa ini masih memengaruhi hukum, trauma bangsa, atau politik di era cerita utama..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -6543,7 +6543,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {/* Official Winner History vs Hidden Historical Truth */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Sejarah Resmi Pemenang (Propaganda Publik / Buku Sejarah Istana)
                         </label>
                         <textarea
@@ -6561,12 +6561,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Versi sejarah yang diajarkan kepada rakyat umum atau diklaim oleh penguasa..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Kebenaran Rahasia Tersembunyi (Fakta Kanon di Balik Layar)
                         </label>
                         <textarea
@@ -6584,7 +6584,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Apa yang sebenarnya terjadi di balik layar yang disembunyikan dari publik..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -6598,7 +6598,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'encyclopedia' && (
                 <div className="space-y-4">
                   {/* Section 1: Klasifikasi Sub-Kategori, Kelangkaan, Pemegang, Pencipta & Habitat */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
                     <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
                       <Compass className="w-3.5 h-3.5" />
                       <span>
@@ -6608,7 +6608,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Sub-Kategori Ensiklopedia
                         </label>
                         <select
@@ -6626,7 +6626,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               },
                             })
                           }
-                          className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         >
                           {ENCYCLOPEDIA_SUBCATEGORY_FILTERS.filter(
                             (x) => x !== 'Semua'
@@ -6639,7 +6639,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Tingkat Kelangkaan
                         </label>
                         <div className="space-y-1">
@@ -6655,7 +6655,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               });
                             }}
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             <option value="">
                               -- Pilih Preset Kelangkaan --
@@ -6681,14 +6681,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Picker for Linked Power System */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Sistem Kekuatan Terkait (Pilih dari Power System / Ketik)
                         </label>
                         <div className="space-y-1">
@@ -6705,7 +6705,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   },
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih dari Tab Power System --
@@ -6732,7 +6732,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
@@ -6741,7 +6741,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       {/* Hybrid Picker for Current Holder / Owner */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Pemilik / Pemegang Saat Ini (Tokoh / Kelompok / Ketik)
                         </label>
                         <div className="space-y-1">
@@ -6759,7 +6759,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   },
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih Tokoh / Kelompok --
@@ -6789,14 +6789,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Picker for Creator / Biological Origin */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Pencipta / Asal-Usul Biologis (Ras / Tokoh / Kelompok)
                         </label>
                         <div className="space-y-1">
@@ -6815,7 +6815,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   },
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih Ras / Tokoh / Kelompok --
@@ -6850,14 +6850,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
 
                       {/* Hybrid Picker for Habitat / Region of Origin */}
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                           Habitat Alami / Lokasi Asal (Pilih Wilayah / Negara)
                         </label>
                         <div className="space-y-1">
@@ -6874,7 +6874,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   },
                                 });
                               }}
-                              className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                              className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg text-ink"
                             >
                               <option value="">
                                 -- Pilih Wilayah / Negara --
@@ -6900,14 +6900,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 },
                               })
                             }
-                            className="w-full px-2.5 py-1 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Khasiat Utama, Kekuatan Magis atau Kemampuan Spesifik
                       </label>
                       <input
@@ -6923,14 +6923,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             },
                           })
                         }
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
 
                   {/* Section 2: Dossier Pusaka (Syarat Aktivasi, Kutukan/Efek Samping, Riwayat Kepemilikan & Cara Menghancurkan) */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
-                    <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
+                    <div className="text-xs font-semibold text-brass flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>
                         2. Dossier Pusaka & Artefak: Syarat Aktivasi, Kutukan, Sejarah Kepemilikan & Cara Menghancurkan
@@ -6939,7 +6939,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                        <label className="block text-[11px] font-semibold text-forest mb-1">
                           Syarat Aktivasi / Ikatan Jiwa (Attunement)
                         </label>
                         <textarea
@@ -6957,12 +6957,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Darah garis keturunan khusus, pembacaan aksara bintang, atau kondisi lingkungan..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Kutukan, Efek Samping & Risiko Penggunaan
                         </label>
                         <textarea
@@ -6978,12 +6978,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Menguras memori, membekukan darah, atau memancing halusinasi..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink mb-1">
                           Kelemahan Mutlak / Cara Menghancurkan atau Menjinakkan
                         </label>
                         <textarea
@@ -6999,14 +6999,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Hanya dapat dilebur di tanur magma kuno atau dinetralkan dengan garam perak..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
 
                     {/* Ownership History Chip Builder */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2">
-                      <label className="block text-[11px] font-semibold text-[#8F5B14]">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2">
+                      <label className="block text-[11px] font-semibold text-amber">
                         Rantai Sejarah Kepemilikan / Perpindahan Tangan Pusaka
                       </label>
                       <div className="flex flex-wrap gap-1.5">
@@ -7014,7 +7014,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (oh) => (
                             <span
                               key={oh}
-                              className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-semibold text-[#231C14] flex items-center gap-1.5"
+                              className="px-2.5 py-1 rounded bg-aged border border-amber/40 text-xs font-semibold text-ink flex items-center gap-1.5"
                             >
                               <span>{oh}</span>
                               <button
@@ -7031,7 +7031,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   })
                                 }
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -7043,7 +7043,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       {(characterEntities.length > 0 ||
                         factionEntities.length > 0) && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[11px] text-[#695A47]">
+                          <span className="text-[11px] text-ink-soft">
                             Tambah Cepat Tokoh/Kelompok Pemilik:
                           </span>
                           {[...characterEntities, ...factionEntities]
@@ -7073,8 +7073,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   }}
                                   className={`px-2 py-0.5 text-[11px] rounded border cursor-pointer transition-colors ${
                                     already
-                                      ? 'bg-[#8F5B14] text-white border-[#8F5B14]'
-                                      : 'bg-[#F6F1E6] text-[#231C14] border-[#D8CBB3] hover:bg-[#EFE7D6]'
+                                      ? 'bg-[#8F5B14] text-white border-amber'
+                                      : 'bg-parchment text-ink border-sepia hover:bg-aged'
                                   }`}
                                 >
                                   {already ? '✓ ' : '+ '}
@@ -7093,7 +7093,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomOwnershipInput(e.target.value)
                           }
                           placeholder="Ketik urutan pemilik (misal: 1. Kaisar Aurelius I -> 2. Direbut Archmage Vaelen)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -7122,7 +7122,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
 
                   {/* Section 3: Dossier Bestiari, Herbarium & Alkimia */}
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3.5">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-3.5">
                     <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
                       <Globe className="w-3.5 h-3.5" />
                       <span>
@@ -7132,7 +7132,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink mb-1">
                           Perilaku Makhluk, Siklus Hidup & Pola Berburu (Fauna / Flora)
                         </label>
                         <textarea
@@ -7148,7 +7148,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Bagaimana makhluk ini berburu, musim mekarnya tanaman, atau tata bahasa aksara..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
 
@@ -7169,13 +7169,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Resep ramuan yang dihasilkan, fungsi kerajinan zirah, atau nilai jual di pasar gelap..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
 
                     {/* Harvestable Materials Chip Builder */}
-                    <div className="p-3 rounded-lg bg-[#FBF8F1] border border-[#D8CBB3] space-y-2">
+                    <div className="p-3 rounded-lg bg-vellum border border-sepia space-y-2">
                       <label className="block text-[11px] font-semibold text-[#3D5A45]">
                         Bagian Tubuh Monster / Komponen Material & Hasil Panen Berharga
                       </label>
@@ -7184,7 +7184,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           (hm) => (
                             <span
                               key={hm}
-                              className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#3D5A45]/40 text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5"
+                              className="px-2.5 py-1 rounded bg-aged border border-[#3D5A45]/40 text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5"
                             >
                               <span>{hm}</span>
                               <button
@@ -7201,7 +7201,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     },
                                   })
                                 }
-                                className="text-[#9E2A2B] hover:text-[#231C14] cursor-pointer"
+                                className="text-wax hover:text-ink cursor-pointer"
                               >
                                 <X className="w-3 h-3" />
                               </button>
@@ -7218,7 +7218,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             setCustomHarvestMaterialInput(e.target.value)
                           }
                           placeholder="Ketik komponen panen (misal: Sisik Sayap Kaca-Es / Kelopak Embun Perak / Inti Kristal)..."
-                          className="flex-1 px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded"
+                          className="flex-1 px-2.5 py-1 text-xs bg-parchment border border-sepia rounded"
                         />
                         <button
                           type="button"
@@ -7252,16 +7252,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* COSMIC ENTITY EDITOR (PILAR I — ENTITAS KOSMIK)               */}
               {/* ============================================================= */}
               {category === 'cosmic_entity' && (
-                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
-                  <div className="text-xs font-bold text-[#264653] flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-[#B5832A]" />
+                <div className="p-4 rounded-xl bg-aged/85 border border-sepia space-y-4">
+                  <div className="text-xs font-bold text-sea flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-brass" />
                     <span>
                       Arsitektur Entitas Kosmik & Primordial (Di Atas Dewa-Dewi)
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Skala Eksistensi Kosmik
                       </label>
                       <input
@@ -7277,11 +7277,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Primordial Pembentuk Realitas / Titan Astral / Entitas Luar Dimensi..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Dimensi Asal / Alam Keberadaan
                       </label>
                       <input
@@ -7297,11 +7297,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Samudra Astral Luar Cakrawala / Palung Kehampaan..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Hukum Semesta / Realitas yang Dikendalikan
                       </label>
                       <input
@@ -7317,11 +7317,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Gravitasi Bintang, Entropi Cahaya, Siklus Waktu..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Sikap terhadap Makhluk Fana & Tingkat Ancaman Eksistensial
                       </label>
                       <input
@@ -7337,11 +7337,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Tidur Abadi / Apatis / Pemangsa Energi Kosmik..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Pertanda Kemunculan & Anomali Langit (Manifestation Omen)
                       </label>
                       <textarea
@@ -7357,7 +7357,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Fenomena gerhana, getaran bijih meteorit, atau perubahan warna langit saat entitas ini bergerak..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -7368,16 +7368,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* DEITY & PANTHEON EDITOR (PILAR I — DEWA-DEWI)                 */}
               {/* ============================================================= */}
               {category === 'deity' && (
-                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
-                  <div className="text-xs font-bold text-[#8F5B14] flex items-center gap-1.5">
-                    <Crown className="w-4 h-4 text-[#B5832A]" />
+                <div className="p-4 rounded-xl bg-aged/85 border border-sepia space-y-4">
+                  <div className="text-xs font-bold text-amber flex items-center gap-1.5">
+                    <Crown className="w-4 h-4 text-brass" />
                     <span>
                       Dossier Dewa-Dewi & Pantheon Ilahi (Sembahan Makhluk Fana)
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Peringkat Pantheon / Gelar Ilahi
                       </label>
                       <input
@@ -7393,11 +7393,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Dewa Tertinggi Pantheon / Dewi Pelindung Alam / Setengah-Dewa..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Domain Kekuasaan Ilahi
                       </label>
                       <input
@@ -7413,11 +7413,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Matahari Zenith, Sumpah Ksatria & Keadilan Hukum..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Simbol Suci & Relik Ilahi
                       </label>
                       <input
@@ -7433,11 +7433,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Cakram Matahari Emas Bersayap Tombak Kembar..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Kuil Utama, Ordo Pendeta & Hari Raya Suci
                       </label>
                       <input
@@ -7453,11 +7453,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Katedral Agung Sol-Aurea di Solis Prime..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                      <label className="block text-[11px] font-semibold text-forest mb-1">
                         Berkat & Mukjizat bagi Pengikut Setia
                       </label>
                       <textarea
@@ -7473,11 +7473,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Karunia kekuatan atau perlindungan bagi mereka yang menjaga sumpah..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                      <label className="block text-[11px] font-semibold text-wax mb-1">
                         Pantangan Ilahi & Kutukan Pelanggar Sumpah
                       </label>
                       <textarea
@@ -7493,7 +7493,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Hukuman atau kutukan ilahi bila melanggar pantangan suci..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -7504,16 +7504,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* BESTIARY & MONSTER EDITOR (PILAR II — BESTIARY MONSTER)       */}
               {/* ============================================================= */}
               {category === 'bestiary' && (
-                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
-                  <div className="text-xs font-bold text-[#9E2A2B] flex items-center gap-1.5">
-                    <Swords className="w-4 h-4 text-[#9E2A2B]" />
+                <div className="p-4 rounded-xl bg-aged/85 border border-sepia space-y-4">
+                  <div className="text-xs font-bold text-wax flex items-center gap-1.5">
+                    <Swords className="w-4 h-4 text-wax" />
                     <span>
                       Dossier Bestiary Monster, Habitat, Kelemahan & Material Buruan
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Klasifikasi Makhluk / Monster
                       </label>
                       <input
@@ -7529,11 +7529,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Naga Laut / Makhluk Mitologi / Konstruk..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Tingkat Bahaya (Danger Rating)
                       </label>
                       <input
@@ -7549,11 +7549,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Kelas Bencana (Rank S+) / Sangat Berbahaya..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Habitat Alami / Wilayah Sebaran
                       </label>
                       <input
@@ -7569,12 +7569,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Puncak Wyvern / Rimba Shadowwood / Teluk Naga..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                        <label className="block text-[11px] font-semibold text-ink mb-1">
                           Kemampuan Serangan, Racun & Anomali Sihir
                         </label>
                         <textarea
@@ -7590,11 +7590,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Semburan napas elemen, serangan ilusi memori, atau gelombang kejut..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                        <label className="block text-[11px] font-semibold text-wax mb-1">
                           Kelemahan Anatomis & Cara Menaklukkan
                         </label>
                         <textarea
@@ -7610,7 +7610,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             })
                           }
                           placeholder="Titik lemah di balik sisik, elemen penangkal, atau frekuensi suara..."
-                          className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                       </div>
                     </div>
@@ -7622,16 +7622,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* CULTURE & RELIGION EDITOR (PILAR III — AGAMA & BUDAYA)        */}
               {/* ============================================================= */}
               {category === 'culture_religion' && (
-                <div className="p-4 rounded-xl bg-[#EFE7D6]/85 border border-[#D8CBB3] space-y-4">
-                  <div className="text-xs font-bold text-[#2D5A43] flex items-center gap-1.5">
-                    <BookOpen className="w-4 h-4 text-[#2D5A43]" />
+                <div className="p-4 rounded-xl bg-aged/85 border border-sepia space-y-4">
+                  <div className="text-xs font-bold text-forest flex items-center gap-1.5">
+                    <BookOpen className="w-4 h-4 text-forest" />
                     <span>
                       Dossier Agama, Adat Istiadat, Ritus & Tradisi Budaya Bangsa
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Jenis Tradisi / Institusi Keagamaan
                       </label>
                       <input
@@ -7647,11 +7647,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Agama Negara / Hukum Adat Hutan / Kode Kasta Kriya..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                         Bangsa / Negara Penganut Utama
                       </label>
                       <input
@@ -7667,11 +7667,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Kekaisaran Gondoria / Sylvan Aelfir / Dvergr..."
-                        className="w-full px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#231C14] mb-1">
+                      <label className="block text-[11px] font-semibold text-ink mb-1">
                         Nilai Filosofis, Etika & Ajaran Inti
                       </label>
                       <textarea
@@ -7687,11 +7687,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Prinsip moral utama, pandangan tentang hidup-mati, dan kehormatan..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#2D5A43] mb-1">
+                      <label className="block text-[11px] font-semibold text-forest mb-1">
                         Ritus Kehidupan, Upacara & Festival Tahunan
                       </label>
                       <textarea
@@ -7709,11 +7709,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Upacara kedewasaan, pernikahan, pemakaman, atau festival musim..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#9E2A2B] mb-1">
+                      <label className="block text-[11px] font-semibold text-wax mb-1">
                         Pantangan Adat (Social Taboos) & Hukum Moral
                       </label>
                       <textarea
@@ -7729,11 +7729,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Hal-hal yang dilarang keras secara adat atau dianggap dosa besar..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-semibold text-[#B5832A] mb-1">
+                      <label className="block text-[11px] font-semibold text-brass mb-1">
                         Ciri Khas Busana, Arsitektur & Kuliner Tradisional
                       </label>
                       <textarea
@@ -7749,7 +7749,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           })
                         }
                         placeholder="Pakaian adat, hidangan jamuan khas, dan estetika bangunan..."
-                        className="w-full p-2.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                        className="w-full p-2.5 text-xs bg-vellum border border-sepia rounded-lg"
                       />
                     </div>
                   </div>
@@ -7759,11 +7759,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* Wiki Cross-link Helper Bar + Main Markdown/Lore Textarea */}
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                  <label className="text-xs font-semibold text-[#695A47]">
+                  <label className="text-xs font-semibold text-ink-soft">
                     Catatan Sejarah & Lore Lengkap (Gunakan [[Nama Entitas]] untuk Cross-Link otomatis)
                   </label>
                   <div className="flex items-center gap-1 flex-wrap">
-                    <span className="text-[11px] text-[#695A47]">
+                    <span className="text-[11px] text-ink-soft">
                       Sisipkan Tautan Cepat:
                     </span>
                     {entities.slice(0, 4).map((ent) => (
@@ -7771,7 +7771,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         key={ent.id}
                         type="button"
                         onClick={() => insertWikiLink(ent.title)}
-                        className="px-2 py-0.5 text-[11px] bg-[#EFE7D6] hover:bg-[#D8CBB3] text-[#231C14] rounded cursor-pointer"
+                        className="px-2 py-0.5 text-[11px] bg-aged hover:bg-sepia text-ink rounded cursor-pointer"
                       >
                         +[[{ent.title.split(' ')[0]}]]
                       </button>
@@ -7779,21 +7779,23 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   </div>
                 </div>
                 <textarea
-                  rows={8}
+                  rows={12}
                   value={draftEntity.content}
                   onChange={(e) =>
                     setDraftEntity({ ...draftEntity, content: e.target.value })
                   }
-                  className="w-full p-3.5 text-sm bg-[#F6F1E6] border border-[#D8CBB3] rounded-xl text-[#231C14] leading-relaxed focus:outline-none focus:border-[#9E2A2B]"
+                  aria-label="Catatan sejarah dan lore lengkap"
+                  placeholder="Tulis sejarah, asal-usul, dan catatan lore di sini…"
+                  className="paper-sheet"
                 />
               </div>
             </form>
           ) : activeEntity ? (
             <div className="space-y-6">
               {/* Header & Metadata Row */}
-              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#D8CBB3] pb-5">
+              <div className="flex flex-wrap items-start justify-between gap-4 border-b border-sepia pb-5">
                 <div className="space-y-1.5">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-[#695A47]">
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-ink-soft">
                     <span
                       className="font-semibold"
                       style={{
@@ -7811,10 +7813,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </>
                     )}
                   </div>
-                  <h2 className="font-display text-3xl font-bold text-[#231C14]">
+                  <h2 className="font-display text-3xl font-bold text-ink">
                     {activeEntity.title}
                   </h2>
-                  <p className="text-sm font-medium text-[#695A47] italic">
+                  <p className="text-sm font-medium text-ink-soft italic">
                     {activeEntity.subtitle}
                   </p>
                 </div>
@@ -7823,9 +7825,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   <button
                     type="button"
                     onClick={() => onRunAuditOnEntity(activeEntity)}
-                    className="px-3 py-1.5 text-xs font-semibold border border-[#B5832A] bg-[#F6F1E6] text-[#231C14] hover:bg-[#EFE7D6] rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="px-3 py-1.5 text-xs font-semibold border border-brass bg-parchment text-ink hover:bg-aged rounded-lg flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-wax" />
                     Cek Konsistensi Lore (AI)
                   </button>
                   <button
@@ -7840,7 +7842,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     <button
                       type="button"
                       onClick={() => onDeleteEntity(activeEntity.id)}
-                      className="p-1.5 text-[#9E2A2B] border border-[#9E2A2B]/30 rounded-lg hover:bg-[#9E2A2B]/10 transition-colors cursor-pointer"
+                      className="p-1.5 text-wax border border-wax/30 rounded-lg hover:bg-wax/10 transition-colors cursor-pointer"
                       title="Hapus entri ini"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -7851,17 +7853,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Character Signature Quote Banner (All-around border, no border-l-4) */}
               {category === 'character' && activeAttrs.signatureQuote && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-wax">
                     <Quote className="w-3.5 h-3.5" />
                     <span>Kutipan Khas & Suara Karakter</span>
                   </div>
-                  <p className="text-sm italic text-[#231C14] leading-relaxed">
+                  <p className="text-sm italic text-ink leading-relaxed">
                     “{activeAttrs.signatureQuote}”
                   </p>
                   {activeAttrs.voiceStyle && (
-                    <div className="text-xs text-[#695A47] pt-0.5">
-                      <strong className="text-[#231C14]">Gaya Bicara:</strong>{' '}
+                    <div className="text-xs text-ink-soft pt-0.5">
+                      <strong className="text-ink">Gaya Bicara:</strong>{' '}
                       {activeAttrs.voiceStyle}
                     </div>
                   )}
@@ -7870,12 +7872,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Faction Banner Emblem & Motto */}
               {category === 'faction' && activeAttrs.emblemSymbol && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#8F5B14]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-amber">
                     <Compass className="w-3.5 h-3.5" />
                     <span>Lambang Panji & Semboyan Organisasi</span>
                   </div>
-                  <p className="text-sm font-semibold text-[#231C14] leading-relaxed">
+                  <p className="text-sm font-semibold text-ink leading-relaxed">
                     {activeAttrs.emblemSymbol}
                   </p>
                 </div>
@@ -7883,14 +7885,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Power System Awakening Condition Banner */}
               {category === 'power_system' && activeAttrs.awakeningCondition && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#5A3E7A]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-mystic">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>
                       Syarat Bangkit (Awakening) & Pembukaan Meridian / Bakat
                     </span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.awakeningCondition}
                       entities={entities}
@@ -7902,14 +7904,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Skill Visual Manifestation Banner */}
               {category === 'skill' && activeAttrs.visualManifestation && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#5A3E7A]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-mystic">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>
                       Manifestasi Visual & Fenomena Saat Teknik Diaktifkan
                     </span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.visualManifestation}
                       entities={entities}
@@ -7921,14 +7923,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Nation National Emblem & Royal Motto Banner */}
               {category === 'nation' && activeAttrs.nationalEmblem && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#B5832A]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brass">
                     <Crown className="w-3.5 h-3.5" />
                     <span>
                       Lambang Kebesaran Negara & Semboyan Kedaulatan
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-[#231C14] leading-relaxed">
+                  <p className="text-sm font-semibold text-ink leading-relaxed">
                     {activeAttrs.nationalEmblem}
                   </p>
                 </div>
@@ -7936,14 +7938,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Region Sensory Atmosphere & Scene-Setting Banner */}
               {category === 'region' && activeAttrs.sensoryAtmosphere && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#264653]">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] font-semibold text-sea">
                     <Sparkles className="w-3.5 h-3.5" />
                     <span>
                       Atmosfer Sensorik, Suasana & Panduan Latar Adegan Novel
                     </span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.sensoryAtmosphere}
                       entities={entities}
@@ -7955,15 +7957,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* History Trigger & Casus Belli Banner */}
               {category === 'history' && activeAttrs.historicalTrigger && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
                   <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#7A3E1D]">
-                    <Flame className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                    <Flame className="w-3.5 h-3.5 text-wax" />
                     <span>
                       Pemicu Awal Peristiwa (Casus Belli) ·{' '}
                       {activeAttrs.displayDate || activeAttrs.era || 'Arsip Sejarah'}
                     </span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.historicalTrigger}
                       entities={entities}
@@ -7975,15 +7977,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
               {/* Encyclopedia Magical Properties & Arcane Effect Banner */}
               {category === 'encyclopedia' && activeAttrs.magicalProperties && (
-                <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
+                <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
                   <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#3D5A45]">
-                    <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                    <Sparkles className="w-3.5 h-3.5 text-brass" />
                     <span>
                       Khasiat Utama, Kekuatan Magis & Karakteristik Spesifik ·{' '}
                       {activeAttrs.subCategory || 'Artefak & Biota'}
                     </span>
                   </div>
-                  <div className="text-xs text-[#231C14] leading-relaxed">
+                  <div className="text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.magicalProperties}
                       entities={entities}
@@ -7997,22 +7999,22 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {category === 'cosmic_entity' &&
                 (activeAttrs.manifestationOmen ||
                   activeAttrs.cosmicLawControlled) && (
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#264653]">
-                      <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-2">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold text-sea">
+                      <Sparkles className="w-3.5 h-3.5 text-brass" />
                       <span>
                         Manifestasi Hukum Semesta & Pertanda Kemunculan Kosmik
                       </span>
                     </div>
                     {activeAttrs.cosmicLawControlled && (
-                      <div className="text-xs text-[#231C14] leading-relaxed">
+                      <div className="text-xs text-ink leading-relaxed">
                         <strong>Hukum Realitas yang Dikendalikan:</strong>{' '}
                         {activeAttrs.cosmicLawControlled}
                       </div>
                     )}
                     {activeAttrs.manifestationOmen && (
-                      <div className="text-xs text-[#695A47] leading-relaxed">
-                        <strong className="text-[#231C14]">
+                      <div className="text-xs text-ink-soft leading-relaxed">
+                        <strong className="text-ink">
                           Pertanda Langit / Anomali:
                         </strong>{' '}
                         <WikiTextRenderer
@@ -8031,12 +8033,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.divineTabooOrCurse) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {activeAttrs.divineBlessing && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#2D5A43]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-forest">
                           <Sparkles className="w-3.5 h-3.5" />
                           <span>Berkat Ilahi & Mukjizat Pengikut</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.divineBlessing}
                             entities={entities}
@@ -8046,12 +8048,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                     {activeAttrs.divineTabooOrCurse && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-wax">
                           <ShieldAlert className="w-3.5 h-3.5" />
                           <span>Pantangan Suci & Kutukan Ilahi</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.divineTabooOrCurse}
                             entities={entities}
@@ -8069,12 +8071,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.anatomicalWeakness) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {activeAttrs.attackAbilities && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#231C14]">
-                          <Flame className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-ink">
+                          <Flame className="w-3.5 h-3.5 text-wax" />
                           <span>Kemampuan Serangan & Anomali Monster</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.attackAbilities}
                             entities={entities}
@@ -8084,12 +8086,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                     {activeAttrs.anatomicalWeakness && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-wax">
                           <Swords className="w-3.5 h-3.5" />
                           <span>Kelemahan Anatomis & Cara Menaklukkan</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.anatomicalWeakness}
                             entities={entities}
@@ -8109,12 +8111,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.attireAndCuisine) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {activeAttrs.coreBeliefsOrEthics && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#231C14]">
-                          <BookOpen className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-ink">
+                          <BookOpen className="w-3.5 h-3.5 text-brass" />
                           <span>Filosofi, Etika & Ajaran Inti</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.coreBeliefsOrEthics}
                             entities={entities}
@@ -8124,12 +8126,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                     {activeAttrs.sacredRitualsAndFestivals && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#2D5A43]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-forest">
                           <Sparkles className="w-3.5 h-3.5" />
                           <span>Ritus Kehidupan & Festival Tahunan</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.sacredRitualsAndFestivals}
                             entities={entities}
@@ -8139,12 +8141,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                     {activeAttrs.socialTaboos && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#9E2A2B]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-wax">
                           <ShieldAlert className="w-3.5 h-3.5" />
                           <span>Pantangan Adat (Taboo) & Hukum Moral</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.socialTaboos}
                             entities={entities}
@@ -8154,12 +8156,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       </div>
                     )}
                     {activeAttrs.attireAndCuisine && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#B5832A]">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                        <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brass">
                           <Crown className="w-3.5 h-3.5" />
                           <span>Busana Adat, Arsitektur & Kuliner Khas</span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.attireAndCuisine}
                             entities={entities}
@@ -8175,7 +8177,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-start">
                 {activeEntity.imageUrl && (
                   <div className="md:col-span-4 space-y-2">
-                    <div className="rounded-xl overflow-hidden border border-[#D8CBB3] bg-[#EFE7D6]">
+                    <div className="rounded-xl overflow-hidden border border-sepia bg-aged">
                       <img
                         src={activeEntity.imageUrl}
                         alt={activeEntity.title}
@@ -8184,8 +8186,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       />
                     </div>
                     {category === 'character' && activeAttrs.appearance && (
-                      <div className="p-3 rounded-lg bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47] leading-relaxed">
-                        <strong className="text-[#231C14] block mb-0.5">
+                      <div className="p-3 rounded-lg bg-parchment border border-sepia text-xs text-ink-soft leading-relaxed">
+                        <strong className="text-ink block mb-0.5">
                           Ciri Fisik & Busana:
                         </strong>
                         {activeAttrs.appearance}
@@ -8201,11 +8203,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       : 'md:col-span-12 space-y-3'
                   }
                 >
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3]">
-                    <div className="text-xs font-semibold text-[#695A47] mb-1">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia">
+                    <div className="text-xs font-semibold text-ink-soft mb-1">
                       Ikhtisar Kanon
                     </div>
-                    <div className="text-sm text-[#231C14] font-medium leading-relaxed">
+                    <div className="text-sm text-ink font-medium leading-relaxed">
                       <WikiTextRenderer
                         text={activeEntity.summary}
                         entities={entities}
@@ -8217,8 +8219,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {category === 'character' &&
                     !activeEntity.imageUrl &&
                     activeAttrs.appearance && (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47] leading-relaxed">
-                        <strong className="text-[#231C14] block mb-0.5">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft leading-relaxed">
+                        <strong className="text-ink block mb-0.5">
                           Ciri Fisik & Penampilan:
                         </strong>
                         {activeAttrs.appearance}
@@ -8418,24 +8420,24 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         return (
                           <div
                             key={key}
-                            className={`px-3.5 py-2.5 rounded-lg bg-[#F6F1E6]/75 border border-[#D8CBB3]/85 ${
+                            className={`px-3.5 py-2.5 rounded-lg bg-parchment/75 border border-sepia/85 ${
                               key === 'traits' ? 'sm:col-span-2' : ''
                             }`}
                           >
-                            <div className="text-[11px] text-[#695A47]">
+                            <div className="text-[11px] text-ink-soft">
                               {labelMap[key] || key}
                             </div>
                             {matchedEnt && matchedEnt.id !== activeEntity.id ? (
                               <button
                                 type="button"
                                 onClick={() => jumpToEntity(matchedEnt.id)}
-                                className="text-xs font-bold text-[#9E2A2B] hover:underline flex items-center gap-1 mt-0.5 cursor-pointer text-left"
+                                className="text-xs font-bold text-wax hover:underline flex items-center gap-1 mt-0.5 cursor-pointer text-left"
                               >
                                 <span>{String(val)}</span>
                                 <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
                               </button>
                             ) : (
-                              <div className="text-xs font-semibold text-[#231C14] mt-0.5 leading-relaxed">
+                              <div className="text-xs font-semibold text-ink mt-0.5 leading-relaxed">
                                 {Array.isArray(val)
                                   ? val.join(' · ')
                                   : String(val)}
@@ -8453,8 +8455,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.ownedArtifacts &&
                         activeAttrs.ownedArtifacts.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Swords className="w-3.5 h-3.5" />
                             <span>Keahlian & Skill Dikuasai</span>
                           </div>
@@ -8469,7 +8471,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={sk}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedSkill.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/40 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-wax/40 text-xs font-semibold text-wax flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{sk}</span>
                                   <ArrowUpRight className="w-3 h-3" />
@@ -8477,7 +8479,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ) : (
                                 <span
                                   key={sk}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {sk}
                                 </span>
@@ -8486,8 +8488,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-brass flex items-center gap-1.5">
                             <Compass className="w-3.5 h-3.5" />
                             <span>Senjata, Pusaka & Artefak</span>
                           </div>
@@ -8502,15 +8504,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={art}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedArt.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#B5832A]/60 text-xs font-semibold text-[#231C14] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-brass/60 text-xs font-semibold text-ink flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{art}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B]" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax" />
                                 </button>
                               ) : (
                                 <span
                                   key={art}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {art}
                                 </span>
@@ -8528,8 +8530,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.signatureSkills &&
                         activeAttrs.signatureSkills.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Users className="w-3.5 h-3.5" />
                             <span>Cabang Sub-Ras & Garis Keturunan</span>
                           </div>
@@ -8537,7 +8539,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {(activeAttrs.subRaces || []).map((sr) => (
                               <span
                                 key={sr}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#2D5A43]/35 text-xs font-semibold text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-forest/35 text-xs font-semibold text-ink"
                               >
                                 {sr}
                               </span>
@@ -8545,8 +8547,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Swords className="w-3.5 h-3.5" />
                             <span>Teknik & Skill Khas Ras</span>
                           </div>
@@ -8561,7 +8563,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={sk}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedSkill.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/40 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-wax/40 text-xs font-semibold text-wax flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{sk}</span>
                                   <ArrowUpRight className="w-3 h-3" />
@@ -8569,7 +8571,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ) : (
                                 <span
                                   key={sk}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {sk}
                                 </span>
@@ -8587,8 +8589,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.factionArtifacts &&
                         activeAttrs.factionArtifacts.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
                             <Users className="w-3.5 h-3.5" />
                             <span>Tangga Hierarki Pangkat Organisasi</span>
                           </div>
@@ -8596,7 +8598,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {(activeAttrs.rankHierarchy || []).map((rk) => (
                               <span
                                 key={rk}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#8F5B14]/40 text-xs font-semibold text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-amber/40 text-xs font-semibold text-ink"
                               >
                                 {rk}
                               </span>
@@ -8604,8 +8606,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Compass className="w-3.5 h-3.5" />
                             <span>Pusaka & Aset Strategis Kelompok</span>
                           </div>
@@ -8620,7 +8622,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={art}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedArt.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/40 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-wax/40 text-xs font-semibold text-wax flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{art}</span>
                                   <ArrowUpRight className="w-3 h-3" />
@@ -8628,7 +8630,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ) : (
                                 <span
                                   key={art}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {art}
                                 </span>
@@ -8646,8 +8648,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.elementBranches &&
                         activeAttrs.elementBranches.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#5A3E7A] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-mystic flex items-center gap-1.5">
                             <Flame className="w-3.5 h-3.5" />
                             <span>Tangga Tingkatan Kekuatan (Power Tiers)</span>
                           </div>
@@ -8655,7 +8657,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {(activeAttrs.powerTiersList || []).map((tier) => (
                               <span
                                 key={tier}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#5A3E7A]/40 text-xs font-semibold text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-mystic/40 text-xs font-semibold text-ink"
                               >
                                 {tier}
                               </span>
@@ -8663,8 +8665,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>Cabang Aliran & Disiplin Elemen</span>
                           </div>
@@ -8672,7 +8674,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {(activeAttrs.elementBranches || []).map((br) => (
                               <span
                                 key={br}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#9E2A2B]/40 text-xs font-semibold text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-wax/40 text-xs font-semibold text-ink"
                               >
                                 {br}
                               </span>
@@ -8686,8 +8688,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {category === 'skill' &&
                     activeAttrs.exclusiveRaces &&
                     activeAttrs.exclusiveRaces.length > 0 && (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                        <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                           <Users className="w-3.5 h-3.5" />
                           <span>
                             Ras & Garis Darah Pemilik Eksklusif Skill Ini
@@ -8704,7 +8706,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 key={rName}
                                 type="button"
                                 onClick={() => jumpToEntity(matchedRace.id)}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                                className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-forest/50 text-xs font-semibold text-forest flex items-center gap-1 cursor-pointer"
                               >
                                 <span>{rName}</span>
                                 <ArrowUpRight className="w-3 h-3" />
@@ -8712,7 +8714,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             ) : (
                               <span
                                 key={rName}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                               >
                                 {rName}
                               </span>
@@ -8726,8 +8728,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {category === 'nation' &&
                     activeAttrs.dominantRaces &&
                     activeAttrs.dominantRaces.length > 0 && (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                        <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                           <Users className="w-3.5 h-3.5" />
                           <span>
                             Demografi Ras Mayoritas & Komposisi Penduduk
@@ -8744,7 +8746,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 key={rName}
                                 type="button"
                                 onClick={() => jumpToEntity(matchedRace.id)}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                                className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-forest/50 text-xs font-semibold text-forest flex items-center gap-1 cursor-pointer"
                               >
                                 <span>{rName}</span>
                                 <ArrowUpRight className="w-3 h-3" />
@@ -8752,7 +8754,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             ) : (
                               <span
                                 key={rName}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                               >
                                 {rName}
                               </span>
@@ -8769,8 +8771,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.endemicFloraFauna &&
                         activeAttrs.endemicFloraFauna.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-sea flex items-center gap-1.5">
                             <MapPin className="w-3.5 h-3.5" />
                             <span>
                               Titik Penting (Landmark), Distrik & Reruntuhan
@@ -8780,7 +8782,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             {(activeAttrs.landmarksList || []).map((lm) => (
                               <span
                                 key={lm}
-                                className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#264653]/40 text-xs font-semibold text-[#231C14]"
+                                className="px-2.5 py-1 rounded bg-aged border border-sea/40 text-xs font-semibold text-ink"
                               >
                                 {lm}
                               </span>
@@ -8788,8 +8790,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>
                               Flora, Fauna & Pusaka Endemik Wilayah Ini
@@ -8806,7 +8808,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={ef}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedEnc.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#2D5A43]/50 text-xs font-semibold text-[#2D5A43] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-forest/50 text-xs font-semibold text-forest flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{ef}</span>
                                   <ArrowUpRight className="w-3 h-3" />
@@ -8814,7 +8816,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ) : (
                                 <span
                                   key={ef}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {ef}
                                 </span>
@@ -8832,8 +8834,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       (activeAttrs.keyHistoricalFigures &&
                         activeAttrs.keyHistoricalFigures.length > 0)) && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Swords className="w-3.5 h-3.5" />
                             <span>
                               Pihak, Negara & Kelompok yang Terlibat
@@ -8847,7 +8849,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   key={bel}
                                   type="button"
                                   onClick={() => jumpToEntity(matchedBel.id)}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#9E2A2B]/50 text-xs font-semibold text-[#9E2A2B] flex items-center gap-1 cursor-pointer"
+                                  className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-wax/50 text-xs font-semibold text-wax flex items-center gap-1 cursor-pointer"
                                 >
                                   <span>{bel}</span>
                                   <ArrowUpRight className="w-3 h-3" />
@@ -8855,7 +8857,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               ) : (
                                 <span
                                   key={bel}
-                                  className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                  className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                 >
                                   {bel}
                                 </span>
@@ -8864,8 +8866,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                        <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                          <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
                             <Users className="w-3.5 h-3.5" />
                             <span>
                               Tokoh Kunci, Panglima & Saksi Sejarah
@@ -8883,7 +8885,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     key={kf}
                                     type="button"
                                     onClick={() => jumpToEntity(matchedChar.id)}
-                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#8F5B14]/50 text-xs font-semibold text-[#8F5B14] flex items-center gap-1 cursor-pointer"
+                                    className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-amber/50 text-xs font-semibold text-amber flex items-center gap-1 cursor-pointer"
                                   >
                                     <span>{kf}</span>
                                     <ArrowUpRight className="w-3 h-3" />
@@ -8891,7 +8893,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 ) : (
                                   <span
                                     key={kf}
-                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                    className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                   >
                                     {kf}
                                   </span>
@@ -8912,8 +8914,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                         {activeAttrs.ownershipHistory &&
                           activeAttrs.ownershipHistory.length > 0 && (
-                            <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
-                              <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                            <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
+                              <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
                                 <Clock className="w-3.5 h-3.5" />
                                 <span>
                                   Rantai Sejarah Kepemilikan & Perpindahan Pusaka
@@ -8930,7 +8932,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                       onClick={() =>
                                         jumpToEntity(matchedOwner.id)
                                       }
-                                      className="px-2.5 py-1 rounded bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#8F5B14]/50 text-xs font-semibold text-[#8F5B14] flex items-center gap-1 cursor-pointer text-left"
+                                      className="px-2.5 py-1 rounded bg-aged hover:bg-sepia border border-amber/50 text-xs font-semibold text-amber flex items-center gap-1 cursor-pointer text-left"
                                     >
                                       <span>{oh}</span>
                                       <ArrowUpRight className="w-3 h-3 shrink-0" />
@@ -8938,7 +8940,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   ) : (
                                     <span
                                       key={oh}
-                                      className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#D8CBB3] text-xs font-medium text-[#231C14]"
+                                      className="px-2.5 py-1 rounded bg-aged border border-sepia text-xs font-medium text-ink"
                                     >
                                       {oh}
                                     </span>
@@ -8950,7 +8952,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                         {activeAttrs.harvestableMaterials &&
                           activeAttrs.harvestableMaterials.length > 0 && (
-                            <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-2">
+                            <div className="p-3.5 rounded-xl bg-parchment border border-sepia space-y-2">
                               <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
                                 <Sparkles className="w-3.5 h-3.5" />
                                 <span>
@@ -8961,7 +8963,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                 {activeAttrs.harvestableMaterials.map((hm) => (
                                   <span
                                     key={hm}
-                                    className="px-2.5 py-1 rounded bg-[#EFE7D6] border border-[#3D5A45]/45 text-xs font-semibold text-[#3D5A45]"
+                                    className="px-2.5 py-1 rounded bg-aged border border-[#3D5A45]/45 text-xs font-semibold text-[#3D5A45]"
                                   >
                                     {hm}
                                   </span>
@@ -8978,14 +8980,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* SKILL STRATEGIC / LARGE-SCALE IMPACT                          */}
               {/* ============================================================= */}
               {category === 'skill' && activeAttrs.strategicImpact && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#9E2A2B]">
+                <div className="pt-4 border-t border-sepia space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-wax">
                     <Flame className="w-4 h-4" />
                     <span>
                       Dampak Skala Besar & Efek Strategis Medan Tempur ({activeAttrs.impactScale || 'Skala Khusus'})
                     </span>
                   </div>
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#231C14] leading-relaxed">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.strategicImpact}
                       entities={entities}
@@ -9004,8 +9006,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.arcStart ||
                   activeAttrs.arcCrisis ||
                   activeAttrs.arcEndgame) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#9E2A2B]">
+                  <div className="pt-4 border-t border-sepia space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-wax">
                       <Flame className="w-4 h-4" />
                       <span>
                         Anatomi Psikologi & Busur Perkembangan Karakter (Character Arc)
@@ -9014,20 +9016,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     {(activeAttrs.motivationGoal || activeAttrs.fatalFlaw) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                          <div className="text-xs font-semibold text-[#2D5A43]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                          <div className="text-xs font-semibold text-forest">
                             Motivasi & Tujuan Utama (Goal / Desire)
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.motivationGoal || 'Belum diisi.'}
                           </p>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1">
-                          <div className="text-xs font-semibold text-[#9E2A2B]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1">
+                          <div className="text-xs font-semibold text-wax">
                             Ketakutan & Kelemahan Fatal (Fatal Flaw)
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.fatalFlaw || 'Belum diisi.'}
                           </p>
                         </div>
@@ -9038,27 +9040,27 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       activeAttrs.arcCrisis ||
                       activeAttrs.arcEndgame) && (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div className="p-3.5 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-1">
-                          <div className="text-[11px] font-semibold text-[#695A47]">
+                        <div className="p-3.5 rounded-xl bg-aged/70 border border-sepia space-y-1">
+                          <div className="text-[11px] font-semibold text-ink-soft">
                             I. Fase Awal (Babak I)
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.arcStart || '—'}
                           </p>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-1">
-                          <div className="text-[11px] font-semibold text-[#9E2A2B]">
+                        <div className="p-3.5 rounded-xl bg-aged/70 border border-sepia space-y-1">
+                          <div className="text-[11px] font-semibold text-wax">
                             II. Titik Balik & Krisis
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.arcCrisis || '—'}
                           </p>
                         </div>
-                        <div className="p-3.5 rounded-xl bg-[#EFE7D6]/70 border border-[#D8CBB3] space-y-1">
-                          <div className="text-[11px] font-semibold text-[#264653]">
+                        <div className="p-3.5 rounded-xl bg-aged/70 border border-sepia space-y-1">
+                          <div className="text-[11px] font-semibold text-sea">
                             III. Transformasi Akhir
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.arcEndgame || '—'}
                           </p>
                         </div>
@@ -9076,8 +9078,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.languageAndNaming ||
                   activeAttrs.cultureAndTraditions ||
                   activeAttrs.interRaceRelations) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#2D5A43]">
+                  <div className="pt-4 border-t border-sepia space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-forest">
                       <Globe className="w-4 h-4" />
                       <span>
                         Biologi Spesies, Bahasa & Antropologi Budaya Ras
@@ -9088,26 +9090,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.innateAbilities ||
                       activeAttrs.racialWeakness) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>
                               Bakat Magis & Kemampuan Bawaan (Innate Abilities)
                             </span>
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.innateAbilities || 'Belum diisi.'}
                           </p>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Kelemahan Biologis & Pantangan Rasial (Weakness)
                             </span>
                           </div>
-                          <p className="text-xs text-[#231C14] leading-relaxed">
+                          <p className="text-xs text-ink leading-relaxed">
                             {activeAttrs.racialWeakness || 'Belum diisi.'}
                           </p>
                         </div>
@@ -9116,14 +9118,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     {/* Language & Naming Conventions */}
                     {activeAttrs.languageAndNaming && (
-                      <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                        <div className="text-xs font-semibold text-[#B5832A] flex items-center gap-1.5">
+                      <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                        <div className="text-xs font-semibold text-brass flex items-center gap-1.5">
                           <Languages className="w-3.5 h-3.5" />
                           <span>
                             Bahasa, Aksara & Pola Penamaan Tokoh (Naming Conventions)
                           </span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.languageAndNaming}
                             entities={entities}
@@ -9137,11 +9139,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.cultureAndTraditions ||
                       activeAttrs.interRaceRelations) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#231C14]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-ink">
                             Struktur Sosial, Kepercayaan & Tradisi Adat
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.cultureAndTraditions ||
@@ -9153,11 +9155,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#264653]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-sea">
                             Hubungan Diplomatik dengan Bangsa / Ras Lain
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.interRaceRelations || 'Belum diisi.'
@@ -9182,8 +9184,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.resourcesAndAssets ||
                   activeAttrs.alliedFactions ||
                   activeAttrs.rivalFactions) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#8F5B14]">
+                  <div className="pt-4 border-t border-sepia space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-amber">
                       <Swords className="w-4 h-4" />
                       <span>
                         Doktrin Organisasi, Agenda Rahasia, Aset & Peta Diplomasi
@@ -9193,14 +9195,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {/* Public Ideology vs Secret Agenda */}
                     {(activeAttrs.ideology || activeAttrs.secretAgenda) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>
                               Doktrin & Ideologi Publik (Wajah Resmi)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={activeAttrs.ideology || 'Belum diisi.'}
                               entities={entities}
@@ -9209,14 +9211,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Agenda Rahasia & Konspirasi Internal
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={activeAttrs.secretAgenda || 'Belum diisi.'}
                               entities={entities}
@@ -9231,11 +9233,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.recruitmentOath ||
                       activeAttrs.resourcesAndAssets) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#8F5B14]">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-amber">
                             Syarat Perekrutan & Sumpah Setia Anggota
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.recruitmentOath || 'Belum diisi.'
@@ -9246,11 +9248,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#231C14]">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-ink">
                             Sumber Pendanaan, Pasukan & Wilayah Pengaruh
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.resourcesAndAssets || 'Belum diisi.'
@@ -9267,11 +9269,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.alliedFactions ||
                       activeAttrs.rivalFactions) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest">
                             Jaringan Sekutu & Patron Politik
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.alliedFactions || 'Belum diisi.'
@@ -9282,11 +9284,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax">
                             Rival Politik & Musuh Organisasi
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={activeAttrs.rivalFactions || 'Belum diisi.'}
                               entities={entities}
@@ -9306,8 +9308,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 (activeAttrs.hardRules ||
                   activeAttrs.corruptionCost ||
                   activeAttrs.systemWeakness) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#5A3E7A]">
+                  <div className="pt-4 border-t border-sepia space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-mystic">
                       <ShieldCheck className="w-4 h-4" />
                       <span>
                         Arsitektur Hukum Besi (Hard Magic Rules), Penangkal & Harga Kekuatan
@@ -9315,14 +9317,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {activeAttrs.hardRules && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                        <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                        <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                           <ShieldCheck className="w-3.5 h-3.5" />
                           <span>
                             Hukum Besi & Batasan Mutlak (Hard Magic Rules)
                           </span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.hardRules}
                             entities={entities}
@@ -9335,14 +9337,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.corruptionCost ||
                       activeAttrs.systemWeakness) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Risiko Over-Resonansi & Harga Kekuatan (Backlash)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.corruptionCost || 'Belum diisi.'
@@ -9353,11 +9355,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#231C14]">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-ink">
                             Kelemahan Lingkungan & Material Penangkal (Counter)
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.systemWeakness || 'Belum diisi.'
@@ -9381,8 +9383,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.lawsAndCulture ||
                   activeAttrs.diplomaticAllies ||
                   activeAttrs.borderConflicts) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#B5832A]">
+                  <div className="pt-4 border-t border-sepia space-y-4">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-brass">
                       <Crown className="w-4 h-4" />
                       <span>
                         Dossier Geopolitik: Ekonomi, Militer, Hukum & Peta Diplomasi Negara
@@ -9393,14 +9395,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.economicCommodities ||
                       activeAttrs.militaryStrength) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#8F5B14] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-amber flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>
                               Komoditas Ekonomi Utama & Jalur Perdagangan
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.economicCommodities ||
@@ -9412,14 +9414,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Swords className="w-3.5 h-3.5" />
                             <span>
                               Kekuatan Militer, Legiun Elit & Pertahanan Negara
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.militaryStrength || 'Belum diisi.'
@@ -9434,14 +9436,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     {/* Laws & Culture */}
                     {activeAttrs.lawsAndCulture && (
-                      <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                        <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                        <div className="text-xs font-semibold text-ink flex items-center gap-1.5">
+                          <ShieldCheck className="w-3.5 h-3.5 text-brass" />
                           <span>
                             Hukum Utama Kerajaan, Konstitusi & Adat Budaya Masyarakat
                           </span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.lawsAndCulture}
                             entities={entities}
@@ -9455,11 +9457,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.diplomaticAllies ||
                       activeAttrs.borderConflicts) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43]">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest">
                             Aliansi Diplomatik & Perjanjian Dagang Internasional
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.diplomaticAllies || 'Belum diisi.'
@@ -9470,14 +9472,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Rival Geopolitik, Sengketa & Konflik Perbatasan
                             </span>
                           </div>
-                          <div className="text-xs text-[#695A47] leading-relaxed">
+                          <div className="text-xs text-ink-soft leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.borderConflicts || 'Belum diisi.'
@@ -9496,14 +9498,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* REGION ECOLOGY, MONSTERS & ENVIRONMENTAL HAZARDS DOSSIER      */}
               {/* ============================================================= */}
               {category === 'region' && activeAttrs.localEcologyAndHazards && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-semibold text-[#9E2A2B]">
+                <div className="pt-4 border-t border-sepia space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-wax">
                     <ShieldAlert className="w-4 h-4" />
                     <span>
                       Ekologi Monster, Anomali Magis & Bahaya Medan ({activeAttrs.dangerLevel || 'Bahaya Wilayah'})
                     </span>
                   </div>
-                  <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#231C14] leading-relaxed">
+                  <div className="p-4 rounded-xl bg-parchment border border-sepia text-xs text-ink leading-relaxed">
                     <WikiTextRenderer
                       text={activeAttrs.localEcologyAndHazards}
                       entities={entities}
@@ -9521,9 +9523,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.hiddenHistoricalTruth ||
                   activeAttrs.casualtiesAndLosses ||
                   activeAttrs.worldImpactLegacy) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                  <div className="pt-4 border-t border-sepia space-y-4">
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#7A3E1D]">
-                      <BookOpen className="w-4 h-4 text-[#9E2A2B]" />
+                      <BookOpen className="w-4 h-4 text-wax" />
                       <span>
                         Dossier Historiografi: Sejarah Resmi Pemenang vs Kebenaran Rahasia & Dampak Dunia
                       </span>
@@ -9533,14 +9535,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.officialHistoryVersion ||
                       activeAttrs.hiddenHistoricalTruth) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Crown className="w-3.5 h-3.5" />
                             <span>
                               Sejarah Resmi Pemenang (Propaganda Publik / Kronik Istana)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.officialHistoryVersion ||
@@ -9552,14 +9554,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Kebenaran Rahasia Tersembunyi (Fakta Kanon di Balik Layar)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.hiddenHistoricalTruth ||
@@ -9577,14 +9579,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.casualtiesAndLosses ||
                       activeAttrs.worldImpactLegacy) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <Swords className="w-3.5 h-3.5" />
                             <span>
                               Korban Jiwa, Kehancuran & Kerugian Besar
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.casualtiesAndLosses ||
@@ -9596,14 +9598,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#264653] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-sea flex items-center gap-1.5">
                             <Globe className="w-3.5 h-3.5" />
                             <span>
                               Dampak Jangka Panjang terhadap Dunia Saat Ini (Legacy)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.worldImpactLegacy || 'Belum diisi.'
@@ -9627,9 +9629,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   activeAttrs.destructionMethod ||
                   activeAttrs.creatureBehavior ||
                   activeAttrs.alchemicalUses) && (
-                  <div className="pt-4 border-t border-[#D8CBB3] space-y-4">
+                  <div className="pt-4 border-t border-sepia space-y-4">
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#3D5A45]">
-                      <Compass className="w-4 h-4 text-[#B5832A]" />
+                      <Compass className="w-4 h-4 text-brass" />
                       <span>
                         Dossier Ensiklopedia: Syarat Aktivasi, Kutukan Pusaka, Ekologi Biota & Alkimia
                       </span>
@@ -9639,14 +9641,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     {(activeAttrs.attunementRequirement ||
                       activeAttrs.curseOrSideEffect) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#2D5A43] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-forest flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5" />
                             <span>
                               Syarat Aktivasi, Ikatan Jiwa & Kondisi Panen (Attunement)
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.attunementRequirement ||
@@ -9658,14 +9660,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </div>
                         </div>
 
-                        <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                          <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                        <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                          <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                             <ShieldAlert className="w-3.5 h-3.5" />
                             <span>
                               Kutukan, Efek Samping & Bahaya Mematikan
                             </span>
                           </div>
-                          <div className="text-xs text-[#231C14] leading-relaxed">
+                          <div className="text-xs text-ink leading-relaxed">
                             <WikiTextRenderer
                               text={
                                 activeAttrs.curseOrSideEffect || 'Belum diisi.'
@@ -9683,14 +9685,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       activeAttrs.alchemicalUses) && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {activeAttrs.creatureBehavior && (
-                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
-                            <div className="text-xs font-semibold text-[#231C14] flex items-center gap-1.5">
+                          <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
+                            <div className="text-xs font-semibold text-ink flex items-center gap-1.5">
                               <Globe className="w-3.5 h-3.5 text-[#3D5A45]" />
                               <span>
                                 Perilaku Makhluk, Siklus Ekologi & Karakteristik
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeAttrs.creatureBehavior}
                                 entities={entities}
@@ -9701,14 +9703,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         )}
 
                         {activeAttrs.alchemicalUses && (
-                          <div className="p-4 rounded-xl bg-[#EFE7D6]/75 border border-[#D8CBB3] space-y-1.5">
+                          <div className="p-4 rounded-xl bg-aged/75 border border-sepia space-y-1.5">
                             <div className="text-xs font-semibold text-[#3D5A45] flex items-center gap-1.5">
-                              <Flame className="w-3.5 h-3.5 text-[#B5832A]" />
+                              <Flame className="w-3.5 h-3.5 text-brass" />
                               <span>
                                 Khasiat Alkimia, Tempaan Senjata & Nilai Ekonomi
                               </span>
                             </div>
-                            <div className="text-xs text-[#231C14] leading-relaxed">
+                            <div className="text-xs text-ink leading-relaxed">
                               <WikiTextRenderer
                                 text={activeAttrs.alchemicalUses}
                                 entities={entities}
@@ -9722,14 +9724,14 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
 
                     {/* Destruction Method / Countermeasure */}
                     {activeAttrs.destructionMethod && (
-                      <div className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-1.5">
-                        <div className="text-xs font-semibold text-[#9E2A2B] flex items-center gap-1.5">
+                      <div className="p-4 rounded-xl bg-parchment border border-sepia space-y-1.5">
+                        <div className="text-xs font-semibold text-wax flex items-center gap-1.5">
                           <Swords className="w-3.5 h-3.5" />
                           <span>
                             Kelemahan Mutlak, Penangkal & Cara Menghancurkan / Menjinakkan
                           </span>
                         </div>
-                        <div className="text-xs text-[#231C14] leading-relaxed">
+                        <div className="text-xs text-ink leading-relaxed">
                           <WikiTextRenderer
                             text={activeAttrs.destructionMethod}
                             entities={entities}
@@ -9742,9 +9744,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                 )}
 
               {/* Full Lore Manuscript Prose with Interactive [[Cross-Links]] & Illuminated Drop Cap */}
-              <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+              <div className="pt-4 border-t border-sepia space-y-3">
                 <FantasySectionDivider title="Arsip Sejarah & Catatan Manuskrip Dunia" />
-                <div className="p-5 sm:p-6 rounded-xl bg-[#F6F1E6]/75 border border-[#B5832A]/45">
+                <div className="paper-sheet">
                   <WikiTextRenderer
                     text={activeEntity.content}
                     entities={entities}
@@ -9759,10 +9761,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF CHARACTERS BELONGING TO THIS RACE         */}
               {/* ============================================================= */}
               {category === 'race' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                <div className="pt-4 border-t border-sepia space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                      <Users className="w-4 h-4 text-[#2D5A43]" />
+                    <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                      <Users className="w-4 h-4 text-forest" />
                       <span>
                         Tokoh Tercatat dari Ras {activeEntity.title} (
                         {charactersOfActiveRace.length})
@@ -9773,13 +9775,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       onClick={() => handleCreateCharacterFromRace(activeEntity)}
                       className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
                     >
-                      <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <UserPlus className="w-3.5 h-3.5 text-brass" />
                       + Buat Karakter dari Ras Ini
                     </button>
                   </div>
 
                   {charactersOfActiveRace.length === 0 ? (
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                       Belum ada tokoh di tab <strong>Character</strong> yang
                       tercatat berasal dari ras ini. Klik{' '}
                       <strong>+ Buat Karakter dari Ras Ini</strong> untuk
@@ -9794,30 +9796,30 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             key={char.id}
                             type="button"
                             onClick={() => jumpToEntity(char.id)}
-                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-start gap-3 cursor-pointer"
+                            className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-start gap-3 cursor-pointer"
                           >
                             {char.imageUrl ? (
                               <img
                                 src={char.imageUrl}
                                 alt={char.title}
                                 referrerPolicy="no-referrer"
-                                className="w-12 h-12 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                className="w-12 h-12 rounded-lg object-cover border border-sepia shrink-0"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                <User className="w-5 h-5 text-[#9E2A2B]" />
+                              <div className="w-12 h-12 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                <User className="w-5 h-5 text-wax" />
                               </div>
                             )}
                             <div className="min-w-0 flex-1">
-                              <div className="text-[11px] font-semibold text-[#9E2A2B] truncate">
+                              <div className="text-[11px] font-semibold text-wax truncate">
                                 {cAttrs.role || 'Tokoh'} ·{' '}
                                 {cAttrs.status || 'Hidup'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] truncate flex items-center gap-1">
+                              <div className="font-display text-base font-bold text-ink truncate flex items-center gap-1">
                                 <span className="truncate">{char.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <div className="text-[11px] text-[#695A47] truncate">
+                              <div className="text-[11px] text-ink-soft truncate">
                                 {cAttrs.powerTier || char.subtitle}
                               </div>
                             </div>
@@ -9833,10 +9835,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF MEMBERS BELONGING TO THIS FACTION         */}
               {/* ============================================================= */}
               {category === 'faction' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                <div className="pt-4 border-t border-sepia space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                      <Users className="w-4 h-4 text-[#8F5B14]" />
+                    <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                      <Users className="w-4 h-4 text-amber" />
                       <span>
                         Daftar Anggota & Tokoh Terkait {activeEntity.title} (
                         {membersOfActiveFaction.length})
@@ -9849,13 +9851,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       }
                       className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
                     >
-                      <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                      <UserPlus className="w-3.5 h-3.5 text-brass" />
                       + Rekrut / Buat Tokoh Anggota Baru
                     </button>
                   </div>
 
                   {membersOfActiveFaction.length === 0 ? (
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                       Belum ada tokoh di tab <strong>Character</strong> yang
                       terdaftar sebagai anggota kelompok ini. Klik{' '}
                       <strong>+ Rekrut / Buat Tokoh Anggota Baru</strong> untuk
@@ -9870,30 +9872,30 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             key={member.id}
                             type="button"
                             onClick={() => jumpToEntity(member.id)}
-                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-start gap-3 cursor-pointer"
+                            className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-start gap-3 cursor-pointer"
                           >
                             {member.imageUrl ? (
                               <img
                                 src={member.imageUrl}
                                 alt={member.title}
                                 referrerPolicy="no-referrer"
-                                className="w-12 h-12 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                className="w-12 h-12 rounded-lg object-cover border border-sepia shrink-0"
                               />
                             ) : (
-                              <div className="w-12 h-12 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                <User className="w-5 h-5 text-[#9E2A2B]" />
+                              <div className="w-12 h-12 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                <User className="w-5 h-5 text-wax" />
                               </div>
                             )}
                             <div className="min-w-0 flex-1">
-                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                              <div className="text-[11px] font-semibold text-amber truncate">
                                 {mAttrs.role || 'Anggota'} ·{' '}
                                 {mAttrs.status || 'Hidup'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] truncate flex items-center gap-1">
+                              <div className="font-display text-base font-bold text-ink truncate flex items-center gap-1">
                                 <span className="truncate">{member.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <div className="text-[11px] text-[#695A47] truncate">
+                              <div className="text-[11px] text-ink-soft truncate">
                                 {mAttrs.powerTier || member.subtitle}
                               </div>
                             </div>
@@ -9909,12 +9911,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF DERIVED SKILLS & PRACTITIONERS (POWER)    */}
               {/* ============================================================= */}
               {category === 'power_system' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                <div className="pt-4 border-t border-sepia space-y-5">
                   {/* Derived Skills Section */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Swords className="w-4 h-4 text-[#5A3E7A]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Swords className="w-4 h-4 text-mystic" />
                         <span>
                           Daftar Teknik & Skill Turunan {activeEntity.title} (
                           {skillsOfActivePowerSystem.length})
@@ -9927,13 +9929,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         }
                         className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer"
                       >
-                        <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        <Plus className="w-3.5 h-3.5 text-brass" />
                         + Buat Skill dari Sistem Ini
                       </button>
                     </div>
 
                     {skillsOfActivePowerSystem.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada teknik di tab <strong>Skill</strong> yang
                         tercatat di bawah sistem kekuatan ini. Klik{' '}
                         <strong>+ Buat Skill dari Sistem Ini</strong> untuk
@@ -9948,9 +9950,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={sk.id}
                               type="button"
                               onClick={() => jumpToEntity(sk.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#5A3E7A]">
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-mystic">
                                 <span>
                                   {sAttrs.skillRank || 'Teknik Kanon'}
                                 </span>
@@ -9958,11 +9960,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   {sAttrs.elementAffinity || 'Aliran Umum'}
                                 </span>
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{sk.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-2">
+                              <p className="text-xs text-ink-soft line-clamp-2">
                                 {sk.summary}
                               </p>
                             </button>
@@ -9975,8 +9977,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Practitioners Section */}
                   {practitionersOfActivePowerSystem.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Users className="w-4 h-4 text-wax" />
                         <span>
                           Praktisi & Pengguna Tercatat (
                           {practitionersOfActivePowerSystem.length})
@@ -9990,26 +9992,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={prac.id}
                               type="button"
                               onClick={() => jumpToEntity(prac.id)}
-                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                              className="text-left p-3 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center gap-3 cursor-pointer"
                             >
                               {prac.imageUrl ? (
                                 <img
                                   src={prac.imageUrl}
                                   alt={prac.title}
                                   referrerPolicy="no-referrer"
-                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                  className="w-10 h-10 rounded-lg object-cover border border-sepia shrink-0"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                <div className="w-10 h-10 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-wax" />
                                 </div>
                               )}
                               <div className="min-w-0 flex-1">
-                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <div className="font-display text-sm font-bold text-ink truncate flex items-center gap-1">
                                   <span className="truncate">{prac.title}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax shrink-0" />
                                 </div>
-                                <div className="text-[11px] text-[#695A47] truncate">
+                                <div className="text-[11px] text-ink-soft truncate">
                                   {pAttrs.powerTier || prac.subtitle}
                                 </div>
                               </div>
@@ -10026,12 +10028,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF RACES & CHARACTER PRACTITIONERS (SKILL)   */}
               {/* ============================================================= */}
               {category === 'skill' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                <div className="pt-4 border-t border-sepia space-y-5">
                   {/* Races Possessing This Skill */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Globe className="w-4 h-4 text-[#2D5A43]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Globe className="w-4 h-4 text-forest" />
                         <span>
                           Ras & Garis Darah Penguasa Skill Ini (
                           {racesOfActiveSkill.length})
@@ -10043,7 +10045,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           onChange={(e) =>
                             setSelectedQuickRaceId(e.target.value)
                           }
-                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                          className="px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                         >
                           <option value="">-- Pilih Ras --</option>
                           {raceEntities.map((r) => (
@@ -10070,7 +10072,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {racesOfActiveSkill.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada entitas <strong>Ras</strong> yang tercatat
                         mewarisi skill ini secara eksklusif. Pilih ras di atas
                         dan klik <strong>+ Tautkan ke Ras</strong> bila skill
@@ -10085,17 +10087,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={rc.id}
                               type="button"
                               onClick={() => jumpToEntity(rc.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="text-[11px] font-semibold text-[#2D5A43]">
+                              <div className="text-[11px] font-semibold text-forest">
                                 {rAttrs.raceOriginClass || 'Ras Kanon'} ·{' '}
                                 {rAttrs.homeland || 'Habitat Asal'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{rc.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-1">
+                              <p className="text-xs text-ink-soft line-clamp-1">
                                 {rc.subtitle}
                               </p>
                             </button>
@@ -10108,8 +10110,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Character Practitioners Mastering This Skill */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Users className="w-4 h-4 text-wax" />
                         <span>
                           Tokoh Praktisi yang Menguasai Skill Ini (
                           {practitionersOfActiveSkill.length})
@@ -10121,7 +10123,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           onChange={(e) =>
                             setSelectedQuickCharId(e.target.value)
                           }
-                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                          className="px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                         >
                           <option value="">-- Pilih Tokoh --</option>
                           {characterEntities.map((c) => (
@@ -10148,7 +10150,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {practitionersOfActiveSkill.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada tokoh di tab <strong>Character</strong> yang
                         tercatat menguasai skill ini. Pilih tokoh di atas dan
                         klik <strong>+ Tautkan ke Tokoh</strong>.
@@ -10162,26 +10164,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={prac.id}
                               type="button"
                               onClick={() => jumpToEntity(prac.id)}
-                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                              className="text-left p-3 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center gap-3 cursor-pointer"
                             >
                               {prac.imageUrl ? (
                                 <img
                                   src={prac.imageUrl}
                                   alt={prac.title}
                                   referrerPolicy="no-referrer"
-                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                  className="w-10 h-10 rounded-lg object-cover border border-sepia shrink-0"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                <div className="w-10 h-10 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-wax" />
                                 </div>
                               )}
                               <div className="min-w-0 flex-1">
-                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <div className="font-display text-sm font-bold text-ink truncate flex items-center gap-1">
                                   <span className="truncate">{prac.title}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax shrink-0" />
                                 </div>
-                                <div className="text-[11px] text-[#695A47] truncate">
+                                <div className="text-[11px] text-ink-soft truncate">
                                   {pAttrs.raceName
                                     ? `${pAttrs.raceName} · `
                                     : ''}
@@ -10201,12 +10203,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF REGIONS, FACTIONS & CITIZENS (NATION)     */}
               {/* ============================================================= */}
               {category === 'nation' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                <div className="pt-4 border-t border-sepia space-y-5">
                   {/* Regions / Provinces under this Nation */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <MapPin className="w-4 h-4 text-[#264653]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <MapPin className="w-4 h-4 text-sea" />
                         <span>
                           Daftar Wilayah, Provinsi & Kota di Bawah Kedaulatan{' '}
                           {activeEntity.title} ({regionsOfActiveNation.length})
@@ -10219,13 +10221,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         }
                         className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                       >
-                        <Plus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        <Plus className="w-3.5 h-3.5 text-brass" />
                         + Buat Wilayah di Negara Ini
                       </button>
                     </div>
 
                     {regionsOfActiveNation.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada entri di tab <strong>Wilayah</strong> yang
                         tercatat berada di bawah kedaulatan negara ini. Klik{' '}
                         <strong>+ Buat Wilayah di Negara Ini</strong> untuk
@@ -10241,9 +10243,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={reg.id}
                               type="button"
                               onClick={() => jumpToEntity(reg.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#264653]">
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-sea">
                                 <span>
                                   {regAttrs.climate || 'Zona Geografis'}
                                 </span>
@@ -10251,11 +10253,11 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                   {regAttrs.dangerLevel || 'Wilayah Kanon'}
                                 </span>
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{reg.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-2">
+                              <p className="text-xs text-ink-soft line-clamp-2">
                                 {reg.summary}
                               </p>
                             </button>
@@ -10268,8 +10270,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Factions / Organizations operating in this Nation */}
                   {factionsOfActiveNation.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Compass className="w-4 h-4 text-amber" />
                         <span>
                           Kelompok, Ordo & Organisasi yang Beroperasi di Negara Ini (
                           {factionsOfActiveNation.length})
@@ -10283,17 +10285,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={fac.id}
                               type="button"
                               onClick={() => jumpToEntity(fac.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                              <div className="text-[11px] font-semibold text-amber truncate">
                                 {fAttrs.factionType || 'Organisasi'} · Markas:{' '}
                                 {fAttrs.headquarters || 'Tersembunyi'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{fac.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-1">
+                              <p className="text-xs text-ink-soft line-clamp-1">
                                 {fac.subtitle}
                               </p>
                             </button>
@@ -10306,8 +10308,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Citizens / Characters from this Nation */}
                   {citizensOfActiveNation.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Users className="w-4 h-4 text-wax" />
                         <span>
                           Penguasa, Bangsawan & Tokoh Asal {activeEntity.title}{' '}
                           ({citizensOfActiveNation.length})
@@ -10321,26 +10323,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={cit.id}
                               type="button"
                               onClick={() => jumpToEntity(cit.id)}
-                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                              className="text-left p-3 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center gap-3 cursor-pointer"
                             >
                               {cit.imageUrl ? (
                                 <img
                                   src={cit.imageUrl}
                                   alt={cit.title}
                                   referrerPolicy="no-referrer"
-                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                  className="w-10 h-10 rounded-lg object-cover border border-sepia shrink-0"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                <div className="w-10 h-10 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-wax" />
                                 </div>
                               )}
                               <div className="min-w-0 flex-1">
-                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <div className="font-display text-sm font-bold text-ink truncate flex items-center gap-1">
                                   <span className="truncate">{cit.title}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax shrink-0" />
                                 </div>
-                                <div className="text-[11px] text-[#695A47] truncate">
+                                <div className="text-[11px] text-ink-soft truncate">
                                   {cAttrs.role || 'Tokoh'} ·{' '}
                                   {cAttrs.originNation || cit.subtitle}
                                 </div>
@@ -10358,12 +10360,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF MAP PINS, FACTIONS & CHARACTERS (REGION)  */}
               {/* ============================================================= */}
               {category === 'region' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                <div className="pt-4 border-t border-sepia space-y-5">
                   {/* Map Stamps / Coordinates linked to this Region */}
                   {mapStampsOfActiveRegion.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <MapPin className="w-4 h-4 text-[#264653]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <MapPin className="w-4 h-4 text-sea" />
                         <span>
                           Titik Pin & Koordinat di Map Dunia (
                           {mapStampsOfActiveRegion.length})
@@ -10375,20 +10377,20 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             key={st.id}
                             type="button"
                             onClick={() => onOpenMapAtStamp(st.id)}
-                            className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center justify-between gap-3 cursor-pointer"
+                            className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center justify-between gap-3 cursor-pointer"
                           >
                             <div className="min-w-0">
-                              <div className="text-[11px] font-semibold text-[#264653]">
+                              <div className="text-[11px] font-semibold text-sea">
                                 Pin Peta Dunia · Koordinat X:{Math.round(st.x)}%
                                 , Y:{Math.round(st.y)}%
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] truncate">
+                              <div className="font-display text-base font-bold text-ink truncate">
                                 {st.label}
                               </div>
                             </div>
                             <span className="px-2.5 py-1 rounded bg-[#231C14] text-[#FBF8F1] text-[11px] font-semibold whitespace-nowrap shrink-0 flex items-center gap-1">
                               <span>Buka di Peta</span>
-                              <ArrowUpRight className="w-3 h-3 text-[#B5832A]" />
+                              <ArrowUpRight className="w-3 h-3 text-brass" />
                             </span>
                           </button>
                         ))}
@@ -10399,8 +10401,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Factions / Organizations headquartered or operating in this Region */}
                   {factionsOfActiveRegion.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Compass className="w-4 h-4 text-amber" />
                         <span>
                           Kelompok & Organisasi yang Bermarkas / Beroperasi di{' '}
                           {activeEntity.title} ({factionsOfActiveRegion.length})
@@ -10414,17 +10416,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={fac.id}
                               type="button"
                               onClick={() => jumpToEntity(fac.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                              <div className="text-[11px] font-semibold text-amber truncate">
                                 {fAttrs.factionType || 'Organisasi'} · Pemimpin:{' '}
                                 {fAttrs.leader || 'Dewan'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{fac.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-1">
+                              <p className="text-xs text-ink-soft line-clamp-1">
                                 {fac.subtitle}
                               </p>
                             </button>
@@ -10437,8 +10439,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Characters originating from or active in this Region */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Users className="w-4 h-4 text-wax" />
                         <span>
                           Tokoh & Karakter Terkait Wilayah {activeEntity.title}{' '}
                           ({charactersOfActiveRegion.length})
@@ -10451,13 +10453,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         }
                         className="px-3.5 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                       >
-                        <UserPlus className="w-3.5 h-3.5 text-[#B5832A]" />
+                        <UserPlus className="w-3.5 h-3.5 text-brass" />
                         + Buat Karakter di Wilayah Ini
                       </button>
                     </div>
 
                     {charactersOfActiveRegion.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada tokoh di tab <strong>Character</strong> yang
                         tercatat berasal dari atau berada di wilayah ini. Klik{' '}
                         <strong>+ Buat Karakter di Wilayah Ini</strong> untuk
@@ -10472,26 +10474,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={char.id}
                               type="button"
                               onClick={() => jumpToEntity(char.id)}
-                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                              className="text-left p-3 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center gap-3 cursor-pointer"
                             >
                               {char.imageUrl ? (
                                 <img
                                   src={char.imageUrl}
                                   alt={char.title}
                                   referrerPolicy="no-referrer"
-                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                  className="w-10 h-10 rounded-lg object-cover border border-sepia shrink-0"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                <div className="w-10 h-10 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-wax" />
                                 </div>
                               )}
                               <div className="min-w-0 flex-1">
-                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <div className="font-display text-sm font-bold text-ink truncate flex items-center gap-1">
                                   <span className="truncate">{char.title}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax shrink-0" />
                                 </div>
-                                <div className="text-[11px] text-[#695A47] truncate">
+                                <div className="text-[11px] text-ink-soft truncate">
                                   {cAttrs.role || 'Tokoh'} ·{' '}
                                   {cAttrs.raceName || char.subtitle}
                                 </div>
@@ -10509,9 +10511,9 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* HISTORY TIMELINE SYNCHRONIZATION & KRONOLOGI BRIDGE PANEL     */}
               {/* ============================================================= */}
               {category === 'history' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3.5">
+                <div className="pt-4 border-t border-sepia space-y-3.5">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-ink">
                       <Clock className="w-4 h-4 text-[#7A3E1D]" />
                       <span>
                         Sinkronisasi Pita Kronologi Dunia (
@@ -10540,19 +10542,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           className="px-3 py-1.5 text-xs font-semibold bg-[#231C14] text-[#FBF8F1] rounded-lg hover:bg-[#3A2E21] flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
                         >
                           <span>Buka Tab Kronologi</span>
-                          <ArrowUpRight className="w-3.5 h-3.5 text-[#B5832A]" />
+                          <ArrowUpRight className="w-3.5 h-3.5 text-brass" />
                         </button>
                       )}
                     </div>
                   </div>
 
                   {timelineSyncMessage && (
-                    <div className="p-3 rounded-lg bg-[#EFE7D6] border border-[#2D5A43]/40 text-xs font-semibold text-[#2D5A43] flex items-center justify-between">
+                    <div className="p-3 rounded-lg bg-aged border border-forest/40 text-xs font-semibold text-forest flex items-center justify-between">
                       <span>{timelineSyncMessage}</span>
                       <button
                         type="button"
                         onClick={() => setTimelineSyncMessage('')}
-                        className="text-[#695A47] hover:text-[#231C14] cursor-pointer"
+                        className="text-ink-soft hover:text-ink cursor-pointer"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -10560,7 +10562,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   )}
 
                   {timelineEventsOfActiveHistory.length === 0 ? (
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                       Peristiwa sejarah ini belum tercatat di <strong>Tab Kronologi</strong>. Klik{' '}
                       <strong>+ Catat / Sinkronkan ke Pita Kronologi</strong> di atas agar peristiwa ini otomatis masuk ke urutan tahun linier dunia beserta tautan pihak yang terlibat.
                     </div>
@@ -10569,7 +10571,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                       {timelineEventsOfActiveHistory.map((tlEv) => (
                         <div
                           key={tlEv.id}
-                          className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex flex-wrap items-center justify-between gap-3"
+                          className="p-4 rounded-xl bg-parchment border border-sepia flex flex-wrap items-center justify-between gap-3"
                         >
                           <div className="space-y-1 min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold text-[#7A3E1D]">
@@ -10579,10 +10581,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               <span aria-hidden="true">·</span>
                               <span>{tlEv.era}</span>
                             </div>
-                            <div className="font-display text-base font-bold text-[#231C14]">
+                            <div className="font-display text-base font-bold text-ink">
                               {tlEv.title}
                             </div>
-                            <p className="text-xs text-[#695A47] leading-relaxed">
+                            <p className="text-xs text-ink-soft leading-relaxed">
                               {tlEv.summary}
                             </p>
                           </div>
@@ -10590,7 +10592,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             <button
                               type="button"
                               onClick={onOpenTimeline}
-                              className="px-3 py-1.5 rounded-lg bg-[#EFE7D6] hover:bg-[#D8CBB3] border border-[#7A3E1D]/40 text-xs font-semibold text-[#7A3E1D] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+                              className="px-3 py-1.5 rounded-lg bg-aged hover:bg-sepia border border-[#7A3E1D]/40 text-xs font-semibold text-[#7A3E1D] flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
                             >
                               <span>Lihat di Pita Waktu</span>
                               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -10607,12 +10609,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* AUTOMATIC ROSTER OF HOLDERS, FACTIONS & HABITATS (ENCYCLOPEDIA) */}
               {/* ============================================================= */}
               {category === 'encyclopedia' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-5">
+                <div className="pt-4 border-t border-sepia space-y-5">
                   {/* Characters Holding / Linked to This Encyclopedia Item */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Users className="w-4 h-4 text-[#9E2A2B]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Users className="w-4 h-4 text-wax" />
                         <span>
                           Tokoh Pemilik, Pencipta & Pengguna Terkait (
                           {holdersOfActiveEncyclopedia.length})
@@ -10624,7 +10626,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           onChange={(e) =>
                             setSelectedQuickHolderCharId(e.target.value)
                           }
-                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                          className="px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                         >
                           <option value="">-- Pilih Tokoh --</option>
                           {characterEntities.map((c) => (
@@ -10651,7 +10653,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {holdersOfActiveEncyclopedia.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada tokoh di tab <strong>Character</strong> yang
                         tercatat menyimpan atau menggunakan entri ini. Pilih
                         tokoh di atas dan klik{' '}
@@ -10667,26 +10669,26 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={char.id}
                               type="button"
                               onClick={() => jumpToEntity(char.id)}
-                              className="text-left p-3 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors flex items-center gap-3 cursor-pointer"
+                              className="text-left p-3 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors flex items-center gap-3 cursor-pointer"
                             >
                               {char.imageUrl ? (
                                 <img
                                   src={char.imageUrl}
                                   alt={char.title}
                                   referrerPolicy="no-referrer"
-                                  className="w-10 h-10 rounded-lg object-cover border border-[#D8CBB3] shrink-0"
+                                  className="w-10 h-10 rounded-lg object-cover border border-sepia shrink-0"
                                 />
                               ) : (
-                                <div className="w-10 h-10 rounded-lg bg-[#EFE7D6] border border-[#D8CBB3] flex items-center justify-center shrink-0">
-                                  <User className="w-4 h-4 text-[#9E2A2B]" />
+                                <div className="w-10 h-10 rounded-lg bg-aged border border-sepia flex items-center justify-center shrink-0">
+                                  <User className="w-4 h-4 text-wax" />
                                 </div>
                               )}
                               <div className="min-w-0 flex-1">
-                                <div className="font-display text-sm font-bold text-[#231C14] truncate flex items-center gap-1">
+                                <div className="font-display text-sm font-bold text-ink truncate flex items-center gap-1">
                                   <span className="truncate">{char.title}</span>
-                                  <ArrowUpRight className="w-3 h-3 text-[#9E2A2B] shrink-0" />
+                                  <ArrowUpRight className="w-3 h-3 text-wax shrink-0" />
                                 </div>
-                                <div className="text-[11px] text-[#695A47] truncate">
+                                <div className="text-[11px] text-ink-soft truncate">
                                   {cAttrs.role || 'Tokoh'} ·{' '}
                                   {cAttrs.factionName || char.subtitle}
                                 </div>
@@ -10701,8 +10703,8 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Factions Holding or Utilizing This Encyclopedia Item */}
                   {factionsOfActiveEncyclopedia.length > 0 && (
                     <div className="space-y-2.5">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                        <Compass className="w-4 h-4 text-[#8F5B14]" />
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                        <Compass className="w-4 h-4 text-amber" />
                         <span>
                           Kelompok & Organisasi Pemegang / Pengguna (
                           {factionsOfActiveEncyclopedia.length})
@@ -10716,17 +10718,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={fac.id}
                               type="button"
                               onClick={() => jumpToEntity(fac.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="text-[11px] font-semibold text-[#8F5B14] truncate">
+                              <div className="text-[11px] font-semibold text-amber truncate">
                                 {fAttrs.factionType || 'Organisasi'} · Markas:{' '}
                                 {fAttrs.headquarters || 'Kanon'}
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{fac.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-1">
+                              <p className="text-xs text-ink-soft line-clamp-1">
                                 {fac.subtitle}
                               </p>
                             </button>
@@ -10739,7 +10741,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {/* Regions / Habitats Linked to This Encyclopedia Item */}
                   <div className="space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
+                      <div className="flex items-center gap-2 text-xs font-semibold text-ink">
                         <MapPin className="w-4 h-4 text-[#3D5A45]" />
                         <span>
                           Wilayah Habitat Endemik & Lokasi Penyimpanan (
@@ -10752,7 +10754,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           onChange={(e) =>
                             setSelectedQuickHabitatRegionId(e.target.value)
                           }
-                          className="px-2.5 py-1 text-xs bg-[#F6F1E6] border border-[#D8CBB3] rounded-lg text-[#231C14]"
+                          className="px-2.5 py-1 text-xs bg-parchment border border-sepia rounded-lg text-ink"
                         >
                           <option value="">-- Pilih Wilayah --</option>
                           {regionEntities.map((r) => (
@@ -10779,7 +10781,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                     </div>
 
                     {regionsOfActiveEncyclopedia.length === 0 ? (
-                      <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                      <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                         Belum ada wilayah di tab <strong>Wilayah</strong> yang
                         tercatat sebagai habitat atau lokasi penyimpanan entri
                         ini. Pilih wilayah di atas dan klik{' '}
@@ -10794,19 +10796,19 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                               key={reg.id}
                               type="button"
                               onClick={() => jumpToEntity(reg.id)}
-                              className="text-left p-3.5 rounded-xl bg-[#F6F1E6] hover:bg-[#EFE7D6] border border-[#D8CBB3] transition-colors space-y-1 cursor-pointer"
+                              className="text-left p-3.5 rounded-xl bg-parchment hover:bg-aged border border-sepia transition-colors space-y-1 cursor-pointer"
                             >
-                              <div className="flex items-center justify-between text-[11px] font-semibold text-[#264653]">
+                              <div className="flex items-center justify-between text-[11px] font-semibold text-sea">
                                 <span>
                                   {rAttrs.regionType || 'Zona Geografis'}
                                 </span>
                                 <span>{rAttrs.parentNation || 'Otonom'}</span>
                               </div>
-                              <div className="font-display text-base font-bold text-[#231C14] flex items-center justify-between gap-2">
+                              <div className="font-display text-base font-bold text-ink flex items-center justify-between gap-2">
                                 <span className="truncate">{reg.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B] shrink-0" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax shrink-0" />
                               </div>
-                              <p className="text-xs text-[#695A47] line-clamp-1">
+                              <p className="text-xs text-ink-soft line-clamp-1">
                                 {reg.subtitle}
                               </p>
                             </button>
@@ -10822,10 +10824,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               {/* INLINE CHARACTER / ENTITY RELATIONSHIPS MATRIX                */}
               {/* ============================================================= */}
               {category === 'character' && (
-                <div className="pt-4 border-t border-[#D8CBB3] space-y-3">
+                <div className="pt-4 border-t border-sepia space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 text-xs font-semibold text-[#231C14]">
-                      <GitBranch className="w-4 h-4 text-[#9E2A2B]" />
+                    <div className="flex items-center gap-2 text-xs font-semibold text-ink">
+                      <GitBranch className="w-4 h-4 text-wax" />
                       <span>
                         Jaringan Relasi & Dinamika Tokoh (
                         {entityRelationships.length})
@@ -10854,17 +10856,17 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   {showAddRelation && onUpdateRelationships && (
                     <form
                       onSubmit={handleCreateInlineRelationship}
-                      className="p-4 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] space-y-3"
+                      className="p-4 rounded-xl bg-parchment border border-sepia space-y-3"
                     >
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
-                          <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                             Tokoh / Entitas Tujuan
                           </label>
                           <select
                             value={relTargetId}
                             onChange={(e) => setRelTargetId(e.target.value)}
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             {entities
                               .filter((e) => e.id !== activeEntity.id)
@@ -10877,7 +10879,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                             Jenis Hubungan
                           </label>
                           <select
@@ -10885,7 +10887,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             onChange={(e) =>
                               setRelType(e.target.value as RelationType)
                             }
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           >
                             {Object.entries(RELATION_TYPE_LABELS).map(
                               ([k, v]) => (
@@ -10897,7 +10899,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           </select>
                         </div>
                         <div>
-                          <label className="block text-[11px] font-semibold text-[#695A47] mb-1">
+                          <label className="block text-[11px] font-semibold text-ink-soft mb-1">
                             Julukan Relasi (Contoh: Mantan Guru)
                           </label>
                           <input
@@ -10905,7 +10907,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                             value={relLabel}
                             onChange={(e) => setRelLabel(e.target.value)}
                             placeholder="Mantan Guru & Rival..."
-                            className="w-full px-2.5 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                            className="w-full px-2.5 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                           />
                         </div>
                       </div>
@@ -10915,7 +10917,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           value={relNotes}
                           onChange={(e) => setRelNotes(e.target.value)}
                           placeholder="Catatan singkat dinamika hubungan mereka..."
-                          className="flex-1 px-3 py-1.5 text-xs bg-[#FBF8F1] border border-[#D8CBB3] rounded-lg"
+                          className="flex-1 px-3 py-1.5 text-xs bg-vellum border border-sepia rounded-lg"
                         />
                         <button
                           type="submit"
@@ -10928,7 +10930,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   )}
 
                   {entityRelationships.length === 0 ? (
-                    <div className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] text-xs text-[#695A47]">
+                    <div className="p-3.5 rounded-xl bg-parchment border border-sepia text-xs text-ink-soft">
                       Belum ada ikatan relasi tercatat untuk tokoh ini. Klik{' '}
                       <strong>+ Tambah Relasi Tokoh</strong> di atas untuk
                       menghubungkannya dengan tokoh atau kelompok lain.
@@ -10947,21 +10949,21 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                         return (
                           <div
                             key={rel.id}
-                            className="p-3.5 rounded-xl bg-[#F6F1E6] border border-[#D8CBB3] flex items-start justify-between gap-3"
+                            className="p-3.5 rounded-xl bg-parchment border border-sepia flex items-start justify-between gap-3"
                           >
                             <div className="space-y-1 min-w-0">
-                              <div className="text-[11px] font-semibold text-[#9E2A2B]">
+                              <div className="text-[11px] font-semibold text-wax">
                                 {RELATION_TYPE_LABELS[rel.type]} · {rel.label}
                               </div>
                               <button
                                 type="button"
                                 onClick={() => jumpToEntity(partner.id)}
-                                className="font-display text-base font-bold text-[#231C14] hover:text-[#9E2A2B] flex items-center gap-1 cursor-pointer text-left"
+                                className="font-display text-base font-bold text-ink hover:text-wax flex items-center gap-1 cursor-pointer text-left"
                               >
                                 <span>{partner.title}</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                                <ArrowUpRight className="w-3.5 h-3.5 text-wax" />
                               </button>
-                              <p className="text-xs text-[#695A47] leading-relaxed">
+                              <p className="text-xs text-ink-soft leading-relaxed">
                                 {rel.notes}
                               </p>
                             </div>
@@ -10973,7 +10975,7 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                                     relationships.filter((r) => r.id !== rel.id)
                                   )
                                 }
-                                className="text-[#695A47] hover:text-[#9E2A2B] p-1 cursor-pointer shrink-0"
+                                className="text-ink-soft hover:text-wax p-1 cursor-pointer shrink-0"
                                 title="Hapus relasi"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -10988,16 +10990,16 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
               )}
 
               {/* Bidirectional Backlinks & Map Connections */}
-              <div className="pt-4 border-t border-[#D8CBB3] grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-3.5 rounded-xl bg-[#EFE7D6]/60 border border-[#D8CBB3]">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#231C14] mb-2">
-                    <Link2 className="w-3.5 h-3.5 text-[#9E2A2B]" />
+              <div className="pt-4 border-t border-sepia grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3.5 rounded-xl bg-aged/60 border border-sepia">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-ink mb-2">
+                    <Link2 className="w-3.5 h-3.5 text-wax" />
                     <span>
                       Entitas Terkait ({backlinks.linkedEntities.length})
                     </span>
                   </div>
                   {backlinks.linkedEntities.length === 0 ? (
-                    <p className="text-xs text-[#695A47]">
+                    <p className="text-xs text-ink-soft">
                       Belum ada entitas lain yang merujuk ke halaman ini.
                     </p>
                   ) : (
@@ -11007,10 +11009,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           key={le.id}
                           type="button"
                           onClick={() => jumpToEntity(le.id)}
-                          className="w-full text-left px-2.5 py-1.5 rounded bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#D8CBB3] text-xs font-medium text-[#231C14] flex items-center justify-between cursor-pointer"
+                          className="w-full text-left px-2.5 py-1.5 rounded bg-vellum hover:bg-parchment border border-sepia text-xs font-medium text-ink flex items-center justify-between cursor-pointer"
                         >
                           <span className="truncate">{le.title}</span>
-                          <span className="text-[10px] text-[#695A47] shrink-0 ml-2">
+                          <span className="text-[10px] text-ink-soft shrink-0 ml-2">
                             {CATEGORY_META[le.category].singular}
                           </span>
                         </button>
@@ -11019,13 +11021,13 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   )}
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#EFE7D6]/60 border border-[#D8CBB3]">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#231C14] mb-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#9E2A2B]" />
+                <div className="p-3.5 rounded-xl bg-aged/60 border border-sepia">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-ink mb-2">
+                    <MapPin className="w-3.5 h-3.5 text-wax" />
                     <span>Pin di Peta Dunia ({linkedPins.length})</span>
                   </div>
                   {linkedPins.length === 0 ? (
-                    <p className="text-xs text-[#695A47]">
+                    <p className="text-xs text-ink-soft">
                       Belum ada pin peta yang ditautkan ke entri ini.
                     </p>
                   ) : (
@@ -11035,10 +11037,10 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           key={pin.id}
                           type="button"
                           onClick={() => onOpenMapAtStamp(pin.id)}
-                          className="w-full text-left px-2.5 py-1.5 rounded bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#D8CBB3] text-xs font-medium text-[#9E2A2B] flex items-center justify-between cursor-pointer"
+                          className="w-full text-left px-2.5 py-1.5 rounded bg-vellum hover:bg-parchment border border-sepia text-xs font-medium text-wax flex items-center justify-between cursor-pointer"
                         >
                           <span className="truncate">{pin.label}</span>
-                          <span className="font-mono-tabular text-[11px] text-[#695A47]">
+                          <span className="font-mono-tabular text-[11px] text-ink-soft">
                             {pin.x}°,{pin.y}° →
                           </span>
                         </button>
@@ -11047,15 +11049,15 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                   )}
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#EFE7D6]/60 border border-[#D8CBB3]">
-                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#231C14] mb-2">
-                    <Sparkles className="w-3.5 h-3.5 text-[#B5832A]" />
+                <div className="p-3.5 rounded-xl bg-aged/60 border border-sepia">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-ink mb-2">
+                    <Sparkles className="w-3.5 h-3.5 text-brass" />
                     <span>
                       Kemunculan di Bab ({backlinks.linkedChapters.length})
                     </span>
                   </div>
                   {backlinks.linkedChapters.length === 0 ? (
-                    <p className="text-xs text-[#695A47]">
+                    <p className="text-xs text-ink-soft">
                       Belum muncul di dalam draf bab cerita.
                     </p>
                   ) : (
@@ -11065,12 +11067,12 @@ export const CodexWorkspace: React.FC<CodexWorkspaceProps> = ({
                           key={ch.id}
                           type="button"
                           onClick={() => onOpenChapter(ch.id)}
-                          className="w-full text-left px-2.5 py-1.5 rounded bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#D8CBB3] text-xs font-medium text-[#231C14] flex items-center justify-between cursor-pointer"
+                          className="w-full text-left px-2.5 py-1.5 rounded bg-vellum hover:bg-parchment border border-sepia text-xs font-medium text-ink flex items-center justify-between cursor-pointer"
                         >
                           <span className="truncate">
                             Bab {ch.chapterNumber}: {ch.title}
                           </span>
-                          <span className="text-[10px] text-[#695A47] shrink-0 ml-1">
+                          <span className="text-[10px] text-ink-soft shrink-0 ml-1">
                             {ch.status}
                           </span>
                         </button>
