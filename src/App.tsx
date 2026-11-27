@@ -998,7 +998,7 @@ export default function App() {
       className="min-h-screen flex flex-col medieval-desk-bg bg-parchment text-ink transition-colors duration-200"
     >
       {/* Top Bar: Brand & Active Breadcrumb on Left, Global Productivity Actions on Right */}
-      <header className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-vellum/95 backdrop-blur-xs border-b-2 border-brass/60 shadow-sm print:hidden">
+      <header className="wood-plank-bar sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 px-6 py-3 bg-vellum/95 backdrop-blur-xs border-b-2 border-brass/60 shadow-sm print:hidden">
         <div className="flex items-center gap-3.5 min-w-0">
           <a
             href="#top"
@@ -1460,7 +1460,7 @@ export default function App() {
       </main>
 
       {/* Quiet Editorial Footer */}
-      <footer className="border-t border-brass/40 bg-aged/80 px-6 py-4 mt-8 print:hidden">
+      <footer className="wood-plank-bar border-t border-brass/40 bg-aged/80 px-6 py-4 mt-8 print:hidden">
         <div className="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4 text-xs text-ink-soft">
           <span>
             MythosCartograph — Studio World Bible, Peta Abad Pertengahan & Arsitektur Cerita

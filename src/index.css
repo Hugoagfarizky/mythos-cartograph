@@ -587,3 +587,153 @@ textarea.paper-sheet::placeholder {
 ::-webkit-scrollbar-thumb:hover {
   background: #9E2A2B;
 }
+
+/* ============================================================================
+   GAME-STYLE UI LAYER
+   Chunky riveted wood frames around parchment panels, recessed slots for
+   nested panels, bevelled buttons and wooden plank bars.
+   ============================================================================ */
+
+/* Surface colour each framed element paints inside its frame */
+.medieval-tome-sheet :is(.bg-vellum, [class*="bg-vellum/"]) { --fill: var(--bg-vellum); }
+.medieval-tome-sheet :is(.bg-parchment, [class*="bg-parchment/"]) { --fill: var(--bg-parchment); }
+.medieval-tome-sheet :is(.bg-aged, [class*="bg-aged/"]) { --fill: var(--bg-aged); }
+
+/* 1. Main panels: parchment set in a riveted wooden frame */
+.medieval-tome-sheet :is(.rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]):is(.p-3, .p-4, .p-5, .p-6, .p-10, .p-3\.5) {
+  border: 7px solid transparent;
+  border-radius: 0.5rem;
+  background:
+    var(--tex-fibers) 0 0 / 220px 220px padding-box,
+    linear-gradient(var(--fill, var(--bg-vellum)), var(--fill, var(--bg-vellum))) padding-box,
+    radial-gradient(circle, #F6DC96 0 1.1px, #A27630 1.7px, #3A220C 2.5px, transparent 3px) left top / 7px 7px no-repeat border-box,
+    radial-gradient(circle, #F6DC96 0 1.1px, #A27630 1.7px, #3A220C 2.5px, transparent 3px) right top / 7px 7px no-repeat border-box,
+    radial-gradient(circle, #F6DC96 0 1.1px, #A27630 1.7px, #3A220C 2.5px, transparent 3px) left bottom / 7px 7px no-repeat border-box,
+    radial-gradient(circle, #F6DC96 0 1.1px, #A27630 1.7px, #3A220C 2.5px, transparent 3px) right bottom / 7px 7px no-repeat border-box,
+    var(--tex-wood) 0 0 / 600px 200px border-box,
+    linear-gradient(180deg, #8E5F34 0%, #6B4122 42%, #4A2A12 100%) border-box;
+  box-shadow:
+    0 0 0 1px #21110A,
+    inset 0 0 0 1px rgba(33, 17, 10, 0.8),
+    inset 0 0 26px rgba(122, 70, 24, 0.3),
+    0 3px 0 #1C0E06,
+    0 9px 16px rgba(0, 0, 0, 0.32);
+}
+
+/* 2. Panels inside a panel: recessed parchment slots */
+.medieval-tome-sheet :is(.rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]):is(.p-3, .p-4, .p-5, .p-6, .p-10, .p-3\.5) :is(div, section, article, aside, nav, form, li, ul):is(.rounded-lg, .rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]) {
+  border: 1px solid rgba(74, 42, 18, 0.45);
+  border-radius: 0.3rem;
+  background:
+    var(--tex-fibers) 0 0 / 220px 220px,
+    color-mix(in oklab, var(--fill, var(--bg-vellum)) 92%, #7A5530);
+  box-shadow:
+    inset 0 2px 5px rgba(70, 38, 12, 0.24),
+    0 1px 0 rgba(255, 246, 225, 0.55);
+}
+
+/* 3. Bevelled game buttons */
+button:is(.bg-\[\#9E2A2B\], .bg-\[\#231C14\], .bg-\[\#7E2021\], .bg-\[\#2D5A43\], .bg-\[\#264653\], .bg-\[\#5A3E7A\], .bg-\[\#8F5B14\], .bg-\[\#3A2E21\]) {
+  background-image: linear-gradient(180deg, rgba(255, 236, 200, 0.24) 0%, rgba(255, 236, 200, 0.05) 48%, rgba(0, 0, 0, 0.1) 52%, rgba(0, 0, 0, 0.26) 100%);
+  border: 1px solid #B98A3C;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 180, 0.45),
+    0 2px 0 rgba(20, 8, 3, 0.85),
+    0 3px 6px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
+}
+
+.wax-seal-btn {
+  border-color: #D49B35;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 228, 180, 0.5),
+    inset 0 -2px 3px rgba(45, 8, 8, 0.45),
+    0 2px 0 #3E0B0B,
+    0 3px 7px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
+}
+
+.medieval-tome-sheet button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]), button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]) {
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 55%, rgba(110, 70, 30, 0.12) 100%),
+    var(--tex-fibers);
+  background-size: auto, 220px 220px;
+  border-color: rgba(118, 78, 38, 0.6);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 2px 0 rgba(96, 60, 26, 0.6),
+    0 2px 4px rgba(60, 30, 10, 0.14);
+}
+
+:is(button:is(.bg-\[\#9E2A2B\], .bg-\[\#231C14\], .bg-\[\#7E2021\], .bg-\[\#2D5A43\], .bg-\[\#264653\], .bg-\[\#5A3E7A\], .bg-\[\#8F5B14\], .bg-\[\#3A2E21\]), .wax-seal-btn, button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"])) {
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
+}
+
+:is(button:is(.bg-\[\#9E2A2B\], .bg-\[\#231C14\], .bg-\[\#7E2021\], .bg-\[\#2D5A43\], .bg-\[\#264653\], .bg-\[\#5A3E7A\], .bg-\[\#8F5B14\], .bg-\[\#3A2E21\]), .wax-seal-btn, button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"])):hover {
+  filter: brightness(1.06);
+}
+
+:is(button:is(.bg-\[\#9E2A2B\], .bg-\[\#231C14\], .bg-\[\#7E2021\], .bg-\[\#2D5A43\], .bg-\[\#264653\], .bg-\[\#5A3E7A\], .bg-\[\#8F5B14\], .bg-\[\#3A2E21\]), .wax-seal-btn, button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"])):active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 4. Recessed count badges and form fields */
+.medieval-tome-sheet span.rounded:is(.bg-aged, .bg-parchment, .bg-vellum) {
+  box-shadow: inset 0 1px 2px rgba(60, 30, 10, 0.35);
+  background-color: color-mix(in oklab, var(--bg-aged) 85%, #5A3A1C);
+}
+
+.medieval-tome-sheet :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select, textarea:not(.paper-sheet)) {
+  box-shadow: inset 0 2px 3px rgba(70, 38, 12, 0.2);
+  border-color: rgba(118, 78, 38, 0.5);
+}
+
+/* 5. Wooden plank bars (header and footer) with their own dark palette */
+.wood-plank-bar {
+  --bg-parchment: #2B1A0E;
+  --bg-vellum: #3A2414;
+  --bg-aged: #4A2E19;
+  --border-sepia: #6B4826;
+  --ink-primary: #F6E9CF;
+  --ink-secondary: #D9C29A;
+  --accent-brass: #E7B860;
+  --accent-wax: #F08A6B;
+  color: var(--ink-primary);
+  background:
+    var(--tex-wood) 0 0 / 1200px 400px,
+    linear-gradient(180deg, #6E4624 0%, #4C2D16 58%, #3A210F 100%);
+  border-color: #1E0F06;
+  box-shadow: inset 0 1px 0 rgba(255, 214, 160, 0.22), 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.wood-plank-bar button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]) {
+  background-image:
+    linear-gradient(180deg, rgba(255, 220, 170, 0.16) 0%, rgba(255, 220, 170, 0) 55%, rgba(0, 0, 0, 0.18) 100%);
+  border-color: rgba(231, 184, 96, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 220, 170, 0.25), 0 2px 0 #160A04;
+}
+
+/* 6. Night theme: same wood, darker parchment, subtler highlights */
+[data-theme="grimoire-dark"] .medieval-tome-sheet :is(.rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]):is(.p-3, .p-4, .p-5, .p-6, .p-10, .p-3\.5) {
+  border-color: transparent !important;
+  box-shadow:
+    0 0 0 1px #0A0503,
+    inset 0 0 0 1px rgba(0, 0, 0, 0.8),
+    inset 0 0 26px rgba(0, 0, 0, 0.45),
+    0 3px 0 #070302,
+    0 9px 16px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="grimoire-dark"] .medieval-tome-sheet :is(.rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]):is(.p-3, .p-4, .p-5, .p-6, .p-10, .p-3\.5) :is(div, section, article, aside, nav, form, li, ul):is(.rounded-lg, .rounded-xl, .rounded-2xl):is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]) {
+  border-color: rgba(0, 0, 0, 0.55) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 220, 170, 0.05);
+}
+
+[data-theme="grimoire-dark"] :is(.medieval-tome-sheet button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"]), button:is(.bg-vellum, .bg-parchment, .bg-aged, [class*="bg-vellum/"], [class*="bg-parchment/"], [class*="bg-aged/"])) {
+  background-image:
+    linear-gradient(180deg, rgba(255, 220, 170, 0.1) 0%, rgba(255, 220, 170, 0) 55%, rgba(0, 0, 0, 0.2) 100%),
+    var(--tex-fibers);
+  border-color: rgba(160, 112, 52, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 220, 170, 0.12), 0 2px 0 #050201;
+}
