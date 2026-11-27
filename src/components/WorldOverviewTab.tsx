@@ -549,6 +549,110 @@ export const WorldOverviewTab: React.FC<WorldOverviewTabProps> = ({
       </div>
 
       {/* ===================================================================== */}
+      {/* 1B. EMPTY WORLD PARCHMENT QUICK-START GUIDE (Auto-hides once populated) */}
+      {/* ===================================================================== */}
+      {project.entities.length === 0 && project.chapters.length === 0 && (
+        <div className="relative overflow-hidden medieval-folio-frame bg-[#EFE7D6]/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-xs">
+          <OrnateCornerFiligree />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3 border-b border-[#B5832A]/40 pb-3">
+            <div className="flex-1 min-w-0 space-y-0.5 text-left">
+              <div className="font-epic text-xs font-bold uppercase tracking-widest text-[#9E2A2B] flex items-center gap-1.5">
+                <span>⚜ Panduan Langkah Awal Grimoire</span>
+                <span aria-hidden="true">·</span>
+                <span className="text-[#695A47]">Kanvas Dunia Siap Diisi</span>
+              </div>
+              <h2 className="font-display text-xl sm:text-2xl font-bold text-[#231C14]">
+                Mulai Bangun Semesta Fantasi Anda dalam 4 Langkah
+              </h2>
+            </div>
+            <span className="text-xs text-[#695A47] italic shrink-0">
+              Kartu ini otomatis tertutup setelah Anda membuat entitas atau bab pertama
+            </span>
+          </div>
+
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <button
+              type="button"
+              onClick={handleOpenEditor}
+              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  Langkah I · Pondasi
+                </span>
+                <Edit3 className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <div className="font-display text-base font-bold text-[#231C14]">
+                1. Isi Identitas & Kosmologi
+              </div>
+              <p className="text-xs text-[#695A47] leading-relaxed">
+                Tentukan nama dunia, premis utama, sistem kalender, konflik pusat, dan hukum kosmologi.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={onOpenMapTab}
+              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  Langkah II · Geografi
+                </span>
+                <Compass className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <div className="font-display text-base font-bold text-[#231C14]">
+                2. Lukis Peta Dunia Baru
+              </div>
+              <p className="text-xs text-[#695A47] leading-relaxed">
+                Gambar benua atau acak kepulauan, sematkan pin kastil/kota, dan tambahkan kaligrafi wilayah.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                onQuickCreateEntity?.('Tokoh Utama Baru', 'character', true)
+              }
+              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  Langkah III · Penghuni
+                </span>
+                <Users className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <div className="font-display text-base font-bold text-[#231C14]">
+                3. Buat Karakter Pertama
+              </div>
+              <p className="text-xs text-[#695A47] leading-relaxed">
+                Mulai tulis lembar tokoh protagonis, dewa, ras, atau sistem sihir pertama di dunia Anda.
+              </p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onOpenChapter('')}
+              className="text-left p-4 rounded-xl bg-[#FBF8F1] hover:bg-[#F6F1E6] border border-[#B5832A]/50 transition-all space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-epic text-[11px] font-bold uppercase tracking-wider text-[#9E2A2B]">
+                  Langkah IV · Naskah
+                </span>
+                <BookOpen className="w-4 h-4 text-[#B5832A] group-hover:translate-x-0.5 transition-transform" />
+              </div>
+              <div className="font-display text-base font-bold text-[#231C14]">
+                4. Susun Alur Bab Cerita
+              </div>
+              <p className="text-xs text-[#695A47] leading-relaxed">
+                Rancang Bab 1, susun adegan (*scene beats*), dan hubungkan tokoh serta lokasi dengan `[[Nama]]`.
+              </p>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
       {/* 2. GLOBAL SEARCH OMNIBAR & 3. QUICK IDEA SCRATCHPAD                   */}
       {/* ===================================================================== */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
