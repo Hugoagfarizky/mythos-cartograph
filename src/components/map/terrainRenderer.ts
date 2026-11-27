@@ -465,10 +465,12 @@ export function drawTerrainIcons(
   ctx: CanvasRenderingContext2D,
   W: number,
   H: number,
-  model: TerrainModel
+  model: TerrainModel,
+  rivers: RiverShape[] = []
 ): void {
   const { fields, raster, cellW, cellH } = model;
   const icons: Icon[] = [];
+  const riverMask = buildRiverMask(raster, rivers);
 
   const landAt = (x: number, y: number) => rasterAt(raster, raster.coast, x, y);
   const weight = (t: LandType, x: number, y: number, salt: number) =>
@@ -487,6 +489,7 @@ export function drawTerrainIcons(
         const x = (gx + 0.1 + rnd(1) * 0.8) * spacing;
         const y = (gy + 0.1 + rnd(2) * 0.8) * spacing;
         if (x < 34 || x > W - 34 || y < 34 || y > H - 34) continue;
+        if (riverMask[maskIndex(raster, x, y)]) continue;
         visit(x, y, rnd);
       }
     }
@@ -784,4 +787,233 @@ function drawGrass(ctx: CanvasRenderingContext2D, x: number, y: number, rnd: (k:
   ctx.moveTo(x + 2.2, y);
   ctx.lineTo(x + 3, y - 3 - rnd(6));
   ctx.stroke();
+}
+
+// ---------------------------------------------------------------------------
+// Rivers: tapered, meandering water bodies with inked banks
+// ---------------------------------------------------------------------------
+type Pt = { x: number; y: number };
+
+export interface RiverShape {
+  center: Pt[];
+  widths: number[];
+  name: string;
+}
+
+function catmullRom(points: Pt[], spacing: number): Pt[] {
+  if (points.length < 2) return points.slice();
+  const out: Pt[] = [];
+  const p = [points[0], ...points, points[points.length - 1]];
+  for (let i = 1; i < p.length - 2; i++) {
+    const p0 = p[i - 1];
+    const p1 = p[i];
+    const p2 = p[i + 1];
+    const p3 = p[i + 2];
+    const segLen = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const steps = Math.max(2, Math.ceil(segLen / spacing));
+    for (let s = 0; s < steps; s++) {
+      const t = s / steps;
+      const t2 = t * t;
+      const t3 = t2 * t;
+      out.push({
+        x:
+          0.5 *
+          (2 * p1.x +
+            (-p0.x + p2.x) * t +
+            (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 +
+            (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3),
+        y:
+          0.5 *
+          (2 * p1.y +
+            (-p0.y + p2.y) * t +
+            (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 +
+            (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3),
+      });
+    }
+  }
+  out.push(points[points.length - 1]);
+  return out;
+}
+
+function normals(pts: Pt[]): Pt[] {
+  return pts.map((_, i) => {
+    const a = pts[Math.max(0, i - 1)];
+    const b = pts[Math.min(pts.length - 1, i + 1)];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const len = Math.hypot(dx, dy) || 1;
+    return { x: -dy / len, y: dx / len };
+  });
+}
+
+/**
+ * Turn a river's control points (logical px) into a smooth, meandering
+ * centreline that widens from source to mouth. The end lying nearer the sea is
+ * treated as the mouth, so hand-drawn rivers can be drawn in either direction.
+ */
+export function buildRiverShape(
+  controlPts: Pt[],
+  model: TerrainModel,
+  name: string,
+  salt: number
+): RiverShape | null {
+  if (controlPts.length < 2) return null;
+  const { raster } = model;
+  const pts = controlPts.slice();
+  const landStart = rasterAt(raster, raster.coast, pts[0].x, pts[0].y);
+  const landEnd = rasterAt(raster, raster.coast, pts[pts.length - 1].x, pts[pts.length - 1].y);
+  if (landStart < landEnd) pts.reverse();
+
+  let center = catmullRom(pts, 3);
+  if (center.length < 3) return null;
+
+  // gentle meanders, pinned at both ends
+  const n0 = normals(center);
+  let acc = 0;
+  const base = center;
+  center = base.map((p, i) => {
+    if (i > 0) acc += Math.hypot(p.x - base[i - 1].x, p.y - base[i - 1].y);
+    const t = i / (base.length - 1);
+    const pin = Math.sin(Math.PI * t);
+    const off =
+      ((fbm(acc / 30, salt * 3.1, 611, 2) - 0.5) * 2 * 7 +
+        (fbm(acc / 11, salt * 5.7, 612, 2) - 0.5) * 2 * 2) *
+      pin;
+    return { x: p.x + n0[i].x * off, y: p.y + n0[i].y * off };
+  });
+
+  // stop a little past the coastline so the mouth opens into the sea
+  let last = center.length - 1;
+  for (let i = 0; i < center.length; i++) {
+    if (rasterAt(raster, raster.coast, center[i].x, center[i].y) < 0.44) {
+      last = Math.min(center.length - 1, i + 2);
+      break;
+    }
+  }
+  center = center.slice(0, last + 1);
+  if (center.length < 3) return null;
+
+  let total = 0;
+  const along = center.map((p, i) => {
+    if (i > 0) total += Math.hypot(p.x - center[i - 1].x, p.y - center[i - 1].y);
+    return total;
+  });
+  const maxW = Math.min(10, Math.max(3.4, total / 60));
+  const widths = along.map((d) => {
+    const t = total ? d / total : 0;
+    let w = 1 + (maxW - 1) * Math.pow(t, 0.8);
+    if (t > 0.93) w *= 1 + (t - 0.93) * 9; // estuary flare
+    return w;
+  });
+  return { center, widths, name };
+}
+
+function buildRiverMask(raster: LandRaster, rivers: RiverShape[]): Uint8Array {
+  const mask = new Uint8Array(raster.gw * raster.gh);
+  for (const r of rivers) {
+    for (let i = 0; i < r.center.length; i += 2) {
+      const p = r.center[i];
+      const rad = r.widths[i] / 2 + 6;
+      const i0 = Math.floor((p.x - rad) / STEP);
+      const i1 = Math.ceil((p.x + rad) / STEP);
+      const j0 = Math.floor((p.y - rad) / STEP);
+      const j1 = Math.ceil((p.y + rad) / STEP);
+      for (let j = Math.max(0, j0); j <= Math.min(raster.gh - 1, j1); j++) {
+        for (let k = Math.max(0, i0); k <= Math.min(raster.gw - 1, i1); k++) {
+          if (Math.hypot(k * STEP - p.x, j * STEP - p.y) <= rad) mask[j * raster.gw + k] = 1;
+        }
+      }
+    }
+  }
+  return mask;
+}
+
+function maskIndex(raster: LandRaster, x: number, y: number): number {
+  const i = Math.min(Math.max(Math.round(x / STEP), 0), raster.gw - 1);
+  const j = Math.min(Math.max(Math.round(y / STEP), 0), raster.gh - 1);
+  return j * raster.gw + i;
+}
+
+export function drawRiver(ctx: CanvasRenderingContext2D, river: RiverShape, showName: boolean): void {
+  const { center, widths } = river;
+  const nrm = normals(center);
+  const left = center.map((p, i) => ({
+    x: p.x + (nrm[i].x * widths[i]) / 2,
+    y: p.y + (nrm[i].y * widths[i]) / 2,
+  }));
+  const right = center.map((p, i) => ({
+    x: p.x - (nrm[i].x * widths[i]) / 2,
+    y: p.y - (nrm[i].y * widths[i]) / 2,
+  }));
+
+  ctx.save();
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  // water body
+  ctx.fillStyle = '#A9C0C2';
+  ctx.beginPath();
+  ctx.moveTo(left[0].x, left[0].y);
+  for (const p of left) ctx.lineTo(p.x, p.y);
+  for (let i = right.length - 1; i >= 0; i--) ctx.lineTo(right[i].x, right[i].y);
+  ctx.closePath();
+  ctx.fill();
+
+  // current lines in the wider reaches
+  ctx.strokeStyle = 'rgba(255, 252, 240, 0.55)';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  let drawing = false;
+  for (let i = 0; i < center.length; i++) {
+    if (widths[i] > 3.2 && i % 14 < 7) {
+      const p = center[i];
+      if (!drawing) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+      drawing = true;
+    } else {
+      drawing = false;
+    }
+  }
+  ctx.stroke();
+
+  // inked banks (they meet in a point at the source)
+  ctx.strokeStyle = '#2B1E12';
+  ctx.lineWidth = 0.95;
+  ctx.beginPath();
+  ctx.moveTo(left[0].x, left[0].y);
+  for (const p of left) ctx.lineTo(p.x, p.y);
+  ctx.moveTo(right[0].x, right[0].y);
+  for (const p of right) ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+
+  // name lettered along the stream
+  if (showName && river.name) {
+    let total = 0;
+    for (let i = 1; i < center.length; i++) {
+      total += Math.hypot(center[i].x - center[i - 1].x, center[i].y - center[i - 1].y);
+    }
+    if (total > 110) {
+      const idx = Math.floor(center.length * 0.42);
+      const a = center[Math.max(0, idx - 6)];
+      const b = center[Math.min(center.length - 1, idx + 6)];
+      let angle = Math.atan2(b.y - a.y, b.x - a.x);
+      if (angle > Math.PI / 2) angle -= Math.PI;
+      if (angle < -Math.PI / 2) angle += Math.PI;
+      const p = center[idx];
+      const off = widths[idx] / 2 + 6;
+      const nx = -Math.sin(angle);
+      const ny = Math.cos(angle);
+      ctx.translate(p.x - nx * off, p.y - ny * off);
+      ctx.rotate(angle);
+      ctx.font = 'italic 600 9.5px "Lora", Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.lineWidth = 2.6;
+      ctx.strokeStyle = 'rgba(245, 236, 214, 0.85)';
+      ctx.strokeText(river.name, 0, 0);
+      ctx.fillStyle = '#34525C';
+      ctx.fillText(river.name, 0, 0);
+    }
+  }
+  ctx.restore();
 }

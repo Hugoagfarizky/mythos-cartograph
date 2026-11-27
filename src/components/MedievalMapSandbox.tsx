@@ -36,10 +36,13 @@ import {
 } from '../types/world';
 import { CATEGORY_META, OrnateCornerFiligree } from './WikiTextRenderer';
 import {
+  buildRiverShape,
   buildTerrainModel,
+  drawRiver,
   drawTerrainBase,
   drawTerrainIcons,
   hasAnyLand,
+  RiverShape,
 } from './map/terrainRenderer';
 import {
   AUTO_RIVER_PREFIX,
@@ -335,7 +338,9 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     model: ReturnType<typeof buildTerrainModel> | null;
     base: HTMLCanvasElement | null;
     icons: HTMLCanvasElement | null;
-  }>({ cells: null, model: null, base: null, icons: null });
+    rivers: MapRiverPath[] | null;
+    riverShapes: RiverShape[];
+  }>({ cells: null, model: null, base: null, icons: null, rivers: null, riverShapes: [] });
 
   // Older saves used a coarse 36×22 grid: resample them once to the finer grid.
   useEffect(() => {
@@ -488,6 +493,26 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       cache.model = model;
       cache.base = base;
       cache.icons = null;
+      cache.rivers = null;
+    }
+    // River shapes depend on the coastline; symbols are laid out around them.
+    if (cache.rivers !== rivers && cache.model) {
+      const model = cache.model;
+      cache.riverShapes = rivers
+        .map((river, idx) =>
+          buildRiverShape(
+            river.points.map((pt) => ({
+              x: (pt.x / 100) * width,
+              y: (pt.y / 100) * height,
+            })),
+            model,
+            river.name,
+            idx + 1
+          )
+        )
+        .filter((shape): shape is RiverShape => shape !== null);
+      cache.rivers = rivers;
+      cache.icons = null;
     }
     if (!cache.icons && cache.model) {
       const icons = document.createElement('canvas');
@@ -496,7 +521,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
       const ictx = icons.getContext('2d');
       if (ictx) {
         ictx.setTransform(MAP_PIXEL_SCALE, 0, 0, MAP_PIXEL_SCALE, 0, 0);
-        drawTerrainIcons(ictx, width, height, cache.model);
+        drawTerrainIcons(ictx, width, height, cache.model, cache.riverShapes);
       }
       cache.icons = icons;
     }
@@ -507,31 +532,8 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     // 3. WINDING CALLIGRAPHIC RIVERS LAYER
     // =========================================================================
     if (showRiversLayer) {
-      for (const river of rivers) {
-        if (river.points.length < 2) continue;
-        ctx.save();
-        ctx.strokeStyle = '#2B1E12';
-        ctx.lineWidth = 4.2;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.beginPath();
-        river.points.forEach((pt, idx) => {
-          const px = (pt.x / 100) * width;
-          const py = (pt.y / 100) * height;
-          if (idx === 0) ctx.moveTo(px, py);
-          else {
-            const prev = river.points[idx - 1];
-            const mx = ((prev.x + pt.x) / 200) * width + 5;
-            const my = ((prev.y + pt.y) / 200) * height - 4;
-            ctx.quadraticCurveTo(mx, my, px, py);
-          }
-        });
-        ctx.stroke();
-
-        ctx.strokeStyle = '#9BB0B5';
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-        ctx.restore();
+      for (const shape of cache.riverShapes) {
+        drawRiver(ctx, shape, showLabelsLayer);
       }
     }
 
@@ -779,6 +781,7 @@ export const MedievalMapSandbox: React.FC<MedievalMapSandboxProps> = ({
     mapData,
     routes,
     showRiversLayer,
+    showLabelsLayer,
     showRoutesLayer,
     showRhumbLines,
     toolMode,
