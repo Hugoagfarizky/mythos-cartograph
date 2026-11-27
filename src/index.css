@@ -20,10 +20,10 @@
 
 @layer base {
   :root {
-    --bg-parchment: #F6F1E6;
-    --bg-vellum: #FBF8F1;
-    --bg-aged: #EFE7D6;
-    --border-sepia: #D8CBB3;
+    --bg-parchment: #F3E9D3;
+    --bg-vellum: #F8F0DD;
+    --bg-aged: #ECDFC4;
+    --border-sepia: #D3C19F;
     --ink-primary: #231C14;
     --ink-secondary: #695A47;
     --accent-wax: #9E2A2B;
@@ -32,7 +32,13 @@
     --accent-cartography: #264653;
     --accent-forest: #2D5A43;
     --accent-mystic: #5A3E7A;
-    --bg-paper: #FDFBF6;
+    --bg-paper: #FBF4E3;
+
+    /* Procedural SVG textures (no image files) */
+  --tex-fibers: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36  0 0 0 0 0.25  0 0 0 0 0.12  0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23t%29'/%3E%3C/svg%3E");
+  --tex-mottle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0065' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.48  0 0 0 0 0.32  0 0 0 0 0.12  0.55 0 0 0 -0.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23t%29'/%3E%3C/svg%3E");
+  --tex-leather: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.55' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.32 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23t%29'/%3E%3C/svg%3E");
+  --tex-wood: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='400'%3E%3Cfilter id='t'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.004 0.18' numOctaves='4' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.05  0 0 0 0 0.02  0.9 0 0 0 -0.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url%28%23t%29'/%3E%3C/svg%3E");
   }
 
   body {
@@ -221,6 +227,97 @@
 }
 
 /* ============================================================================
+   MEDIEVAL BOOK TEXTURES
+   Oak desk under lamplight, tooled leather binding, aged vellum leaves with
+   fibres, water stains, foxing and darkened edges. Overrides the flat styles above.
+   ============================================================================ */
+.medieval-desk-bg {
+  background-color: #3A2716;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 50% 28%, rgba(255, 209, 140, 0.18), transparent 70%),
+    radial-gradient(ellipse at 50% 110%, rgba(0, 0, 0, 0.5), transparent 65%),
+    var(--tex-wood),
+    linear-gradient(180deg, #4B321C 0%, #3A2716 45%, #2C1C10 100%);
+  background-size: auto, auto, 1200px 400px, auto;
+}
+
+.medieval-tome-binding {
+  padding: 1.15rem 1.25rem 1.5rem;
+  background:
+    var(--tex-leather) 0 0 / 180px 180px,
+    radial-gradient(ellipse at 28% 18%, rgba(140, 84, 42, 0.32), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.35), transparent 60%),
+    linear-gradient(160deg, #4A2B17 0%, #301B0E 55%, #3B2213 100%);
+}
+
+/* Blind-tooled double gold rule around the cover */
+.medieval-tome-binding::before {
+  inset: 6px;
+  border: 3px double rgba(214, 160, 62, 0.58);
+  border-radius: 1.1rem;
+}
+
+.medieval-tome-sheet {
+  background-color: #F2E8D0;
+  background-image:
+    /* gutter shadow of the open spread */
+    linear-gradient(
+      90deg,
+      rgba(59, 46, 30, 0.12) 0%,
+      transparent 9%,
+      transparent 48.6%,
+      rgba(59, 46, 30, 0.07) 50%,
+      transparent 51.4%,
+      transparent 91%,
+      rgba(59, 46, 30, 0.12) 100%
+    ),
+    /* darkened, handled edges */
+    radial-gradient(ellipse at center, transparent 58%, rgba(128, 84, 34, 0.22) 100%),
+    /* foxing: small rust spots near the margins */
+    radial-gradient(circle at 6% 14%, rgba(146, 92, 36, 0.13) 0, transparent 1.6%),
+    radial-gradient(circle at 9% 17%, rgba(146, 92, 36, 0.09) 0, transparent 0.9%),
+    radial-gradient(circle at 94% 36%, rgba(146, 92, 36, 0.11) 0, transparent 1.4%),
+    radial-gradient(circle at 12% 88%, rgba(146, 92, 36, 0.10) 0, transparent 2%),
+    radial-gradient(circle at 81% 94%, rgba(146, 92, 36, 0.12) 0, transparent 1.2%),
+    var(--tex-mottle),
+    var(--tex-fibers);
+  background-size:
+    auto, auto, auto, auto, auto, auto, auto,
+    900px 900px,
+    220px 220px;
+  box-shadow:
+    inset 0 0 70px rgba(128, 84, 34, 0.16),
+    inset 0 0 0 1px rgba(181, 131, 42, 0.3),
+    -3px 3px 0 -1px #E9DDC3,
+    3px 3px 0 -1px #E9DDC3,
+    0 3px 0 0 #BFA77F,
+    -6px 6px 0 -2px #DFD0B1,
+    6px 6px 0 -2px #DFD0B1,
+    0 6px 0 -1px #AD936B,
+    -9px 9px 0 -3px #D5C3A0,
+    9px 9px 0 -3px #D5C3A0,
+    0 9px 0 -2px #977C56,
+    0 16px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Panels written on the page share its fibres instead of flat digital fills */
+.medieval-tome-sheet
+  :is(.bg-vellum, .bg-parchment, .bg-aged, [class*=" bg-vellum/"], [class*=" bg-parchment/"], [class*=" bg-aged/"], [class^="bg-vellum/"], [class^="bg-parchment/"], [class^="bg-aged/"]) {
+  background-image: var(--tex-fibers);
+  background-size: 220px 220px;
+}
+
+/* Manuscript pages have crisp corners, not app-card curves */
+.medieval-tome-sheet :is(.rounded-xl, .rounded-2xl) {
+  border-radius: 0.3rem;
+}
+
+/* Rubrication: the first letter of each title in vermilion ink */
+.medieval-tome-sheet :is(h1, h2)::first-letter {
+  color: var(--accent-wax);
+}
+
+/* ============================================================================
    MODE GRIMOIRE MALAM LILIN (Candlelight Obsidian Grimoire Theme)
    High-Contrast WCAG AA/AAA Overrides for All Surfaces, Accents & Controls
    ============================================================================ */
@@ -241,14 +338,20 @@
 }
 
 [data-theme="grimoire-dark"] .medieval-desk-bg {
-  background-color: #0D0A07 !important;
+  background-color: #120C07 !important;
   background-image:
-    radial-gradient(ellipse at 50% 0%, rgba(240, 195, 109, 0.09), transparent 65%),
-    radial-gradient(ellipse at 50% 100%, rgba(158, 42, 43, 0.08), transparent 70%) !important;
+    radial-gradient(ellipse 60% 45% at 50% 25%, rgba(240, 175, 90, 0.10), transparent 70%),
+    radial-gradient(ellipse at 50% 110%, rgba(0, 0, 0, 0.6), transparent 65%),
+    var(--tex-wood),
+    linear-gradient(180deg, #1E140B 0%, #150E08 50%, #0E0905 100%) !important;
+  background-size: auto, auto, 1200px 400px, auto !important;
 }
 
 [data-theme="grimoire-dark"] .medieval-tome-binding {
-  background: linear-gradient(160deg, #1A120C 0%, #0F0A07 55%, #17100B 100%) !important;
+  background:
+    var(--tex-leather) 0 0 / 180px 180px,
+    radial-gradient(ellipse at 28% 18%, rgba(120, 70, 34, 0.22), transparent 55%),
+    linear-gradient(160deg, #2A170C 0%, #170C06 55%, #22130A 100%) !important;
   border-color: #9A7132 !important;
   box-shadow:
     inset 0 0 0 3px rgba(240, 195, 109, 0.22),
@@ -269,7 +372,10 @@
       transparent 88%,
       rgba(0, 0, 0, 0.42) 100%
     ),
-    radial-gradient(ellipse at center, transparent 62%, rgba(0, 0, 0, 0.38) 100%) !important;
+    radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.42) 100%),
+    var(--tex-mottle),
+    var(--tex-fibers) !important;
+  background-size: auto, auto, 900px 900px, 220px 220px !important;
   border-color: #5C452D !important;
   box-shadow:
     inset 0 0 32px rgba(0, 0, 0, 0.45),
@@ -385,7 +491,7 @@
   background-color: var(--bg-paper);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.41 0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   border: 1px solid color-mix(in oklab, var(--border-sepia) 80%, transparent);
-  border-radius: 0.75rem;
+  border-radius: 0.3rem;
   color: var(--ink-primary);
   box-shadow: 0 1px 2px rgba(35, 28, 20, 0.04);
   /* keep a comfortable line length (~68 characters) inside any width */
